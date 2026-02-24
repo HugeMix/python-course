@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 12: Модули и библиотеки</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+            <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Урок 12: Модули и библиотеки</h2>
+            <p>Изучим, как подключать модули и использовать библиотеки в Python.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <!-- Цель урока -->
+        <section class="lesson-goal">
+            <h2>🎯 Цель урока</h2>
+            <p>Научиться использовать модули и библиотеки в Python, загружать и устанавливать их.</p>
+        </section>
+
+        <!-- Основной материал -->
+        <section class="lesson-content">
+            <h2>📌 Что такое модули?</h2>
+            <p>Модуль - это файл с кодом Python, который можно подключить в программу. Например, модуль
+                <code>math</code> содержит математические функции.
+            </p>
+
+            <h2>🔧 Подключение встроенных модулей</h2>
+            <p>В Python есть много встроенных модулей. Например, модуль <code>math</code> для работы с математикой:</p>
+            <pre><code>import math
+
+print(math.sqrt(25))  # Выведет 5.0
+print(math.pi)  # Выведет 3.141592653589793</code></pre>
+
+            <h2>📦 Установка сторонних библиотек</h2>
+            <p>Python поддерживает сторонние библиотеки, которые можно установить с помощью pip. Например, библиотека
+                <code>requests</code> для работы с интернет-запросами:
+            </p>
+            <pre><code>pip install requests</code></pre>
+
+            <p>Пример использования:</p>
+            <pre><code>import requests
+
+response = requests.get("https://api.github.com")
+print(response.status_code)  # Выведет 200, если запрос успешен</code></pre>
+        \n            <h2>💡 Официальный менеджер Pip</h2><p><strong>PIP</strong> — это официальный менеджер пакетов в Python (Package Installer). При помощи простой команды в терминале: <code>pip install libraries_name</code> вы загружаете сторонний код из интернета на ваш ПК и можете интегрировать его за секунду.</p>\n        </section>
+
+        <!-- Домашнее задание -->
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
+            <ul>
+                <li>Подключи модуль <code>random</code> и выведи случайное число.</li>
+                <li>Установи библиотеку <code>requests</code> и попробуй сделать HTTP-запрос.</li>
+            </ul>
+        </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Навигация -->
+        <div class="lesson-navigation"></div>
+    </main>
+
+    <footer>
+        <p>© 2025 Python для начинающих. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

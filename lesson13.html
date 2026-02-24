@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 13: Основы ООП</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+            <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Голубая плашка с названием урока -->
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Урок 13: Основы ООП</h2>
+            <p>Познакомимся с объектно-ориентированным программированием в Python.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <!-- Плашка с целью урока -->
+        <section class="lesson-goal">
+            <h2>🎯 Цель урока</h2>
+            <p>Научиться создавать классы и объекты, работать с атрибутами и методами.</p>
+        </section>
+
+        <!-- Основной материал -->
+        <section class="lesson-content">
+            <h2>📌 Что такое ООП?</h2>
+            <p>Объектно-ориентированное программирование (ООП) - это стиль программирования, где код организован в виде
+                объектов.</p>
+
+            <h2>🔧 Создание класса</h2>
+            <p>Класс - это шаблон для создания объектов. Давайте создадим класс <code>Car</code>:</p>
+            <pre><code>class Car:
+    def __init__(self, brand, model, year):
+        self.brand = brand  # Атрибут марки
+        self.model = model  # Атрибут модели
+        self.year = year    # Атрибут года выпуска
+
+    def show_info(self):
+        print(f"Автомобиль: {self.brand} {self.model}, {self.year} года выпуска")</code></pre>
+
+            <h2>🚗 Создание объекта</h2>
+            <p>Объект - это экземпляр класса. Создадим объект машины:</p>
+            <pre><code>my_car = Car("Toyota", "Camry", 2020)
+my_car.show_info()</code></pre>
+            <p>Вывод:</p>
+            <pre><code>Автомобиль: Toyota Camry, 2020 года выпуска</code></pre>
+
+            <h2>⚙ Методы класса</h2>
+            <p>Методы - это функции внутри класса. Добавим метод <code>start_engine</code>:</p>
+            <pre><code>class Car:
+    def __init__(self, brand, model, year):
+        self.brand = brand
+        self.model = model
+        self.year = year
+
+    def show_info(self):
+        print(f"Автомобиль: {self.brand} {self.model}, {self.year} года выпуска")
+
+    def start_engine(self):
+        print(f"{self.brand} {self.model}: Двигатель запущен!")
+
+my_car = Car("BMW", "X5", 2022)
+my_car.show_info()
+my_car.start_engine()</code></pre>
+        \n            <h2>💡 Принцип Инкапсуляции</h2><p>Одним из китов ООП является <strong>Инкапсуляция</strong> — это умение объектов утаивать и скрывать свои внутренние данные от внешних пользователей ради безопасности.</p>\n        </section>
+
+        <!-- Домашнее задание -->
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
+            <ul>
+                <li>Создай класс <code>Person</code> с атрибутами <code>name</code> и <code>age</code>.</li>
+                <li>Добавь метод <code>greet</code>, который выводит приветствие.</li>
+                <li>Создай объект этого класса и вызови метод <code>greet</code>.</li>
+            </ul>
+        </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Навигация -->
+        <div class="lesson-navigation"></div>
+    </main>
+
+    <footer>
+        <p>© 2025 Python для начинающих. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 1: Введение в Python</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html"
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span
+                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
+                        style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Голубая плашка с названием урока -->
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Урок 1: Введение в Python</h2>
+            <p>Познакомимся с языком Python, установим среду и напишем первую программу.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <!-- Плашка с целью урока -->
+        <section class="lesson-goal">
+            <h2>🎯 Цель урока</h2>
+            <p>Познакомиться с языком Python, установить среду для программирования и написать первую программу.</p>
+        </section>
+
+        <!-- Основной материал -->
+        <section class="lesson-content">
+            <h2>📌 Введение</h2>
+            <p>Python — это простой и понятный язык программирования, который используется для создания сайтов, игр,
+                ботов, мобильных приложений и многого другого.</p>
+
+            <h2>🔧 Установка Python</h2>
+            <p>Чтобы начать программировать, нужно установить Python:</p>
+            <ol>
+                <li>Перейди на официальный сайт: <a href="https://www.python.org/downloads/"
+                        target="_blank">python.org</a>.</li>
+                <li>Скачай последнюю версию для своей операционной системы.</li>
+                <li>Установи, поставив галочку <strong>"Add Python to PATH"</strong> (чтобы Python работал в командной
+                    строке).</li>
+            </ol>
+
+            <h2>💻 Проверка установки</h2>
+            <p>Открой **командную строку** (Windows) или **терминал** (Mac/Linux) и напиши:</p>
+            <pre><code>python --version</code></pre>
+            <p>Если появится версия Python, значит всё установлено правильно.</p>
+
+            <h2>🚀 Первая программа</h2>
+            <p>Открой **Python IDLE** (или любой текстовый редактор) и напиши:</p>
+            <pre><code>print("Привет, мир!")</code></pre>
+            <p>Запусти код — если на экране появилось <strong>Привет, мир!</strong>, значит всё работает! 🎉</p>
+
+            <p><strong>Важно о функции <code>print()</code>:</strong></p>
+            <ul>
+                <li>Она выполняет одну роль: <strong>выводит переданные данные в консоль</strong> (на экран).</li>
+                <li>Python <strong>регистрозависим</strong>! Это значит, что функции <code>print</code> и
+                    <code>PRiNT</code> — это разные вещи. Команды нужно писать строго маленькими буквами.</li>
+            </ul>
+
+            <h3>Дополнительная теория:</h3>
+            <p><strong>Кто создал Python?</strong> Язык Python был создан программистом по имени <strong>Гвидо ван
+                    Россум</strong>.</p>
+            <p><strong>В каком году?</strong> Первый релиз языка состоялся в <strong>1991</strong> году.</p>
+            <p><strong>Какое расширение файлов?</strong> Все файлы с кодом Python имеют расширение <strong>.py</strong>.
+            </p>
+
+        </section>
+
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Домашнее задание -->
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
+            <ul>
+                <li>Установи Python и проверь его версию.</li>
+                <li>Напиши и запусти свою первую программу.</li>
+                <li>Попробуй изменить код так, чтобы он выводил своё имя.</li>
+            </ul>
+        </section>
+        <!-- Навигация -->
+        <div class="lesson-navigation"></div>
+    </main>
+
+    <footer>
+        <p>© 2025 Python для начинающих. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

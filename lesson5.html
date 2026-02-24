@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 5: Циклы (for, while)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+            <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Урок 5: Циклы (for, while)</h2>
+            <p>Изучаем, как повторять действия в коде с помощью циклов.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <!-- Цель урока -->
+        <section class="lesson-goal">
+            <h2>🎯 Цель урока</h2>
+            <p>Научиться использовать циклы <strong>for</strong> и <strong>while</strong> для повторения действий.</p>
+        </section>
+
+        <!-- Основной материал -->
+        <section class="lesson-content">
+            <h2>🔄 Цикл for</h2>
+            <p>Цикл <code>for</code> используется, когда заранее известно количество повторений.</p>
+            <pre><code>for i in range(5):
+    print("Привет, мир!")</code></pre>
+            <p>Этот код 5 раз напечатает <strong>"Привет, мир!"</strong>.</p>
+
+            <h2>🔁 Цикл while</h2>
+            <p>Цикл <code>while</code> выполняется, пока условие истинно.</p>
+            <pre><code>count = 0
+while count < 5:
+    print("Повтор №", count)
+    count += 1</code></pre>
+            <p>Этот код будет выполняться, пока <code>count</code> меньше 5.</p>
+
+            <h2>⏩ Операторы break и continue</h2>
+            <p><code>break</code> прерывает цикл, а <code>continue</code> пропускает оставшуюся часть итерации.</p>
+            <pre><code>for i in range(10):
+    if i == 5:
+        break  # Остановит цикл при i = 5
+    print(i)</code></pre>
+            <pre><code>for i in range(10):
+    if i % 2 == 0:
+        continue  # Пропустит четные числа
+    print(i)</code></pre>
+        \n            <h2>💡 Подробнее о continue</h2><p>Оператор <code>continue</code> заставляет программу мгновенно прервать текущий круг выполнения цикла. Но в отличие от break он не убивает цикл, а сразу переходит к следующему шагу!</p>\n        </section>
+
+        <!-- Домашнее задание -->
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
+            <ul>
+                <li>Напиши цикл <code>for</code>, который выведет числа от 1 до 10.</li>
+                <li>Напиши цикл <code>while</code>, который запрашивает у пользователя число, пока он не введёт 0.</li>
+                <li>Используй <code>break</code> для остановки цикла при вводе отрицательного числа.</li>
+            </ul>
+        </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Навигация -->
+        <div class="lesson-navigation"></div>
+    </main>
+
+    <footer>
+        <p>© 2025 Python для начинающих. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

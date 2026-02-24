@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 8: Словари и множества</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+            <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Урок 8: Словари и множества</h2>
+            <p>Изучаем работу со словарями и множествами в Python.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="lesson-goal">
+            <h2>🎯 Цель урока</h2>
+            <p>Научиться работать со словарями и множествами, использовать их методы.</p>
+        </section>
+
+        <section class="lesson-content">
+            <h2>📖 Словари в Python</h2>
+            <p>Словарь — это структура данных, которая хранит пары ключ-значение.</p>
+            <pre><code>student = {"имя": "Алекс", "возраст": 20, "город": "Москва"}
+print(student["имя"])  # Выведет: Алекс</code></pre>
+            <p>Основные методы словарей:</p>
+            <ul>
+                <li><code>keys()</code> – получить список ключей</li>
+                <li><code>values()</code> – получить список значений</li>
+                <li><code>get()</code> – получить значение по ключу</li>
+            </ul>
+
+            <h2>🔢 Множества</h2>
+            <p>Множество — это структура данных, которая хранит уникальные элементы.</p>
+            <pre><code>numbers = {1, 2, 3, 4, 5, 5}
+print(numbers)  # Выведет: {1, 2, 3, 4, 5}</code></pre>
+            <p>Основные операции с множествами:</p>
+            <ul>
+                <li><code>add()</code> – добавить элемент</li>
+                <li><code>remove()</code> – удалить элемент</li>
+                <li><code>union()</code> – объединение множеств</li>
+            </ul>
+        \n            <h2>💡 Словари и ключи</h2><ul><li>Инструкция <code>d.keys()</code> возвращает все имеющиеся ключи в словаре.</li><li>Отдельные ключи в словаре можно удалять командой <code>del</code> (например, <code>del user['age']</code>). Это очистит и ключ, и его значение.</li></ul>\n        </section>
+
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
+            <ul>
+                <li>Создай словарь с информацией о себе и выведи его на экран.</li>
+                <li>Добавь в множество 3 новых элемента и выведи результат.</li>
+            </ul>
+        </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Навигация -->
+        <div class="lesson-navigation"></div>
+    </main>
+
+    <footer>
+        <p>© 2025 Python для начинающих. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

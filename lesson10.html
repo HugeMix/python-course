@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 10: Файлы в Python</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+            <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Урок 10: Файлы в Python</h2>
+            <p>Научимся работать с файлами: читать и записывать данные.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="lesson-goal">
+            <h2>🎯 Цель урока</h2>
+            <p>Понять, как открывать, читать и записывать файлы в Python.</p>
+        </section>
+
+        <section class="lesson-content">
+            <h2>📂 Открытие файла</h2>
+            <p>Используем функцию <code>open()</code> для работы с файлами.</p>
+            <pre><code>file = open("example.txt", "r")
+content = file.read()
+print(content)
+file.close()</code></pre>
+
+            <h2>✏️ Запись в файл</h2>
+            <p>Открываем файл в режиме записи <code>"w"</code> и записываем текст.</p>
+            <pre><code>file = open("example.txt", "w")
+file.write("Привет, мир!")
+file.close()</code></pre>
+
+            <h2>📌 Чтение построчно</h2>
+            <p>Читаем файл построчно с помощью <code>readline()</code> или <code>readlines()</code>.</p>
+            <pre><code>file = open("example.txt", "r")
+for line in file:
+    print(line.strip())
+file.close()</code></pre>
+        \n            <h2>💡 Секреты файлов: with open</h2><p>Писать <code>file.close()</code> вручную крайне ненадёжно, так как при любой ошибке файл останется висеть в памяти. Безопаснее применять блок <code>with open(...) as f:</code>, который гарантирует, что файл автоматически закроется по окончании работы вашего кода.</p>\n        </section>
+
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
+            <ul>
+                <li>Создай файл <code>data.txt</code> и запиши в него несколько строк.</li>
+                <li>Напиши код, который читает этот файл и выводит его содержимое.</li>
+                <li>Добавь новые строки в файл без удаления старых данных.</li>
+            </ul>
+        </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Навигация -->
+        <div class="lesson-navigation"></div>
+    </main>
+
+    <footer>
+        <p>© 2025 Python для начинающих. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

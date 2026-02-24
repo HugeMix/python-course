@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 14: Работа с датой и временем</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+            <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Урок 14: Работа с датой и временем</h2>
+            <p>Изучаем модуль datetime и способы форматирования даты.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="lesson-goal">
+            <h2>🎯 Цель урока</h2>
+            <p>Познакомиться с модулем <code>datetime</code> и научиться работать с датами и временем в Python.</p>
+        </section>
+
+        <section class="lesson-content">
+            <h2>📅 Модуль datetime</h2>
+            <p>Python предоставляет встроенный модуль <code>datetime</code> для работы с датами и временем.</p>
+
+            <h3>Пример получения текущей даты и времени:</h3>
+            <pre><code>import datetime
+now = datetime.datetime.now()
+print("Текущая дата и время:", now)</code></pre>
+
+            <h2>⏳ Форматирование даты</h2>
+            <p>Мы можем отобразить дату в удобном формате с помощью метода <code>strftime()</code>.</p>
+
+            <h3>Форматирование даты в строку:</h3>
+            <pre><code>formatted_date = now.strftime("%d.%m.%Y %H:%M:%S")
+print("Отформатированная дата:", formatted_date)</code></pre>
+
+            <h2>📆 Создание своей даты</h2>
+            <p>Мы можем создать объект даты вручную:</p>
+            <pre><code>custom_date = datetime.datetime(2025, 5, 17, 15, 30)
+print("Созданная дата:", custom_date)</code></pre>
+        \n            <h2>💡 Разница во времени</h2><p>Если из одной переменной с датой вычесть другую, мы получим особый объект <code>timedelta</code>, в котором хранятся дни и секунды получившейся разницы!</p>\n        </section>
+
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
+            <ul>
+                <li>Выведите текущую дату и время в формате "ГГГГ-ММ-ДД ЧЧ:ММ:СС".</li>
+                <li>Создайте объект даты своего дня рождения и выведите его.</li>
+                <li>Выведите, какой день недели будет 1 января следующего года.</li>
+            </ul>
+        </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Навигация -->
+        <div class="lesson-navigation"></div>
+    </main>
+
+    <footer>
+        <p>© 2025 Python для начинающих. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

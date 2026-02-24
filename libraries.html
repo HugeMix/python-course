@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Библиотеки Python</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .libraries-layout {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+            align-items: flex-start;
+        }
+
+        .libraries-sidebar {
+            width: 250px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 20px;
+            flex-shrink: 0;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        body.dark-mode .libraries-sidebar {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .libraries-sidebar h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .libraries-sidebar h3 {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .libraries-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .libraries-sidebar li {
+            margin-bottom: 8px;
+        }
+
+        .libraries-sidebar a {
+            display: block;
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: var(--transition);
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .libraries-sidebar a:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--accent-color);
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        .libraries {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .library {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            transition: var(--transition);
+            position: relative;
+            scroll-margin-top: 40px;
+        }
+
+        body.dark-mode .library {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .library:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .library h2 {
+            margin-top: 0;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            background: #4f46e5;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .libraries-layout {
+                flex-direction: column;
+            }
+
+            .libraries-sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 0px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html"
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span
+                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
+                        style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="libraries.html" class="active">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Популярные библиотеки Python</h2>
+            <p>Исследуйте ключевые библиотеки и фреймворки, которые делают Python таким уникальным и востребованным в
+                мире.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="libraries-layout">
+            <!-- Боковая навигация -->
+            <aside class="libraries-sidebar">
+                <h3>📚 Навигация</h3>
+                <ul>
+                    <li><a href="#numpy">📐 NumPy</a></li>
+                    <li><a href="#pandas">📊 Pandas</a></li>
+                    <li><a href="#matplotlib">📉 Matplotlib</a></li>
+                    <li><a href="#requests">🌐 Requests</a></li>
+                    <li><a href="#django">🚀 Django</a></li>
+                    <li><a href="#flask">⚙️ Flask</a></li>
+                    <li><a href="#beautifulsoup">🥣 BeautifulSoup</a></li>
+                    <li><a href="#pygame">🎮 Pygame</a></li>
+                    <li><a href="#tensorflow">🧠 TensorFlow</a></li>
+                    <li><a href="#pillow">🖼️ Pillow (PIL)</a></li>
+                </ul>
+            </aside>
+
+            <!-- Основной контент -->
+            <section class="libraries">
+
+                <div class="library" id="numpy">
+                    <span class="badge">Математика / Наука данных</span>
+                    <h2>📐 NumPy</h2>
+                    <p>Фундаментальная библиотека для научных вычислений в Python. Предоставляет поддержку для работы с
+                        многомерными массивами (матрицами) и содержит множество высокоуровневых математических функций
+                        для операций над ними. Она работает намного быстрее стандартных списков Python, так как написана
+                        на языке C.</p>
+                    <pre><code>import numpy as np
+
+# Создание массива
+arr = np.array([1, 2, 3, 4])
+print(arr * 2) # Выведет: [2 4 6 8]</code></pre>
+                </div>
+
+                <div class="library" id="pandas">
+                    <span class="badge">Анализ данных</span>
+                    <h2>📊 Pandas</h2>
+                    <p>Мощный инструмент для работы с табличными данными (Excel, CSV, SQL). Он предоставляет структуры
+                        данных Series (одномерные данные) и DataFrame (таблицы), с помощью которых можно легко
+                        фильтровать, сортировать и анализировать миллионы строк данных.</p>
+                    <pre><code>import pandas as pd
+
+# Создание таблицы (DataFrame)
+data = {"Имя": ["Анна", "Иван"], "Возраст": [20, 25]}
+df = pd.DataFrame(data)
+print(df)</code></pre>
+                </div>
+
+                <div class="library" id="matplotlib">
+                    <span class="badge">Визуализация</span>
+                    <h2>📉 Matplotlib</h2>
+                    <p>Самая популярная библиотека для построения графиков и диаграмм (линейных, столбчатых, круговых,
+                        гистограмм). Идеально работает в связке с NumPy и Pandas для визуализации тенденций и
+                        результатов анализа данных.</p>
+                    <pre><code>import matplotlib.pyplot as plt
+
+plt.plot([1, 2, 3], [10, 20, 15])
+plt.title("Мой первый график")
+plt.show()</code></pre>
+                </div>
+
+                <div class="library" id="requests">
+                    <span class="badge">Веб-сети</span>
+                    <h2>🌐 Requests</h2>
+                    <p>Позволяет отправлять HTTP-запросы простым и понятным способом. С её помощью можно скачивать
+                        страницы из интернета, работать с API других сайтов (например, получать погоду), сохранять
+                        картинки и автоматизировать работу в сети.</p>
+                    <pre><code>import requests
+
+response = requests.get("https://api.github.com")
+print("Статус:", response.status_code)</code></pre>
+                </div>
+
+                <div class="library" id="django">
+                    <span class="badge">Веб-разработка (Фреймворк)</span>
+                    <h2>🚀 Django</h2>
+                    <p>Полнофункциональный и мощный фреймворк для создания сложных веб-сайтов. Он включает в себя всё
+                        необходимое "из коробки" (систему авторизации, панель администратора, работу с базами данных) и
+                        используется в таких проектах, как Instagram или Pinterest.</p>
+                    <pre><code># Установка через терминал
+pip install django
+
+# Создание нового проекта
+django-admin startproject mywebsite</code></pre>
+                </div>
+
+                <div class="library" id="flask">
+                    <span class="badge">Веб-разработка (Микрофреймворк)</span>
+                    <h2>⚙️ Flask</h2>
+                    <p>В отличие от Django, Flask — это легковесный инструмент. Он идеален для написания простых
+                        веб-приложений, API или бота для Telegram. Он даёт программисту полный контроль над архитектурой
+                        и не навязывает лишних функций.</p>
+                    <pre><code>from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Привет, мир Сервера!"
+
+if __name__ == "__main__":
+    app.run()</code></pre>
+                </div>
+
+                <div class="library" id="beautifulsoup">
+                    <span class="badge">Парсинг (Сбор данных)</span>
+                    <h2>🥣 BeautifulSoup</h2>
+                    <p>Библиотека для извлечения данных из HTML и XML файлов. Если вам нужно вытащить цены на товары,
+                        новости или контакты с чужого сайта (веб-скрапинг), BeautifulSoup позволяет легко находить
+                        нужные теги в коде страницы.</p>
+                    <pre><code>from bs4 import BeautifulSoup
+
+html_doc = "&lt;h1&gt;Заголовок&lt;/h1&gt;"
+soup = BeautifulSoup(html_doc, 'html.parser')
+print(soup.h1.text) # Выведет: Заголовок</code></pre>
+                </div>
+
+                <div class="library" id="pygame">
+                    <span class="badge">Создание Игр</span>
+                    <h2>🎮 Pygame</h2>
+                    <p>Инструмент для написания простых 2D-игр и мультимедийных приложений. Отлично подходит для
+                        новичков, чтобы изучить концепции программирования (события, циклы, координаты) на примере
+                        разработки собственной игры вроде Тетриса или Змейки.</p>
+                    <pre><code>import pygame
+
+pygame.init()
+screen = pygame.display.set_mode((400, 300))
+pygame.display.set_caption("Моя игра")</code></pre>
+                </div>
+
+                <div class="library" id="tensorflow">
+                    <span class="badge">Нейросети / AI</span>
+                    <h2>🧠 TensorFlow</h2>
+                    <p>Одна из самых мощных библиотек машинного обучения, разработанная Google. Используется для
+                        создания нейронных сетей, распознавания лиц на фотографиях, анализа текста и создания
+                        искусственного интеллекта.</p>
+                    <pre><code>import tensorflow as tf
+
+# Пример создания базовой модели:
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(10, activation='relu')
+])</code></pre>
+                </div>
+
+                <div class="library" id="pillow">
+                    <span class="badge">Графика</span>
+                    <h2>🖼️ Pillow (PIL)</h2>
+                    <p>Библиотека для обработки цифровых изображений. Она позволяет открывать картинки, изменять их
+                        размер, накладывать водяные знаки, применять фильтры и сохранять в других форматах (например, из
+                        PNG в JPG).</p>
+                    <pre><code>from PIL import Image
+
+# Открытие и изменение размера
+img = Image.open("image.jpg")
+img_resized = img.resize((200, 200))
+img_resized.save("tiny_image.jpg")</code></pre>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 Python для начинающих. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

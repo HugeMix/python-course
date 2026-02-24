@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 3: Операторы в Python</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+            <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Урок 3: Операторы в Python</h2>
+            <p>Изучаем арифметические, логические и операторы сравнения.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="lesson-goal">
+            <h2>🎯 Цель урока</h2>
+            <p>Познакомиться с основными операторами в Python и научиться их использовать.</p>
+        </section>
+
+        <section class="lesson-content">
+            <h2>➕ Арифметические операторы</h2>
+            <p>Арифметические операторы позволяют выполнять математические операции:</p>
+            <pre><code>print(10 + 5)  # Сложение
+print(10 - 5)  # Вычитание
+print(10 * 5)  # Умножение
+print(10 / 5)  # Деление
+print(10 // 3) # Целочисленное деление
+print(10 % 3)  # Остаток от деления
+print(2 ** 3)  # Возведение в степень</code></pre>
+
+            <h2>🔄 Операторы сравнения</h2>
+            <p>Используются для сравнения значений:</p>
+            <pre><code>print(10 > 5)   # Больше
+print(10 < 5)   # Меньше
+print(10 == 5)  # Равно
+print(10 != 5)  # Не равно
+print(10 >= 5)  # Больше или равно
+print(10 <= 5)  # Меньше или равно</code></pre>
+
+            <h2>🧠 Логические операторы</h2>
+            <p>Позволяют комбинировать условия:</p>
+            <pre><code>a = True
+b = False
+print(a and b)  # Логическое И
+print(a or b)   # Логическое ИЛИ
+print(not a)    # Логическое НЕ</code></pre>
+        \n            <h2>💡 Важно узнать!</h2><p>Помимо представленных выше вычислений, существуют <strong>Логические операторы (and, or, not)</strong>. Они возвращают True или False: <code>not</code> просто меняет логическое состояние любого значения на противоположное (True на False и наоборот).</p>\n        </section>
+
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
+            <ul>
+                <li>Напишите программу, которая запрашивает два числа у пользователя и выполняет с ними все
+                    арифметические операции.</li>
+                <li>Создайте программу, которая сравнивает возраст пользователя с 18 и выводит, совершеннолетний он или
+                    нет.</li>
+                <li>Используйте логические операторы, чтобы проверить, попадает ли число в диапазон от 10 до 50.</li>
+            </ul>
+        </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Навигация -->
+        <div class="lesson-navigation"></div>
+    </main>
+
+    <footer>
+        <p>© 2025 Python для начинающих. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,860 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ==== CSS VARIABLES & THEME ==== */
+:root {
+    --bg-color: #f8fafc;
+    --text-color: #1e293b;
+    --header-bg: rgba(255, 255, 255, 0.85);
+    --header-text: #0f172a;
+    --card-bg: #ffffff;
+    --accent-color: #4f46e5;
+    --accent-hover: #4338ca;
+    --success-color: #10b981;
+    --success-bg: #d1fae5;
+    --error-color: #ef4444;
+    --error-bg: #fee2e2;
+    --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    --font-family: 'Inter', sans-serif;
+    --radius: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.dark-mode {
+    --bg-color: #0f172a;
+    --text-color: #f1f5f9;
+    --header-bg: rgba(15, 23, 42, 0.85);
+    --header-text: #f8fafc;
+    --card-bg: #1e293b;
+    --accent-color: #6366f1;
+    --accent-hover: #818cf8;
+    --success-color: #34d399;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --error-color: #f87171;
+    --error-bg: rgba(239, 68, 68, 0.1);
+    --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* ==== ОБЩИЕ СТИЛИ ==== */
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color var(--transition), color var(--transition);
+}
+
+a {
+    transition: var(--transition);
+    text-decoration: none;
+    color: var(--accent-color);
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ==== ШАПКА ==== */
+header {
+    background: var(--header-bg);
+    color: var(--header-text);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+body.dark-mode header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    gap: 10px;
+}
+
+nav ul li a {
+    color: var(--header-text);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--accent-color);
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: var(--transition);
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+/* ==== HERO SECTION ==== */
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    border-radius: 0 0 30px 30px;
+    margin-bottom: 60px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" stroke-width="2" fill="none"/></svg>') repeat;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    margin-bottom: 40px;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 400;
+    position: relative;
+    z-index: 1;
+}
+
+.hero .btn {
+    display: inline-block;
+    padding: 16px 40px;
+    background: #ffffff;
+    color: #4f46e5;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 50px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    transition: var(--transition);
+    position: relative;
+    z-index: 1;
+}
+
+.hero .btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+    color: #4338ca;
+}
+
+/* ==== КАРТОЧКИ ==== */
+.info {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: -20px;
+    position: relative;
+    z-index: 2;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 35px 25px;
+    border-radius: var(--radius);
+    text-align: center;
+    flex: 1;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    transition: var(--transition);
+}
+
+body.dark-mode .card {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-hover);
+    z-index: 10;
+}
+
+.card h3 {
+    margin-top: 0;
+    font-size: 1.25rem;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+}
+
+.card p {
+    color: var(--text-color);
+    opacity: 0.8;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+/* Сетка уроков */
+.lessons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.lesson-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: left;
+    transition: var(--transition);
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+}
+
+body.dark-mode .lesson-card {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.lesson-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+    z-index: 10;
+}
+
+.lesson-card h3 {
+    margin-top: 0;
+    color: var(--text-color);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    transition: var(--transition);
+}
+
+.lesson-card:hover h3 {
+    color: var(--accent-color);
+}
+
+.lesson-card p {
+    color: var(--text-color);
+    opacity: 0.75;
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+    flex-grow: 1;
+}
+
+.lesson-card .btn {
+    align-self: flex-start;
+    background: rgba(79, 70, 229, 0.1);
+    color: var(--accent-color);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    border: none;
+}
+
+.lesson-card .btn:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+.lesson-card.completed {
+    border: 1px solid var(--success-color);
+}
+
+.lesson-card.completed h3 {
+    padding-right: 125px;
+    /* Prevent overlap with the completed badge */
+}
+
+.lesson-card.completed::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--success-color);
+}
+
+.check-mark {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success-color);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ==== СТИЛИ УРОКА ==== */
+.lesson-title {
+    background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+    border-radius: 0 0 30px 30px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow);
+}
+
+.lesson-title h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.lesson-title p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.lesson-content,
+.lesson-goal,
+.lesson-homework {
+    background: var(--card-bg);
+    padding: 35px 40px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+body.dark-mode .lesson-content,
+body.dark-mode .lesson-goal,
+body.dark-mode .lesson-homework {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.lesson-goal::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: #fbbf24;
+}
+
+.lesson-content::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: var(--accent-color);
+}
+
+.lesson-homework::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: var(--success-color);
+}
+
+.lesson-goal h2,
+.lesson-content h2,
+.lesson-homework h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 20px;
+}
+
+pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 20px;
+    border-radius: 12px;
+    overflow-x: auto;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.95rem;
+    position: relative;
+    margin: 20px 0;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+code {
+    font-family: 'Fira Code', 'Consolas', monospace;
+    background: rgba(128, 128, 128, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--accent-color);
+}
+
+pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+}
+
+/* ==== КВИЗ И КНОПКИ ==== */
+#quiz-container {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-top: 50px;
+    margin-bottom: 50px;
+    position: relative;
+    border-top: 4px solid #fbbf24;
+}
+
+.quiz-question {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 25px;
+    margin-bottom: 25px;
+}
+
+body.dark-mode .quiz-question {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.quiz-question p {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.btn-quiz-opt {
+    background: var(--bg-color);
+    border: 2px solid transparent;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    transition: var(--transition);
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+}
+
+body.dark-mode .btn-quiz-opt {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-quiz-opt:hover:not(:disabled) {
+    background: rgba(79, 70, 229, 0.05);
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.btn-quiz-opt.correct {
+    background: var(--success-bg);
+    border-color: var(--success-color);
+    color: #047857;
+}
+
+.btn-quiz-opt.incorrect {
+    background: var(--error-bg);
+    border-color: var(--error-color);
+    color: #b91c1c;
+}
+
+textarea.code-input {
+    background: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+body.dark-mode textarea.code-input {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+textarea.code-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.quiz-passed-container {
+    text-align: center;
+    background: var(--success-bg);
+    padding: 40px;
+    border-radius: var(--radius);
+    color: var(--success-color);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.quiz-passed-container h3 {
+    font-size: 1.8rem;
+    margin-top: 0;
+}
+
+/* Кнопки навигации */
+.lesson-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+    gap: 20px;
+}
+
+.btn-nav {
+    padding: 14px 28px;
+    border-radius: 10px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+body.dark-mode .btn-nav {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-nav:hover {
+    background: var(--bg-color);
+    transform: translateY(-2px);
+}
+
+.btn-nav.next {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    margin-left: auto;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+}
+
+.btn-nav.next:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+}
+
+/* Большая кнопка завершения */
+.btn-complete {
+    width: 100%;
+    padding: 18px;
+    margin-top: 40px;
+    font-size: 1.1rem;
+    border: none;
+    color: white;
+    background: linear-gradient(135deg, var(--success-color), #059669);
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+    transition: var(--transition);
+}
+
+.btn-complete:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(16, 185, 129, 0.3);
+}
+
+/* Кнопки пересдачи */
+.btn-retake {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-retake:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Тема */
+.theme-toggle-btn {
+    background: rgba(128, 128, 128, 0.1);
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--header-text);
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(128, 128, 128, 0.2);
+}
+
+/* Копирование */
+.btn-copy {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-copy:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 40px 0;
+    margin-top: auto;
+    color: var(--text-color);
+    opacity: 0.6;
+    font-size: 0.95rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Locked Lessons */
+.lesson-card.locked {
+    filter: grayscale(1);
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.lesson-card.locked .btn {
+    background: rgba(128, 128, 128, 0.2);
+    color: var(--text-color);
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .container {
+        width: 92%;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .info {
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    header .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .lesson-navigation {
+        flex-direction: column;
+    }
+
+    .btn-nav,
+    .btn-nav.next {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ==== COURSE ACTIONS ==== */
+.btn-reset-small {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition);
+    margin-top: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-reset-small:hover {
+    background: var(--error-color);
+    border-color: var(--error-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+/* ==== ANIMATIONS ==== */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-in-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==== LIBRARIES PAGE STYLES ==== */
+.libraries-layout {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    margin-top: 30px;
+}
+
+.libraries-sidebar {
+    width: 260px;
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 90px;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.libraries-sidebar h3 {
+    margin-top: 0;
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    border-bottom: 2px solid rgba(79, 70, 229, 0.2);
+    padding-bottom: 15px;
+}
+
+.libraries-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0 0;
+}
+
+.libraries-sidebar ul li {
+    margin-bottom: 8px;
+}
+
+.libraries-sidebar ul li a {
+    color: var(--text-color);
+    font-weight: 500;
+    display: block;
+    padding: 10px 14px;
+    border-radius: 8px;
+}
+
+.libraries-sidebar ul li a:hover {
+    background: rgba(79, 70, 229, 0.08);
+    color: var(--accent-color);
+    padding-left: 20px;
+}
+
+.libraries {
+    flex: 1;
+}
+
+.library {
+    background: var(--card-bg);
+    padding: 35px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+    border-left: 5px solid var(--accent-color);
+    border-top: 1px solid rgba(0, 0, 0, 0.03);
+    border-right: 1px solid rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.library h2 {
+    margin-top: 0;
+    color: var(--accent-color);
+    font-size: 1.6rem;
+}
+
+@media (max-width: 900px) {
+    .libraries-layout {
+        flex-direction: column;
+    }
+
+    .libraries-sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 30px;
+    }
+}
+
+/* Костыль для онлайн компилятора Python */
+.CodeMirror-linenumber {
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}

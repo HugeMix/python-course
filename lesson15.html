@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Итоговый проект по Python</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+            <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Итоговый проект</h2>
+            <p>Примените все полученные знания и создайте свою первую программу.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="lesson-goal">
+            <h2>🎯 Задача</h2>
+            <p>Создайте консольное приложение на Python, которое поможет пользователю вести список дел (To-Do List).</p>
+        </section>
+
+        <section class="lesson-content">
+            <h2>📌 Описание проекта</h2>
+            <p>Программа должна позволять:</p>
+            <ul>
+                <li>Добавлять задачи</li>
+                <li>Просматривать список задач</li>
+                <li>Удалять выполненные задачи</li>
+                <li>Сохранять список в файл и загружать его</li>
+            </ul>
+
+            <h2>💻 Пример кода</h2>
+            <pre><code>
+import json
+
+def load_tasks():
+    try:
+        with open("tasks.json", "r", encoding="utf-8") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
+
+def save_tasks(tasks):
+    with open("tasks.json", "w", encoding="utf-8") as file:
+        json.dump(tasks, file, ensure_ascii=False, indent=4)
+
+def main():
+    tasks = load_tasks()
+    while True:
+        print("\n1. Добавить задачу")
+        print("2. Показать список задач")
+        print("3. Удалить задачу")
+        print("4. Выйти")
+        choice = input("Выберите действие: ")
+        
+        if choice == "1":
+            task = input("Введите новую задачу: ")
+            tasks.append(task)
+            save_tasks(tasks)
+        elif choice == "2":
+            print("\nВаш список дел:")
+            for i, task in enumerate(tasks, 1):
+                print(f"{i}. {task}")
+        elif choice == "3":
+            num = int(input("Введите номер задачи для удаления: ")) - 1
+            if 0 <= num < len(tasks):
+                tasks.pop(num)
+                save_tasks(tasks)
+            else:
+                print("Некорректный номер!")
+        elif choice == "4":
+            break
+        else:
+            print("Неверный ввод, попробуйте снова.")
+
+if __name__ == "__main__":
+    main()
+        </code></pre>
+        \n            <h2>💡 Главные инструменты программиста</h2><ul><li>Для стандарта красоты написания программ в Python используют свод правил — <strong>PEP8</strong>.</li><li>Проекты теперь хранят не на флешке, а в интернете через систему <strong>Git</strong> и сайт <strong>GitHub</strong>, что позволяет легко работать в команде.</li></ul>\n        </section>
+
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
+            <ul>
+                <li>Запустите код и добавьте несколько задач.</li>
+                <li>Попробуйте изменить код, добавив возможность редактирования задач.</li>
+                <li>Попробуйте создать графический интерфейс с помощью библиотеки Tkinter.</li>
+            </ul>
+        </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Навигация -->
+        <div class="lesson-navigation"></div>
+    </main>
+
+    <footer>
+        <p>© 2025 Python для начинающих. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
