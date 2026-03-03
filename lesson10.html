@@ -4,17 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Урок 10: Работа с файлами в Python. Открытие, чтение и запись файлов с помощью open() и with.">
     <title>Урок 10: Файлы в Python</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-            <header>
+    <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html"
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+                <span
+                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
+                        style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -31,48 +37,87 @@
     <section class="lesson-title">
         <div class="container">
             <h2>Урок 10: Файлы в Python</h2>
-            <p>Научимся работать с файлами: читать и записывать данные.</p>
+            <p>Научимся работать с файлами: читать, записывать и безопасно закрывать их.</p>
         </div>
     </section>
 
     <main class="container">
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Понять, как открывать, читать и записывать файлы в Python.</p>
+            <p>Понять, как открывать, читать и записывать файлы в Python, и научиться делать это безопасно.</p>
         </section>
 
         <section class="lesson-content">
-            <h2>📂 Открытие файла</h2>
-            <p>Используем функцию <code>open()</code> для работы с файлами.</p>
-            <pre><code>file = open("example.txt", "r")
-content = file.read()
+            <h2>📂 Открытие файла - функция open()</h2>
+            <p>Встроенная функция <code>open()</code> открывает файл и возвращает объект для работы с ним.
+                Принимает имя файла и режим работы:</p>
+            <pre><code>file = open("example.txt", "r")  # "r" = режим чтения
+content = file.read()            # Читаем весь файл в строку
 print(content)
-file.close()</code></pre>
+file.close()                     # ОБЯЗАТЕЛЬНО закрываем файл!</code></pre>
+
+            <h2>📋 Режимы открытия файлов</h2>
+            <ul>
+                <li><code>"r"</code> - чтение (файл должен существовать)</li>
+                <li><code>"w"</code> - запись (<strong>перезапишет</strong> файл с нуля)</li>
+                <li><code>"a"</code> - дозапись в конец файла (данные сохраняются)</li>
+                <li><code>"x"</code> - создание нового файла (ошибка, если уже существует)</li>
+            </ul>
 
             <h2>✏️ Запись в файл</h2>
-            <p>Открываем файл в режиме записи <code>"w"</code> и записываем текст.</p>
+            <p>Открываем файл в режиме записи <code>"w"</code> и записываем текст:</p>
             <pre><code>file = open("example.txt", "w")
-file.write("Привет, мир!")
+file.write("Привет, мир!\n")
+file.write("Это вторая строка.\n")
 file.close()</code></pre>
 
             <h2>📌 Чтение построчно</h2>
-            <p>Читаем файл построчно с помощью <code>readline()</code> или <code>readlines()</code>.</p>
+            <p>Читаем файл построчно - экономно для больших файлов:</p>
             <pre><code>file = open("example.txt", "r")
 for line in file:
-    print(line.strip())
+    print(line.strip())  # strip() убирает лишний перевод строки
 file.close()</code></pre>
-        \n            <h2>💡 Секреты файлов: with open</h2><p>Писать <code>file.close()</code> вручную крайне ненадёжно, так как при любой ошибке файл останется висеть в памяти. Безопаснее применять блок <code>with open(...) as f:</code>, который гарантирует, что файл автоматически закроется по окончании работы вашего кода.</p>\n        </section>
 
+            <p>Метод <code>readlines()</code> читает все строки и возвращает их в виде списка:</p>
+            <pre><code>file = open("example.txt", "r")
+lines = file.readlines()
+file.close()
+print(lines)  # ['Привет, мир!\n', 'Это вторая строка.\n']</code></pre>
+
+            <h2>🔒 Безопасный способ: with open</h2>
+            <p>Конструкция <code>with open()</code> - <strong>рекомендуемый</strong> способ работы с файлами.
+                Файл закрывается <strong>автоматически</strong> по выходу из блока, даже если произошла ошибка:</p>
+            <pre><code>with open("example.txt", "r", encoding="utf-8") as f:
+    content = f.read()
+    print(content)
+# Файл автоматически закрывается здесь!</code></pre>
+
+            <p>Писать <code>file.close()</code> вручную ненадёжно - при ошибке файл может остаться
+                «открытым» в памяти. Блок <code>with open(...) as f:</code> решает эту проблему полностью.</p>
+
+            <h2>⚙️ Кодировка - параметр encoding</h2>
+            <p>При работе с файлами, содержащими русский текст, всегда указывайте кодировку
+                <code>encoding="utf-8"</code>, чтобы символы читались и записывались корректно:
+            </p>
+            <pre><code>with open("data.txt", "w", encoding="utf-8") as f:
+    f.write("Привет, это русский текст!")</code></pre>
+        </section>
+
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>
             <ul>
-                <li>Создай файл <code>data.txt</code> и запиши в него несколько строк.</li>
+                <li>Создай файл <code>data.txt</code> и запиши в него несколько строк с помощью конструкции
+                    <code>with open()</code>.
+                </li>
                 <li>Напиши код, который читает этот файл и выводит его содержимое.</li>
-                <li>Добавь новые строки в файл без удаления старых данных.</li>
+                <li>Добавь новые строки в файл без удаления старых данных (режим <code>"a"</code>).</li>
+                <li>Используй <code>readlines()</code> и выведи только третью строку файла.</li>
             </ul>
         </section>
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
 
         <!-- Навигация -->
         <div class="lesson-navigation"></div>

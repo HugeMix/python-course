@@ -4,17 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Урок 14: Работа с датой и временем в Python. Модуль datetime, strftime, strptime и timedelta.">
     <title>Урок 14: Работа с датой и временем</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-            <header>
+    <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html"
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+                <span
+                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
+                        style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -31,48 +37,87 @@
     <section class="lesson-title">
         <div class="container">
             <h2>Урок 14: Работа с датой и временем</h2>
-            <p>Изучаем модуль datetime и способы форматирования даты.</p>
+            <p>Изучаем модуль datetime и способы форматирования даты и времени.</p>
         </div>
     </section>
 
     <main class="container">
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Познакомиться с модулем <code>datetime</code> и научиться работать с датами и временем в Python.</p>
+            <p>Познакомиться с модулем <code>datetime</code> и научиться получать, форматировать и
+                вычислять разницу между датами.</p>
         </section>
 
         <section class="lesson-content">
             <h2>📅 Модуль datetime</h2>
-            <p>Python предоставляет встроенный модуль <code>datetime</code> для работы с датами и временем.</p>
+            <p>Python предоставляет встроенный модуль <code>datetime</code> для работы с датами и
+                временем. Чтобы использовать его, нужно импортировать класс <code>datetime</code>
+                из одноимённого модуля:</p>
+            <pre><code>from datetime import datetime
 
-            <h3>Пример получения текущей даты и времени:</h3>
-            <pre><code>import datetime
-now = datetime.datetime.now()
+now = datetime.now()
 print("Текущая дата и время:", now)</code></pre>
 
-            <h2>⏳ Форматирование даты</h2>
-            <p>Мы можем отобразить дату в удобном формате с помощью метода <code>strftime()</code>.</p>
+            <h2>⏳ Форматирование даты - метод strftime()</h2>
+            <p>Метод <code>strftime()</code> конвертирует объект даты в строку по заданному шаблону.
+                Название: <strong>str</strong>ing <strong>f</strong>ormat <strong>time</strong>:</p>
+            <pre><code>from datetime import datetime
 
-            <h3>Форматирование даты в строку:</h3>
-            <pre><code>formatted_date = now.strftime("%d.%m.%Y %H:%M:%S")
-print("Отформатированная дата:", formatted_date)</code></pre>
+now = datetime.now()
+formatted_date = now.strftime("%d.%m.%Y %H:%M:%S")
+print("Отформатированная дата:", formatted_date)
+# Пример вывода: 02.03.2025 19:21:14</code></pre>
+
+            <p>Основные символы форматирования:</p>
+            <ul>
+                <li><code>%Y</code> - год (четыре цифры, например 2025)</li>
+                <li><code>%m</code> - месяц (01–12)</li>
+                <li><code>%d</code> - день (01–31)</li>
+                <li><code>%H</code> - час (00–23)</li>
+                <li><code>%M</code> - минуты (00–59)</li>
+                <li><code>%S</code> - секунды (00–59)</li>
+            </ul>
 
             <h2>📆 Создание своей даты</h2>
-            <p>Мы можем создать объект даты вручную:</p>
-            <pre><code>custom_date = datetime.datetime(2025, 5, 17, 15, 30)
-print("Созданная дата:", custom_date)</code></pre>
-        \n            <h2>💡 Разница во времени</h2><p>Если из одной переменной с датой вычесть другую, мы получим особый объект <code>timedelta</code>, в котором хранятся дни и секунды получившейся разницы!</p>\n        </section>
+            <p>Объект даты можно создать вручную, передав год, месяц, день и (опционально) время:</p>
+            <pre><code>from datetime import datetime
 
+custom_date = datetime(2025, 5, 17, 15, 30)
+print("Созданная дата:", custom_date)
+# Выведет: 2025-05-17 15:30:00</code></pre>
+
+            <h2>⏱️ Разница во времени - timedelta</h2>
+            <p>Если вычесть одну дату из другой, получится объект <code>timedelta</code> -
+                он хранит разницу в днях и секундах:</p>
+            <pre><code>from datetime import datetime, timedelta
+
+now = datetime.now()
+deadline = datetime(2025, 12, 31)
+delta = deadline - now
+print("До конца года осталось:", delta.days, "дней")</code></pre>
+
+            <p>С помощью <code>timedelta</code> можно также <strong>прибавлять или вычитать дни</strong>
+                из даты:</p>
+            <pre><code>from datetime import datetime, timedelta
+
+today = datetime.now()
+next_week = today + timedelta(days=7)
+print("Через неделю будет:", next_week.strftime("%d.%m.%Y"))</code></pre>
+        </section>
+
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>
             <ul>
-                <li>Выведите текущую дату и время в формате "ГГГГ-ММ-ДД ЧЧ:ММ:СС".</li>
+                <li>Выведите текущую дату и время в формате «ДД.ММ.ГГГГ ЧЧ:ММ:СС».</li>
                 <li>Создайте объект даты своего дня рождения и выведите его.</li>
-                <li>Выведите, какой день недели будет 1 января следующего года.</li>
+                <li>Вычислите, сколько дней прошло с вашего дня рождения (используйте <code>timedelta</code>).</li>
+                <li>Вычислите, какой будет дата через 100 дней с сегодня.</li>
             </ul>
         </section>
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
 
         <!-- Навигация -->
         <div class="lesson-navigation"></div>

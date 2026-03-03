@@ -4,17 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Урок 6: Списки и кортежи в Python. Создание, изменение и основные методы коллекций.">
     <title>Урок 6: Списки и кортежи</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-            <header>
+    <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html"
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+                <span
+                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
+                        style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -31,49 +37,90 @@
     <section class="lesson-title">
         <div class="container">
             <h2>Урок 6: Списки и кортежи</h2>
-            <p>Списки и кортежи - это способы хранения нескольких значений в одной переменной.</p>
+            <p>Списки и кортежи - способы хранить несколько значений в одной переменной.</p>
         </div>
     </section>
 
     <main class="container">
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Понять, как использовать списки и кортежи, научиться добавлять, изменять и получать данные из них.</p>
+            <p>Понять, как использовать списки и кортежи, научиться добавлять, удалять, изменять и получать данные
+                из них.</p>
         </section>
 
         <section class="lesson-content">
-            <h2>📋 Что такое список?</h2>
-            <p>Список — это изменяемая последовательность элементов, которые можно добавлять, удалять и изменять.</p>
+            <h2>📋 Что такое список (list)?</h2>
+            <p>Список - это <strong>изменяемая</strong> последовательность элементов в квадратных скобках.
+                Элементы могут быть любого типа, и их можно добавлять, удалять и изменять.</p>
             <pre><code>fruits = ["яблоко", "банан", "вишня"]
-print(fruits[0])  # Выведет: яблоко</code></pre>
+print(fruits[0])  # Выведет: яблоко
+print(fruits[1])  # Выведет: банан
+print(fruits[2])  # Выведет: вишня</code></pre>
 
-            <h3>🔧 Основные операции со списками</h3>
-            <pre><code># Добавление элемента
-fruits.append("груша")  
+            <p>Нумерация элементов (индексов) начинается с <strong>нуля</strong> (0), а не с единицы.
+                Отрицательные индексы считают с конца: <code>fruits[-1]</code> вернёт последний элемент.</p>
 
-# Удаление элемента
-fruits.remove("банан")  
+            <h2>🔧 Основные операции со списками</h2>
+            <pre><code># Добавление элемента в конец списка
+fruits.append("груша")
+
+# Удаление элемента по его ЗНАЧЕНИЮ
+fruits.remove("банан")
 
 # Сортировка списка
-fruits.sort()</code></pre>
+fruits.sort()
 
-            <h2>🎭 Что такое кортеж?</h2>
-            <p>Кортеж - это неизменяемая последовательность элементов. Его нельзя изменить после создания.</p>
+# Длина списка
+print(len(fruits))
+
+# Вставка в конкретную позицию (индекс, значение)
+fruits.insert(1, "манго")</code></pre>
+
+            <p>Важные методы списков:</p>
+            <ul>
+                <li><code>append(значение)</code> - добавляет элемент <strong>в конец</strong> списка.</li>
+                <li><code>remove('значение')</code> - удаляет элемент по его <strong>точному значению</strong>,
+                    а не по индексу.</li>
+                <li><code>len(...)</code> - встроенная функция, возвращающая <strong>количество элементов</strong>
+                    в списке.</li>
+                <li><code>sort()</code> - сортирует список <strong>по возрастанию</strong>.</li>
+                <li><code>insert(i, val)</code> - вставляет элемент на позицию с индексом <code>i</code>.</li>
+            </ul>
+
+            <h2>🔍 Перебор списка циклом</h2>
+            <p>Очень часто списки обрабатывают с помощью цикла <code>for</code>:</p>
+            <pre><code>fruits = ["яблоко", "банан", "вишня"]
+for fruit in fruits:
+    print(fruit)</code></pre>
+
+            <h2>🎭 Что такое кортеж (tuple)?</h2>
+            <p>Кортеж - это <strong>неизменяемая</strong> последовательность элементов в круглых скобках.
+                После создания кортежа нельзя добавить, удалить или изменить его элементы.</p>
             <pre><code>colors = ("красный", "зелёный", "синий")
 print(colors[1])  # Выведет: зелёный</code></pre>
-        \n            <h2>💡 Важные методы списков:</h2><ul><li><code>len(...)</code> — специальная функция в Python, чтобы легко получить размер (длину) любого списка.</li><li><code>remove('значение')</code> — удаляет элемент по его точному значению, а не по индексу.</li></ul>\n        </section>
 
+            <h2>🆚 Когда использовать список, а когда кортеж?</h2>
+            <ul>
+                <li>Используйте <strong>список</strong>, если данные могут меняться (например, список покупок).</li>
+                <li>Используйте <strong>кортеж</strong>, если данные постоянны и менять их не нужно
+                    (например, координаты точки, дни недели).</li>
+                <li>Кортежи работают <strong>быстрее</strong> списков, так как защищены от изменений.</li>
+            </ul>
+        </section>
+
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>
             <ul>
-                <li>Создай список с 5 любимыми блюдами и выведи их на экран.</li>
-                <li>Добавь новый элемент в список и отсортируй его.</li>
-                <li>Создай кортеж с 3 любимыми цветами и выведи их.</li>
-                <li>Попробуй изменить элемент в кортеже и посмотри, что произойдёт.</li>
+                <li>Создай список с 5 любимыми блюдами и выведи их на экран с помощью цикла.</li>
+                <li>Добавь новый элемент в список с помощью <code>append()</code> и отсортируй его.</li>
+                <li>Создай кортеж с 3 любимыми цветами и выведи второй элемент.</li>
+                <li>Попробуй изменить элемент в кортеже и посмотри, какую ошибку выдаст Python.</li>
             </ul>
         </section>
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
 
         <!-- Навигация -->
         <div class="lesson-navigation"></div>

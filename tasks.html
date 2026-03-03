@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Задачи Python</title>
+    <meta name="description"
+        content="Практические алгоритмические задачи по Python с автоматическим роботом-проверяющим (автогрейдером). Тренажер программиста.">
+    <title>Задачи Python - Автогрейдер</title>
     <link rel="stylesheet" href="style.css">
     <!-- CodeMirror for the editor -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
@@ -232,7 +234,7 @@
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
                     <li><a href="index.html">Главная</a></li>
-                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="courses.html">Курсы</a></li>
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="tasks.html" class="active">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
@@ -251,7 +253,7 @@
     <main class="container">
         <div class="explanation-block">
             <strong>🤔 Для чего нужна эта страница и чем она отличается от "Python Online"?</strong><br><br>
-            В <em>Python Online</em> вы можете выполнять абсолютно любой код — это просто песочница, без конкретной
+            В <em>Python Online</em> вы можете выполнять абсолютно любой код - это просто песочница, без конкретной
             цели.
             А здесь находится <strong>тренажер программиста</strong>, необходимый для закрепления знаний!<br><br>
             Вам даётся конкретное задание: написать функцию. Когда вы нажимаете кнопку «Проверить», в работу вступает
@@ -496,7 +498,7 @@ except Exception as e:
                 id: "unique_dict",
                 title: "Словарь возрастов",
                 difficulty: "medium",
-                desc: "<p>Напишите функцию <code>get_oldest(people)</code>. На вход подается словарь, где ключ — имя, значение — возраст. <code>{'Иван': 20, 'Анна': 25}</code>. Верните ИМЯ самого старшего человека.</p>",
+                desc: "<p>Напишите функцию <code>get_oldest(people)</code>. На вход подается словарь, где ключ - имя, значение - возраст. <code>{'Иван': 20, 'Анна': 25}</code>. Верните ИМЯ самого старшего человека.</p>",
                 startCode: `def get_oldest(people):\n    # Ваш код пишите здесь\n    pass\n`,
                 testCode: `
 try:
@@ -541,7 +543,7 @@ except Exception as e:
                 id: "count_words",
                 title: "Частота слов",
                 difficulty: "hard",
-                desc: "<p>Напишите функцию <code>word_counts(text)</code>, которая принимает строку и возвращает <strong>словарь</strong>, где ключ — слово (в нижнем регистре), а значение — сколько раз оно встретилось. Знаков препинания в строке не будет.</p>",
+                desc: "<p>Напишите функцию <code>word_counts(text)</code>, которая принимает строку и возвращает <strong>словарь</strong>, где ключ - слово (в нижнем регистре), а значение - сколько раз оно встретилось. Знаков препинания в строке не будет.</p>",
                 startCode: `def word_counts(text):\n    # Подсказка: .split() разбивает на слова\n    pass\n`,
                 testCode: `
 try:

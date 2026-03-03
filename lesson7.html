@@ -4,17 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Урок 7: Функции в Python. Создание функций, аргументы, возврат значений и значения по умолчанию.">
     <title>Урок 7: Функции в Python</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-            <header>
+    <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html"
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+                <span
+                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
+                        style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -38,47 +44,80 @@
     <main class="container">
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Научиться создавать функции, передавать в них аргументы и получать результаты.</p>
+            <p>Научиться создавать функции, передавать в них аргументы, получать результаты и использовать
+                значения по умолчанию.</p>
         </section>
 
         <section class="lesson-content">
             <h2>📈 Что такое функция?</h2>
-            <p>Функция - это блок кода, который выполняет определённую задачу и может вызываться в программе несколько
-                раз.</p>
+            <p>Функция - это именованный блок кода, который выполняет определённую задачу и может быть
+                <strong>вызван в программе несколько раз</strong>. Функции помогают избежать повторения кода
+                (принцип DRY - Don't Repeat Yourself).
+            </p>
 
-            <h2>✅ Создание функции</h2>
-            <p>Используем ключевое слово <code>def</code> для создания функции.</p>
-            <pre><code>def приветствие():
+            <h2>✅ Создание функции с помощью def</h2>
+            <p>Для создания функции используется ключевое слово <code>def</code>:</p>
+            <pre><code>def greet():
     print("Привет! Добро пожаловать в Python!")
 
-приветствие()  # Вызов функции</code></pre>
+greet()  # Вызов функции - выведет приветствие</code></pre>
+            <p>После слова <code>def</code> указывается имя функции, затем круглые скобки <code>()</code>
+                и обязательное двоеточие <code>:</code>. Тело функции пишется с отступом.</p>
 
-            <h2>🤖 Аргументы функции</h2>
-            <p>Функция может принимать данные (аргументы) и использовать их внутри.</p>
-            <pre><code>def приветствие(имя):
-    print("Привет,", имя, "!")
+            <h2>🤖 Аргументы (параметры) функции</h2>
+            <p>Функция может принимать данные через <strong>аргументы</strong> (они же параметры) и
+                использовать их внутри:</p>
+            <pre><code>def greet(name):
+    print("Привет,", name, "!")
 
-приветствие("Алекс")</code></pre>
+greet("Алекс")   # Выведет: Привет, Алекс !
+greet("Мария")   # Выведет: Привет, Мария !</code></pre>
+            <p>Функция с аргументами становится универсальной - одна функция работает для разных данных.</p>
 
-            <h2>🌟 Возвращаемое значение</h2>
-            <p>Функция может возвращать результат с помощью <code>return</code>.</p>
-            <pre><code>def квадрат(число):
-    return число * число
+            <h2>🌟 Возвращаемое значение - оператор return</h2>
+            <p>Функция может <strong>возвращать результат</strong> своей работы с помощью оператора
+                <code>return</code>. Этот результат можно сохранить в переменную:
+            </p>
+            <pre><code>def square(number):
+    return number * number
 
-результат = квадрат(5)
-print("Квадрат числа 5 равен", результат)</code></pre>
-        \n            <h2>💡 Значения по-умолчанию</h2><p>Функции могут иметь запасные стандарты переменных: например, <code>def greet(name='Гость'):</code>. Если вызовем <code>greet()</code> пустым (без аргументов), то Python по-умолчанию подставит имя: 'Гость'. Вы также должны знать, что функция без <code>return</code> автоматически вернет пустоту — объект <code>None</code>.</p>\n        </section>
+result = square(5)
+print("Квадрат числа 5 равен", result)  # Выведет: 25</code></pre>
+            <p><strong>Важно:</strong> функция без <code>return</code> автоматически возвращает <code>None</code>
+                - специальный объект «ничего». Это нормально, если функция просто что-то делает, а не считает.</p>
 
+            <h2>💡 Значения по умолчанию</h2>
+            <p>Параметр функции может иметь <strong>значение по умолчанию</strong>. Если при вызове аргумент
+                не передан, Python подставит это значение автоматически:</p>
+            <pre><code>def greet(name='Гость'):
+    print("Привет,", name, "!")
+
+greet()           # Выведет: Привет, Гость !
+greet("Дмитрий") # Выведет: Привет, Дмитрий !</code></pre>
+
+            <h2>📦 Несколько аргументов</h2>
+            <p>Функция может принимать несколько аргументов через запятую:</p>
+            <pre><code>def add(a, b):
+    return a + b
+
+print(add(3, 7))   # Выведет: 10
+print(add(10, 20)) # Выведет: 30</code></pre>
+        </section>
+
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>
             <ul>
                 <li>Создай функцию, которая принимает два числа и возвращает их сумму.</li>
-                <li>Напиши функцию, которая определяет, является ли число чётным.</li>
-                <li>Попробуй написать свою собственную полезную функцию.</li>
+                <li>Напиши функцию, которая принимает число и определяет, является ли оно чётным
+                    (используй оператор <code>%</code>).</li>
+                <li>Создай функцию с параметром по умолчанию - например, функцию приветствия, которая
+                    говорит «Привет, Гость!» если имя не передано.</li>
             </ul>
         </section>
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
 
         <!-- Навигация -->
         <div class="lesson-navigation"></div>

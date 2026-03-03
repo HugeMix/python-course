@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Онлайн компилятор Python. Пишите код и выполняйте скрипты прямо в браузере с помощью технологии Pyodide.">
     <title>Python Online - Локальный компилятор</title>
     <link rel="stylesheet" href="style.css">
 
@@ -150,7 +152,7 @@
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
                     <li><a href="index.html">Главная</a></li>
-                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="courses.html">Курсы</a></li>
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="python-online.html" class="active">Python Online</a></li>
                 </ul>
@@ -228,7 +230,7 @@ for i in range(1, 4):
 
         // Redirect Python's stdout to our terminal
         function printToTerminal(text) {
-            terminal.textContent += text + "\\n";
+            terminal.textContent += text;
             terminal.scrollTop = terminal.scrollHeight;
         }
 
@@ -240,9 +242,9 @@ for i in range(1, 4):
                 });
                 loadingOverlay.style.display = "none";
                 runBtn.disabled = false;
-                printToTerminal("✅ Python успешно загружен и готов к работе!\\n");
+                printToTerminal("✅ Python успешно загружен и готов к работе!\n");
             } catch (err) {
-                printToTerminal("❌ Ошибка при загрузке Python: " + err + "\\n");
+                printToTerminal("❌ Ошибка при загрузке Python: " + err + "\n");
             }
         }
 
@@ -258,7 +260,7 @@ for i in range(1, 4):
             try {
                 await pyodide.runPythonAsync(code);
             } catch (err) {
-                printToTerminal("\\n[Ошибка]:\\n" + err);
+                printToTerminal("\n[Ошибка]:\n" + err);
             }
             runBtn.disabled = false;
             runBtn.innerHTML = "▶ Запустить";

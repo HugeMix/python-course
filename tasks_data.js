@@ -199,7 +199,7 @@ except Exception as e:
         id: "unique_dict",
         title: "Словарь возрастов",
         difficulty: "medium",
-        desc: "<p>Напишите функцию <code>get_oldest(people)</code>. На вход подается словарь, где ключ — имя, значение — возраст. <code>{'Иван': 20, 'Анна': 25}</code>. Верните ИМЯ самого старшего человека.</p>",
+        desc: "<p>Напишите функцию <code>get_oldest(people)</code>. На вход подается словарь, где ключ - имя, значение - возраст. <code>{'Иван': 20, 'Анна': 25}</code>. Верните ИМЯ самого старшего человека.</p>",
         startCode: "def get_oldest(people):\n    # Ваш код пишите здесь\n    pass\n",
         testCode: `
 try:
@@ -244,7 +244,7 @@ except Exception as e:
         id: "count_words",
         title: "Частота слов",
         difficulty: "hard",
-        desc: "<p>Напишите функцию <code>word_counts(text)</code>, которая принимает строку и возвращает <strong>словарь</strong>, где ключ — слово (в нижнем регистре), а значение — сколько раз оно встретилось. Знаков препинания в строке не будет.</p>",
+        desc: "<p>Напишите функцию <code>word_counts(text)</code>, которая принимает строку и возвращает <strong>словарь</strong>, где ключ - слово (в нижнем регистре), а значение - сколько раз оно встретилось. Знаков препинания в строке не будет.</p>",
         startCode: "def word_counts(text):\n    # Подсказка: .split() разбивает на слова\n    pass\n",
         testCode: `
 try:
