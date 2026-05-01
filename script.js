@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     navLinks.forEach(link => {
         const href = link.getAttribute('href');
         const isLesson = currentPath.startsWith('lesson');
+        const isCourseList = currentPath === 'python-basic.html';
+        const isIndex = currentPath === 'index.html';
+        const isLibraries = currentPath === 'libraries.html';
 
         if (href === currentPath) {
             link.classList.add('active');
@@ -25,162 +28,121 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- 1. Quiz Data (15 Lessons) ---
-    // Для каждого вопроса с вариантами ответов: correct - оригинальный индекс правильного ответа в массиве options
     const quizData = {
         'lesson1.html': [
             { question: "Какая команда используется для вывода текста на экран?", options: ["input()", "print()", "scan()", "output()"], correct: 1 },
             { question: "Какое расширение имеют файлы Python?", options: [".txt", ".exe", ".py", ".pyt"], correct: 2 },
-            { question: "В каком году был выпущен первый релиз Python?", options: ["1991", "2000", "1985", "1995"], correct: 0 },
+            { question: "В каком году был выпущен Python?", options: ["1991", "2000", "1985", "1995"], correct: 0 },
             { question: "Какую роль выполняет функция print()?", options: ["Считывает ввод с клавиатуры", "Выводит переданные данные в консоль", "Удаляет пробелы", "Объявляет функцию"], correct: 1 },
-            { question: "Является ли Python регистрозависимым языком (print и Print - разные вещи)?", options: ["Да, регистр важен (print и Print - разные)", "Нет, регистр не имеет значения", "Только для переменных", "Только в Windows"], correct: 0 },
-            { question: "Кто создал язык программирования Python?", options: ["Линус Торвальдс", "Гвидо ван Россум", "Деннис Ритчи", "Джеймс Гослинг"], correct: 1 },
-            { question: "Напишите код, который выводит слово: Привет", type: "code", correct: ["print('Привет')", "print(\"Привет\")", "print('привет')", "print(\"привет\")"] },
-            { question: "Напишите код, который выводит число 42", type: "code", correct: ["print(42)", "print('42')", "print(\"42\")"] }
+            { question: "Print регистрозависима?", options: ["Да (PRiNT и print - разные)", "Нет", "В Python не важен регистр", "Регистр влияет только на Windows"], correct: 0 },
+            { question: "Напишите программу, которая выводит текст 'Привет'", type: "code", correct: ["print('Привет')", "print(\"Привет\")"] },
+            { question: "Напишите программу, которая выводит число 42", type: "code", correct: ["print(42)", "print('42')", "print(\"42\")"] }
         ],
         'lesson2.html': [
-            { question: "Как правильно объявить переменную x = 5 в Python?", options: ["var x = 5", "int x = 5", "x = 5", "$x = 5"], correct: 2 },
-            { question: "Какой тип данных у значения 3.14?", options: ["int", "float", "str", "bool"], correct: 1 },
-            { question: "Что выведет print(type(\"10\"))?", options: ["<class 'int'>", "<class 'str'>", "<class 'float'>", "Ошибка"], correct: 1 },
-            { question: "Какое имя переменной НЕДОПУСТИМО в Python?", options: ["my_var", "var1", "1var", "_var_"], correct: 2 },
-            { question: "Что будет результатом выражения: str(5) + '5'?", options: ["10", "Ошибка", "'55'", "55"], correct: 2 },
-            { question: "Какая функция позволяет узнать тип переменной?", options: ["kind()", "type()", "typeof()", "datatype()"], correct: 1 },
-            { question: "Какая функция считывает ввод пользователя и всегда возвращает строку?", options: ["read()", "scan()", "input()", "get()"], correct: 2 },
+            { question: "Как правильно объявить переменную в Python?", options: ["var x = 5", "int x = 5", "x = 5", "$x = 5"], correct: 2 },
+            { question: "Какой тип данных у значения 3.14?", options: ["int", "float", "string", "bool"], correct: 1 },
+            { question: "Что выведет код: print(type(\"10\"))?", options: ["<class 'int'>", "<class 'str'>", "<class 'float'>", "Ошибка"], correct: 1 },
+            { question: "Какое имя переменной недопустимо в Python?", options: ["my_var", "var1", "1var", "_var_"], correct: 2 },
+            { question: "Что будет результатом: str(5) + '5'?", options: ["10", "Ошибка", "55", "'5'"], correct: 2 },
             { question: "Создайте переменную age и присвойте ей значение 20", type: "code", correct: ["age=20", "age = 20"] },
-            { question: "Конвертируйте строку '10' в целое число и запишите в переменную x", type: "code", correct: ["x=int('10')", "x=int(\"10\")", "x = int('10')", "x = int(\"10\")", "x=int(10)", "x = int(10)"] }
+            { question: "Сконвертируйте строку '10' в число и присвойте в x", type: "code", correct: ["x=int('10')", "x=int(\"10\")", "x = int('10')", "x = int(\"10\")"] }
         ],
         'lesson3.html': [
-            { question: "Чему равен результат операции 10 // 3?", options: ["3.333", "3", "4", "3.0"], correct: 1 },
-            { question: "Какой оператор используется для возведения в степень в Python?", options: ["^", "*", "**", "^^"], correct: 2 },
-            { question: "Как проверить равенство двух переменных x и y?", options: ["x = y", "x == y", "x === y", "equals(x, y)"], correct: 1 },
+            { question: "Результат операции 10 // 3?", options: ["3.333", "3", "4", "3.0"], correct: 1 },
+            { question: "Какой оператор используется для возведения в степень?", options: ["^", "*", "**", "^^"], correct: 2 },
+            { question: "Как проверить равенство двух переменных?", options: ["x = y", "x == y", "x === y", "x equals y"], correct: 1 },
             { question: "Что выведет код: print(True and False)?", options: ["True", "False", "Ошибка", "None"], correct: 1 },
-            { question: "Какой логический оператор меняет значение на противоположное?", options: ["not", "!=!", "reverse", "invert"], correct: 0 },
-            { question: "Что означает оператор % в Python?", options: ["Процент от числа", "Остаток от деления", "Умножение", "Степень"], correct: 1 },
-            { question: "Что делает оператор x += 5?", options: ["Сравнивает x с 5", "Прибавляет 5 к x (аналог x = x + 5)", "Создаёт переменную x=5", "Вычитает 5 из x"], correct: 1 },
-            { question: "Когда оператор 'or' возвращает True?", options: ["Только если оба условия истинны", "Если хотя бы одно условие истинно", "Только если оба условия ложны", "Никогда"], correct: 1 },
-            { question: "Напишите выражение для вычисления остатка от деления 10 на 3", type: "code", correct: ["10%3", "10 % 3", "print(10%3)", "print(10 % 3)"] }
+            { question: "Какой оператор меняет логическое значение на противоположное?", options: ["not", "!=!", "reverse", "invert"], correct: 0 },
+            { question: "Напишите выражение: остаток от деления 10 на 3", type: "code", correct: ["10%3", "10 % 3"] }
         ],
         'lesson4.html': [
-            { question: "Как правильно записать условие 'если x больше 5'?", options: ["if x > 5 then:", "if (x > 5)", "if x > 5:", "if x > 5 ;"], correct: 2 },
-            { question: "Какое ключевое слово выполняется, когда ВСЕ предыдущие условия if/elif оказались ложны?", options: ["elif", "else", "finally", "default"], correct: 1 },
-            { question: "Что такое elif в Python?", options: ["Другое слово для else", "Сокращение от 'else if' - дополнительная проверка условия", "Ошибочное написание слова else", "Оператор выхода из условия"], correct: 1 },
-            { question: "Что ОБЯЗАТЕЛЬНО ставить в конце строки с if, elif или else?", options: ["Точку с запятой (;)", "Двоеточие (:)", "Скобки ()", "Запятую (,)"], correct: 1 },
-            { question: "Какого отступа требует Python внутри блока if?", options: ["2 пробела", "Отступ не важен", "1 табуляция или 2 пробела", "4 пробела"], correct: 3 },
-            { question: "Что считается 'ложным' значением в условии Python?", options: ["Число 1", "Пустая строка (\"\"\", 0, [], None)", "Слово 'False'", "Любая переменная"], correct: 1 },
-            { question: "В каком порядке Python проверяет ветки if-elif-else?", options: ["Случайном", "Снизу вверх", "Сверху вниз, останавливаясь на первой подошедшей", "Все проверяет одновременно"], correct: 2 },
-            { question: "Напишите заголовок условия: если a меньше b", type: "code", correct: ["if a<b:", "if a < b:"] },
-            { question: "Напишите ключевое слово Python для 'иначе если' (дополнительное условие после if):", type: "code", correct: ["elif"] }
+            { question: "Как правильно написать условие 'если x больше 5'?", options: ["if x > 5 then:", "if (x > 5)", "if x > 5:", "if x > 5 ;"], correct: 2 },
+            { question: "Какое слово обрабатывает ситуацию, когда все предыдущие условия ложны?", options: ["else if", "else:", "elif", "finally"], correct: 1 },
+            { question: "Какой оператор означает 'не равно'?", options: ["<>", "!=", "/=", "not="], correct: 1 },
+            { question: "Что всегда обязательно ставить в конце условия if/elif/else перед переходом на новую строку?", options: ["Точку с запятой", "Двоеточие (:)", "Круглые скобки", "Запятую"], correct: 1 },
+            { question: "Напишите код условия: если a меньше b:", type: "code", correct: ["if a<b:", "if a < b:"] },
+            { question: "Напишите ключевое слово 'иначе если':", type: "code", correct: ["elif", "elif:"] }
         ],
         'lesson5.html': [
-            { question: "Какой цикл выполняется, пока его условие истинно (True)?", options: ["while", "for", "do-while", "loop"], correct: 0 },
-            { question: "Что генерирует функция range(5)?", options: ["Числа от 1 до 5", "Числа от 0 до 4", "Числа от 0 до 5", "Пять единиц"], correct: 1 },
-            { question: "Как досрочно ПОЛНОСТЬЮ выйти из цикла?", options: ["stop", "exit", "break", "return"], correct: 2 },
-            { question: "Как пропустить текущую итерацию и перейти к следующей?", options: ["skip", "pass", "continue", "next"], correct: 2 },
-            { question: "Что произойдёт, если условие цикла while НИКОГДА не станет ложным?", options: ["Программа выдаст ошибку сразу", "Цикл выполнится ровно 100 раз", "Бесконечный цикл - программа зависнет", "Цикл автоматически остановится"], correct: 2 },
-            { question: "Какие числа выведет диапазон range(1, 6)?", options: ["0, 1, 2, 3, 4, 5", "1, 2, 3, 4, 5", "1, 2, 3, 4, 5, 6", "0, 1, 2, 3, 4"], correct: 1 },
-            { question: "Напишите команду для досрочного прерывания (выхода из) цикла", type: "code", correct: ["break"] },
-            { question: "Напишите заголовок цикла for по диапазону из 3 элементов (i от 0 до 2):", type: "code", correct: ["for i in range(3):", "for i in range(0,3):", "for i in range(0, 3):"] }
+            { question: "Какой цикл работает, пока его условие истинно (True)?", options: ["while", "for", "do-while", "loop"], correct: 0 },
+            { question: "Что генерирует функция range(5)?", options: ["Числа от 1 до 5", "Числа от 0 до 4", "Числа от 0 до 5", "Считает до 5"], correct: 1 },
+            { question: "Как досрочно полностью выйти из цикла (оборвать его)?", options: ["stop", "exit", "break", "return"], correct: 2 },
+            { question: "Как пропустить текущий шаг цикла и перейти сразу к следующему?", options: ["skip", "pass", "continue", "next"], correct: 2 },
+            { question: "Напишите команду досрочного прерывания цикла", type: "code", correct: ["break"] },
+            { question: "Напишите начало цикла 'для i в диапазоне 3':", type: "code", correct: ["for i in range(3):", "for i in range(0,3):"] }
         ],
         'lesson6.html': [
             { question: "Как правильно создать список (list) в Python?", options: ["x = (1, 2)", "x = {1, 2}", "x = [1, 2]", "x = <1, 2>"], correct: 2 },
-            { question: "С какого индекса начинается нумерация элементов в Python-списке?", options: ["1", "0", "-1", "Любого"], correct: 1 },
-            { question: "Какой метод добавляет новый элемент В КОНЕЦ списка?", options: [".add()", ".insert()", ".append()", ".push()"], correct: 2 },
-            { question: "Какая встроенная функция возвращает количество элементов в списке?", options: ["list.count()", "size(list)", "list.length", "len()"], correct: 3 },
-            { question: "Чем кортеж (tuple) отличается от списка (list)?", options: ["Ничем, это одно и то же", "Кортеж нельзя изменить после создания", "Кортеж хранит только числа", "У кортежа нет индексов"], correct: 1 },
-            { question: "Что означает fruits[-1] в Python?", options: ["Ошибку, отрицательных индексов нет", "Последний элемент списка", "Предпоследний элемент", "Первый элемент"], correct: 1 },
-            { question: "Какой метод СОРТИРУЕТ список по возрастанию?", options: [".order()", ".arrange()", ".sort()", ".sorted()"], correct: 2 },
-            { question: "Создайте пустой список с именем numbers", type: "code", correct: ["numbers=[]", "numbers = []", "numbers=list()", "numbers = list()"] },
-            { question: "Напишите метод списка, который удаляет элемент по его ЗНАЧЕНИЮ:", type: "code", correct: ["remove", "remove()", ".remove()"] }
+            { question: "С какого индекса (номера) начинается счет элементов в списке?", options: ["1", "0", "-1", "Любого"], correct: 1 },
+            { question: "Как добавить элемент 'apple' в конец существующего списка list?", options: ["list.add('apple')", "list.insert('apple')", "list.append('apple')", "list.push('apple')"], correct: 2 },
+            { question: "Какая функция определяет количество элементов (длину) в списке?", options: ["list.count()", "size(list)", "list.length", "len()"], correct: 3 },
+            { question: "Создайте пустой список numbers", type: "code", correct: ["numbers=[]", "numbers = []", "numbers=list()"] },
+            { question: "Напишите метод, который удаляет элемент по его значению:", type: "code", correct: ["remove", "remove()"] }
         ],
         'lesson7.html': [
-            { question: "Какое ключевое слово Python используется для объявления функции?", options: ["function", "func", "def", "create"], correct: 2 },
-            { question: "Как правильно ВЫЗВАТЬ функцию с именем my_func?", options: ["call my_func()", "my_func", "my_func()", "execute my_func"], correct: 2 },
-            { question: "Что вернёт функция, в которой нет оператора return?", options: ["0", "False", "None", "Ошибка"], correct: 2 },
-            { question: "Что такое параметр по умолчанию?", options: ["Параметр, который нельзя изменить", "Параметр со значением, используемым если аргумент не передан при вызове", "Обязательный первый параметр", "Такого нет в Python"], correct: 1 },
-            { question: "Какой принцип программирования означает: 'не повторяй себя' (Don't Repeat Yourself)?", options: ["OOP", "DRY", "MVC", "SOLID"], correct: 1 },
-            { question: "Функция может принимать сколько аргументов?", options: ["Только один", "Только два", "Не более пяти", "Любое количество"], correct: 3 },
-            { question: "Напишите оператор для возврата значения переменной x из функции", type: "code", correct: ["return x", "return(x)"] },
-            { question: "Напишите объявление функции greet без аргументов", type: "code", correct: ["def greet():", "def greet() :"] }
+            { question: "Какое ключевое слово используется для создания (объявления) функции?", options: ["function", "func", "def", "create"], correct: 2 },
+            { question: "Как правильно вызывать функцию с именем my_func?", options: ["call my_func()", "my_func", "my_func()", "execute my_func"], correct: 2 },
+            { question: "Что возвратит функция, если в ней нет явного оператора return?", options: ["0", "False", "None", "Ошибка"], correct: 2 },
+            { question: "Что такое аргументы по умолчанию?", options: ["Аргументы, которые нельзя изменить", "Параметры, имеющие стартовое значение, если их не забыли передать", "Обязательные параметры", "Такого нет в Python"], correct: 1 },
+            { question: "Как вернуть значение переменной x из функции назад в программу?", type: "code", correct: ["return x", "return(x)"] },
+            { question: "Напишите объявление функции hello без аргументов", type: "code", correct: ["def hello():", "def hello() :"] }
         ],
         'lesson8.html': [
-            { question: "Что такое словарь (dict) в Python?", options: ["Список чисел", "Коллекция пар ключ-значение, например: {'a': 1}", "Список строк", "Кортеж из двух элементов"], correct: 1 },
-            { question: "Главное отличие множества (set) от списка:", options: ["Оно упорядочено", "Элементы могут повторяться", "Все элементы уникальны, порядок не гарантирован", "Доступ только по индексу"], correct: 2 },
-            { question: "Как создать ПУСТОЕ множество (set)? Внимание: {} создаёт словарь!", options: ["{}", "set()", "[]", "dict()"], correct: 1 },
-            { question: "Какой метод возвращает все КЛЮЧИ словаря d?", options: ["d.keys()", "d.get()", "d.values()", "d.items()"], correct: 0 },
-            { question: "Что вернёт метод get(), если ключа нет в словаре?", options: ["Ошибку KeyError", "None (или заданное значение по умолчанию)", "Пустую строку", "Ноль"], correct: 1 },
-            { question: "Каким оператором удалить ключ из словаря?", options: ["remove", "del", "pop", "erase"], correct: 1 },
-            { question: "Напишите обращение к значению ключа 'name' в словаре data", type: "code", correct: ["data['name']", "data[\"name\"]"] },
-            { question: "Напишите команду удаления ключа 'age' из словаря d оператором del", type: "code", correct: ["del d['age']", "del d[\"age\"]", "del(d['age'])", "del(d[\"age\"])"] }
+            { question: "Как правильно понимать и создавать словарь (dict)?", options: ["x = {1, 2}", "Пары ключ:значение, x = {'a': 1, 'b': 2}", "x = [1: 2]", "x = (1)"], correct: 1 },
+            { question: "Какая главная особенность и отличие множества (set) от списка?", options: ["Оно упорядочено", "Элементы могут повторяться", "Все уникальны и не имеют индексов", "Использует дробные индексы"], correct: 2 },
+            { question: "Как правильно создать ПУСТОЕ множество (а не пустой словарь)?", options: ["{}", "set()", "[]", "dict()"], correct: 1 },
+            { question: "Как получить все ключи словаря d?", options: ["d.keys()", "d.get()", "d.values()", "d.items()"], correct: 0 },
+            { question: "Получите значение по ключу 'name' из словаря data (через [])", type: "code", correct: ["data['name']", "data[\"name\"]"] },
+            { question: "Напишите удаление ключа 'age' из словаря d с помощью оператора del", type: "code", correct: ["del d['age']", "del d[\"age\"]", "del(d['age'])"] }
         ],
         'lesson9.html': [
-            { question: "Как получить длину (количество символов) строки s?", options: ["s.length()", "len(s)", "s.size()", "count(s)"], correct: 1 },
-            { question: "Какой метод строки преобразует все буквы в ВЕРХНИЙ регистр?", options: [".upper()", ".to_upper()", ".capitalize()", ".UPPER()"], correct: 0 },
-            { question: "Какой метод строки преобразует все буквы в НИЖНИЙ регистр?", options: [".down()", ".small()", ".lower()", ".min()"], correct: 2 },
-            { question: "Какой метод разбивает строку на список подстрок по разделителю?", options: [".divide()", ".split()", ".cut()", ".break()"], correct: 1 },
-            { question: "Какой метод заменяет одну подстроку на другую в строке?", options: [".swap()", ".change()", ".replace()", ".switch()"], correct: 2 },
-            { question: "Что делает метод s.strip()?", options: ["Очищает всю строку полностью", "Удаляет пробелы и спецсимволы по краям строки", "Переводит в нижний регистр", "Удаляет все цифры"], correct: 1 },
-            { question: "Как называется современный способ вставки переменных в строку (буква перед кавычками)?", options: ["d-строки", "f-строки", "s-строки", "r-строки"], correct: 1 },
-            { question: "len() - это функция или метод строки?", options: ["Метод строки, вызывается как s.len()", "Встроенная функция Python, вызывается как len(s)", "И то и другое", "Зависит от версии Python"], correct: 1 },
-            { question: "Напишите вызов функции для получения длины строки t", type: "code", correct: ["len(t)", "print(len(t))"] }
+            { question: "Как узнать длину строки s (количество символов)?", options: ["s.length()", "len(s)", "s.size()", "count(s)"], correct: 1 },
+            { question: "Какой метод переводит всю строку в верхний регистр (ЗАГЛАВНЫЕ БУКВЫ)?", options: ["upper()", "to_upper()", "capitalize()", "UPPER()"], correct: 0 },
+            { question: "Какой метод делит строку s на список слов по пробелам?", options: ["s.divide()", "s.split()", "s.cut()", "s.break()"], correct: 1 },
+            { question: "Какой метод заменяет подстроку 'a' на 'b'?", options: ["s.swap('a', 'b')", "s.change('a', 'b')", "s.replace('a', 'b')", "s.switch('a', 'b')"], correct: 2 },
+            { question: "Что делает метод s.strip()?", options: ["Очищает всю строку", "Удаляет пробелы и переносы по самым краям строки", "Сделает буквы строчными", "Удалит все числа"], correct: 1 },
+            { question: "Напишите вызов функции для получения длины строки t", type: "code", correct: ["len(t)"] }
         ],
         'lesson10.html': [
-            { question: "Какая встроенная функция Python открывает файл?", options: ["file.open()", "read()", "open()", "start()"], correct: 2 },
-            { question: "Какой режим открытия файла ПЕРЕЗАПИСЫВАЕТ его с нуля?", options: ["'r'", "'a'", "'w'", "'x'"], correct: 2 },
-            { question: "Зачем используют конструкцию 'with open()' вместо обычного open()?", options: ["Она быстрее работает", "Файл закрывается автоматически, даже если возникла ошибка", "Позволяет читать бинарные файлы", "Открывает несколько файлов"], correct: 1 },
-            { question: "Какой метод читает ВЕСЬ файл целиком в одну строку?", options: [".read()", ".get()", ".text()", ".lines()"], correct: 0 },
-            { question: "Какую кодировку рекомендуется указывать при работе с файлами с русским текстом?", options: ["ascii", "utf-8", "windows-1251", "latin-1"], correct: 1 },
-            { question: "Какой режим открытия файла добавляет данные В КОНЕЦ, не удаляя существующие?", options: ["'w'", "'r'", "'a'", "'x'"], correct: 2 },
-            { question: "Какой метод читает все строки файла и возвращает их в виде СПИСКА?", options: [".readall()", ".readlines()", ".getlines()", ".lines()"], correct: 1 },
-            { question: "Напишите режим открытия файла для ДОЗАПИСИ в конец (без удаления данных)", type: "code", correct: ["'a'", "\"a\"", "a"] },
-            { question: "Напишите вызов метода для закрытия файла f", type: "code", correct: ["f.close()", "f.close"] }
+            { question: "Какая функция используется для открытия файла?", options: ["file.open()", "read()", "open()", "start()"], correct: 2 },
+            { question: "Какой режим (mode) используется для записи в файл с УДАЛЕНИЕМ старого содержимого?", options: ["'r'", "'a'", "'w'", "'x'"], correct: 2 },
+            { question: "Почему 'with open()' используют чаще, чем просто open()?", options: ["Она работает быстрее", "Она автоматически закроет файл даже при ошибке, не оставляя утечек памяти", "Позволяет писать цветной текст", "Ускоряет загрузку"], correct: 1 },
+            { question: "Как прочитать весь текстовый файл целиком в одну строку?", options: ["file.read()", "file.get()", "file.text()", "file.lines()"], correct: 0 },
+            { question: "Напишите режим открытия файла для ДОЗАПИСИ (в конец файла)", type: "code", correct: ["'a'", "\"a\""] },
+            { question: "Напишите метод закрытия файла f (например открытого через open без with)", type: "code", correct: ["f.close()"] }
         ],
         'lesson11.html': [
-            { question: "Зачем нужен блок try-except?", options: ["Для создания циклов", "Для перехвата ошибок и предотвращения 'краша' программы", "Для ускорения кода", "Для работы с файлами"], correct: 1 },
-            { question: "В каком блоке пишется код, обрабатывающий пойманную ошибку?", options: ["try", "except", "handle", "finally"], correct: 1 },
-            { question: "Когда выполняется блок finally?", options: ["Только при ошибке", "Только при успехе", "Всегда - и при ошибке, и без неё", "Никогда автоматически"], correct: 2 },
-            { question: "Какая ошибка возникает при делении числа на 0 в Python?", options: ["ValueError", "TypeError", "ZeroDivisionError", "SyntaxError"], correct: 2 },
-            { question: "Как называется базовый класс всех ошибок, который перехватывает ЛЮБОЕ исключение?", options: ["Error", "BaseError", "Exception", "AnyError"], correct: 2 },
-            { question: "Что произойдёт с программой при ошибке, если НЕТ блока try-except?", options: ["Python выдаст предупреждение и продолжит", "Программа аварийно завершится (упадёт)", "Ничего - ошибка проигнорируется", "Запустится блок finally"], correct: 1 },
-            { question: "Напишите ключевое слово для принудительного вызова исключения", type: "code", correct: ["raise"] },
-            { question: "Напишите имя базового класса для перехвата ЛЮБОЙ ошибки: except _______:", type: "code", correct: ["Exception"] }
+            { question: "Для чего используется блок try-except?", options: ["Для создания циклов", "Для перехвата ошибок и защиты программы от внезапных 'падений'", "Для ускорения кода", "Для работы с базами"], correct: 1 },
+            { question: "В каком блоке описывается перехват и логика обработки пойманной ошибки?", options: ["try", "except", "handle", "finally"], correct: 1 },
+            { question: "В каких случаях выполняется блок finally?", options: ["Только если возникла ошибка", "Только если код отработал успешно", "Он выполняется ВСЕГДА, в самом конце", "Он никогда не выполняется"], correct: 2 },
+            { question: "Что случится, если поделить число на 0 в Python?", options: ["ValueError", "TypeError", "ZeroDivisionError", "SyntaxError"], correct: 2 },
+            { question: "Ключевое слово для искусственного вызова исключения (ошибки)", type: "code", correct: ["raise"] },
+            { question: "Универсальный класс для перехвата любых ошибок: except ________:", type: "code", correct: ["Exception"] }
         ],
         'lesson12.html': [
-            { question: "Для чего служит ключевое слово import?", options: ["Экспортирует функции", "Подключает встроенные и сторонние модули/библиотеки", "Компилирует код", "Сжимает файл"], correct: 1 },
-            { question: "Как импортировать ТОЛЬКО константу pi из модуля math?", options: ["import math.pi", "from math import pi", "get pi from math", "using math.pi"], correct: 1 },
-            { question: "Что такое pip?", options: ["Игровая платформа", "Стандартный менеджер пакетов Python для установки библиотек", "Тип ошибки", "Модуль для изображений"], correct: 1 },
-            { question: "Какой встроенный модуль Python используется для генерации случайных чисел?", options: ["math", "random", "shuffle", "chance"], correct: 1 },
-            { question: "Как дать псевдоним модулю при импорте (например, math сократить до m)?", options: ["import math = m", "import math as m", "alias math m", "math aka m"], correct: 1 },
-            { question: "Модуль - это:", options: ["Специальный тип данных Python", "Файл с готовым кодом Python, который можно подключить", "Встроенная функция", "Тип исключения"], correct: 1 },
-            { question: "Что вернёт math.sqrt(25) из модуля math?", options: ["5", "5.0", "625", "Ошибку"], correct: 1 },
-            { question: "Напишите команду терминала для установки библиотеки requests", type: "code", correct: ["pip install requests"] }
+            { question: "Для чего используют конструкцию import?", options: ["Чтобы красить текст", "Для подключения встроенных и скачанных библиотек в свой проект", "Для компиляции кода", "Для архивации"], correct: 1 },
+            { question: "Как из модуля math импортировать ТОЛЬКО константу pi?", options: ["import math.pi", "from math import pi", "get pi from math", "using math.pi"], correct: 1 },
+            { question: "Что такое PIP?", options: ["Платформа игр", "Официальный менеджер для загрузки и установки пакетов (библиотек) из интернета", "Вид ошибки", "Модуль для работы с фото"], correct: 1 },
+            { question: "Напишите команду консоли для установки библиотеки requests", type: "code", correct: ["pip install requests"] }
         ],
         'lesson13.html': [
-            { question: "Что в ООП является 'чертежом' (шаблоном) для создания объектов?", options: ["Функция", "Класс", "Переменная", "Пакет"], correct: 1 },
-            { question: "Как называется специальный метод-конструктор, вызываемый при создании объекта?", options: ["__start__", "__main__", "__init__", "__create__"], correct: 2 },
-            { question: "Какой параметр ОБЯЗАН быть первым в каждом методе класса?", options: ["Имя класса", "self", "this", "cls"], correct: 1 },
-            { question: "Инкапсуляция - это:", options: ["Скрытие внутренней реализации и данных объекта от внешнего кода", "Наследование атрибутов", "Перегрузка методов", "Копирование объекта"], correct: 0 },
-            { question: "Что хранится в атрибутах объекта, заданных в __init__ через self?", options: ["Функции модуля", "Данные (свойства) конкретного объекта", "Общие методы класса", "Ошибки выполнения"], correct: 1 },
-            { question: "Как в Python обозначают 'приватный' (скрытый) атрибут класса?", options: ["Знаком @ перед именем", "Двойным подчёркиванием __ перед именем", "Словом private перед именем", "Заглавными буквами"], correct: 1 },
-            { question: "Создайте экземпляр класса Car и сохраните в переменную obj", type: "code", correct: ["obj=Car()", "obj = Car()"] }
+            { question: "Что является основным 'шаблоном' для создания объекта в ООП программировании?", options: ["Функция", "Класс", "Переменная", "Пакет"], correct: 1 },
+            { question: "Как называется метод инициализации (или конструктор) нового объекта?", options: ["__start__", "__main__", "__init__", "__create__"], correct: 2 },
+            { question: "Какое слово всегда обязательно должен принимать любой метод внутри класса (как самый 1-й аргумент)?", options: ["Имя класса", "self", "ID", "cls"], correct: 1 },
+            { question: "Какой принцип программирования описывается словом Инкапсуляция?", options: ["Скрытие внутренней реализации логики/данных от пользователей объекта", "Наследование от других классов", "Вызов разных методов", "Копирование объекта"], correct: 0 },
+            { question: "Создайте экземпляр класса Car в переменной obj", type: "code", correct: ["obj=Car()", "obj = Car()"] }
         ],
         'lesson14.html': [
-            { question: "Какая функция возвращает текущую дату и время?", options: ["time.now()", "calendar.today()", "datetime.now()", "datetime.today()"], correct: 2 },
-            { question: "Какой объект хранит разницу между двумя датами?", options: ["difference", "timedelta", "timeshift", "dategap"], correct: 1 },
-            { question: "Какой код символа strftime() соответствует 4-значному году?", options: ["%Y", "%y", "%G", "%YYYY"], correct: 0 },
-            { question: "Из какого модуля импортируют класс datetime?", options: ["calendar", "time", "datetime", "clock"], correct: 2 },
-            { question: "Что можно делать с помощью timedelta помимо вычисления разницы между датами?", options: ["Только смотреть разницу в днях", "Прибавлять или вычитать дни из даты", "Форматировать дату в строку", "Конвертировать строку в дату"], correct: 1 },
-            { question: "Что означает %d в шаблоне strftime()?", options: ["Год (4 цифры)", "Месяц (01-12)", "День (01-31)", "Часы (00-23)"], correct: 2 },
-            { question: "Напишите название метода, конвертирующего дату в строку по шаблону формата", type: "code", correct: ["strftime", "strftime()", ".strftime()"] },
-            { question: "Напишите строку импорта класса datetime из модуля datetime", type: "code", correct: ["from datetime import datetime"] }
+            { question: "Какой встроенно класс позволяет получить текущую дату и время ПК?", options: ["time.now()", "calendar.today()", "datetime.now()", "dates.get()"], correct: 2 },
+            { question: "Какой специальный класс отвечает за разницу (промежуток) между двумя датами?", options: ["difference", "timedelta", "timeshift", "dategap"], correct: 1 },
+            { question: "Как получить текущую системную дату и время?", options: ["datetime.now()", "datetime.current()", "datetime.today()", "datetime.get()"], correct: 0 },
+            { question: "Напишите метод, превращающий Дату в строку по шаблону (например '%Y-%m')", type: "code", correct: ["strftime", "strftime()"] }
         ],
         'lesson15.html': [
             { question: "Какая библиотека встроена в Python 'из коробки' для создания настольных окон (GUI)?", options: ["Pandas", "Tkinter", "Requests", "PyQt"], correct: 1 },
             { question: "Как называется популярный всемирный стандарт оформления и чистоты кода в Python?", options: ["PEP8", "PY-STYLE", "CLEAN-CODE 2.0", "ISO-PY"], correct: 0 },
-            { question: "Для хранения своего кода в облаке и создания портфолио программисты используют:", options: ["Facebook", "GitHub", "Google Drive", "VK"], correct: 1 },
-            { question: "Что такое Git?", options: ["Язык программирования", "Система контроля версий кода", "Менеджер пакетов Python", "Редактор кода"], correct: 1 },
-            { question: "Какой модуль используется в итоговом проекте для сохранения задач в файл?", options: ["csv", "pickle", "json", "xml"], correct: 2 },
-            { question: "Какую конструкцию использует итоговый проект для бесконечного главного меню с выходом через break?", options: ["for i in range(999):", "while True: ... break", "repeat until False", "loop(): ... stop"], correct: 1 },
-            { question: "Что делает функция enumerate() при переборе списка?", options: ["Возвращает только индексы", "Возвращает пары (индекс, элемент) одновременно", "Сортирует список", "Возвращает только элементы"], correct: 1 },
-            { question: "Напишите сокращённое название системы контроля версий", type: "code", correct: ["Git", "git"] }
+            { question: "Для хранения своего кода в облаке и портфолио программисты обычно используют:", options: ["Facebook", "GitHub", "Google Drive", "VK"], correct: 1 },
+            { question: "Напишите сокращенное название системы контроля версий программного обеспечения", type: "code", correct: ["Git", "git"] }
         ]
     };
 
@@ -219,10 +181,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             link.href = '#';
                             link.textContent = '🔒 Закрыто';
                             link.style.background = '#6c757d';
-                            link.style.color = 'white';
                             link.onclick = (e) => {
                                 e.preventDefault();
-                                showToast('❌ Доступ закрыт! Сначала пройдите предыдущий урок.', 'error');
+                                alert('❌ Доступ закрыт! Сначала пройдите предыдущий урок.');
                             };
                         }
                     } else {
@@ -290,6 +251,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Next Button is handled by showNextLessonButton after quiz
+            // Show finish button if it's the last lesson AND passed? 
+            // We'll let the quiz logic handle the forward navigation visibility.
         }
     }
 
@@ -326,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!startBtn) {
             startBtn = document.createElement('button');
             startBtn.id = 'btn-start-quiz';
-            startBtn.textContent = '🧠 Теория изучена - начать тест!';
+            startBtn.textContent = '🧠 Я изучил теорию, готов к тесту!';
             startBtn.className = 'btn-complete';
             startBtn.onclick = () => {
                 startBtn.style.display = 'none'; // Hide self
@@ -349,16 +312,6 @@ document.addEventListener('DOMContentLoaded', () => {
             renderQuizContent(quizContainer, true); // True = render passed state
             showNextLessonButton(); // Show navigation since passed
         }
-    }
-
-    // Алгоритм Фишера-Йейтса для надёжного перемешивания
-    function shuffleArray(array) {
-        const arr = [...array];
-        for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
     }
 
     function renderQuizContent(container, alreadyPassed = false) {
@@ -397,50 +350,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     inputArea.style.margin = '10px 0';
                     inputArea.style.resize = 'vertical';
                     inputArea.rows = 2;
-                    inputArea.placeholder = 'Напишите ваш ответ...';
+                    inputArea.placeholder = 'Напишите ваш код...';
 
                     const checkBtn = document.createElement('button');
-                    checkBtn.textContent = '✔️ Проверить';
+                    checkBtn.textContent = '✔️ Проверить код';
                     checkBtn.className = 'btn-quiz-opt';
 
                     const feedback = document.createElement('p');
                     feedback.className = 'quiz-feedback';
 
                     checkBtn.onclick = () => {
-                        // Нормализация: убираем лишние пробелы, приводим кавычки к одному виду
-                        const norm = (s) => s.trim().replace(/\s+/g, ' ').replace(/"/g, "'");
-                        const normStrict = (s) => norm(s).replace(/\s/g, '');
+                        const userCode = inputArea.value.trim().replace(/\s+/g, ' ');
+                        const correctAnswers = q.correct.map(c => c.trim().replace(/\s+/g, ' '));
 
-                        const userCode = norm(inputArea.value);
-                        const userStrict = normStrict(inputArea.value);
-
-                        const isCorrect = q.correct.some(ans => {
-                            const normAns = norm(ans);
-                            const normAnsStrict = normStrict(ans);
-                            // 1. Точное совпадение после нормализации пробелов и кавычек
-                            if (userCode === normAns) return true;
-                            // 2. Без пробелов (любое форматирование)
-                            if (userStrict === normAnsStrict) return true;
-                            // 3. Contains-match (ответ содержит правильную конструкцию)
-                            if (userCode.includes(normAns)) return true;
-                            // 4. Без учёта регистра
-                            if (userCode.toLowerCase() === normAns.toLowerCase()) return true;
-                            if (userStrict.toLowerCase() === normAnsStrict.toLowerCase()) return true;
-                            return false;
-                        });
+                        const isCorrect = correctAnswers.some(ans => userCode.includes(ans) || userCode.replace(/\s/g, '') === ans.replace(/\s/g, ''));
 
                         inputArea.disabled = true;
                         checkBtn.disabled = true;
                         checkBtn.style.opacity = '0.7';
 
                         if (isCorrect) {
-                            feedback.textContent = '✅ Верно!';
+                            feedback.textContent = '✅ Верно';
                             feedback.style.color = '#10b981';
                             qBlock.classList.add('answered-correct');
                         } else {
-                            // Показываем правильный ответ при ошибке
-                            const exampleAns = q.correct[0];
-                            feedback.innerHTML = `❌ Ошибка. Правильный ответ: <code style="background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;">${exampleAns}</code>`;
+                            feedback.textContent = '❌ Ошибка';
                             feedback.style.color = '#ef4444';
                             qBlock.classList.add('answered-wrong');
                         }
@@ -455,16 +389,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     const optionsDiv = document.createElement('div');
 
-                    // SHUFFLE LOGIC - алгоритм Фишера-Йейтса для нейтрализации запоминания позиции
+                    // SHUFFLE LOGIC
                     const indexedOptions = q.options.map((opt, i) => ({ text: opt, originalIndex: i }));
-                    const shuffled = shuffleArray(indexedOptions);
+                    // Simple Shuffle
+                    indexedOptions.sort(() => Math.random() - 0.5);
 
-                    shuffled.forEach((optObj) => {
+                    indexedOptions.forEach((optObj) => {
                         const btn = document.createElement('button');
                         btn.textContent = optObj.text;
                         btn.className = 'btn-quiz-opt';
-                        btn.dataset.origIndex = optObj.originalIndex; // Сохраняем оригинальный индекс
-                        // Сравниваем с оригинальным индексом правильного ответа
+                        // Pass ORIGINAL Index for correctness check
                         btn.onclick = () => checkAnswer(btn, optObj.originalIndex, q.correct, questions.length);
                         optionsDiv.appendChild(btn);
                     });
@@ -480,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {
             container.innerHTML = `<div style="padding: 20px; background: #fee2e2; color: #b91c1c; border-radius: 12px; border: 2px solid #ef4444;">
                 <h3 style="margin-top:0;">ОШИБКА ОТРИСОВКИ ТЕСТА!</h3>
-                <p><strong>Мы не смогли загрузить тест из-за сбоя:</strong></p>
+                <p><strong>Мы не смогли загрузить тест из-за сбоя в браузере:</strong></p>
                 <div style="background: #fff; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 0.9em; overflow-x: auto;"><b>${e.name}</b>: ${e.message}<br><br>${e.stack}</div>
                 <button class="btn-retake" onclick="window.location.reload()">Перезагрузить страницу</button>
             </div>`;
@@ -492,27 +426,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const qBlock = optionsDiv.parentElement;
         const feedback = qBlock.querySelector('.quiz-feedback');
 
-        // Блокируем все кнопки в этом вопросе
+        // Disable buttons in this question
         optionsDiv.querySelectorAll('.btn-quiz-opt').forEach(b => b.disabled = true);
 
         if (selected === correct) {
             btn.classList.add('correct');
-            feedback.textContent = '✅ Верно!';
+            feedback.textContent = '✅ Верно'; // Less verbose
             feedback.style.color = '#28a745';
             qBlock.classList.add('answered-correct');
         } else {
             btn.classList.add('incorrect');
-            // Подсвечиваем правильный вариант зелёным
-            optionsDiv.querySelectorAll('.btn-quiz-opt').forEach(b => {
-                if (parseInt(b.dataset.origIndex) === correct) {
-                    b.classList.add('correct');
-                }
-            });
+            // Show correct answer? No, let them find it themselves next time.
             feedback.textContent = '❌ Ошибка';
             feedback.style.color = '#dc3545';
             qBlock.classList.add('answered-wrong');
         }
 
+        // Always check if quiz is finished (all questions answered)
         checkQuizCompletion(total);
     }
 
@@ -543,60 +473,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderQuizFailed(container, score, total) {
-        const percent = Math.round((score / total) * 100);
-        const wrong = total - score;
-        let motivText = '';
-        if (percent === 0) {
-            motivText = 'Не расстраивайся - повтори теорию и попробуй снова!';
-        } else if (percent < 50) {
-            motivText = 'Хорошее начало! Повтори пропущенные темы и попробуй ещё раз.';
-        } else {
-            motivText = 'Совсем чуть-чуть не хватило! Ты почти у цели - ещё одна попытка!';
-        }
-
         container.innerHTML = `
-            <div class="quiz-failed-wrapper">
-                <div class="quiz-failed-icon">💥</div>
-                <h3 class="quiz-failed-title">Тест не пройден</h3>
-                <p class="quiz-failed-subtitle">${motivText}</p>
-                <div class="quiz-failed-score-box">
-                    <div class="quiz-score-stat quiz-score-correct">
-                        <span class="score-num">${score}</span>
-                        <span class="score-label">верных</span>
-                    </div>
-                    <div class="quiz-score-divider">из ${total}</div>
-                    <div class="quiz-score-stat quiz-score-wrong">
-                        <span class="score-num">${wrong}</span>
-                        <span class="score-label">ошибок</span>
-                    </div>
-                </div>
-                <div class="quiz-failed-bar-wrap">
-                    <div class="quiz-failed-bar-track">
-                        <div class="quiz-failed-bar-fill" style="width:0%" data-target="${percent}"></div>
-                    </div>
-                    <span class="quiz-failed-percent">${percent}%</span>
-                </div>
-                <div class="quiz-failed-actions">
-                    <button class="quiz-action-btn quiz-btn-retry" id="btn-restart-quiz">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-                        Пересдать тест
-                    </button>
-                    <button class="quiz-action-btn quiz-btn-review" id="btn-read-lesson">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                        Повторить урок
-                    </button>
+            <div style="text-align:center; padding: 30px; border: 2px solid #dc3545; border-radius: 12px; background: #fff5f5;">
+                <h3 style="color: #dc3545; margin-top:0;">❌ Тест не пройден</h3>
+                <p style="font-size: 1.1em;">Вы ответили верно на <b>${score}</b> из <b>${total}</b> вопросов.</p>
+                <p>Чтобы пройти дальше, нужно ответить на все вопросы правильно.</p>
+                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                    <button class="btn-retake" id="btn-restart-quiz" style="background: #dc3545;">🔄 Пересдать тест</button>
+                    <button class="btn-retake" id="btn-read-lesson" style="background: #007bff;">📖 Повторить урок</button>
                 </div>
             </div>
         `;
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                const bar = container.querySelector('.quiz-failed-bar-fill');
-                if (bar) bar.style.width = bar.dataset.target + '%';
-            });
-        });
-
         document.getElementById('btn-restart-quiz').onclick = () => {
+            // Instant restart without going back to "Start" button
             renderQuizContent(container);
             container.scrollIntoView({ behavior: 'smooth' });
         };
@@ -649,10 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navContainer.scrollIntoView({ behavior: 'smooth' });
 
         } else if (lessonIndex === lessonsList.length - 1) {
-            const finishDiv = document.createElement('div');
-            finishDiv.className = 'btn-nav finish';
-            finishDiv.textContent = '🏆 Курс завершён!';
-            navContainer.appendChild(finishDiv);
+            navContainer.innerHTML += '<div class="btn-nav finish" style="background:green;color:white;cursor:default;">🏆 Курс завершен!</div>';
         }
     }
 
@@ -744,40 +630,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         animatedElements.forEach(el => observer.observe(el));
-    }
-
-    // --- Toast Notification ---
-    function showToast(message, type = 'info') {
-        // Добавляем стили если ещё нет
-        if (!document.getElementById('toast-styles')) {
-            const style = document.createElement('style');
-            style.id = 'toast-styles';
-            style.textContent = `
-                .toast-msg {
-                    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
-                    background: #1e293b; color: white; padding: 14px 28px; border-radius: 12px;
-                    font-size: 0.98rem; font-weight: 500; z-index: 9999; opacity: 0;
-                    transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.3); min-width: 260px; text-align: center;
-                    border-left: 4px solid #6366f1;
-                }
-                .toast-msg.toast-error { border-left-color: #ef4444; }
-                .toast-msg.toast-success { border-left-color: #10b981; }
-                .toast-msg.is-shown { opacity: 1; transform: translateX(-50%) translateY(0); }
-            `;
-            document.head.appendChild(style);
-        }
-        const toast = document.createElement('div');
-        toast.className = `toast-msg toast-${type}`;
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => toast.classList.add('is-shown'));
-        });
-        setTimeout(() => {
-            toast.classList.remove('is-shown');
-            setTimeout(() => toast.remove(), 400);
-        }, 3500);
     }
 
     // Run All

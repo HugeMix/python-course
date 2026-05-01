@@ -4,23 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Урок 9: Работа со строками в Python. Методы upper, lower, split, join, replace, strip и форматирование.">
     <title>Урок 9: Работа со строками</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <header>
+            <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html"
-                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span
-                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
-                        style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -37,93 +31,45 @@
     <section class="lesson-title">
         <div class="container">
             <h2>Урок 9: Работа со строками</h2>
-            <p>Изучаем методы строк, форматирование и полезные приёмы работы с текстом.</p>
+            <p>Изучаем, как работать со строками в Python.</p>
         </div>
     </section>
 
     <main class="container">
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Научиться работать со строками: изменять регистр, искать, заменять, разделять и форматировать текст.</p>
+            <p>Научиться работать со строками, изменять их и использовать встроенные методы.</p>
         </section>
 
         <section class="lesson-content">
             <h2>📝 Основы строк</h2>
-            <p>Строки в Python - это текст в кавычках. Можно использовать одинарные или двойные кавычки:</p>
+            <p>Строки в Python обозначаются в кавычках:</p>
             <pre><code>text = "Привет, мир!"
-print(text)
+print(text)</code></pre>
 
-# Многострочная строка - тройные кавычки:
-poem = """Первая строка
-Вторая строка
-Третья строка"""
-print(poem)</code></pre>
-
-            <h2>🔠 Методы изменения регистра</h2>
+            <h2>🔠 Методы строк</h2>
+            <p>Python предоставляет множество методов для работы со строками:</p>
             <pre><code>text = "python"
-print(text.upper())       # Верхний регистр: PYTHON
-print(text.lower())       # Нижний регистр: python
-print(text.capitalize())  # Первая буква заглавная: Python</code></pre>
-
-            <h2>🔍 Поиск и замена</h2>
-            <pre><code>text = "python"
-print(text.replace("y", "i"))  # Заменяет символы: pithon
-
-sentence = "Я люблю Python"
-print(sentence.find("Python"))   # Возвращает индекс начала: 8
-print("Python" in sentence)      # Проверяет наличие: True</code></pre>
-            <p>Метод <code>replace('что', 'на что')</code> заменяет <strong>все</strong> вхождения первой
-                подстроки на вторую.</p>
-
-            <h2>📏 Длина строки</h2>
-            <pre><code>text = "python"
-print(len(text))  # Длина строки: 6</code></pre>
-            <p>Функция <code>len()</code> - это встроенная функция (не метод!), она возвращает количество
-                символов в строке.</p>
+print(text.upper())  # Преобразует в верхний регистр
+print(text.lower())  # Преобразует в нижний регистр
+print(text.replace("y", "i"))  # Заменяет символы</code></pre>
 
             <h2>✂️ Разделение и объединение строк</h2>
             <pre><code>words = "apple,banana,orange".split(",")
-print(words)  # ['apple', 'banana', 'orange']
+print(words)
+print(" - ".join(words))  # Объединение строк</code></pre>
+        \n            <h2>💡 Полезные свойства строк</h2><ul><li><code>s.strip()</code> очищает переменную от мусора: переносит пробелы и невидимые символы строго по краям текста.</li><li><code>s.replace('a','b')</code> используется для автозамены: меняет все 'a' на 'b'.</li></ul>\n        </section>
 
-# Объединение списка строк в одну:
-print(" - ".join(words))  # apple - banana - orange</code></pre>
-            <p>Метод <code>split(разделитель)</code> разбивает строку на список подстрок по указанному разделителю.
-                Метод <code>join(список)</code> - обратная операция.</p>
-
-            <h2>🧹 Очистка строк от лишних пробелов</h2>
-            <p>Метод <code>strip()</code> удаляет пробелы и невидимые символы строго по <strong>краям</strong>
-                строки (начало и конец):</p>
-            <pre><code>messy = "   Привет!   "
-clean = messy.strip()
-print(clean)  # Выведет: Привет!</code></pre>
-
-            <h2>💬 Форматирование строк (f-строки)</h2>
-            <p>Современный и удобный способ вставить переменные в строку - <strong>f-строки</strong>
-                (f-strings). Поставьте букву <code>f</code> перед кавычками и вставляйте переменные
-                в фигурные скобки:</p>
-            <pre><code>name = "Алекс"
-age = 25
-print(f"Привет! Меня зовут {name} и мне {age} лет.")
-# Выведет: Привет! Меня зовут Алекс и мне 25 лет.</code></pre>
-        </section>
-
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
-
-        <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>
             <ul>
-                <li>Написать программу, которая запрашивает имя и выводит его заглавными буквами с помощью
-                    <code>upper()</code>.
-                </li>
-                <li>Использовать <code>replace()</code> для замены пробелов в строке на подчёркивания.</li>
-                <li>Разделить строку <code>"Я изучаю Python"</code> на отдельные слова с помощью
-                    <code>split()</code>.
-                </li>
-                <li>Написать программу с использованием f-строк, которая выводит информацию о пользователе.</li>
+                <li>Написать программу, которая запрашивает имя и выводит его заглавными буквами.</li>
+                <li>Использовать <code>replace</code> для замены пробелов в строке на подчеркивания.</li>
+                <li>Разделить строку <code>"Я изучаю Python"</code> на отдельные слова.</li>
             </ul>
         </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
 
         <!-- Навигация -->
         <div class="lesson-navigation"></div>

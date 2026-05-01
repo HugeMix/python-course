@@ -4,23 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Урок 13: Основы ООП в Python. Классы, объекты, атрибуты, методы и принципы инкапсуляции.">
-    <title>Урок 13: Основы ООП (Классы и объекты)</title>
+    <title>Урок 13: Основы ООП</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <header>
+            <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html"
-                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span
-                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
-                        style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -37,7 +31,7 @@
     <!-- Голубая плашка с названием урока -->
     <section class="lesson-title">
         <div class="container">
-            <h2>Урок 13: Основы ООП (Классы и объекты)</h2>
+            <h2>Урок 13: Основы ООП</h2>
             <p>Познакомимся с объектно-ориентированным программированием в Python.</p>
         </div>
     </section>
@@ -46,20 +40,17 @@
         <!-- Плашка с целью урока -->
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Научиться создавать классы и объекты, работать с атрибутами и методами,
-                понять принцип инкапсуляции.</p>
+            <p>Научиться создавать классы и объекты, работать с атрибутами и методами.</p>
         </section>
 
         <!-- Основной материал -->
         <section class="lesson-content">
             <h2>📌 Что такое ООП?</h2>
-            <p>Объектно-ориентированное программирование (ООП) - это стиль программирования, где код
-                организован в виде <strong>объектов</strong>, которые объединяют данные и действия над ними.
-                ООП помогает структурировать большие программы и делать их удобными для поддержки.</p>
+            <p>Объектно-ориентированное программирование (ООП) - это стиль программирования, где код организован в виде
+                объектов.</p>
 
-            <h2>🔧 Класс - чертёж для объектов</h2>
-            <p><strong>Класс</strong> - это шаблон (чертёж), по которому создаются объекты. Давайте
-                создадим класс <code>Car</code>:</p>
+            <h2>🔧 Создание класса</h2>
+            <p>Класс - это шаблон для создания объектов. Давайте создадим класс <code>Car</code>:</p>
             <pre><code>class Car:
     def __init__(self, brand, model, year):
         self.brand = brand  # Атрибут марки
@@ -69,19 +60,15 @@
     def show_info(self):
         print(f"Автомобиль: {self.brand} {self.model}, {self.year} года выпуска")</code></pre>
 
-            <p>Метод <code>__init__</code> - это <strong>специальный конструктор</strong>, который
-                вызывается автоматически при создании нового объекта. В нём задаются начальные атрибуты.</p>
-
-            <h2>🚗 Объект - экземпляр класса</h2>
-            <p><strong>Объект</strong> - это конкретный экземпляр, созданный по шаблону класса.
-                Один класс - много объектов:</p>
+            <h2>🚗 Создание объекта</h2>
+            <p>Объект - это экземпляр класса. Создадим объект машины:</p>
             <pre><code>my_car = Car("Toyota", "Camry", 2020)
-my_car.show_info()
-# Выведет: Автомобиль: Toyota Camry, 2020 года выпуска</code></pre>
+my_car.show_info()</code></pre>
+            <p>Вывод:</p>
+            <pre><code>Автомобиль: Toyota Camry, 2020 года выпуска</code></pre>
 
-            <h2>⚙️ Методы класса</h2>
-            <p>Методы - это функции, определённые внутри класса. Они описывают <strong>поведение</strong>
-                объекта. Добавим метод <code>start_engine</code>:</p>
+            <h2>⚙ Методы класса</h2>
+            <p>Методы - это функции внутри класса. Добавим метод <code>start_engine</code>:</p>
             <pre><code>class Car:
     def __init__(self, brand, model, year):
         self.brand = brand
@@ -97,41 +84,19 @@ my_car.show_info()
 my_car = Car("BMW", "X5", 2022)
 my_car.show_info()
 my_car.start_engine()</code></pre>
-
-            <h2>👤 Параметр self</h2>
-            <p>Каждый метод класса <strong>обязательно</strong> принимает первым параметром
-                <code>self</code> - это ссылка на конкретный объект. Благодаря <code>self</code>
-                метод знает, с какими данными работать. Без него Python не сможет обратиться к
-                атрибутам объекта внутри метода.
-            </p>
-
-            <h2>💡 Принцип инкапсуляции</h2>
-            <p><strong>Инкапсуляция</strong> - один из ключевых принципов ООП. Это умение объекта
-                <strong>скрывать свои внутренние данные</strong> от внешнего кода ради безопасности
-                и защиты от случайных изменений.
-            </p>
-            <p>В Python «приватность» обозначают двойным подчёркиванием перед именем атрибута:</p>
-            <pre><code>class BankAccount:
-    def __init__(self, balance):
-        self.__balance = balance  # Приватный атрибут (нельзя изменить снаружи напрямую)
-
-    def get_balance(self):
-        return self.__balance     # Безопасный доступ через метод</code></pre>
-        </section>
-
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
+        \n            <h2>💡 Принцип Инкапсуляции</h2><p>Одним из китов ООП является <strong>Инкапсуляция</strong> — это умение объектов утаивать и скрывать свои внутренние данные от внешних пользователей ради безопасности.</p>\n        </section>
 
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>
             <ul>
                 <li>Создай класс <code>Person</code> с атрибутами <code>name</code> и <code>age</code>.</li>
-                <li>Добавь метод <code>greet</code>, который выводит приветствие с именем и возрастом.</li>
-                <li>Создай два объекта этого класса с разными данными и вызови метод <code>greet</code>.</li>
-                <li>Попробуй добавить приватный атрибут и метод для его получения.</li>
+                <li>Добавь метод <code>greet</code>, который выводит приветствие.</li>
+                <li>Создай объект этого класса и вызови метод <code>greet</code>.</li>
             </ul>
         </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
 
         <!-- Навигация -->
         <div class="lesson-navigation"></div>

@@ -4,23 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Урок 8: Словари и множества в Python. Работа с dict, set и их основными методами.">
     <title>Урок 8: Словари и множества</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <header>
+            <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html"
-                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span
-                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
-                        style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -44,83 +38,42 @@
     <main class="container">
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Научиться работать со словарями и множествами, использовать их методы для хранения и
-                обработки данных.</p>
+            <p>Научиться работать со словарями и множествами, использовать их методы.</p>
         </section>
 
         <section class="lesson-content">
-            <h2>📖 Словари (dict) в Python</h2>
-            <p>Словарь - это структура данных, которая хранит <strong>пары ключ-значение</strong> в фигурных
-                скобках. Значение извлекается по ключу, а не по индексу:</p>
+            <h2>📖 Словари в Python</h2>
+            <p>Словарь — это структура данных, которая хранит пары ключ-значение.</p>
             <pre><code>student = {"имя": "Алекс", "возраст": 20, "город": "Москва"}
-print(student["имя"])      # Выведет: Алекс
-print(student["возраст"])  # Выведет: 20</code></pre>
-
-            <h2>🔑 Методы словарей</h2>
-            <p>Основные методы для работы со словарями:</p>
+print(student["имя"])  # Выведет: Алекс</code></pre>
+            <p>Основные методы словарей:</p>
             <ul>
-                <li><code>keys()</code> - возвращает все <strong>ключи</strong> словаря.</li>
-                <li><code>values()</code> - возвращает все <strong>значения</strong> словаря.</li>
-                <li><code>items()</code> - возвращает все пары <strong>ключ-значение</strong>.</li>
-                <li><code>get(ключ)</code> - безопасно получает значение. Если ключа нет - возвращает
-                    <code>None</code>, а не ошибку.
-                </li>
+                <li><code>keys()</code> – получить список ключей</li>
+                <li><code>values()</code> – получить список значений</li>
+                <li><code>get()</code> – получить значение по ключу</li>
             </ul>
-            <pre><code>student = {"имя": "Алекс", "возраст": 20}
 
-print(student.keys())    # dict_keys(['имя', 'возраст'])
-print(student.values())  # dict_values(['Алекс', 20])
-
-# Безопасное получение:
-print(student.get("город"))  # Выведет None (ключа нет, но без ошибки!)
-print(student.get("город", "Не указан"))  # Выведет: Не указан</code></pre>
-
-            <h2>➕ Добавление и удаление элементов словаря</h2>
-            <pre><code>student = {"имя": "Алекс"}
-
-# Добавление / изменение значения по ключу:
-student["возраст"] = 21
-
-# Удаление ключа и его значения:
-del student["возраст"]   # удаляет ключ 'возраст' полностью
-
-print(student)  # {'имя': 'Алекс'}</code></pre>
-
-            <h2>🔢 Множества (set)</h2>
-            <p>Множество - это структура данных, которая хранит <strong>только уникальные элементы</strong>
-                без повторений. Порядок элементов не гарантирован:</p>
+            <h2>🔢 Множества</h2>
+            <p>Множество — это структура данных, которая хранит уникальные элементы.</p>
             <pre><code>numbers = {1, 2, 3, 4, 5, 5}
-print(numbers)  # Выведет: {1, 2, 3, 4, 5}  - дублирующийся 5 удалён!</code></pre>
-
-            <h2>🛠️ Операции с множествами</h2>
+print(numbers)  # Выведет: {1, 2, 3, 4, 5}</code></pre>
+            <p>Основные операции с множествами:</p>
             <ul>
-                <li><code>add()</code> - добавить элемент.</li>
-                <li><code>remove()</code> - удалить элемент (ошибка если нет).</li>
-                <li><code>union()</code> - объединение двух множеств.</li>
-                <li><code>intersection()</code> - пересечение (общие элементы).</li>
+                <li><code>add()</code> – добавить элемент</li>
+                <li><code>remove()</code> – удалить элемент</li>
+                <li><code>union()</code> – объединение множеств</li>
             </ul>
+        \n            <h2>💡 Словари и ключи</h2><ul><li>Инструкция <code>d.keys()</code> возвращает все имеющиеся ключи в словаре.</li><li>Отдельные ключи в словаре можно удалять командой <code>del</code> (например, <code>del user['age']</code>). Это очистит и ключ, и его значение.</li></ul>\n        </section>
 
-            <h2>⚠️ Важно: как создать пустое множество</h2>
-            <p>Нельзя создать пустое множество через <code>{}</code> - это создаст пустой <strong>словарь</strong>!
-                Для пустого множества нужно использовать <code>set()</code>:</p>
-            <pre><code>empty_dict = {}       # Это пустой СЛОВАРЬ
-empty_set = set()     # Это пустое МНОЖЕСТВО</code></pre>
-        </section>
-
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
-
-        <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>
             <ul>
-                <li>Создай словарь с информацией о себе (имя, возраст, город) и выведи его на экран.</li>
-                <li>Добавь новый ключ в словарь и удали один из существующих с помощью <code>del</code>.</li>
-                <li>Попробуй получить несуществующий ключ через <code>get()</code> - убедись, что
-                    ошибки нет.</li>
-                <li>Создай множество из списка с повторениями и убедись, что дубликаты удалены.</li>
+                <li>Создай словарь с информацией о себе и выведи его на экран.</li>
+                <li>Добавь в множество 3 новых элемента и выведи результат.</li>
             </ul>
         </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
 
         <!-- Навигация -->
         <div class="lesson-navigation"></div>

@@ -4,23 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Урок 12: Модули и библиотеки Python. Импорт модулей, pip и установка сторонних библиотек.">
     <title>Урок 12: Модули и библиотеки</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <header>
+            <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html"
-                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span
-                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
-                        style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -37,7 +31,7 @@
     <section class="lesson-title">
         <div class="container">
             <h2>Урок 12: Модули и библиотеки</h2>
-            <p>Изучим, как подключать модули и использовать готовые библиотеки в Python.</p>
+            <p>Изучим, как подключать модули и использовать библиотеки в Python.</p>
         </div>
     </section>
 
@@ -45,76 +39,46 @@
         <!-- Цель урока -->
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Научиться использовать встроенные модули и сторонние библиотеки, подключать нужные инструменты
-                с помощью <code>import</code> и устанавливать новые пакеты через pip.</p>
+            <p>Научиться использовать модули и библиотеки в Python, загружать и устанавливать их.</p>
         </section>
 
         <!-- Основной материал -->
         <section class="lesson-content">
-            <h2>📌 Что такое модуль?</h2>
-            <p>Модуль - это файл с готовым кодом Python (.py), который можно подключить в свою программу
-                с помощью ключевого слова <code>import</code>. В Python огромное количество встроенных
-                модулей - они уже установлены и готовы к использованию.</p>
+            <h2>📌 Что такое модули?</h2>
+            <p>Модуль - это файл с кодом Python, который можно подключить в программу. Например, модуль
+                <code>math</code> содержит математические функции.
+            </p>
 
             <h2>🔧 Подключение встроенных модулей</h2>
-            <p>Пример: модуль <code>math</code> содержит математические функции:</p>
+            <p>В Python есть много встроенных модулей. Например, модуль <code>math</code> для работы с математикой:</p>
             <pre><code>import math
 
-print(math.sqrt(25))  # Квадратный корень → 5.0
-print(math.pi)        # Константа π → 3.141592653589793
-print(math.ceil(4.1)) # Округление вверх → 5</code></pre>
+print(math.sqrt(25))  # Выведет 5.0
+print(math.pi)  # Выведет 3.141592653589793</code></pre>
 
-            <h2>🎯 Импорт конкретных функций - from ... import</h2>
-            <p>Можно импортировать только нужные функции из модуля. Тогда не нужно каждый раз писать
-                название модуля через точку:</p>
-            <pre><code>from math import pi, sqrt
-
-print(sqrt(16))  # Выведет 4.0
-print(pi)        # Выведет 3.141592653589793</code></pre>
-
-            <h2>🎲 Модуль random - случайные числа</h2>
-            <p>Встроенный модуль <code>random</code> используется для генерации случайных чисел:</p>
-            <pre><code>import random
-
-print(random.randint(1, 10))  # Случайное целое число от 1 до 10
-print(random.random())        # Случайное число от 0.0 до 1.0
-
-fruits = ["яблоко", "банан", "вишня"]
-print(random.choice(fruits))  # Случайный элемент из списка</code></pre>
-
-            <h2>📦 Установка сторонних библиотек - pip</h2>
-            <p><strong>pip</strong> (Package Installer for Python) - это официальный менеджер пакетов Python.
-                С его помощью можно в одну команду в терминале загрузить и установить любую стороннюю
-                библиотеку из интернета:</p>
+            <h2>📦 Установка сторонних библиотек</h2>
+            <p>Python поддерживает сторонние библиотеки, которые можно установить с помощью pip. Например, библиотека
+                <code>requests</code> для работы с интернет-запросами:
+            </p>
             <pre><code>pip install requests</code></pre>
 
-            <p>После установки библиотеку можно использовать как обычный модуль:</p>
+            <p>Пример использования:</p>
             <pre><code>import requests
 
 response = requests.get("https://api.github.com")
 print(response.status_code)  # Выведет 200, если запрос успешен</code></pre>
-
-            <h2>💡 Псевдоним при импорте - as</h2>
-            <p>Длинному имени модуля можно дать короткий псевдоним с помощью ключевого слова <code>as</code>:</p>
-            <pre><code>import math as m
-
-print(m.sqrt(9))  # 3.0 - всё так же, но через псевдоним `m`</code></pre>
-        </section>
-
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
+        \n            <h2>💡 Официальный менеджер Pip</h2><p><strong>PIP</strong> — это официальный менеджер пакетов в Python (Package Installer). При помощи простой команды в терминале: <code>pip install libraries_name</code> вы загружаете сторонний код из интернета на ваш ПК и можете интегрировать его за секунду.</p>\n        </section>
 
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>
             <ul>
-                <li>Подключи модуль <code>random</code> и выведи случайное число от 1 до 100.</li>
-                <li>Попробуй импортировать из <code>math</code> только функцию <code>ceil</code> и
-                    использовать её для округления числа 4.3.</li>
-                <li>Установи библиотеку <code>requests</code> через pip и попробуй сделать HTTP-запрос
-                    к любому открытому API.</li>
+                <li>Подключи модуль <code>random</code> и выведи случайное число.</li>
+                <li>Установи библиотеку <code>requests</code> и попробуй сделать HTTP-запрос.</li>
             </ul>
         </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
 
         <!-- Навигация -->
         <div class="lesson-navigation"></div>

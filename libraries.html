@@ -4,10 +4,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Популярные библиотеки Python: NumPy, Pandas, Matplotlib, Requests, Django, Flask, TensorFlow и другие.">
     <title>Библиотеки Python</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .libraries-layout {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+            align-items: flex-start;
+        }
+
+        .libraries-sidebar {
+            width: 250px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 20px;
+            flex-shrink: 0;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        body.dark-mode .libraries-sidebar {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .libraries-sidebar h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .libraries-sidebar h3 {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .libraries-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .libraries-sidebar li {
+            margin-bottom: 8px;
+        }
+
+        .libraries-sidebar a {
+            display: block;
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: var(--transition);
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .libraries-sidebar a:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--accent-color);
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        .libraries {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .library {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            transition: var(--transition);
+            position: relative;
+            scroll-margin-top: 40px;
+        }
+
+        body.dark-mode .library {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .library:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .library h2 {
+            margin-top: 0;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            background: #4f46e5;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .libraries-layout {
+                flex-direction: column;
+            }
+
+            .libraries-sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 0px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -25,7 +149,7 @@
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
                     <li><a href="index.html">Главная</a></li>
-                    <li><a href="courses.html">Курсы</a></li>
+                    <li><a href="python-basic.html">Курс</a></li>
                     <li><a href="libraries.html" class="active">Библиотеки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
@@ -133,7 +257,7 @@ django-admin startproject mywebsite</code></pre>
                 <div class="library" id="flask">
                     <span class="badge">Веб-разработка (Микрофреймворк)</span>
                     <h2>⚙️ Flask</h2>
-                    <p>В отличие от Django, Flask - это легковесный инструмент. Он идеален для написания простых
+                    <p>В отличие от Django, Flask — это легковесный инструмент. Он идеален для написания простых
                         веб-приложений, API или бота для Telegram. Он даёт программисту полный контроль над архитектурой
                         и не навязывает лишних функций.</p>
                     <pre><code>from flask import Flask

@@ -4,23 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Урок 4: Условные операторы if, else, elif в Python с примерами кода для начинающих.">
-    <title>Урок 4: Условные операторы (if, else, elif)</title>
+    <title>Урок 4: Условные операторы</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <header>
+            <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html"
-                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span
-                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
-                        style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -52,33 +46,25 @@
         <section class="lesson-content">
             <h2>📃 Что такое условные операторы?</h2>
             <p>Иногда программа должна выполнять разные действия в зависимости от ситуации. Для этого используются
-                <strong>условные операторы</strong>. Они позволяют задать вопрос: «Если это условие выполняется - делай
-                одно, иначе - другое».
-            </p>
+                **условные операторы**.</p>
 
-            <h2>✅ Оператор if - простая проверка условия</h2>
-            <p>Синтаксис условия <code>if</code>:</p>
+            <h2>✅ Простая проверка условия</h2>
+            <p>Синтаксис **if**:</p>
             <pre><code>age = 18
 if age >= 18:
     print("Вы совершеннолетний!")</code></pre>
-            <p>Если условие <code>age >= 18</code> верно (True), выполняется код внутри блока <code>if</code>.
-                <strong>Важно:</strong> после условия всегда ставится <strong>двоеточие (:)</strong>, а код
-                внутри блока пишется с отступом в 4 пробела.
-            </p>
+            <p>Если условие <code>age >= 18</code> верно, выполняется код внутри <code>if</code>. Важно использовать
+                отступ (4 пробела).</p>
 
-            <h2>➖ Добавляем else - ветка «иначе»</h2>
-            <p>Блок <code>else</code> выполняется тогда, когда условие <code>if</code> оказалось ложным:</p>
+            <h2>➖ Добавляем else</h2>
             <pre><code>age = 16
 if age >= 18:
     print("Вы совершеннолетний!")
 else:
     print("Вы ещё несовершеннолетний.")</code></pre>
-            <p>В данном примере, так как <code>age = 16</code>, выполнится ветка <code>else</code>.</p>
+            <p>Если условие **ложное**, выполняется код внутри <code>else</code>.</p>
 
             <h2>🔄 Проверка нескольких условий с elif</h2>
-            <p><code>elif</code> - сокращение от «else if» («иначе если»). Используется для проверки
-                дополнительных условий, когда первое оказалось ложным. Можно использовать несколько <code>elif</code>
-                подряд:</p>
             <pre><code>age = 10
 if age >= 18:
     print("Вы взрослый.")
@@ -86,55 +72,32 @@ elif age >= 13:
     print("Вы подросток.")
 else:
     print("Вы ребёнок.")</code></pre>
-            <p>Python проверяет условия по очереди сверху вниз и выполняет первую подошедшую ветку.</p>
+            <p><code>elif</code> позволяет проверить **дополнительные условия**.</p>
 
             <h2>📈 Логические операторы в условиях</h2>
-            <p>Можно проверять несколько условий одновременно, используя логические операторы из прошлого урока:</p>
+            <p>Можно проверять **несколько условий** одновременно:</p>
             <pre><code>temp = 25
 if temp > 20 and temp < 30:
     print("Погода хорошая!")</code></pre>
             <ul>
-                <li><code>and</code> - оба условия должны быть верны.</li>
-                <li><code>or</code> - хотя бы одно условие должно быть верно.</li>
-                <li><code>not</code> - меняет значение на противоположное.</li>
+                <li><code>and</code> – оба условия должны быть верны.</li>
+                <li><code>or</code> – хотя бы одно условие должно быть верно.</li>
+                <li><code>not</code> – меняет значение на противоположное.</li>
             </ul>
-
-            <h2>💡 Синтаксические правила</h2>
-            <p>Запомните два обязательных правила Python для условий:</p>
-            <ul>
-                <li>После <code>if</code>, <code>elif</code> или <code>else</code> всегда ставится
-                    <strong>двоеточие (:)</strong>.
-                </li>
-                <li>Код внутри блока условия <strong>обязательно</strong> пишется с одинаковым отступом -
-                    <strong>4 пробела</strong>. Это не стиль, а требование языка: их отсутствие вызовет ошибку.
-                </li>
-            </ul>
-
-            <h2>🧪 Проверка истинности значений</h2>
-            <p>В Python условие может быть не только сравнением, но и просто значением. Следующие значения
-                считаются «ложными» (<code>False</code>): <code>0</code>, <code>""</code> (пустая строка),
-                <code>[]</code> (пустой список), <code>None</code>. Всё остальное - «истинное»:
-            </p>
-            <pre><code>name = ""
-if name:
-    print("Имя введено:", name)
-else:
-    print("Имя не указано!")</code></pre>
-        </section>
-
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
+        \n            <h2>💡 Синтаксическая особенность</h2><p>После условий <code>if</code>, <code>elif</code> или <code>else</code> <strong>всегда</strong> должно ставиться <strong>двоеточие (:)</strong>. После него код обязательно пишется с отступом в 4 пробела.</p>\n        </section>
 
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>
             <ul>
                 <li>Напишите программу, которая спрашивает возраст и говорит, ребёнок это, подросток или взрослый.</li>
-                <li>Дополните её, чтобы программа реагировала на возраст ниже 0 - выводить сообщение об ошибке.</li>
+                <li>Дополните её, чтобы программа реагировала на возраст **ниже 0** (ошибка).</li>
                 <li>Создайте программу, которая проверяет, является ли число положительным, отрицательным или нулём.
                 </li>
             </ul>
         </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
 
         <!-- Навигация -->
         <div class="lesson-navigation"></div>

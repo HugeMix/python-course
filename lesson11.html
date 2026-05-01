@@ -4,23 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Урок 11: Обработка ошибок в Python. Конструкции try-except-finally, raise и типы исключений.">
     <title>Урок 11: Обработка ошибок (try-except)</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <header>
+            <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html"
-                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span
-                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
-                        style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -44,32 +38,21 @@
     <main class="container">
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Понять, как использовать конструкции <code>try-except</code> для обработки ошибок и
-                предотвращения «краша» программы.</p>
+            <p>Понять, как использовать конструкции <code>try-except</code> для обработки ошибок и избежать сбоев в
+                программе.</p>
         </section>
 
         <section class="lesson-content">
-            <h2>❓ Зачем нужна обработка ошибок?</h2>
-            <p>Любая программа может столкнуться с ситуацией, которую не предусмотрел программист:
-                пользователь ввёл текст вместо числа, файл не найден, нет подключения к сети.
-                Без обработки ошибок программа просто «падает». Блок <code>try-except</code> позволяет
-                перехватить ошибку и <strong>сообщить о ней пользователю</strong>, а не аварийно завершиться.</p>
-
-            <h2>⚠️ Базовая конструкция try-except</h2>
-            <p>Код, который может вызвать ошибку, помещается в блок <code>try</code>. В блоке
-                <code>except</code> описывается, что делать при возникновении ошибки:
-            </p>
+            <h2>⚠️ Перехват ошибок с try-except</h2>
+            <p>Блок <code>try-except</code> позволяет обработать ошибку и избежать остановки программы.</p>
             <pre><code>try:
     число = int(input("Введите число: "))
     print("Вы ввели:", число)
 except ValueError:
-    print("Ошибка! Нужно ввести число, а не текст.")</code></pre>
-            <p>Если пользователь введёт буквы вместо числа, возникнет ошибка <code>ValueError</code>,
-                и выполнится блок <code>except</code> вместо «краша».</p>
+    print("Ошибка! Нужно ввести число.")</code></pre>
 
-            <h2>🔄 Блок finally - выполняется всегда</h2>
-            <p>Блок <code>finally</code> выполняется <strong>всегда</strong> - и при ошибке, и при
-                успешном выполнении. Удобен для закрытия ресурсов:</p>
+            <h2>🔄 Использование finally</h2>
+            <p>Блок <code>finally</code> выполняется всегда, независимо от того, произошла ошибка или нет.</p>
             <pre><code>try:
     файл = open("data.txt", "r")
     содержимое = файл.read()
@@ -78,62 +61,18 @@ except FileNotFoundError:
     print("Ошибка! Файл не найден.")
 finally:
     print("Попытка чтения файла завершена.")</code></pre>
+        \n            <h2>💡 Ошибки в деталях</h2><ul><li>При делении на 0 (например 10 / 0) интерпретатор выбрасывает строгую ошибку <code>ZeroDivisionError</code>.</li><li>Самый старший и универсальный класс ошибок имеет название <code>Exception</code>. Его используют, чтобы отлавливать "вообще абсолютно всё абстрактное", что может пойти не так.</li></ul>\n        </section>
 
-            <h2>🚨 Типы ошибок (исключений) в Python</h2>
-            <p>Популярные встроенные типы ошибок:</p>
-            <ul>
-                <li><code>ValueError</code> - неверное значение (например, int("abc"))</li>
-                <li><code>ZeroDivisionError</code> - деление на ноль (<code>10 / 0</code>)</li>
-                <li><code>FileNotFoundError</code> - файл не найден</li>
-                <li><code>TypeError</code> - операция с неверным типом данных</li>
-                <li><code>Exception</code> - <strong>базовый класс</strong> всех ошибок. Перехватывает
-                    <em>любую</em> ошибку. Используйте его с осторожностью.
-                </li>
-            </ul>
-            <pre><code># Перехватить любую ошибку и вывести её описание:
-try:
-    result = 10 / 0
-except Exception as e:
-    print("Произошла ошибка:", e)</code></pre>
-
-            <h2>🚀 Ключевое слово raise - принудительный вызов ошибки</h2>
-            <p>Иногда нужно <strong>намеренно вызвать ошибку</strong>, если данные некорректны.
-                Для этого используется ключевое слово <code>raise</code>:</p>
-            <pre><code>age = -5
-if age < 0:
-    raise ValueError("Возраст не может быть отрицательным!")
-print("Возраст:", age)</code></pre>
-            <p>Если выполнить этот код, программа выбросит ошибку <code>ValueError</code> с нашим сообщением.</p>
-
-            <h2>🔗 Несколько блоков except</h2>
-            <p>Можно обработать разные типы ошибок по-разному:</p>
-            <pre><code>try:
-    x = int(input("Введите делимое: "))
-    y = int(input("Введите делитель: "))
-    print("Результат:", x / y)
-except ValueError:
-    print("Введите только числа!")
-except ZeroDivisionError:
-    print("На ноль делить нельзя!")</code></pre>
-        </section>
-
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
-
-        <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>
             <ul>
-                <li>Напишите программу, которая запрашивает делимое и делитель, выполняет деление и
-                    обрабатывает ошибку деления на ноль.</li>
-                <li>Добавьте блок <code>finally</code>, который всегда выводит сообщение «Программа завершена».</li>
-                <li>Попробуйте использовать <code>raise</code>, чтобы вручную вызвать ошибку при вводе
-                    отрицательного числа.</li>
-                <li>Напишите обработчик, который перехватывает и <code>ValueError</code>, и
-                    <code>ZeroDivisionError</code> в одной программе.
-                </li>
+                <li>Напишите программу, которая запрашивает делимое и делитель, выполняет деление и обрабатывает ошибку
+                    деления на ноль.</li>
+                <li>Добавьте блок <code>finally</code>, который всегда выводит сообщение "Программа завершена".</li>
             </ul>
         </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
 
         <!-- Навигация -->
         <div class="lesson-navigation"></div>

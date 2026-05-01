@@ -4,23 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Урок 15: Итоговый проект - создание консольного To-Do списка на Python с сохранением в файл. PEP8, Git, GitHub.">
-    <title>Урок 15: Итоговый проект - To-Do List</title>
+    <title>Итоговый проект по Python</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <header>
+            <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html"
-                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span
-                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
-                        style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -36,16 +30,15 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h2>Урок 15: Итоговый проект - To-Do List</h2>
-            <p>Примените все полученные знания и создайте своё первое полноценное приложение.</p>
+            <h2>Итоговый проект</h2>
+            <p>Примените все полученные знания и создайте свою первую программу.</p>
         </div>
     </section>
 
     <main class="container">
         <section class="lesson-goal">
             <h2>🎯 Задача</h2>
-            <p>Создайте консольное приложение на Python, которое поможет пользователю вести список дел
-                (To-Do List) с сохранением данных в файл.</p>
+            <p>Создайте консольное приложение на Python, которое поможет пользователю вести список дел (To-Do List).</p>
         </section>
 
         <section class="lesson-content">
@@ -55,11 +48,12 @@
                 <li>Добавлять задачи</li>
                 <li>Просматривать список задач</li>
                 <li>Удалять выполненные задачи</li>
-                <li>Сохранять список в файл и загружать его при следующем запуске</li>
+                <li>Сохранять список в файл и загружать его</li>
             </ul>
 
             <h2>💻 Пример кода</h2>
-            <pre><code>import json
+            <pre><code>
+import json
 
 def load_tasks():
     try:
@@ -80,7 +74,7 @@ def main():
         print("3. Удалить задачу")
         print("4. Выйти")
         choice = input("Выберите действие: ")
-
+        
         if choice == "1":
             task = input("Введите новую задачу: ")
             tasks.append(task)
@@ -102,97 +96,20 @@ def main():
             print("Неверный ввод, попробуйте снова.")
 
 if __name__ == "__main__":
-    main()</code></pre>
+    main()
+        </code></pre>
+        \n            <h2>💡 Главные инструменты программиста</h2><ul><li>Для стандарта красоты написания программ в Python используют свод правил — <strong>PEP8</strong>.</li><li>Проекты теперь хранят не на флешке, а в интернете через систему <strong>Git</strong> и сайт <strong>GitHub</strong>, что позволяет легко работать в команде.</li></ul>\n        </section>
 
-            <h2>🔍 Какие знания курса задействованы?</h2>
-            <ul>
-                <li><strong>Функции</strong> (<code>def</code>) - <code>load_tasks()</code>,
-                    <code>save_tasks()</code>, <code>main()</code>
-                </li>
-                <li><strong>Списки</strong> - <code>tasks.append()</code>, <code>tasks.pop()</code>,
-                    перебор с <code>enumerate()</code></li>
-                <li><strong>Файлы</strong> - <code>with open()</code>, чтение и запись JSON</li>
-                <li><strong>Обработка ошибок</strong> - <code>try-except FileNotFoundError</code></li>
-                <li><strong>Циклы</strong> - бесконечный <code>while True</code> с выходом через <code>break</code></li>
-                <li><strong>Условия</strong> - <code>if-elif-else</code></li>
-                <li><strong>Строки</strong> - f-строки для форматирования вывода</li>
-            </ul>
-
-            <h2>💡 Стандарт хорошего кода - PEP8</h2>
-            <p>Для стандарта написания красивого и читаемого кода в Python существует свод правил -
-                <strong>PEP8</strong>. Он описывает правила именования переменных, отступов, пробелов и
-                многого другого. Следование PEP8 делает ваш код понятным для других разработчиков.
-            </p>
-
-            <h2>🗂️ Система контроля версий - Git</h2>
-            <p><strong>Git</strong> - это система контроля версий. Она позволяет:</p>
-            <ul>
-                <li>Сохранять историю всех изменений в коде</li>
-                <li>Откатываться к любой предыдущей версии</li>
-                <li>Работать в команде - несколько человек над одним проектом</li>
-            </ul>
-            <p>Проекты хранят в облаке через сервис <strong>GitHub</strong> - это позволяет работать
-                в команде и создать профессиональное портфолио.</p>
-
-            <h2>📱 Встроенная библиотека для GUI - Tkinter</h2>
-            <p>Python поставляется «из коробки» с библиотекой <strong>Tkinter</strong> - она позволяет
-                создавать настольные приложения с графическим интерфейсом (окнами, кнопками, полями ввода)
-                без установки дополнительных пакетов.</p>
-
-            <h2>🏆 Что дальше?</h2>
-            <p>Вы прошли базовый курс Python! Теперь вы умеете:</p>
-            <ul>
-                <li>Работать с переменными, типами данных и операторами</li>
-                <li>Использовать условия, циклы, функции</li>
-                <li>Работать с коллекциями (списки, словари, множества)</li>
-                <li>Читать и писать файлы</li>
-                <li>Обрабатывать ошибки</li>
-                <li>Использовать модули и библиотеки</li>
-                <li>Понимать основы ООП</li>
-            </ul>
-            <p>Следующий шаг - практика! Решайте задачи в разделе <a href="tasks.html">Задачи</a> и
-                изучайте популярные <a href="libraries.html">библиотеки Python</a>.
-            </p>
-
-            <h2>🔁 Паттерн while True + break - бесконечное меню</h2>
-            <p>В итоговом проекте главное меню реализовано через конструкцию <code>while True</code>. Цикл выполняется
-                бесконечно, пока пользователь не выберет «Выйти» - тогда срабатывает <code>break</code> и цикл
-                останавливается:</p>
-            <pre><code>while True:
-    choice = input("Введите 1, 2 или 3: ")
-    if choice == "3":
-        break  # Выход из бесконечного цикла
-    print("Продолжаем...")</code></pre>
-            <p>Это стандартный паттерн для консольных меню в Python.</p>
-
-            <h2>🔢 Функция enumerate() - нумерованный перебор</h2>
-            <p>Функция <code>enumerate(список)</code> позволяет одновременно получать <strong>индекс и значение</strong>
-                каждого элемента при переборе - очень удобна для вывода нумерованных списков:</p>
-            <pre><code>tasks = ["Купить молоко", "Позвонить маме", "Сделать зарядку"]
-for i, task in enumerate(tasks, 1):  # start=1 начинает нумерацию с 1
-    print(f"{i}. {task}")
-# Выведет:
-# 1. Купить молоко
-# 2. Позвонить маме
-# 3. Сделать зарядку</code></pre>
-            <p>Именно так в проекте выводится пронумерованный список задач:
-                <code>for i, task in enumerate(tasks, 1)</code>.</p>
-        </section>
-
-
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
-
-        <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>
             <ul>
                 <li>Запустите код и добавьте несколько задач.</li>
                 <li>Попробуйте изменить код, добавив возможность редактирования задач.</li>
-                <li>Попробуйте создать простой графический интерфейс с помощью библиотеки <strong>Tkinter</strong>.</li>
-                <li>Создайте аккаунт на GitHub и загрузите туда ваш проект!</li>
+                <li>Попробуйте создать графический интерфейс с помощью библиотеки Tkinter.</li>
             </ul>
         </section>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
 
         <!-- Навигация -->
         <div class="lesson-navigation"></div>
