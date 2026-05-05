@@ -39,6 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const prevLesson = lessonsList[index - 1];
             const isPrevPassed = isFirst || quizProgress[prevLesson];
 
+            // Remove existing lock UI if any
+            const existingLock = card.querySelector('.lock-ui-container');
+            if (existingLock) existingLock.remove();
+
             if (!isFirst && !isPrevPassed && !isManuallyUnlocked) {
                 card.classList.add('locked');
                 card.style.opacity = "0.8";
@@ -50,12 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 lockUI.innerHTML = `
                     <p style="margin: 0 0 12px 0; font-size: 0.85rem; color: #666; font-weight: 500;">🔒 Урок заблокирован</p>
-                    <button type="button" class="unlock-btn-trigger" style="width: 100%; padding: 12px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; position: relative; z-index: 9999;">Ввести пароль</button>
+                    <button type="button" class="unlock-btn-trigger" style="width: 100%; padding: 12px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; position: relative; z-index: 9999; pointer-events: auto;">Ввести пароль</button>
                 `;
                 
                 card.appendChild(lockUI);
 
-                // Use direct onclick to ensure it's not blocked by other listeners
                 const trigger = lockUI.querySelector('.unlock-btn-trigger');
                 trigger.onclick = function(e) {
                     e.preventDefault();
@@ -71,10 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     return false;
                 };
-                
-                // Add hover effect
-                trigger.onmouseover = () => trigger.style.background = "#4f46e5";
-                trigger.onmouseout = () => trigger.style.background = "#6366f1";
+            } else {
+                card.classList.remove('locked');
+                card.style.opacity = "1";
+                link.style.display = 'inline-block';
             }
         });
     }
@@ -170,7 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 progress[lessonId] = true;
                 localStorage.setItem('python_quiz_progress', JSON.stringify(progress));
                 
-                // Show next lesson button if exists
                 const nextBtn = document.getElementById('next-lesson-btn');
                 if (nextBtn) nextBtn.style.display = 'inline-block';
             } else {
@@ -214,20 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // --- 7. Logo Shortcut ---
-    const logo = document.querySelector('.logo');
-    if (logo) {
-        logo.addEventListener('dblclick', () => {
-            const cmd = prompt('Команда (admin/reset):');
-            if (cmd === 'admin') {
-                const unlocks = {};
-                lessonsList.forEach(l => unlocks[l] = true);
-                localStorage.setItem('manual_unlocks', JSON.stringify(unlocks));
-                location.reload();
-            }
-        });
-    }
-
     initLockSystem();
     initQuiz();
     updateProgressUI();
@@ -241,60 +229,58 @@ const quizData = {
     ],
     'lesson2.html': [
         { question: "Как объявить переменную x=10?", options: ["var x=10", "x = 10", "int x=10"], answer: "x = 10" },
-        { question: "Тип данных для текста?", options: ["int", "float", "str"], answer: "str" }
+        { question: "Тип данных для дробных чисел?", options: ["int", "string", "float"], answer: "float" }
     ],
     'lesson3.html': [
         { question: "Результат 10 // 3?", options: ["3.33", "3", "1"], answer: "3" },
         { question: "Оператор 'не равно'?", options: ["<>", "==", "!="], answer: "!=" }
     ],
     'lesson4.html': [
-        { question: "Как пишется 'иначе если'?", options: ["else if", "elseif", "elif"], answer: "elif" },
-        { question: "Нужны ли отступы в if?", options: ["Да", "Нет", "Только в конце"], answer: "Да" }
+        { question: "Ключевое слово для 'иначе если'?", options: ["else if", "elif", "elseif"], answer: "elif" },
+        { question: "Нужны ли скобки в if в Python?", options: ["Обязательно", "Нет", "Только для сложных"], answer: "Нет" }
     ],
     'lesson5.html': [
-        { question: "Цикл с условием?", options: ["for", "while", "do"], answer: "while" },
-        { question: "Функция для диапазона чисел?", options: ["range()", "list()", "len()"], answer: "range()" }
+        { question: "Функция для создания диапазона чисел?", options: ["list()", "range()", "for()"], answer: "range()" },
+        { question: "Как прервать цикл?", options: ["stop", "exit", "break"], answer: "break" }
     ],
     'lesson6.html': [
-        { question: "Как добавить элемент в список?", options: ["add()", "push()", "append()"], answer: "append()" },
-        { question: "Кортеж — это...?", options: ["Изменяемый список", "Неизменяемый список", "Словарь"], answer: "Неизменяемый список" }
+        { question: "Метод для добавления в конец списка?", options: ["add()", "append()", "push()"], answer: "append()" },
+        { question: "Кортеж — это...", options: ["Изменяемый список", "Неизменяемый список", "Словарь"], answer: "Неизменяемый список" }
     ],
     'lesson7.html': [
-        { question: "Ключевое слово для функции?", options: ["func", "def", "function"], answer: "def" },
-        { question: "Как вернуть значение?", options: ["give", "send", "return"], answer: "return" }
+        { question: "Ключевое слово для создания функции?", options: ["func", "def", "define"], answer: "def" },
+        { question: "Как вернуть значение из функции?", options: ["give", "send", "return"], answer: "return" }
     ],
     'lesson8.html': [
-        { question: "Чем разделяются ключ и значение?", options: ["Тире", "Двоеточием", "Запятой"], answer: "Двоеточием" },
-        { question: "Множество хранит дубликаты?", options: ["Да", "Нет", "Только числа"], answer: "Нет" }
+        { question: "Скобки для словаря?", options: ["[]", "{}", "()"], answer: "{}" },
+        { question: "Элемент словаря состоит из...", options: ["Индекса и значения", "Ключа и значения", "Только значения"], answer: "Ключа и значения" }
     ],
     'lesson9.html': [
-        { question: "Метод для перевода в верхний регистр?", options: ["up()", "upper()", "capitalize()"], answer: "upper()" },
-        { question: "Как найти длину строки?", options: ["size()", "length()", "len()"], answer: "len()" }
+        { question: "Метод для перевода в верхний регистр?", options: ["upper()", "up()", "toUpperCase()"], answer: "upper()" },
+        { question: "Как найти длину строки?", options: ["length()", "len()", "size()"], answer: "len()" }
     ],
     'lesson10.html': [
         { question: "Режим для записи в файл?", options: ["'r'", "'w'", "'a'"], answer: "'w'" },
-        { question: "Нужно ли закрывать файл?", options: ["Да", "Нет", "Только если он большой"], answer: "Да" }
+        { question: "Конструкция для авто-закрытия файла?", options: ["with", "try", "using"], answer: "with" }
     ],
     'lesson11.html': [
-        { question: "Блок для перехвата ошибок?", options: ["try", "catch", "except"], answer: "except" },
-        { question: "Блок, который выполнится всегда?", options: ["always", "finally", "end"], answer: "finally" }
+        { question: "Блок для перехвата ошибок?", options: ["catch", "except", "error"], answer: "except" },
+        { question: "Блок, который выполняется всегда?", options: ["finally", "always", "end"], answer: "finally" }
     ],
     'lesson12.html': [
-        { question: "Как импортировать модуль?", options: ["include", "import", "using"], answer: "import" },
-        { question: "Библиотека для математики?", options: ["math", "calc", "numbers"], answer: "math" }
+        { question: "Как подключить модуль?", options: ["include", "require", "import"], answer: "import" },
+        { question: "Модуль для математики?", options: ["math", "calc", "numbers"], answer: "math" }
     ],
     'lesson13.html': [
-        { question: "Чертеж объекта — это...?", options: ["Функция", "Класс", "Переменная"], answer: "Класс" },
-        { question: "Первый аргумент метода класса?", options: ["this", "me", "self"], answer: "self" }
+        { question: "Ключевое слово для создания класса?", options: ["object", "class", "def"], answer: "class" },
+        { question: "Что такое self?", options: ["Тип данных", "Ссылка на текущий объект", "Глобальная переменная"], answer: "Ссылка на текущий объект" }
     ],
     'lesson14.html': [
-        { question: "Модуль для даты?", options: ["time", "date", "datetime"], answer: "datetime" },
-        { question: "Метод для текущей даты?", options: ["now()", "today()", "current()"], answer: "now()" }
+        { question: "Модуль для работы с временем?", options: ["time", "date", "datetime"], answer: "datetime" },
+        { question: "Как получить текущую дату?", options: ["now()", "today()", "current()"], answer: "now()" }
     ],
     'lesson15.html': [
-        { question: "Что такое алгоритм?", options: ["Код", "Инструкция", "Переменная"], answer: "Инструкция" },
-        { question: "Python — это какой язык?", options: ["Низкоуровневый", "Высокоуровневый", "Машинный"], answer: "Высокоуровневый" }
+        { question: "Что такое PEP 8?", options: ["Версия Python", "Стандарт оформления кода", "Библиотека"], answer: "Стандарт оформления кода" },
+        { question: "Функция для ввода данных пользователем?", options: ["get()", "read()", "input()"], answer: "input()" }
     ]
 };
-
-// Cache bust: 1777957262
