@@ -1,23 +1,20 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Урок 14: Работа с датой и временем</title>
+    <title>Работа с датой и временем</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-            <header>
+    <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color);">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
-                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 15px;">
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="python-basic.html">Курс</a></li>
                     <li><a href="libraries.html">Библиотеки</a></li>
@@ -30,46 +27,59 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h2>Урок 14: Работа с датой и временем</h2>
-            <p>Изучаем модуль datetime и способы форматирования даты.</p>
+            <h2>Работа с датой и временем</h2>
+            <p>Глубокое погружение в тему. Время изучения: ~30 минут.</p>
         </div>
     </section>
 
     <main class="container">
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Познакомиться с модулем <code>datetime</code> и научиться работать с датами и временем в Python.</p>
+            <p>Освоить планирование и расчет временных интервалов.</p>
         </section>
 
         <section class="lesson-content">
-            <h2>⏰ Работа с датами</h2>
-            <p>Модуль <code>datetime</code> незаменим для работы со временем.</p>
-            <pre><code>from datetime import datetime
-
-now = datetime.now()
-print(now.strftime("%d.%m.%Y")) # Форматированный вывод</code></pre>
+            
+            <h3>Модуль datetime</h3>
+            <pre><code>import datetime
+now = datetime.datetime.now()
+print(now.strftime("%d.%m.%Y")) # Форматирование</code></pre>
+            <p>Вы можете вычитать даты, получая объект <code>timedelta</code>.</p>
+        
         </section>
 
-        <section class="lesson-homework">
-            <h2>📝 Домашнее задание</h2>
-            <ul>
-                <li>Выведите текущую дату и время в формате "ГГГГ-ММ-ДД ЧЧ:ММ:СС".</li>
-                <li>Создайте объект даты своего дня рождения и выведите его.</li>
-                <li>Выведите, какой день недели будет 1 января следующего года.</li>
-            </ul>
-        </section>
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
+        <div style="text-align: center; margin: 50px 0;">
+            <button id="start-quiz-btn" class="btn" style="padding: 20px 50px; font-size: 1.2rem; background: var(--accent-color); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);">🚀 Перейти к тесту</button>
+        </div>
 
-        <!-- Навигация -->
-        <div class="lesson-navigation"></div>
+        <div id="quiz-container" style="display: none;"></div>
+
+        <div class="lesson-navigation" style="display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee;">
+            <a href="lesson13.html" class="btn" style="display: inline-block">← Предыдущий урок</a>
+            <a href="lesson15.html" id="next-lesson-btn" class="btn" style="display: none; background: var(--success-color); color: white;">Следующий урок →</a>
+        </div>
     </main>
 
     <footer>
-        <p>© 2025 Python для начинающих. Все права защищены.</p>
+        <p>© 2025 PythonBasic. Все права защищены.</p>
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        document.getElementById('start-quiz-btn').onclick = function() {
+            this.style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('quiz-container').offsetTop - 100, behavior: 'smooth' });
+        };
+        
+        // Постоянно проверяем, пройден ли тест, чтобы показать кнопку "Следующий"
+        setInterval(() => {
+            const progress = JSON.parse(localStorage.getItem('python_quiz_progress') || '{}');
+            if (progress['lesson14.html']) {
+                const nextBtn = document.getElementById('next-lesson-btn');
+                if (nextBtn) nextBtn.style.display = 'inline-block';
+            }
+        }, 1000);
+    </script>
 </body>
-
 </html>

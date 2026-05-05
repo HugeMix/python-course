@@ -1,23 +1,20 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Урок 5: Циклы (for, while)</title>
+    <title>Циклы: Автоматизация повторений</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-            <header>
+    <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color);">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
-                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 15px;">
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="python-basic.html">Курс</a></li>
                     <li><a href="libraries.html">Библиотеки</a></li>
@@ -30,60 +27,71 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h2>Урок 5: Циклы (for, while)</h2>
-            <p>Изучаем, как повторять действия в коде с помощью циклов.</p>
+            <h2>Циклы: Автоматизация повторений</h2>
+            <p>Глубокое погружение в тему. Время изучения: ~30 минут.</p>
         </div>
     </section>
 
     <main class="container">
-        <!-- Цель урока -->
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Научиться использовать циклы <strong>for</strong> и <strong>while</strong> для повторения действий.</p>
+            <p>Изучить циклы for и while для эффективной обработки данных.</p>
         </section>
 
-        <!-- Основной материал -->
         <section class="lesson-content">
-            <h2>🔄 Цикл for</h2>
-            <p>Используется для перебора элементов (например, чисел в диапазоне или символов в строке).</p>
+            
+            <h3>Цикл for</h3>
+            <p>Используется для перебора последовательностей (списков, строк, диапазонов).</p>
             <pre><code>for i in range(5):
-    print("Шаг №", i) # Выведет от 0 до 4</code></pre>
+    print(f"Итерация {i}")</code></pre>
 
-            <h2>♾️ Цикл while</h2>
-            <p>Работает до тех пор, пока условие истинно.</p>
+            <h3>Цикл while</h3>
+            <p>Выполняется, пока условие истинно. Опасайтесь бесконечных циклов!</p>
             <pre><code>count = 0
 while count < 3:
-    print("Считаю...")
+    print("Работаю...")
     count += 1</code></pre>
 
-            <h2>🛑 break и continue</h2>
+            <h3>Управление циклом</h3>
             <ul>
-                <li><code>break</code> — полностью прерывает цикл.</li>
-                <li><code>continue</code> — переходит к следующей итерации, пропуская остаток кода в текущей.</li>
+                <li><code>break</code> — немедленный выход.</li>
+                <li><code>continue</code> — переход к следующей итерации.</li>
             </ul>
+        
         </section>
 
-        <!-- Домашнее задание -->
-        <section class="lesson-homework">
-            <h2>📝 Домашнее задание</h2>
-            <ul>
-                <li>Напиши цикл <code>for</code>, который выведет числа от 1 до 10.</li>
-                <li>Напиши цикл <code>while</code>, который запрашивает у пользователя число, пока он не введёт 0.</li>
-                <li>Используй <code>break</code> для остановки цикла при вводе отрицательного числа.</li>
-            </ul>
-        </section>
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
+        <div style="text-align: center; margin: 50px 0;">
+            <button id="start-quiz-btn" class="btn" style="padding: 20px 50px; font-size: 1.2rem; background: var(--accent-color); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);">🚀 Перейти к тесту</button>
+        </div>
 
-        <!-- Навигация -->
-        <div class="lesson-navigation"></div>
+        <div id="quiz-container" style="display: none;"></div>
+
+        <div class="lesson-navigation" style="display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee;">
+            <a href="lesson4.html" class="btn" style="display: inline-block">← Предыдущий урок</a>
+            <a href="lesson6.html" id="next-lesson-btn" class="btn" style="display: none; background: var(--success-color); color: white;">Следующий урок →</a>
+        </div>
     </main>
 
     <footer>
-        <p>© 2025 Python для начинающих. Все права защищены.</p>
+        <p>© 2025 PythonBasic. Все права защищены.</p>
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        document.getElementById('start-quiz-btn').onclick = function() {
+            this.style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('quiz-container').offsetTop - 100, behavior: 'smooth' });
+        };
+        
+        // Постоянно проверяем, пройден ли тест, чтобы показать кнопку "Следующий"
+        setInterval(() => {
+            const progress = JSON.parse(localStorage.getItem('python_quiz_progress') || '{}');
+            if (progress['lesson5.html']) {
+                const nextBtn = document.getElementById('next-lesson-btn');
+                if (nextBtn) nextBtn.style.display = 'inline-block';
+            }
+        }, 1000);
+    </script>
 </body>
-
 </html>

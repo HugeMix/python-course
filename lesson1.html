@@ -1,27 +1,20 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Урок 1: Введение в Python</title>
+    <title>Введение в Python: История, Установка и Первая программа</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
     <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html"
-                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span
-                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
-                        style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color);">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
-                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 15px;">
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="python-basic.html">Курс</a></li>
                     <li><a href="libraries.html">Библиотеки</a></li>
@@ -32,64 +25,74 @@
         </div>
     </header>
 
-    <!-- Голубая плашка с названием урока -->
     <section class="lesson-title">
         <div class="container">
-            <h2>Урок 1: Введение в Python</h2>
-            <p>Познакомимся с языком Python, установим среду и напишем первую программу.</p>
+            <h2>Введение в Python: История, Установка и Первая программа</h2>
+            <p>Глубокое погружение в тему. Время изучения: ~30 минут.</p>
         </div>
     </section>
 
     <main class="container">
-        <!-- Плашка с целью урока -->
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Познакомиться с языком Python, установить среду для программирования и написать первую программу.</p>
+            <p>Понять философию Python, настроить рабочее окружение и запустить первый скрипт.</p>
         </section>
 
-        <!-- Основной материал -->
         <section class="lesson-content">
-            <h2>📌 Что такое Python?</h2>
-            <p>Python — это высокоуровневый язык программирования, который славится своей простотой и читаемостью. Его часто называют "исполняемым псевдокодом", потому что программы на нём выглядят почти как обычный английский текст.</p>
             
-            <h2>🔧 Почему выбирают Python?</h2>
+            <h3>Что такое Python?</h3>
+            <p>Python — это интерпретируемый, объектно-ориентированный язык программирования высокого уровня с динамической типизацией. Созданный Гвидо ван Россумом в конце 80-х, Python стал стандартом в Data Science, веб-разработке и автоматизации.</p>
+            
+            <h3>Почему Python?</h3>
             <ul>
-                <li><strong>Простота:</strong> Меньше кода, больше дела. То, что на Java занимает 10 строк, на Python — одну.</li>
-                <li><strong>Универсальность:</strong> Веб-разработка (Django), Data Science, AI, автоматизация, игры.</li>
-                <li><strong>Огромное сообщество:</strong> На любой ваш вопрос уже есть ответ на Stack Overflow.</li>
+                <li><strong>Читаемость:</strong> Код на Python часто называют "исполняемым псевдокодом".</li>
+                <li><strong>Огромная стандартная библиотека:</strong> "Батарейки в комплекте".</li>
+                <li><strong>Сообщество:</strong> Миллионы разработчиков и готовых решений.</li>
             </ul>
 
-            <h2>🚀 Ваша первая команда: print()</h2>
-            <p>Функция <code>print()</code> — это ваш главный инструмент общения с программой. Она выводит всё, что вы ей дадите, на экран.</p>
-            <pre><code>print("Привет, будущий программист!")
-print(2025) # Можно выводить и числа</code></pre>
-            
-            <div style="background: rgba(79, 70, 229, 0.1); padding: 15px; border-radius: 10px; border-left: 5px solid var(--accent-color);">
-                <strong>💡 Важно:</strong> Python чувствителен к регистру. <code>print()</code> и <code>Print()</code> — это разные вещи для компьютера!
-            </div>
+            <h3>Установка и Настройка</h3>
+            <p>Для работы вам понадобится интерпретатор с сайта python.org и редактор кода (VS Code, PyCharm или просто IDLE). Проверьте установку командой <code>python --version</code>.</p>
+
+            <h3>Ваша первая программа</h3>
+            <pre><code>print("Привет, мир!")
+# Это комментарий. Он не выполняется.
+print(5 + 3)</code></pre>
+            <p>Функция <code>print()</code> выводит данные в консоль. В Python 3 она всегда требует скобок.</p>
+        
         </section>
 
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
+        <div style="text-align: center; margin: 50px 0;">
+            <button id="start-quiz-btn" class="btn" style="padding: 20px 50px; font-size: 1.2rem; background: var(--accent-color); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);">🚀 Перейти к тесту</button>
+        </div>
 
-        <!-- Домашнее задание -->
-        <section class="lesson-homework">
-            <h2>📝 Домашнее задание</h2>
-            <ul>
-                <li>Установи Python и проверь его версию.</li>
-                <li>Напиши и запусти свою первую программу.</li>
-                <li>Попробуй изменить код так, чтобы он выводил своё имя.</li>
-            </ul>
-        </section>
-        <!-- Навигация -->
-        <div class="lesson-navigation"></div>
+        <div id="quiz-container" style="display: none;"></div>
+
+        <div class="lesson-navigation" style="display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee;">
+            <a href="lesson0.html" class="btn" style="display: none">← Предыдущий урок</a>
+            <a href="lesson2.html" id="next-lesson-btn" class="btn" style="display: none; background: var(--success-color); color: white;">Следующий урок →</a>
+        </div>
     </main>
 
     <footer>
-        <p>© 2025 Python для начинающих. Все права защищены.</p>
+        <p>© 2025 PythonBasic. Все права защищены.</p>
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        document.getElementById('start-quiz-btn').onclick = function() {
+            this.style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('quiz-container').offsetTop - 100, behavior: 'smooth' });
+        };
+        
+        // Постоянно проверяем, пройден ли тест, чтобы показать кнопку "Следующий"
+        setInterval(() => {
+            const progress = JSON.parse(localStorage.getItem('python_quiz_progress') || '{}');
+            if (progress['lesson1.html']) {
+                const nextBtn = document.getElementById('next-lesson-btn');
+                if (nextBtn) nextBtn.style.display = 'inline-block';
+            }
+        }, 1000);
+    </script>
 </body>
-
 </html>

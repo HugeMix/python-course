@@ -1,23 +1,20 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Урок 7: Функции в Python</title>
+    <title>Функции: Повторное использование кода</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-            <header>
+    <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color);">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
-                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 15px;">
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="python-basic.html">Курс</a></li>
                     <li><a href="libraries.html">Библиотеки</a></li>
@@ -30,53 +27,65 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h2>Урок 7: Функции в Python</h2>
-            <p>Изучаем, как создавать и использовать функции для удобства программирования.</p>
+            <h2>Функции: Повторное использование кода</h2>
+            <p>Глубокое погружение в тему. Время изучения: ~30 минут.</p>
         </div>
     </section>
 
     <main class="container">
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Научиться создавать функции, передавать в них аргументы и получать результаты.</p>
+            <p>Научиться создавать свои инструменты и структурировать программу.</p>
         </section>
 
         <section class="lesson-content">
-            <h2>🛠️ Создание функций</h2>
-            <p>Функции позволяют группировать код для повторного использования.</p>
-            <pre><code>def say_hello(name):
-    print("Привет,", name)
+            
+            <h3>Объявление функции</h3>
+            <pre><code>def multiply(a, b):
+    return a * b
 
-say_hello("Максим")</code></pre>
+result = multiply(5, 4)  # 20</code></pre>
 
-            <h2>📥 Аргументы и возвращаемое значение</h2>
-            <p>Используйте <code>return</code>, чтобы функция отдала результат обратно в программу.</p>
-            <pre><code>def add(a, b):
-    return a + b
-
-result = add(5, 7) # result станет 12</code></pre>
+            <h3>Аргументы и Return</h3>
+            <p>Функции могут принимать параметры по умолчанию и возвращать любые типы данных.</p>
+            
+            <h3>Область видимости</h3>
+            <p>Переменные внутри функции — локальные. Переменные снаружи — глобальные.</p>
+        
         </section>
 
-        <section class="lesson-homework">
-            <h2>📝 Домашнее задание</h2>
-            <ul>
-                <li>Создай функцию, которая принимает два числа и возвращает их сумму.</li>
-                <li>Напиши функцию, которая определяет, является ли число чётным.</li>
-                <li>Попробуй написать свою собственную полезную функцию.</li>
-            </ul>
-        </section>
-        <!-- Квиз -->
-        <div id="quiz-container"></div>
+        <div style="text-align: center; margin: 50px 0;">
+            <button id="start-quiz-btn" class="btn" style="padding: 20px 50px; font-size: 1.2rem; background: var(--accent-color); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);">🚀 Перейти к тесту</button>
+        </div>
 
-        <!-- Навигация -->
-        <div class="lesson-navigation"></div>
+        <div id="quiz-container" style="display: none;"></div>
+
+        <div class="lesson-navigation" style="display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee;">
+            <a href="lesson6.html" class="btn" style="display: inline-block">← Предыдущий урок</a>
+            <a href="lesson8.html" id="next-lesson-btn" class="btn" style="display: none; background: var(--success-color); color: white;">Следующий урок →</a>
+        </div>
     </main>
 
     <footer>
-        <p>© 2025 Python для начинающих. Все права защищены.</p>
+        <p>© 2025 PythonBasic. Все права защищены.</p>
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        document.getElementById('start-quiz-btn').onclick = function() {
+            this.style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('quiz-container').offsetTop - 100, behavior: 'smooth' });
+        };
+        
+        // Постоянно проверяем, пройден ли тест, чтобы показать кнопку "Следующий"
+        setInterval(() => {
+            const progress = JSON.parse(localStorage.getItem('python_quiz_progress') || '{}');
+            if (progress['lesson7.html']) {
+                const nextBtn = document.getElementById('next-lesson-btn');
+                if (nextBtn) nextBtn.style.display = 'inline-block';
+            }
+        }, 1000);
+    </script>
 </body>
-
 </html>
