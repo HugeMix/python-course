@@ -130,32 +130,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!isFirst && !isPrevPassed && !isManuallyUnlocked) {
                     // LOCKED STATE
                     card.classList.add('locked');
-                    const btnContainer = card.querySelector('.btn').parentNode;
                     const originalBtn = card.querySelector('.btn');
-                    originalBtn.style.display = 'none';
+                    if (originalBtn) {
+                        const btnContainer = originalBtn.parentNode;
+                        originalBtn.style.display = 'none';
 
-                    // Add Lock Notification & Password Button
-                    const lockUI = document.createElement('div');
-                    lockUI.className = 'lock-ui';
-                    lockUI.innerHTML = `
-                        <p style="color: #666; font-size: 0.85rem; margin-bottom: 10px;">🔒 Урок закрыт. Пройдите предыдущий или введите пароль.</p>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="btn btn-password" style="background: #6366f1; color: white;">Ввести пароль</button>
-                        </div>
-                    `;
-                    btnContainer.appendChild(lockUI);
+                        // Add Lock Notification & Password Button
+                        const lockUI = document.createElement('div');
+                        lockUI.className = 'lock-ui';
+                        lockUI.style.zIndex = "10";
+                        lockUI.style.position = "relative";
+                        lockUI.innerHTML = `
+                            <p style="color: #666; font-size: 0.85rem; margin-bottom: 10px;">🔒 Урок закрыт. Пройдите предыдущий или введите пароль.</p>
+                            <button class="btn btn-password-unlock" style="background: #6366f1; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold;">Ввести пароль</button>
+                        `;
+                        btnContainer.appendChild(lockUI);
 
-                    lockUI.querySelector('.btn-password').onclick = () => {
-                        const pass = prompt('Введите пароль для разблокировки урока:');
-                        if (pass === SECRET_PASSWORD) {
-                            manualUnlocks[lessonFileName] = true;
-                            localStorage.setItem('manual_unlocks', JSON.stringify(manualUnlocks));
-                            alert('✅ Урок разблокирован!');
-                            location.reload();
-                        } else {
-                            alert('❌ Неверный пароль!');
-                        }
-                    };
+                        lockUI.querySelector('.btn-password-unlock').addEventListener('click', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const pass = prompt('Введите пароль для разблокировки урока:');
+                            if (pass === SECRET_PASSWORD) {
+                                manualUnlocks[lessonFileName] = true;
+                                localStorage.setItem('manual_unlocks', JSON.stringify(manualUnlocks));
+                                alert('✅ Урок разблокирован!');
+                                location.reload();
+                            } else {
+                                alert('❌ Неверный пароль!');
+                            }
+                        });
+                    }
                 }
             });
             return;
