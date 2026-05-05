@@ -50,13 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 lockUI.innerHTML = `
                     <p style="margin: 0 0 12px 0; font-size: 0.85rem; color: #666; font-weight: 500;">🔒 Урок заблокирован</p>
-                    <button type="button" class="unlock-btn-trigger" style="width: 100%; padding: 10px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s;">Ввести пароль</button>
+                    <button type="button" class="unlock-btn-trigger" style="width: 100%; padding: 12px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; position: relative; z-index: 9999;">Ввести пароль</button>
                 `;
                 
                 card.appendChild(lockUI);
 
+                // Use direct onclick to ensure it's not blocked by other listeners
                 const trigger = lockUI.querySelector('.unlock-btn-trigger');
-                trigger.addEventListener('click', function(e) {
+                trigger.onclick = function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     const pass = prompt('Введите пароль для доступа к уроку:');
@@ -65,10 +66,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         localStorage.setItem('manual_unlocks', JSON.stringify(manualUnlocks));
                         alert('✅ Доступ разрешен!');
                         window.location.reload();
-                    } else if (pass !== null) {
+                    } else if (pass !== null && pass !== "") {
                         alert('❌ Неверный пароль!');
                     }
-                });
+                    return false;
+                };
+                
+                // Add hover effect
+                trigger.onmouseover = () => trigger.style.background = "#4f46e5";
+                trigger.onmouseout = () => trigger.style.background = "#6366f1";
             }
         });
     }
