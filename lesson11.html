@@ -43,25 +43,15 @@
         </section>
 
         <section class="lesson-content">
-            <h2>⚠️ Перехват ошибок с try-except</h2>
-            <p>Блок <code>try-except</code> позволяет обработать ошибку и избежать остановки программы.</p>
+            <h2>⚠️ Ошибки и исключения</h2>
+            <p>Даже идеальный код может упасть (например, если нет интернета или файла). Для этого есть <code>try-except</code>.</p>
             <pre><code>try:
-    число = int(input("Введите число: "))
-    print("Вы ввели:", число)
-except ValueError:
-    print("Ошибка! Нужно ввести число.")</code></pre>
-
-            <h2>🔄 Использование finally</h2>
-            <p>Блок <code>finally</code> выполняется всегда, независимо от того, произошла ошибка или нет.</p>
-            <pre><code>try:
-    файл = open("data.txt", "r")
-    содержимое = файл.read()
-    print(содержимое)
-except FileNotFoundError:
-    print("Ошибка! Файл не найден.")
-finally:
-    print("Попытка чтения файла завершена.")</code></pre>
-        \n            <h2>💡 Ошибки в деталях</h2><ul><li>При делении на 0 (например 10 / 0) интерпретатор выбрасывает строгую ошибку <code>ZeroDivisionError</code>.</li><li>Самый старший и универсальный класс ошибок имеет название <code>Exception</code>. Его используют, чтобы отлавливать "вообще абсолютно всё абстрактное", что может пойти не так.</li></ul>\n        </section>
+    x = 10 / 0
+except ZeroDivisionError:
+    print("На ноль делить нельзя!")
+except Exception as e:
+    print(f"Произошла ошибка: {e}")</code></pre>
+        </section>
 
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>

@@ -46,51 +46,43 @@
         </section>
 
         <section class="lesson-content">
-            <h2>📌 Что такое переменные?</h2>
-            <p>Переменная - это "контейнер" для хранения данных. В Python переменную можно создать, просто присвоив ей
-                значение.</p>
-            <pre><code>x = 5  # Создали переменную x и присвоили ей число 5
-name = "Анна"  # Создали переменную name и присвоили ей строку "Анна"</code></pre>
-
-            <p><strong>⚠️ Правила именования переменных:</strong></p>
-            <ul>
-                <li>Имя может содержать только буквы, цифры и символ подчеркивания (<code>_</code>).</li>
-                <li>Имя <strong>не может начинаться с цифры</strong> (например, <code>1var</code> - недопустимо, вызовет
-                    ошибку).</li>
-                <li>Рекомендуется писать переменные строчными буквами, разделяя слова подчеркиванием (Snake Case):
-                    <code>my_var</code>. Теги <code>var1</code> или <code>_var_</code> тоже допустимы, но первый вариант
-                    предпочтительнее.</li>
-            </ul>
+            <h2>📦 Что такое переменные?</h2>
+            <p>Представьте переменную как коробку с наклеенным именем, в которой лежит какое-то значение. Мы можем обращаться к содержимому коробки по её имени.</p>
+            <pre><code>name = "Алексей"
+age = 25
+is_student = True</code></pre>
 
             <h2>🔢 Основные типы данных</h2>
-            <p>Python автоматически определяет тип переменной. Вот основные типы данных:</p>
-            <ul>
-                <li><strong>int</strong> (целые числа): <code>age = 20</code></li>
-                <li><strong>float</strong> (числа с запятой): <code>height = 1.75</code></li>
-                <li><strong>str</strong> (строки): <code>city = "Москва"</code></li>
-                <li><strong>bool</strong> (логические значения): <code>is_student = True</code></li>
-            </ul>
+            <table style="width:100%; border-collapse: collapse; margin: 20px 0;">
+                <tr style="background: var(--accent-color); color: white;">
+                    <th style="padding: 10px; border: 1px solid #ddd;">Тип</th>
+                    <th style="padding: 10px; border: 1px solid #ddd;">Описание</th>
+                    <th style="padding: 10px; border: 1px solid #ddd;">Пример</th>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>int</strong></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Целые числа</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">10, -5, 0</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>float</strong></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Числа с плавающей точкой</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">3.14, -0.5</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>str</strong></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Строки (текст)</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">"Hello", 'Python'</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>bool</strong></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Логический тип</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">True, False</td>
+                </tr>
+            </table>
 
-            <p>Узнать тип переменной можно с помощью функции <code>type()</code>:</p>
-            <pre><code>print(type("10")) # Выведет &lt;class 'str'&gt;
-print(type(5))    # Выведет &lt;class 'int'&gt;</code></pre>
-
-            <h2>🔄 Преобразование типов</h2>
-            <p>Иногда нужно преобразовать один тип данных в другой:</p>
-            <pre><code>num = "10"  # Это строка
-num = int(num)  # Преобразуем в число</code></pre>
-            <p>Функции преобразования:</p>
-            <ul>
-                <li><code>int()</code> – преобразует в целое число</li>
-                <li><code>float()</code> – в число с плавающей точкой</li>
-                <li><code>str()</code> – в строку</li>
-                <li><code>bool()</code> – в логическое значение</li>
-            </ul>
-
-            <p><strong>💡 Зачем нужны преобразования? Пример (Сложение строк):</strong></p>
-            <p>Представь, что у нас есть число <code>5</code>, которое мы превратили в строку. Если сложить строку с
-                другой строкой, они просто "склеятся" (это называется конкатенацией):</p>
-            <pre><code>print(str(5) + '5') # Результатом будет '55', а не 10!</code></pre>
+            <h2>📝 Правила именования</h2>
+            <p>Имя переменной должно начинаться с буквы или подчеркивания. Оно не может начинаться с цифры и не должно содержать пробелов.</p>
         </section>
 
         <section class="lesson-homework">

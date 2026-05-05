@@ -42,63 +42,17 @@
         </section>
 
         <section class="lesson-content">
-            <h2>📌 Описание проекта</h2>
-            <p>Программа должна позволять:</p>
+            <h2>🎓 Итоговый проект</h2>
+            <p>Вы прошли путь от <code>print("Hello")</code> до основ ООП. Теперь пора собрать всё воедино.</p>
+            <p><strong>Ваша задача:</strong> Создать консольный менеджер задач (To-Do List).</p>
             <ul>
-                <li>Добавлять задачи</li>
-                <li>Просматривать список задач</li>
-                <li>Удалять выполненные задачи</li>
-                <li>Сохранять список в файл и загружать его</li>
+                <li>Используйте <strong>списки</strong> для хранения задач.</li>
+                <li>Используйте <strong>функции</strong> для добавления и просмотра.</li>
+                <li>Используйте <strong>цикл while</strong> для меню управления.</li>
+                <li>Используйте <strong>файлы</strong> для сохранения списка между запусками.</li>
             </ul>
-
-            <h2>💻 Пример кода</h2>
-            <pre><code>
-import json
-
-def load_tasks():
-    try:
-        with open("tasks.json", "r", encoding="utf-8") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        return []
-
-def save_tasks(tasks):
-    with open("tasks.json", "w", encoding="utf-8") as file:
-        json.dump(tasks, file, ensure_ascii=False, indent=4)
-
-def main():
-    tasks = load_tasks()
-    while True:
-        print("\n1. Добавить задачу")
-        print("2. Показать список задач")
-        print("3. Удалить задачу")
-        print("4. Выйти")
-        choice = input("Выберите действие: ")
-        
-        if choice == "1":
-            task = input("Введите новую задачу: ")
-            tasks.append(task)
-            save_tasks(tasks)
-        elif choice == "2":
-            print("\nВаш список дел:")
-            for i, task in enumerate(tasks, 1):
-                print(f"{i}. {task}")
-        elif choice == "3":
-            num = int(input("Введите номер задачи для удаления: ")) - 1
-            if 0 <= num < len(tasks):
-                tasks.pop(num)
-                save_tasks(tasks)
-            else:
-                print("Некорректный номер!")
-        elif choice == "4":
-            break
-        else:
-            print("Неверный ввод, попробуйте снова.")
-
-if __name__ == "__main__":
-    main()
-        </code></pre>
-        \n            <h2>💡 Главные инструменты программиста</h2><ul><li>Для стандарта красоты написания программ в Python используют свод правил — <strong>PEP8</strong>.</li><li>Проекты теперь хранят не на флешке, а в интернете через систему <strong>Git</strong> и сайт <strong>GitHub</strong>, что позволяет легко работать в команде.</li></ul>\n        </section>
+            <p>Удачи, программист! Это только начало твоего пути.</p>
+        </section>
 
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>

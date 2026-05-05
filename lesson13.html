@@ -45,46 +45,18 @@
 
         <!-- Основной материал -->
         <section class="lesson-content">
-            <h2>📌 Что такое ООП?</h2>
-            <p>Объектно-ориентированное программирование (ООП) - это стиль программирования, где код организован в виде
-                объектов.</p>
+            <h2>🏗️ Основы ООП</h2>
+            <p>Объектно-ориентированное программирование — это способ организации кода через "объекты" (чертежи и детали).</p>
+            <pre><code>class Dog:
+    def __init__(self, name):
+        self.name = name
+    
+    def bark(self):
+        print(f"{self.name} говорит: Гав!")
 
-            <h2>🔧 Создание класса</h2>
-            <p>Класс - это шаблон для создания объектов. Давайте создадим класс <code>Car</code>:</p>
-            <pre><code>class Car:
-    def __init__(self, brand, model, year):
-        self.brand = brand  # Атрибут марки
-        self.model = model  # Атрибут модели
-        self.year = year    # Атрибут года выпуска
-
-    def show_info(self):
-        print(f"Автомобиль: {self.brand} {self.model}, {self.year} года выпуска")</code></pre>
-
-            <h2>🚗 Создание объекта</h2>
-            <p>Объект - это экземпляр класса. Создадим объект машины:</p>
-            <pre><code>my_car = Car("Toyota", "Camry", 2020)
-my_car.show_info()</code></pre>
-            <p>Вывод:</p>
-            <pre><code>Автомобиль: Toyota Camry, 2020 года выпуска</code></pre>
-
-            <h2>⚙ Методы класса</h2>
-            <p>Методы - это функции внутри класса. Добавим метод <code>start_engine</code>:</p>
-            <pre><code>class Car:
-    def __init__(self, brand, model, year):
-        self.brand = brand
-        self.model = model
-        self.year = year
-
-    def show_info(self):
-        print(f"Автомобиль: {self.brand} {self.model}, {self.year} года выпуска")
-
-    def start_engine(self):
-        print(f"{self.brand} {self.model}: Двигатель запущен!")
-
-my_car = Car("BMW", "X5", 2022)
-my_car.show_info()
-my_car.start_engine()</code></pre>
-        \n            <h2>💡 Принцип Инкапсуляции</h2><p>Одним из китов ООП является <strong>Инкапсуляция</strong> — это умение объектов утаивать и скрывать свои внутренние данные от внешних пользователей ради безопасности.</p>\n        </section>
+my_dog = Dog("Шарик")
+my_dog.bark()</code></pre>
+        </section>
 
         <!-- Домашнее задание -->
         <section class="lesson-homework">

@@ -45,30 +45,23 @@
         <!-- Основной материал -->
         <section class="lesson-content">
             <h2>🔄 Цикл for</h2>
-            <p>Цикл <code>for</code> используется, когда заранее известно количество повторений.</p>
+            <p>Используется для перебора элементов (например, чисел в диапазоне или символов в строке).</p>
             <pre><code>for i in range(5):
-    print("Привет, мир!")</code></pre>
-            <p>Этот код 5 раз напечатает <strong>"Привет, мир!"</strong>.</p>
+    print("Шаг №", i) # Выведет от 0 до 4</code></pre>
 
-            <h2>🔁 Цикл while</h2>
-            <p>Цикл <code>while</code> выполняется, пока условие истинно.</p>
+            <h2>♾️ Цикл while</h2>
+            <p>Работает до тех пор, пока условие истинно.</p>
             <pre><code>count = 0
-while count < 5:
-    print("Повтор №", count)
+while count < 3:
+    print("Считаю...")
     count += 1</code></pre>
-            <p>Этот код будет выполняться, пока <code>count</code> меньше 5.</p>
 
-            <h2>⏩ Операторы break и continue</h2>
-            <p><code>break</code> прерывает цикл, а <code>continue</code> пропускает оставшуюся часть итерации.</p>
-            <pre><code>for i in range(10):
-    if i == 5:
-        break  # Остановит цикл при i = 5
-    print(i)</code></pre>
-            <pre><code>for i in range(10):
-    if i % 2 == 0:
-        continue  # Пропустит четные числа
-    print(i)</code></pre>
-        \n            <h2>💡 Подробнее о continue</h2><p>Оператор <code>continue</code> заставляет программу мгновенно прервать текущий круг выполнения цикла. Но в отличие от break он не убивает цикл, а сразу переходит к следующему шагу!</p>\n        </section>
+            <h2>🛑 break и continue</h2>
+            <ul>
+                <li><code>break</code> — полностью прерывает цикл.</li>
+                <li><code>continue</code> — переходит к следующей итерации, пропуская остаток кода в текущей.</li>
+            </ul>
+        </section>
 
         <!-- Домашнее задание -->
         <section class="lesson-homework">

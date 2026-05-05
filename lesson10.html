@@ -42,26 +42,20 @@
         </section>
 
         <section class="lesson-content">
-            <h2>📂 Открытие файла</h2>
-            <p>Используем функцию <code>open()</code> для работы с файлами.</p>
-            <pre><code>file = open("example.txt", "r")
-content = file.read()
-print(content)
-file.close()</code></pre>
+            <h2>📂 Чтение и запись файлов</h2>
+            <p>Для работы с файлами используйте встроенную функцию <code>open()</code>.</p>
+            <pre><code># Запись
+with open("test.txt", "w") as f:
+    f.write("Привет, файл!")
 
-            <h2>✏️ Запись в файл</h2>
-            <p>Открываем файл в режиме записи <code>"w"</code> и записываем текст.</p>
-            <pre><code>file = open("example.txt", "w")
-file.write("Привет, мир!")
-file.close()</code></pre>
-
-            <h2>📌 Чтение построчно</h2>
-            <p>Читаем файл построчно с помощью <code>readline()</code> или <code>readlines()</code>.</p>
-            <pre><code>file = open("example.txt", "r")
-for line in file:
-    print(line.strip())
-file.close()</code></pre>
-        \n            <h2>💡 Секреты файлов: with open</h2><p>Писать <code>file.close()</code> вручную крайне ненадёжно, так как при любой ошибке файл останется висеть в памяти. Безопаснее применять блок <code>with open(...) as f:</code>, который гарантирует, что файл автоматически закроется по окончании работы вашего кода.</p>\n        </section>
+# Чтение
+with open("test.txt", "r") as f:
+    content = f.read()
+    print(content)</code></pre>
+            <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 10px; border-left: 5px solid var(--success-color);">
+                <strong>✅ Совет:</strong> Всегда используйте <code>with</code>. Он автоматически закрывает файл, даже если произошла ошибка.
+            </div>
+        </section>
 
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>

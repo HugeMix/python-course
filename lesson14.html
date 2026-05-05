@@ -42,26 +42,13 @@
         </section>
 
         <section class="lesson-content">
-            <h2>📅 Модуль datetime</h2>
-            <p>Python предоставляет встроенный модуль <code>datetime</code> для работы с датами и временем.</p>
+            <h2>⏰ Работа с датами</h2>
+            <p>Модуль <code>datetime</code> незаменим для работы со временем.</p>
+            <pre><code>from datetime import datetime
 
-            <h3>Пример получения текущей даты и времени:</h3>
-            <pre><code>import datetime
-now = datetime.datetime.now()
-print("Текущая дата и время:", now)</code></pre>
-
-            <h2>⏳ Форматирование даты</h2>
-            <p>Мы можем отобразить дату в удобном формате с помощью метода <code>strftime()</code>.</p>
-
-            <h3>Форматирование даты в строку:</h3>
-            <pre><code>formatted_date = now.strftime("%d.%m.%Y %H:%M:%S")
-print("Отформатированная дата:", formatted_date)</code></pre>
-
-            <h2>📆 Создание своей даты</h2>
-            <p>Мы можем создать объект даты вручную:</p>
-            <pre><code>custom_date = datetime.datetime(2025, 5, 17, 15, 30)
-print("Созданная дата:", custom_date)</code></pre>
-        \n            <h2>💡 Разница во времени</h2><p>Если из одной переменной с датой вычесть другую, мы получим особый объект <code>timedelta</code>, в котором хранятся дни и секунды получившейся разницы!</p>\n        </section>
+now = datetime.now()
+print(now.strftime("%d.%m.%Y")) # Форматированный вывод</code></pre>
+        </section>
 
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>

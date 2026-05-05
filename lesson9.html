@@ -42,23 +42,18 @@
         </section>
 
         <section class="lesson-content">
-            <h2>📝 Основы строк</h2>
-            <p>Строки в Python обозначаются в кавычках:</p>
-            <pre><code>text = "Привет, мир!"
-print(text)</code></pre>
+            <h2>🔤 Работа со строками</h2>
+            <p>Строки в Python — это объекты с множеством полезных методов.</p>
+            <pre><code>text = "  Hello Python  "
+print(text.upper())    # "  HELLO PYTHON  "
+print(text.strip())    # "Hello Python" (убирает пробелы)
+print(text.split())    # ["Hello", "Python"]</code></pre>
 
-            <h2>🔠 Методы строк</h2>
-            <p>Python предоставляет множество методов для работы со строками:</p>
-            <pre><code>text = "python"
-print(text.upper())  # Преобразует в верхний регистр
-print(text.lower())  # Преобразует в нижний регистр
-print(text.replace("y", "i"))  # Заменяет символы</code></pre>
-
-            <h2>✂️ Разделение и объединение строк</h2>
-            <pre><code>words = "apple,banana,orange".split(",")
-print(words)
-print(" - ".join(words))  # Объединение строк</code></pre>
-        \n            <h2>💡 Полезные свойства строк</h2><ul><li><code>s.strip()</code> очищает переменную от мусора: переносит пробелы и невидимые символы строго по краям текста.</li><li><code>s.replace('a','b')</code> используется для автозамены: меняет все 'a' на 'b'.</li></ul>\n        </section>
+            <h2>🔗 Форматирование строк</h2>
+            <p>Самый современный способ — f-строки.</p>
+            <pre><code>name = "Анна"
+print(f"Привет, {name}!")</code></pre>
+        </section>
 
         <section class="lesson-homework">
             <h2>📝 Домашнее задание</h2>

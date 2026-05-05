@@ -48,6 +48,12 @@
         }
 
         .task-item {
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            background: var(--card-bg);
+
             padding: 12px;
             margin-bottom: 4px;
             border-radius: 8px;
@@ -58,6 +64,13 @@
         }
 
         body.dark-mode .task-item {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            background: var(--card-bg);
+
             border: 1px solid transparent;
             background: transparent;
         }
@@ -67,6 +80,10 @@
         }
 
         .task-item.active {
+            border-color: var(--accent-color);
+            transform: translateX(4px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+
             border-color: transparent;
             transform: translateX(4px);
             background: rgba(79, 70, 229, 0.15);
@@ -83,6 +100,11 @@
         .diff-easy {
             background: rgba(16, 185, 129, 0.2);
             color: var(--success-color);
+        }
+
+        .diff-hard {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
         }
 
         .diff-medium {
@@ -295,35 +317,43 @@
     <script src="script.js"></script>
     <script>
         // Tasks Logic 
-        const tasks = [
+                const tasks = [
             // ================= ЛЕГКИЙ УРОВЕНЬ (5 ЗАДАЧ) =================
             {
                 id: "sum",
                 title: "Сумма двух чисел",
                 difficulty: "easy",
                 desc: "<p>Напишите функцию <code>add(a, b)</code>, которая принимает два числа и возвращает их сумму.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>add(2, 3) -> 5</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>add(-1, 1) -> 0</code>",
-                startCode: `def add(a, b):\n    # Ваш код пишите здесь\n    pass\n`,
+                startCode: "def add(a, b):
+    # Ваш код пишите здесь
+    pass
+",
                 testCode: `
 import sys
 try:
     assert add(2, 3) == 5, "add(2, 3) должно вернуть 5"
     assert add(-1, 1) == 0, "add(-1, 1) должно вернуть 0"
     assert add(100, 200) == 300, "add(100, 200) должно вернуть 300"
-    print("✅ Все скрытые тесты успешно пройдены!\\nЛогика функции add работает абсолютно верно при любых числах.")
+    print("✅ Все скрытые тесты успешно пройдены!
+Логика функции add работает абсолютно верно при любых числах.")
 except NameError:
-    print("❌ Ошибка: Функция add не найдена.\\nВы точно назвали её add?")
+    print("❌ Ошибка: Функция add не найдена.
+Вы точно назвали её add?")
 except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:
     print(f"❌ Неизвестная ошибка: {e}")
-        `
+                `
             },
             {
                 id: "even",
                 title: "Чётные числа",
                 difficulty: "easy",
                 desc: "<p>Напишите функцию <code>is_even(n)</code>. Она должна возвращать логическое <code>True</code>, если число <code>n</code> чётное, и <code>False</code>, если нечётное (остаток от деления <code>%</code>).</p>",
-                startCode: `def is_even(n):\n    # Ваш код пишите здесь\n    pass\n`,
+                startCode: "def is_even(n):
+    # Ваш код пишите здесь
+    pass
+",
                 testCode: `
 try:
     assert is_even(4) == True, "Для чётного числа 4 должен быть ответ True"
@@ -337,14 +367,17 @@ except AssertionError as e:
     print(f"❌ Провален тест: {e}")
 except Exception as e:
     print(f"❌ Возникла фатальная ошибка: {e}")
-        `
+                `
             },
             {
                 id: "max",
                 title: "Поиск максимума без max()",
                 difficulty: "easy",
                 desc: "<p>Напишите функцию <code>find_max(a, b)</code>, которая принимает два числа и возвращает наибольшее из них. <strong>Внимание:</strong> Запрещено использовать встроенную функцию <code>max()</code>. Используйте условный оператор if - else.</p>",
-                startCode: `def find_max(a, b):\n    # Ваш код пишите здесь\n    pass\n`,
+                startCode: "def find_max(a, b):
+    # Ваш код пишите здесь
+    pass
+",
                 testCode: `
 import sys
 try:
@@ -363,14 +396,17 @@ except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:
     print(f"❌ Ошибка выполнения кода: {e}")
-        `
+                `
             },
             {
                 id: "power",
                 title: "Возведение в степень",
                 difficulty: "easy",
                 desc: "<p>Напишите функцию <code>fast_power(base, exp)</code>, которая возводит число <code>base</code> в степень <code>exp</code> без использования операторов цикла (используйте оператор **).</p>",
-                startCode: `def fast_power(base, exp):\n    # Ваш код пишите здесь\n    pass\n`,
+                startCode: "def fast_power(base, exp):
+    # Ваш код пишите здесь
+    pass
+",
                 testCode: `
 try:
     assert fast_power(2, 3) == 8, "2 в степени 3 равно 8"
@@ -383,14 +419,17 @@ except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:
     print(f"❌ Ошибка выполнения кода: {e}")
-        `
+                `
             },
             {
                 id: "greet",
                 title: "Приветствие",
                 difficulty: "easy",
                 desc: "<p>Напишите функцию <code>greet(name)</code>, которая принимает одну строку (имя) и возвращает строку вида <code>\"Привет, ИМЯ!\"</code>. Например: <code>\"Привет, Иван!\"</code>. Не забывайте запятую и восклицательный знак.</p>",
-                startCode: `def greet(name):\n    # Ваш код пишите здесь\n    pass\n`,
+                startCode: "def greet(name):
+    # Ваш код пишите здесь
+    pass
+",
                 testCode: `
 try:
     assert greet("Иван") == "Привет, Иван!", "Для Иван должно быть 'Привет, Иван!'"
@@ -402,7 +441,7 @@ except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:
     print(f"❌ Ошибка выполнения кода: {e}")
-        `
+                `
             },
 
             // ================= СРЕДНИЙ УРОВЕНЬ (5 ЗАДАЧ) =================
@@ -411,7 +450,10 @@ except Exception as e:
                 title: "Перевернуть текст",
                 difficulty: "medium",
                 desc: "<p>Напишите функцию <code>reverse_string(text)</code>, которая принимает строку и возвращает её задом наперёд.</p><strong>Примените срезы (slices) или цикл for:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>reverse_string('собака') -> 'акабос'</code>",
-                startCode: `def reverse_string(text):\n    # Ваш код пишите здесь\n    pass\n`,
+                startCode: "def reverse_string(text):
+    # Ваш код пишите здесь
+    pass
+",
                 testCode: `
 try:
     assert reverse_string("кот") == "ток", "Слово 'кот' должно стать 'ток'"
@@ -424,14 +466,17 @@ except AssertionError as e:
     print(f"❌ Ошибка в результате: {e}")
 except Exception as e:
     print(f"❌ Сбой выполнения: {e}")
-        `
+                `
             },
             {
                 id: "count_vowels",
                 title: "Подсчет гласных",
                 difficulty: "medium",
                 desc: "<p>Напишите функцию <code>count_vowels(word)</code>, которая принимает строку и возвращает <strong>количество гласных</strong> букв в ней (а, е, ё, и, о, у, ы, э, ю, я - для русского алфавита). Регистр не имеет значения.</p>",
-                startCode: `def count_vowels(word):\n    # Ваш код пишите здесь\n    pass\n`,
+                startCode: "def count_vowels(word):
+    # Ваш код пишите здесь
+    pass
+",
                 testCode: `
 try:
     assert count_vowels("Привет") == 2, "В 'Привет' две гласные (и, е)"
@@ -445,14 +490,17 @@ except AssertionError as e:
     print(f"❌ Ошибка в результате: {e}")
 except Exception as e:
     print(f"❌ Сбой выполнения: {e}")
-        `
+                `
             },
             {
                 id: "list_sum",
                 title: "Сумма списка",
                 difficulty: "medium",
                 desc: "<p>Напишите функцию <code>sum_list(numbers)</code>, которая принимает список чисел и возвращает их сумму. <strong>Запрещено</strong> использовать встроенную функцию <code>sum()</code>. Используйте цикл <code>for</code>.</p>",
-                startCode: `def sum_list(numbers):\n    # Ваш код пишите здесь\n    pass\n`,
+                startCode: "def sum_list(numbers):
+    # Ваш код пишите здесь
+    pass
+",
                 testCode: `
 try:
     assert sum_list([1, 2, 3]) == 6, "Сумма 1+2+3 равна 6"
@@ -470,14 +518,17 @@ except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:
     print(f"❌ Ошибка выполнения кода: {e}")
-        `
+                `
             },
             {
                 id: "palindrome",
                 title: "Палиндром",
                 difficulty: "medium",
                 desc: "<p>Напишите функцию <code>is_palindrome(text)</code>, которая возвращает <code>True</code>, если текст читается одинаково туда и обратно (без учета пробелов и регистра!), иначе <code>False</code>. Пример: <code>\"Леша на полке клопа нашел\" -> True</code>.</p>",
-                startCode: `def is_palindrome(text):\n    # Очистите текст от пробелов и приведите к одному регистру\n    pass\n`,
+                startCode: "def is_palindrome(text):
+    # Очистите текст от пробелов и приведите к одному регистру
+    pass
+",
                 testCode: `
 try:
     assert is_palindrome("казак") == True, "'казак' это палиндром"
@@ -490,14 +541,17 @@ except AssertionError as e:
     print(f"❌ Ошибка: {e}")
 except Exception as e:
     print(f"❌ Сбой выполнения: {e}")
-        `
+                `
             },
             {
                 id: "unique_dict",
                 title: "Словарь возрастов",
                 difficulty: "medium",
                 desc: "<p>Напишите функцию <code>get_oldest(people)</code>. На вход подается словарь, где ключ — имя, значение — возраст. <code>{'Иван': 20, 'Анна': 25}</code>. Верните ИМЯ самого старшего человека.</p>",
-                startCode: `def get_oldest(people):\n    # Ваш код пишите здесь\n    pass\n`,
+                startCode: "def get_oldest(people):
+    # Ваш код пишите здесь
+    pass
+",
                 testCode: `
 try:
     assert get_oldest({'Иван': 20, 'Анна': 25}) == 'Анна', "Анна (25) старше Ивана (20)"
@@ -509,7 +563,7 @@ except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:
     print(f"❌ Ошибка: {e}")
-        `
+                `
             },
 
             // ================= ТЯЖЕЛЫЙ УРОВЕНЬ (5 ЗАДАЧ) =================
@@ -518,7 +572,10 @@ except Exception as e:
                 title: "Безопасное деление",
                 difficulty: "hard",
                 desc: "<p>Напишите функцию <code>safe_divide(a, b)</code>, которая делит <code>a</code> на <code>b</code>. Если возникает ошибка деления на ноль, используйте блок <code>try-except</code> и возвращайте строку <code>\"Ошибка\"</code>.</p>",
-                startCode: `def safe_divide(a, b):\n    # Ваш код пишите здесь\n    pass\n`,
+                startCode: "def safe_divide(a, b):
+    # Ваш код пишите здесь
+    pass
+",
                 testCode: `
 try:
     assert safe_divide(10, 2) == 5, "10 / 2 должно быть 5"
@@ -535,14 +592,17 @@ except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:
     print(f"❌ Ошибка: {e}")
-        `
+                `
             },
             {
                 id: "count_words",
                 title: "Частота слов",
                 difficulty: "hard",
                 desc: "<p>Напишите функцию <code>word_counts(text)</code>, которая принимает строку и возвращает <strong>словарь</strong>, где ключ — слово (в нижнем регистре), а значение — сколько раз оно встретилось. Знаков препинания в строке не будет.</p>",
-                startCode: `def word_counts(text):\n    # Подсказка: .split() разбивает на слова\n    pass\n`,
+                startCode: "def word_counts(text):
+    # Подсказка: .split() разбивает на слова
+    pass
+",
                 testCode: `
 try:
     d = word_counts("Кот ест кот спит")
@@ -557,14 +617,20 @@ except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:
     print(f"❌ Ошибка: {e}")
-        `
+                `
             },
             {
                 id: "oop_rectangle",
                 title: "Основы ООП (Прямоугольник)",
                 difficulty: "hard",
                 desc: "<p>Напишите класс <code>Rectangle</code>, у которого в конструкторе <code>__init__</code> задаются ширина и высота. Добавьте метод <code>get_area()</code>, который возвращает его площадь (ширина на высоту).</p>",
-                startCode: `class Rectangle:\n    def __init__(self, w, h):\n        pass\n\n    def get_area(self):\n        pass\n`,
+                startCode: "class Rectangle:
+    def __init__(self, w, h):
+        pass
+
+    def get_area(self):
+        pass
+",
                 testCode: `
 try:
     rect1 = Rectangle(10, 5)
@@ -581,14 +647,19 @@ except AssertionError as e:
     print(f"❌ Ошибка: {e}")
 except Exception as e:
     print(f"❌ Ошибка: {e}")
-        `
+                `
             },
             {
                 id: "datetime_days",
                 title: "Разница в днях (datetime)",
                 difficulty: "hard",
                 desc: "<p>Заимпортируйте модуль <code>datetime</code>. Напишите функцию <code>get_days_diff(date1_str, date2_str)</code>. Даты приходят в формате <code>YYYY-MM-DD</code>. Верните целое количество дней (разницу) между первой и второй датой.</p>",
-                startCode: `from datetime import datetime\n\ndef get_days_diff(date1_str, date2_str):\n    # Вам поможет datetime.strptime()\n    pass\n`,
+                startCode: "from datetime import datetime
+
+def get_days_diff(date1_str, date2_str):
+    # Вам поможет datetime.strptime()
+    pass
+",
                 testCode: `
 try:
     assert get_days_diff('2025-01-01', '2025-01-10') in [9, -9], "Разница между 1 и 10 января - 9 дней"
@@ -600,14 +671,17 @@ except AssertionError as e:
     print(f"❌ Ошибка: {e}")
 except Exception as e:
     print(f"❌ Выброшено исключение: {e}")
-        `
+                `
             },
             {
                 id: "fibonacci",
                 title: "Числа Фибоначчи",
                 difficulty: "hard",
                 desc: "<p>Сложный алгоритм! Напишите функцию <code>fib(n)</code>. Она возвращает n-ое число Фибоначчи. Пример ряда: 0, 1, 1, 2, 3, 5, 8. Где fib(0)=0, fib(1)=1, fib(2)=1, fib(6)=8.</p>",
-                startCode: `def fib(n):\n    # Ваш код\n    pass\n`,
+                startCode: "def fib(n):
+    # Ваш код
+    pass
+",
                 testCode: `
 try:
     assert fib(0) == 0, "fib(0) должно быть 0"
@@ -622,7 +696,7 @@ except AssertionError as e:
     print(f"❌ Ошибка результата: {e}")
 except Exception as e:
     print(f"❌ Ошибка: {e}")
-        `
+                `
             }
         ];
 
@@ -720,7 +794,7 @@ except Exception as e:
             try {
                 // Перехватываем print() из Python
                 let output = "";
-                pyodideInstance.setStdout({ batched: (str) => output += str + "\\n" });
+                pyodideInstance.setStdout({ batched: (str) => output += str + "\n" });
 
                 await pyodideInstance.runPythonAsync(fullScript);
 
