@@ -6,26 +6,23 @@ document.addEventListener('DOMContentLoaded', () => {
         'lesson11.html', 'lesson12.html', 'lesson13.html', 'lesson14.html', 'lesson15.html'
     ];
 
+    const SECRET_PASSWORD = "admin"; // Единый пароль для открытия уроков
+
     // --- Navigation & Active Link Logic ---
     let currentPath = window.location.pathname.split('/').pop();
-    if (currentPath === '') currentPath = 'index.html';
+    if (currentPath === '' || currentPath === '/') currentPath = 'index.html';
 
     const navLinks = document.querySelectorAll('nav ul li a');
     navLinks.forEach(link => {
         const href = link.getAttribute('href');
-        const isLesson = currentPath.startsWith('lesson');
-        const isCourseList = currentPath === 'python-basic.html';
-
         if (href === currentPath) {
             link.classList.add('active');
-        } else if (isLesson && href === 'python-basic.html') {
+        } else if (currentPath.startsWith('lesson') && href === 'python-basic.html') {
             link.classList.add('active');
-        } else {
-            link.classList.remove('active');
         }
     });
 
-    // --- 1. Quiz Data (15 Lessons) ---
+    // --- 1. Quiz Data ---
     const quizData = {
         'lesson1.html': [
             { "question": "Кто создал язык Python?", "options": ["Билл Гейтс", "Гвидо ван Россум", "Марк Цукерберг", "Линус Торвальдс"], "correct": 1 },
@@ -44,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ],
         'lesson4.html': [
             { "question": "Как правильно пишется 'иначе если' в Python?", "options": ["else if", "elseif", "elif", "if else"], "correct": 2 },
-            { "question": "Обязательны ли отступы в Python?", "options": ["Нет, это для красоты", "Да, они определяют блоки кода", "Только в циклах", "Только в функций"], "correct": 1 },
+            { "question": "Обязательны ли отступы в Python?", "options": ["Нет, это для красоты", "Да, они определяют блоки кода", "Только в циклах", "Только в функциях"], "correct": 1 },
             { "question": "Что выведет код: if False: print(1) else: print(2)?", "options": ["1", "2", "Ничего", "Ошибка"], "correct": 1 }
         ],
         'lesson5.html': [
@@ -104,21 +101,20 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
     };
 
-    // --- 2. Progress System ---
+    // --- 2. Locking System ---
     function initLockSystem() {
-        const progress = JSON.parse(localStorage.getItem('quiz_results')) || {};
-        const isUnlockedAll = localStorage.getItem('lessons_unlocked_all') === 'true';
+        const quizProgress = JSON.parse(localStorage.getItem('quiz_results')) || {};
+        const manualUnlocks = JSON.parse(localStorage.getItem('manual_unlocks')) || {};
 
         if (currentPath === 'python-basic.html') {
             const cards = document.querySelectorAll('.lesson-card');
-            let passedCount = 0;
-
             cards.forEach((card, index) => {
                 const lessonFileName = `lesson${index + 1}.html`;
-                const isPassed = progress[lessonFileName];
-
+                const isPassed = quizProgress[lessonFileName];
+                const isManuallyUnlocked = manualUnlocks[lessonFileName];
+                
+                // Checkmark for passed
                 if (isPassed) {
-                    passedCount++;
                     card.classList.add('completed');
                     if (!card.querySelector('.check-mark')) {
                         card.style.position = 'relative';
@@ -126,29 +122,53 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                // If not unlocked all, check progress
-                if (!isUnlockedAll && index > 0) {
-                    const prevLesson = `lesson${index}.html`;
-                    if (!progress[prevLesson]) {
-                        card.classList.add('locked');
-                        const link = card.querySelector('a.btn');
-                        if (link) {
-                            link.classList.add('btn-locked');
-                            link.textContent = '🔒 Закрыто';
+                // Lock logic
+                const isFirst = index === 0;
+                const prevLesson = `lesson${index}.html`;
+                const isPrevPassed = quizProgress[prevLesson];
+
+                if (!isFirst && !isPrevPassed && !isManuallyUnlocked) {
+                    // LOCKED STATE
+                    card.classList.add('locked');
+                    const btnContainer = card.querySelector('.btn').parentNode;
+                    const originalBtn = card.querySelector('.btn');
+                    originalBtn.style.display = 'none';
+
+                    // Add Lock Notification & Password Button
+                    const lockUI = document.createElement('div');
+                    lockUI.className = 'lock-ui';
+                    lockUI.innerHTML = `
+                        <p style="color: #666; font-size: 0.85rem; margin-bottom: 10px;">🔒 Урок закрыт. Пройдите предыдущий или введите пароль.</p>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-password" style="background: #6366f1; color: white;">Ввести пароль</button>
+                        </div>
+                    `;
+                    btnContainer.appendChild(lockUI);
+
+                    lockUI.querySelector('.btn-password').onclick = () => {
+                        const pass = prompt('Введите пароль для разблокировки урока:');
+                        if (pass === SECRET_PASSWORD) {
+                            manualUnlocks[lessonFileName] = true;
+                            localStorage.setItem('manual_unlocks', JSON.stringify(manualUnlocks));
+                            alert('✅ Урок разблокирован!');
+                            location.reload();
+                        } else {
+                            alert('❌ Неверный пароль!');
                         }
-                    }
+                    };
                 }
             });
+            return;
+        }
 
-            // Progress Bar
-            const totalLessons = cards.length;
-            const progressContainer = document.getElementById('course-progress-container');
-            if (progressContainer && totalLessons > 0) {
-                const percentage = Math.round((passedCount / totalLessons) * 100);
-                const bar = document.getElementById('progress-bar-fill');
-                if (bar) bar.style.width = `${percentage}%`;
-                const text = document.getElementById('progress-text');
-                if (text) text.textContent = `Пройдено ${passedCount} из ${totalLessons} уроков`;
+        // Redirect if trying to access locked lesson directly
+        if (currentPath.startsWith('lesson')) {
+            const lessonIndex = lessonsList.indexOf(currentPath);
+            if (lessonIndex > 0) {
+                const prevLesson = lessonsList[lessonIndex - 1];
+                if (!quizProgress[prevLesson] && !manualUnlocks[currentPath]) {
+                    window.location.href = 'python-basic.html';
+                }
             }
         }
     }
@@ -158,41 +178,61 @@ document.addEventListener('DOMContentLoaded', () => {
         const quizContainer = document.getElementById('quiz-container');
         if (!quizContainer || !quizData[currentPath]) return;
 
+        const quizProgress = JSON.parse(localStorage.getItem('quiz_results')) || {};
+        if (quizProgress[currentPath]) {
+            renderQuizCompleted(quizContainer);
+            showNextLessonButton();
+            return;
+        }
+
         const startBtn = document.createElement('button');
-        startBtn.textContent = '🧠 Начать тест';
+        startBtn.textContent = '🧠 Начать тест по теме';
         startBtn.className = 'btn-complete';
+        startBtn.style.margin = '20px 0';
         startBtn.onclick = () => {
             startBtn.style.display = 'none';
             renderQuizContent(quizContainer);
         };
         quizContainer.parentNode.insertBefore(startBtn, quizContainer);
-
-        const savedResults = JSON.parse(localStorage.getItem('quiz_results')) || {};
-        if (savedResults[currentPath]) {
-            startBtn.style.display = 'none';
-            renderQuizCompleted(quizContainer);
-            showNextLessonButton();
-        }
     }
 
     function renderQuizContent(container) {
         const questions = quizData[currentPath];
-        container.innerHTML = '<h2>🚀 Проверочный тест</h2>';
+        container.innerHTML = '<h2 style="margin-bottom: 20px;">🚀 Проверочный тест</h2>';
         container.style.display = 'block';
 
         questions.forEach((q, index) => {
             const div = document.createElement('div');
             div.className = 'quiz-question';
-            div.innerHTML = `<p>${index + 1}. ${q.question}</p>`;
+            div.style.background = 'var(--bg-color)';
+            div.style.padding = '20px';
+            div.style.borderRadius = '12px';
+            div.style.marginBottom = '15px';
+            div.innerHTML = `<p style="font-weight: 700; margin-bottom: 15px;">${index + 1}. ${q.question}</p>`;
             
             q.options.forEach((opt, optIndex) => {
                 const btn = document.createElement('button');
                 btn.className = 'btn-quiz-opt';
+                btn.style.display = 'block';
+                btn.style.width = '100%';
+                btn.style.textAlign = 'left';
+                btn.style.padding = '12px 15px';
+                btn.style.marginBottom = '8px';
+                btn.style.borderRadius = '8px';
+                btn.style.border = '2px solid transparent';
+                btn.style.background = 'var(--card-bg)';
+                btn.style.cursor = 'pointer';
+                btn.style.transition = '0.2s';
                 btn.textContent = opt;
+                
                 btn.onclick = () => {
-                    div.querySelectorAll('.btn-quiz-opt').forEach(b => b.style.opacity = '0.5');
-                    btn.style.opacity = '1';
-                    btn.dataset.selected = optIndex;
+                    div.querySelectorAll('.btn-quiz-opt').forEach(b => {
+                        b.style.borderColor = 'transparent';
+                        b.style.background = 'var(--card-bg)';
+                    });
+                    btn.style.borderColor = 'var(--accent-color)';
+                    btn.style.background = 'rgba(99, 102, 241, 0.1)';
+                    div.dataset.selected = optIndex;
                 };
                 div.appendChild(btn);
             });
@@ -202,16 +242,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const submitBtn = document.createElement('button');
         submitBtn.textContent = 'Проверить ответы';
         submitBtn.className = 'btn-complete';
+        submitBtn.style.width = '100%';
+        submitBtn.style.padding = '15px';
         submitBtn.onclick = () => {
             let correctCount = 0;
             const blocks = container.querySelectorAll('.quiz-question');
             blocks.forEach((block, i) => {
-                const selected = block.querySelector('.btn-quiz-opt[style*="opacity: 1"]');
-                if (selected && parseInt(selected.dataset.selected) === questions[i].correct) {
+                const selected = block.dataset.selected;
+                if (selected !== undefined && parseInt(selected) === questions[i].correct) {
                     correctCount++;
-                    block.style.borderLeft = '4px solid green';
+                    block.style.borderLeft = '5px solid #10b981';
                 } else {
-                    block.style.borderLeft = '4px solid red';
+                    block.style.borderLeft = '5px solid #ef4444';
                 }
             });
 
@@ -219,6 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const results = JSON.parse(localStorage.getItem('quiz_results')) || {};
                 results[currentPath] = true;
                 localStorage.setItem('quiz_results', JSON.stringify(results));
+                alert('🎉 Поздравляем! Вы правильно ответили на все вопросы.');
                 renderQuizCompleted(container);
                 showNextLessonButton();
             } else {
@@ -229,10 +272,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderQuizCompleted(container) {
+        container.style.display = 'block';
         container.innerHTML = `
-            <div style="text-align:center; padding: 20px; background: rgba(16,185,129,0.1); border-radius: 12px;">
-                <h3>🎉 Урок пройден!</h3>
-                <p>Вы отлично справились с тестом.</p>
+            <div style="text-align:center; padding: 30px; background: rgba(16,185,129,0.1); border: 2px solid #10b981; border-radius: 16px;">
+                <h3 style="color: #10b981; margin-bottom: 10px;">🎉 Урок успешно пройден!</h3>
+                <p>Вы закрепили знания и открыли доступ к следующему этапу.</p>
             </div>
         `;
     }
@@ -241,43 +285,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const lessonIndex = lessonsList.indexOf(currentPath);
         const nav = document.querySelector('.lesson-navigation');
         if (nav && lessonIndex < lessonsList.length - 1) {
-            nav.innerHTML = `<a href="${lessonsList[lessonIndex+1]}" class="btn-nav next">Следующий урок ➡</a>`;
+            nav.innerHTML = `<a href="${lessonsList[lessonIndex+1]}" class="btn-nav next" style="display: inline-block; padding: 15px 30px; background: var(--accent-color); color: white; border-radius: 50px; font-weight: 700; margin-top: 20px;">Следующий урок ➡</a>`;
         }
     }
 
-    // --- 4. Secret Password Shortcut ---
-    function initSecretShortcut() {
-        // Double click on logo to trigger password prompt
-        const logo = document.querySelector('.logo');
-        if (logo) {
-            logo.style.cursor = 'pointer';
-            logo.title = 'Секретный вход';
-            logo.addEventListener('dblclick', () => {
-                const pass = prompt('Введите секретный пароль для открытия всех уроков:');
-                if (pass === 'admin') {
-                    localStorage.setItem('lessons_unlocked_all', 'true');
-                    alert('✅ Все уроки открыты!');
-                    location.reload();
-                } else if (pass === 'reset') {
-                    localStorage.removeItem('lessons_unlocked_all');
-                    localStorage.removeItem('quiz_results');
-                    alert('Прогресс сброшен');
-                    location.reload();
-                }
-            });
-        }
-    }
-
-    // --- Utilities ---
+    // --- 4. Utilities ---
     function initTheme() {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') document.body.classList.add('dark-mode');
         
-        // Add toggle button to nav if it doesn't exist
         const navUl = document.querySelector('nav ul');
         if (navUl && !document.querySelector('.theme-toggle')) {
             const li = document.createElement('li');
-            li.innerHTML = `<button class="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">${document.body.classList.contains('dark-mode') ? '☀️' : '🌙'}</button>`;
+            li.innerHTML = `<button class="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.2rem; padding: 10px;">${document.body.classList.contains('dark-mode') ? '☀️' : '🌙'}</button>`;
             li.onclick = () => {
                 document.body.classList.toggle('dark-mode');
                 const isDark = document.body.classList.contains('dark-mode');
@@ -291,6 +311,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Run
     initLockSystem();
     initQuiz();
-    initSecretShortcut();
     initTheme();
 });

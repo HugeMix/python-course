@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Задачи Python</title>
+    <title>Задачи Python | PythonBasic</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
@@ -13,98 +13,148 @@
     <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
 
     <style>
+        .tasks-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         .tasks-layout {
             display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 25px;
-            margin-top: 30px;
+            grid-template-columns: 320px 1fr;
+            gap: 30px;
+            margin-top: 20px;
         }
 
         .tasks-sidebar {
             background: var(--card-bg);
-            padding: 20px;
-            border-radius: var(--radius);
+            padding: 25px;
+            border-radius: 16px;
             box-shadow: var(--shadow);
             height: fit-content;
-            max-height: 80vh;
-            overflow-y: auto;
+            position: sticky;
+            top: 100px;
         }
 
         .task-item {
             padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
+            margin-bottom: 12px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.3s ease;
             border: 1px solid rgba(0,0,0,0.05);
-            background: rgba(0,0,0,0.02);
+            background: var(--bg-color);
         }
 
         body.dark-mode .task-item {
-            background: rgba(255,255,255,0.03);
             border-color: rgba(255,255,255,0.05);
         }
 
         .task-item:hover {
-            background: rgba(79, 70, 229, 0.1);
+            transform: translateX(5px);
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--accent-color);
         }
 
         .task-item.active {
+            background: var(--accent-color);
+            color: white;
             border-color: var(--accent-color);
-            background: rgba(79, 70, 229, 0.15);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+        }
+
+        .task-item.active .task-difficulty {
+            color: rgba(255,255,255,0.9);
         }
 
         .task-difficulty {
-            font-size: 0.7rem;
-            font-weight: 700;
+            font-size: 0.75rem;
+            font-weight: 800;
             text-transform: uppercase;
-            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
             display: block;
         }
 
-        .diff-easy { color: var(--success-color); }
+        .diff-easy { color: #10b981; }
         .diff-medium { color: #f59e0b; }
         .diff-hard { color: #ef4444; }
 
-        .editor-container {
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            background: #282a36;
+        .tasks-main {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
         }
 
-        .editor-header {
-            padding: 15px 20px;
+        .task-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .editor-wrapper {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .editor-toolbar {
+            padding: 15px 25px;
             background: #1e1f29;
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .btn-submit {
-            background: var(--success-color);
+        .btn-check {
+            background: #10b981;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 25px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .test-results {
-            margin-top: 20px;
-            padding: 20px;
+        .btn-check:hover:not(:disabled) {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-check:disabled {
+            background: #6b7280;
+            cursor: wait;
+        }
+
+        .results-panel {
+            padding: 25px;
             background: #1e1f29;
             color: #f8f8f2;
-            border-radius: 12px;
-            font-family: monospace;
+            border-radius: 16px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            min-height: 120px;
             white-space: pre-wrap;
-            min-height: 100px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .CodeMirror {
+            font-family: 'Fira Code', monospace;
+            font-size: 15px;
         }
 
         @media (max-width: 900px) {
             .tasks-layout { grid-template-columns: 1fr; }
+            .tasks-sidebar { position: static; }
         }
     </style>
 </head>
@@ -128,32 +178,38 @@
         </div>
     </header>
 
-    <main class="container">
-        <section class="lesson-title" style="padding: 40px 0; text-align: center;">
-            <h2>Практические задачи</h2>
-            <p>Закрепите теорию на практике с автоматической проверкой.</p>
+    <div class="tasks-container">
+        <section style="padding: 40px 0; text-align: center;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Практический тренажер</h1>
+            <p style="color: #666; font-size: 1.1rem;">Решайте задачи и получайте мгновенную обратную связь от системы.</p>
         </section>
 
         <div class="tasks-layout">
-            <aside class="tasks-sidebar" id="tasks-list"></aside>
+            <aside class="tasks-sidebar" id="tasks-list">
+                <h3 style="margin-bottom: 20px;">Список задач</h3>
+                <!-- Заполняется JS -->
+            </aside>
+
             <div class="tasks-main">
-                <div id="task-desc" style="background: var(--card-bg); padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: var(--shadow);">
-                    <h3 id="task-title" style="margin-top:0;">Выберите задачу</h3>
-                    <div id="task-text">Загрузка...</div>
+                <div class="task-card">
+                    <h2 id="task-title" style="margin-bottom: 15px; color: var(--accent-color);">Загрузка...</h2>
+                    <div id="task-text" style="line-height: 1.7; font-size: 1.05rem;">Пожалуйста, подождите...</div>
                 </div>
 
-                <div class="editor-container">
-                    <div class="editor-header">
-                        <span>Редактор кода</span>
-                        <button id="btn-submit" class="btn-submit" disabled>Загрузка Python...</button>
+                <div class="editor-wrapper">
+                    <div class="editor-toolbar">
+                        <span style="font-weight: 600;">Редактор кода (Python 3.11)</span>
+                        <button id="btn-submit" class="btn-check" disabled>
+                            <span>⌛ Загрузка...</span>
+                        </button>
                     </div>
                     <textarea id="code-editor"></textarea>
                 </div>
 
-                <div id="test-results" class="test-results">Результаты появятся здесь...</div>
+                <div id="test-results" class="results-panel">Результаты проверки появятся здесь после запуска...</div>
             </div>
         </div>
-    </main>
+    </div>
 
     <script src="tasks_data.js"></script>
     <script>
@@ -164,30 +220,39 @@
             mode: "python",
             theme: "dracula",
             lineNumbers: true,
-            indentUnit: 4
+            indentUnit: 4,
+            smartIndent: true,
+            matchBrackets: true,
+            autoCloseBrackets: true
         });
-        editor.setSize("100%", "350px");
+        editor.setSize("100%", "400px");
 
         async function initPython() {
             try {
                 pyodideInstance = await loadPyodide();
                 const btn = document.getElementById('btn-submit');
-                btn.textContent = '▶ Проверить решение';
+                btn.innerHTML = '<span>▶ Проверить решение</span>';
                 btn.disabled = false;
             } catch (e) {
-                document.getElementById('test-results').textContent = "Ошибка загрузки Python";
+                document.getElementById('test-results').textContent = "❌ Ошибка при инициализации Python. Пожалуйста, обновите страницу.";
             }
         }
 
         function renderTasks() {
             const list = document.getElementById('tasks-list');
+            const currentTitle = list.querySelector('h3');
             list.innerHTML = '';
+            list.appendChild(currentTitle);
+
             tasks.forEach((task, index) => {
                 const div = document.createElement('div');
                 div.className = `task-item ${index === currentTaskIndex ? 'active' : ''}`;
-                const diff = task.difficulty === 'easy' ? '🟢 Легко' : (task.difficulty === 'medium' ? '🟡 Средне' : '🔴 Сложно');
+                const diffLabel = task.difficulty === 'easy' ? 'Легко' : (task.difficulty === 'medium' ? 'Средне' : 'Сложно');
                 const diffClass = `diff-${task.difficulty}`;
-                div.innerHTML = `<span class="task-difficulty ${diffClass}">${diff}</span><div style="font-weight:700;">${task.title}</div>`;
+                div.innerHTML = `
+                    <span class="task-difficulty ${diffClass}">${diffLabel}</span>
+                    <div style="font-weight:700;">${task.title}</div>
+                `;
                 div.onclick = () => selectTask(index);
                 list.appendChild(div);
             });
@@ -200,23 +265,42 @@
             document.getElementById('task-text').innerHTML = task.desc;
             editor.setValue(task.startCode);
             renderTasks();
+            document.getElementById('test-results').textContent = "Результаты проверки появятся здесь после запуска...";
+            document.getElementById('test-results').style.borderColor = "rgba(255,255,255,0.05)";
         }
 
         document.getElementById('btn-submit').onclick = async () => {
+            const btn = document.getElementById('btn-submit');
             const results = document.getElementById('test-results');
-            results.textContent = "🤖 Проверка...";
-            results.style.color = "white";
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span>⌛ Проверка...</span>';
+            results.textContent = "🤖 Запуск тестов...";
+            results.style.color = "#f8f8f2";
             
             try {
                 let output = "";
                 pyodideInstance.setStdout({ batched: (str) => output += str + "\n" });
-                const fullCode = editor.getValue() + "\n\n" + tasks[currentTaskIndex].testCode;
+                
+                // Clear any previous state if possible or just run
+                const userCode = editor.getValue();
+                const testCode = tasks[currentTaskIndex].testCode;
+                const fullCode = userCode + "\n\n" + testCode;
+                
                 await pyodideInstance.runPythonAsync(fullCode);
-                results.textContent = output;
-                results.style.color = output.includes("✅") ? "#10b981" : "#ef4444";
+                
+                results.textContent = output || "✅ Код выполнен успешно, но тесты не вывели результат.";
+                if (output.includes("✅")) {
+                    results.style.borderLeft = "5px solid #10b981";
+                } else if (output.includes("❌")) {
+                    results.style.borderLeft = "5px solid #ef4444";
+                }
             } catch (err) {
-                results.textContent = "❌ Ошибка:\n" + err;
-                results.style.color = "#ef4444";
+                results.textContent = "❌ Ошибка в коде:\n\n" + err;
+                results.style.borderLeft = "5px solid #ef4444";
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>▶ Проверить решение</span>';
             }
         };
 
