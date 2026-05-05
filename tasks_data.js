@@ -80,3 +80,5 @@ const tasks = [
         testCode: "try:\n    my_dog = Dog('Rex')\n    assert my_dog.name == 'Rex'\n    assert my_dog.bark() == 'Woof!'\n    print('✅ Тест пройден! Класс и метод работают.')\nexcept:\n    print('❌ Ошибка в определении класса.')"
     }
 ];
+
+// Cache bust: 1777957262
