@@ -3,51 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Урок 7: Функции, *args и **kwargs</title>
+    <title>Функции: Повторное использование кода</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .theory-block {
-            margin-bottom: 40px;
-            padding: 25px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            border-left: 5px solid var(--accent-color);
-            box-shadow: var(--shadow);
-        }
-        .theory-block h3 {
-            color: var(--accent-color);
-            margin-top: 0;
-            font-size: 1.4rem;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            text-align: left;
-        }
-        th { background: #f8fafc; }
-        .lesson-header-meta {
-            display: flex;
-            gap: 20px;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.8);
-        }
-    </style>
 </head>
 <body>
     <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
             <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color);">Python<span style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
-                <ul>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="python-basic.html">Курс</a></li>
                     <li><a href="libraries.html">Библиотеки</a></li>
@@ -58,78 +25,64 @@
         </div>
     </header>
 
-    <section class="lesson-title">
-        <div class="container">
-            <h2>Урок 7: Функции, *args и **kwargs</h2>
-            <div class="lesson-header-meta" style="justify-content: center;">
+    <main class="container lesson-page">
+        <section class="lesson-header">
+            <h1>Урок 7: Функции: Повторное использование кода</h1>
+            <div class="lesson-meta">
                 <span>⏱ Время изучения: ~30 минут</span>
-                <span>🎓 Уровень: Базовый+</span>
+                <span>📊 Уровень: Базовый</span>
             </div>
-        </div>
-    </section>
-
-    <main class="container">
-        <section class="lesson-goal">
-            <h2>🎯 Цель урока</h2>
-            <p>Создание гибких функций и понимание функционального программирования.</p>
         </section>
 
-        <section class="lesson-content">
+        <article class="lesson-content">
             
-            <div class="theory-block">
-                <h3>1. Гибкие аргументы</h3>
-                <p><code>*args</code> собирает лишние позиционные аргументы в кортеж, а <code>**kwargs</code> — именованные в словарь.</p>
-                <pre><code>def func(*args, **kwargs):
-    print(args, kwargs)
+            <h3>1. Определение функции</h3>
+            <p>Функции помогают избежать дублирования кода. Используйте ключевое слово <code>def</code>.</p>
+            <pre><code>def greet(name):
+    return f"Привет, {name}!"</code></pre>
 
-func(1, 2, a=3)  # (1, 2) {'a': 3}</code></pre>
-            </div>
+            <h3>2. Аргументы и параметры</h3>
+            <ul>
+                <li><b>Позиционные:</b> Порядок важен.</li>
+                <li><b>Именованные:</b> <code>func(name="Ivan")</code>.</li>
+                <li><b>По умолчанию:</b> <code>def func(a=10)</code>.</li>
+            </ul>
 
-            <div class="theory-block">
-                <h3>2. Лямбда-функции</h3>
-                <p>Анонимные функции для простых задач: <code>add = lambda x, y: x + y</code>.</p>
-            </div>
+            <h3>3. Возврат значения (return)</h3>
+            <p>Если в функции нет <code>return</code>, она автоматически возвращает <code>None</code>. Функция прекращает выполнение сразу после вызова return.</p>
 
-            <div class="theory-block">
-                <h3>3. Документирование (Docstrings)</h3>
-                <p>Всегда пишите описание функции в тройных кавычках сразу после <code>def</code>. Это стандарт индустрии.</p>
-            </div>
+            <h3>4. Область видимости (Scope)</h3>
+            <ul>
+                <li><b>Локальные переменные:</b> Внутри функции.</li>
+                <li><b>Глобальные:</b> Вне функций. Используйте <code>global</code> только в крайних случаях!</li>
+            </ul>
+
+            <h3>5. Лямбда-функции (Анонимные)</h3>
+            <p>Короткие функции в одну строку: <code>add = lambda x, y: x + y</code>. Удобны для сортировок и фильтраций.</p>
+
+            <h3>6. *args и **kwargs</h3>
+            <p>Позволяют функции принимать любое количество аргументов. <code>*args</code> — список, <code>**kwargs</code> — словарь.</p>
         
-        </section>
+        </article>
 
-        <div id="quiz-start-section" style="text-align: center; margin: 60px 0; padding: 40px; background: var(--card-bg); border-radius: 20px; box-shadow: var(--shadow-hover);">
-            <h3 style="margin-bottom: 20px;">Готовы проверить знания?</h3>
-            <p style="margin-bottom: 30px; color: #666;">Тест состоит из вопросов по всей теории урока. Для прохождения нужно ответить на все вопросы верно.</p>
-            <button id="start-quiz-btn" class="btn" style="padding: 20px 60px; font-size: 1.2rem; background: var(--accent-color); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.3s;">🚀 Начать финальный тест</button>
+        <div id="quiz-container" style="margin-top: 50px;">
+            <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 16px; box-shadow: var(--shadow);">
+                <h2 style="margin-bottom: 20px;">🎓 Готовы проверить знания?</h2>
+                <p style="margin-bottom: 30px; color: #666;">После прочтения теории пройдите тест из 5 вопросов, чтобы разблокировать следующий урок.</p>
+                <button id="start-quiz-btn" class="btn" style="padding: 15px 40px; font-size: 1.1rem; font-weight: 700;">🚀 Начать финальный тест</button>
+            </div>
         </div>
 
-        <div id="quiz-container" style="display: none;"></div>
-
-        <div class="lesson-navigation" style="display: flex; justify-content: space-between; margin-top: 50px; padding: 30px 0; border-top: 1px solid #e2e8f0;">
-            <a href="lesson6.html" class="btn-nav" style="display: flex">← Назад</a>
-            <a href="lesson8.html" id="next-lesson-btn" class="btn-nav next" style="display: none;">Следующий урок →</a>
+        <div class="lesson-navigation" style="margin-top: 40px; display: flex; justify-content: space-between; align-items: center;">
+            <a href="python-basic.html" class="btn-secondary">⬅ К списку уроков</a>
+            <a href="lesson8.html" id="next-lesson-btn" class="btn" style="display: none;">Следующий урок ➡</a>
         </div>
     </main>
 
     <footer>
-        <p>© 2025 PythonBasic. Образовательная платформа нового поколения.</p>
+        <p>© 2025 Python для начинающих. Все права защищены.</p>
     </footer>
 
     <script src="script.js"></script>
-    <script>
-        document.getElementById('start-quiz-btn').onclick = function() {
-            document.getElementById('quiz-start-section').style.display = 'none';
-            document.getElementById('quiz-container').style.display = 'block';
-            window.scrollTo({ top: document.getElementById('quiz-container').offsetTop - 100, behavior: 'smooth' });
-        };
-        
-        setInterval(() => {
-            const progress = JSON.parse(localStorage.getItem('python_quiz_progress') || '{}');
-            if (progress['lesson7.html']) {
-                const nextBtn = document.getElementById('next-lesson-btn');
-                if (nextBtn) nextBtn.style.display = 'inline-block';
-            }
-        }, 1000);
-    </script>
 </body>
 </html>
