@@ -6,73 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Задачи Python</title>
     <link rel="stylesheet" href="style.css">
-    <!-- CodeMirror for the editor -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
-
-
-    <!-- Pyodide -->
     <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
 
     <style>
-        .CodeMirror {
-            font-family: 'Fira Code', 'Consolas', monospace;
-            font-size: 16px !important;
-        }
-
-
-
         .tasks-layout {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-            align-items: flex-start;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 25px;
+            margin-top: 30px;
         }
 
         .tasks-sidebar {
-            width: 300px;
             background: var(--card-bg);
             padding: 20px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            flex-shrink: 0;
-            border: 1px solid rgba(0, 0, 0, 0.03);
-            max-height: calc(100vh - 40px);
+            height: fit-content;
+            max-height: 80vh;
             overflow-y: auto;
         }
 
-        body.dark-mode .tasks-sidebar {
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
         .task-item {
-            border-radius: 8px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            background: var(--card-bg);
-
-            padding: 12px;
-            margin-bottom: 4px;
-            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: var(--transition);
-            border: 1px solid transparent;
-            background: transparent;
+            transition: 0.2s;
+            border: 1px solid rgba(0,0,0,0.05);
+            background: rgba(0,0,0,0.02);
         }
 
         body.dark-mode .task-item {
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            background: var(--card-bg);
-
-            border: 1px solid transparent;
-            background: transparent;
+            background: rgba(255,255,255,0.03);
+            border-color: rgba(255,255,255,0.05);
         }
 
         .task-item:hover {
@@ -81,161 +51,60 @@
 
         .task-item.active {
             border-color: var(--accent-color);
-            transform: translateX(4px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
-
-            border-color: transparent;
-            transform: translateX(4px);
             background: rgba(79, 70, 229, 0.15);
         }
 
         .task-difficulty {
-            font-size: 0.75rem;
-            padding: 2px 6px;
-            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
             margin-bottom: 5px;
-            display: inline-block;
+            display: block;
         }
 
-        .diff-easy {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success-color);
-        }
-
-        .diff-hard {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
-        }
-
-        .diff-medium {
-            background: rgba(245, 158, 11, 0.2);
-            color: #f59e0b;
-        }
-
-        .diff-hard {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
-        }
-
-        .tasks-main {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .task-description {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(0, 0, 0, 0.03);
-        }
-
-        body.dark-mode .task-description {
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+        .diff-easy { color: var(--success-color); }
+        .diff-medium { color: #f59e0b; }
+        .diff-hard { color: #ef4444; }
 
         .editor-container {
             border-radius: 12px;
             overflow: hidden;
             box-shadow: var(--shadow);
             background: #282a36;
-            margin-bottom: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        body.dark-mode .editor-container {
-            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .editor-header {
-            background: #f8f9fa;
             padding: 15px 20px;
+            background: #1e1f29;
+            color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: #333;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            font-weight: 600;
-            font-size: 1.1rem;
         }
 
-        body.dark-mode .editor-header {
-            background: #1e1f29;
-            color: #f8f8f2;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .btn-run-tests {
+        .btn-submit {
             background: var(--success-color);
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
-        }
-
-        .btn-run-tests:hover:not(:disabled) {
-            background: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-run-tests:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+            font-weight: 700;
         }
 
         .test-results {
-            background: #f8f9fa;
-            color: #333;
+            margin-top: 20px;
             padding: 20px;
-            border-radius: var(--radius);
+            background: #1e1f29;
+            color: #f8f8f2;
+            border-radius: 12px;
             font-family: monospace;
             white-space: pre-wrap;
             min-height: 100px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            font-size: 1.05rem;
-            line-height: 1.5;
-        }
-
-        body.dark-mode .test-results {
-            background: #1e1f29;
-            color: #f8f8f2;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .explanation-block {
-            background: rgba(79, 70, 229, 0.05);
-            border: 1px solid rgba(79, 70, 229, 0.2);
-            border-left: 4px solid var(--accent-color);
-            padding: 20px;
-            margin-bottom: 40px;
-            border-radius: 8px;
-            font-size: 1.05rem;
-            line-height: 1.6;
-            color: var(--text-color);
         }
 
         @media (max-width: 900px) {
-            .tasks-layout {
-                flex-direction: column;
-            }
-
-            .tasks-sidebar {
-                width: 100%;
-                max-height: 300px;
-            }
+            .tasks-layout { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -243,16 +112,12 @@
 <body>
     <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html"
-                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span
-                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
-                        style="color: var(--accent-color);">Basic</span></span>
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color);">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
-                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 15px; align-items: center;">
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="python-basic.html">Курс</a></li>
                     <li><a href="libraries.html">Библиотеки</a></li>
@@ -263,497 +128,66 @@
         </div>
     </header>
 
-    <section class="lesson-title" style="padding: 40px 20px;">
-        <div class="container">
-            <h2 style="font-size: 2rem;">Практические задачи (Автогрейдер)</h2>
-            <p>Решайте алгоритмические задачи и проверяйте свой код автоматическими скрытыми тестами.</p>
-        </div>
-    </section>
-
     <main class="container">
-        <div class="explanation-block">
-            <strong>🤔 Для чего нужна эта страница и чем она отличается от "Python Online"?</strong><br><br>
-            В <em>Python Online</em> вы можете выполнять абсолютно любой код — это просто песочница, без конкретной
-            цели.
-            А здесь находится <strong>тренажер программиста</strong>, необходимый для закрепления знаний!<br><br>
-            Вам даётся конкретное задание: написать функцию. Когда вы нажимаете кнопку «Проверить», в работу вступает
-            наш скрытый проверяющий робот. Он мгновенно подставит в ваш код десятки разных скрытых данных (нестандартные
-            числа, отрицательные значения или пустые строки), чтобы убедиться, что ваша логика на 100% надёжна и не
-            ломается в трудных ситуациях. Именно так тренируются программисты на настоящих собеседованиях.
-        </div>
+        <section class="lesson-title" style="padding: 40px 0; text-align: center;">
+            <h2>Практические задачи</h2>
+            <p>Закрепите теорию на практике с автоматической проверкой.</p>
+        </section>
 
         <div class="tasks-layout">
-            <!-- Sidebar -->
-            <aside class="tasks-sidebar" id="tasks-list">
-                <!-- Заполняется JS -->
-            </aside>
-
-            <!-- Main Task Area -->
+            <aside class="tasks-sidebar" id="tasks-list"></aside>
             <div class="tasks-main">
-                <div class="task-description" id="task-desc">
-                    <h3 style="margin-top:0; color: var(--accent-color);" id="task-title">Выберите задачу</h3>
-                    <div id="task-text" style="color: var(--text-color); line-height: 1.6;">Текст задачи появится
-                        здесь...</div>
+                <div id="task-desc" style="background: var(--card-bg); padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: var(--shadow);">
+                    <h3 id="task-title" style="margin-top:0;">Выберите задачу</h3>
+                    <div id="task-text">Загрузка...</div>
                 </div>
 
                 <div class="editor-container">
                     <div class="editor-header">
-                        <span>Напишите решение:</span>
-                        <button class="btn-run-tests" id="btn-submit" disabled>Загрузка движка...</button>
+                        <span>Редактор кода</span>
+                        <button id="btn-submit" class="btn-submit" disabled>Загрузка Python...</button>
                     </div>
                     <textarea id="code-editor"></textarea>
                 </div>
 
-                <div>
-                    <h4 style="margin-top:0;">Результаты автоматической проверки:</h4>
-                    <div class="test-results" id="test-results">Выберите задачу и нажмите "Проверить", чтобы посмотреть
-                        результаты.</div>
-                </div>
+                <div id="test-results" class="test-results">Результаты появятся здесь...</div>
             </div>
         </div>
     </main>
 
-    <!-- Скрипты -->
-    <script src="script.js"></script>
+    <script src="tasks_data.js"></script>
     <script>
-        // Tasks Logic 
-                const tasks = [
-            // ================= ЛЕГКИЙ УРОВЕНЬ (5 ЗАДАЧ) =================
-            {
-                id: "sum",
-                title: "Сумма двух чисел",
-                difficulty: "easy",
-                desc: "<p>Напишите функцию <code>add(a, b)</code>, которая принимает два числа и возвращает их сумму.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>add(2, 3) -> 5</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>add(-1, 1) -> 0</code>",
-                startCode: "def add(a, b):
-    # Ваш код пишите здесь
-    pass
-",
-                testCode: `
-import sys
-try:
-    assert add(2, 3) == 5, "add(2, 3) должно вернуть 5"
-    assert add(-1, 1) == 0, "add(-1, 1) должно вернуть 0"
-    assert add(100, 200) == 300, "add(100, 200) должно вернуть 300"
-    print("✅ Все скрытые тесты успешно пройдены!
-Логика функции add работает абсолютно верно при любых числах.")
-except NameError:
-    print("❌ Ошибка: Функция add не найдена.
-Вы точно назвали её add?")
-except AssertionError as e:
-    print(f"❌ Провален скрытый тест: {e}")
-except Exception as e:
-    print(f"❌ Неизвестная ошибка: {e}")
-                `
-            },
-            {
-                id: "even",
-                title: "Чётные числа",
-                difficulty: "easy",
-                desc: "<p>Напишите функцию <code>is_even(n)</code>. Она должна возвращать логическое <code>True</code>, если число <code>n</code> чётное, и <code>False</code>, если нечётное (остаток от деления <code>%</code>).</p>",
-                startCode: "def is_even(n):
-    # Ваш код пишите здесь
-    pass
-",
-                testCode: `
-try:
-    assert is_even(4) == True, "Для чётного числа 4 должен быть ответ True"
-    assert is_even(7) == False, "Для нечётного числа 7 должен быть ответ False"
-    assert is_even(0) == True, "Ноль математически считается чётным числом (ожидается True)"
-    assert is_even(-2) == True, "Отрицательные чётные числа тоже должны возвращать True"
-    print("✅ Все тесты пройдены. Отличная работа!")
-except NameError:
-    print("❌ Ошибка: Функция is_even не найдена.")
-except AssertionError as e:
-    print(f"❌ Провален тест: {e}")
-except Exception as e:
-    print(f"❌ Возникла фатальная ошибка: {e}")
-                `
-            },
-            {
-                id: "max",
-                title: "Поиск максимума без max()",
-                difficulty: "easy",
-                desc: "<p>Напишите функцию <code>find_max(a, b)</code>, которая принимает два числа и возвращает наибольшее из них. <strong>Внимание:</strong> Запрещено использовать встроенную функцию <code>max()</code>. Используйте условный оператор if - else.</p>",
-                startCode: "def find_max(a, b):
-    # Ваш код пишите здесь
-    pass
-",
-                testCode: `
-import sys
-try:
-    assert find_max(10, 5) == 10, "find_max(10, 5) должно вернуть 10"
-    assert find_max(-5, -2) == -2, "find_max(-5, -2) должно вернуть -2"
-    assert find_max(7, 7) == 7, "find_max(7, 7) должно вернуть 7"
-    
-    import inspect
-    source = inspect.getsource(find_max)
-    assert "max(" not in source, "Нарушено правило: нельзя использовать встроенную функцию max()!"
-    
-    print("✅ Все тесты пройдены! Отличная работа с условиями if-else.")
-except NameError:
-    print("❌ Ошибка: Функция find_max не найдена.")
-except AssertionError as e:
-    print(f"❌ Провален скрытый тест: {e}")
-except Exception as e:
-    print(f"❌ Ошибка выполнения кода: {e}")
-                `
-            },
-            {
-                id: "power",
-                title: "Возведение в степень",
-                difficulty: "easy",
-                desc: "<p>Напишите функцию <code>fast_power(base, exp)</code>, которая возводит число <code>base</code> в степень <code>exp</code> без использования операторов цикла (используйте оператор **).</p>",
-                startCode: "def fast_power(base, exp):
-    # Ваш код пишите здесь
-    pass
-",
-                testCode: `
-try:
-    assert fast_power(2, 3) == 8, "2 в степени 3 равно 8"
-    assert fast_power(5, 2) == 25, "5 в квадрате равно 25"
-    assert fast_power(10, 0) == 1, "Любое число в нулевой степени равно 1"
-    print("✅ Отлично! Тесты пройдены.")
-except NameError:
-    print("❌ Ошибка: Функция fast_power не найдена.")
-except AssertionError as e:
-    print(f"❌ Провален скрытый тест: {e}")
-except Exception as e:
-    print(f"❌ Ошибка выполнения кода: {e}")
-                `
-            },
-            {
-                id: "greet",
-                title: "Приветствие",
-                difficulty: "easy",
-                desc: "<p>Напишите функцию <code>greet(name)</code>, которая принимает одну строку (имя) и возвращает строку вида <code>\"Привет, ИМЯ!\"</code>. Например: <code>\"Привет, Иван!\"</code>. Не забывайте запятую и восклицательный знак.</p>",
-                startCode: "def greet(name):
-    # Ваш код пишите здесь
-    pass
-",
-                testCode: `
-try:
-    assert greet("Иван") == "Привет, Иван!", "Для Иван должно быть 'Привет, Иван!'"
-    assert greet("Python") == "Привет, Python!", "Должно быть 'Привет, Python!'"
-    print("✅ Строка правильно склеена! Отличная работа.")
-except NameError:
-    print("❌ Ошибка: Функция greet не найдена.")
-except AssertionError as e:
-    print(f"❌ Провален скрытый тест: {e}")
-except Exception as e:
-    print(f"❌ Ошибка выполнения кода: {e}")
-                `
-            },
-
-            // ================= СРЕДНИЙ УРОВЕНЬ (5 ЗАДАЧ) =================
-            {
-                id: "reverse",
-                title: "Перевернуть текст",
-                difficulty: "medium",
-                desc: "<p>Напишите функцию <code>reverse_string(text)</code>, которая принимает строку и возвращает её задом наперёд.</p><strong>Примените срезы (slices) или цикл for:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>reverse_string('собака') -> 'акабос'</code>",
-                startCode: "def reverse_string(text):
-    # Ваш код пишите здесь
-    pass
-",
-                testCode: `
-try:
-    assert reverse_string("кот") == "ток", "Слово 'кот' должно стать 'ток'"
-    assert reverse_string("Python") == "nohtyP", "Строка 'Python' не перевернулась должным образом"
-    assert reverse_string("") == "", "Пустая строка должна остаться пустой"
-    print("✅ Великолепно! Строки переворачиваются корректно на 100%.")
-except NameError:
-    print("❌ Ошибка: Функция reverse_string не найдена.")
-except AssertionError as e:
-    print(f"❌ Ошибка в результате: {e}")
-except Exception as e:
-    print(f"❌ Сбой выполнения: {e}")
-                `
-            },
-            {
-                id: "count_vowels",
-                title: "Подсчет гласных",
-                difficulty: "medium",
-                desc: "<p>Напишите функцию <code>count_vowels(word)</code>, которая принимает строку и возвращает <strong>количество гласных</strong> букв в ней (а, е, ё, и, о, у, ы, э, ю, я - для русского алфавита). Регистр не имеет значения.</p>",
-                startCode: "def count_vowels(word):
-    # Ваш код пишите здесь
-    pass
-",
-                testCode: `
-try:
-    assert count_vowels("Привет") == 2, "В 'Привет' две гласные (и, е)"
-    assert count_vowels("Яблоко") == 3, "В 'Яблоко' три гласные (Я, о, о)"
-    assert count_vowels("КРТК") == 0, "В 'КРТК' нет гласных"
-    assert count_vowels("") == 0, "Пустая строка возвращает 0"
-    print("✅ Циклы и условия работают правильно! Функция считает верно.")
-except NameError:
-    print("❌ Ошибка: Функция count_vowels не найдена.")
-except AssertionError as e:
-    print(f"❌ Ошибка в результате: {e}")
-except Exception as e:
-    print(f"❌ Сбой выполнения: {e}")
-                `
-            },
-            {
-                id: "list_sum",
-                title: "Сумма списка",
-                difficulty: "medium",
-                desc: "<p>Напишите функцию <code>sum_list(numbers)</code>, которая принимает список чисел и возвращает их сумму. <strong>Запрещено</strong> использовать встроенную функцию <code>sum()</code>. Используйте цикл <code>for</code>.</p>",
-                startCode: "def sum_list(numbers):
-    # Ваш код пишите здесь
-    pass
-",
-                testCode: `
-try:
-    assert sum_list([1, 2, 3]) == 6, "Сумма 1+2+3 равна 6"
-    assert sum_list([-5, 10, 5]) == 10, "Сумма -5+10+5 равна 10"
-    assert sum_list([]) == 0, "Сумма пустого списка должна быть 0"
-    
-    import inspect
-    source = inspect.getsource(sum_list)
-    assert "sum(" not in source, "Нарушено правило: нельзя использовать встроенную функцию sum()!"
-    
-    print("✅ Правильно работают циклы и накопитель суммы!")
-except NameError:
-    print("❌ Ошибка: Функция sum_list не найдена.")
-except AssertionError as e:
-    print(f"❌ Провален скрытый тест: {e}")
-except Exception as e:
-    print(f"❌ Ошибка выполнения кода: {e}")
-                `
-            },
-            {
-                id: "palindrome",
-                title: "Палиндром",
-                difficulty: "medium",
-                desc: "<p>Напишите функцию <code>is_palindrome(text)</code>, которая возвращает <code>True</code>, если текст читается одинаково туда и обратно (без учета пробелов и регистра!), иначе <code>False</code>. Пример: <code>\"Леша на полке клопа нашел\" -> True</code>.</p>",
-                startCode: "def is_palindrome(text):
-    # Очистите текст от пробелов и приведите к одному регистру
-    pass
-",
-                testCode: `
-try:
-    assert is_palindrome("казак") == True, "'казак' это палиндром"
-    assert is_palindrome("собака") == False, "'собака' это не палиндром"
-    assert is_palindrome("А роза упала на лапу Азора") == True, "Многословный палиндром не прошел тест"
-    print("✅ Срезы, приведение типов и строки работают идеально!")
-except NameError:
-    print("❌ Ошибка: Функция is_palindrome не найдена.")
-except AssertionError as e:
-    print(f"❌ Ошибка: {e}")
-except Exception as e:
-    print(f"❌ Сбой выполнения: {e}")
-                `
-            },
-            {
-                id: "unique_dict",
-                title: "Словарь возрастов",
-                difficulty: "medium",
-                desc: "<p>Напишите функцию <code>get_oldest(people)</code>. На вход подается словарь, где ключ — имя, значение — возраст. <code>{'Иван': 20, 'Анна': 25}</code>. Верните ИМЯ самого старшего человека.</p>",
-                startCode: "def get_oldest(people):
-    # Ваш код пишите здесь
-    pass
-",
-                testCode: `
-try:
-    assert get_oldest({'Иван': 20, 'Анна': 25}) == 'Анна', "Анна (25) старше Ивана (20)"
-    assert get_oldest({'Борис': 50, 'Глеб': 15, 'Алла': 40}) == 'Борис', "Должен быть выбран Борис (50)"
-    print("✅ Отличная работа со словарями и ключами/значениями!")
-except NameError:
-    print("❌ Ошибка: Функция get_oldest не найдена.")
-except AssertionError as e:
-    print(f"❌ Провален скрытый тест: {e}")
-except Exception as e:
-    print(f"❌ Ошибка: {e}")
-                `
-            },
-
-            // ================= ТЯЖЕЛЫЙ УРОВЕНЬ (5 ЗАДАЧ) =================
-            {
-                id: "safe_divide",
-                title: "Безопасное деление",
-                difficulty: "hard",
-                desc: "<p>Напишите функцию <code>safe_divide(a, b)</code>, которая делит <code>a</code> на <code>b</code>. Если возникает ошибка деления на ноль, используйте блок <code>try-except</code> и возвращайте строку <code>\"Ошибка\"</code>.</p>",
-                startCode: "def safe_divide(a, b):
-    # Ваш код пишите здесь
-    pass
-",
-                testCode: `
-try:
-    assert safe_divide(10, 2) == 5, "10 / 2 должно быть 5"
-    assert safe_divide(10, 0) == "Ошибка", "На 0 делить нельзя, должна возвращаться строка 'Ошибка'"
-    
-    import inspect
-    source = inspect.getsource(safe_divide)
-    assert "except " in source or "except:" in source, "Нарушено условие: используйте try-except блок."
-    
-    print("✅ Вы отлично справились с обработкой исключений!")
-except NameError:
-    print("❌ Ошибка: Функция safe_divide не найдена.")
-except AssertionError as e:
-    print(f"❌ Провален скрытый тест: {e}")
-except Exception as e:
-    print(f"❌ Ошибка: {e}")
-                `
-            },
-            {
-                id: "count_words",
-                title: "Частота слов",
-                difficulty: "hard",
-                desc: "<p>Напишите функцию <code>word_counts(text)</code>, которая принимает строку и возвращает <strong>словарь</strong>, где ключ — слово (в нижнем регистре), а значение — сколько раз оно встретилось. Знаков препинания в строке не будет.</p>",
-                startCode: "def word_counts(text):
-    # Подсказка: .split() разбивает на слова
-    pass
-",
-                testCode: `
-try:
-    d = word_counts("Кот ест кот спит")
-    assert d == {'кот': 2, 'ест': 1, 'спит': 1}, f"Ожидалось {{'кот': 2, 'ест': 1, 'спит': 1}}, а получено {d}"
-    
-    d2 = word_counts("раз два РАЗ")
-    assert d2 == {'раз': 2, 'два': 1}, f"Регистр важен: 'РАЗ' и 'раз' - одно слово! Получено: {d2}"
-    print("✅ Словарь частот построен абсолютно правильно!")
-except NameError:
-    print("❌ Ошибка: Функция word_counts не найдена.")
-except AssertionError as e:
-    print(f"❌ Провален скрытый тест: {e}")
-except Exception as e:
-    print(f"❌ Ошибка: {e}")
-                `
-            },
-            {
-                id: "oop_rectangle",
-                title: "Основы ООП (Прямоугольник)",
-                difficulty: "hard",
-                desc: "<p>Напишите класс <code>Rectangle</code>, у которого в конструкторе <code>__init__</code> задаются ширина и высота. Добавьте метод <code>get_area()</code>, который возвращает его площадь (ширина на высоту).</p>",
-                startCode: "class Rectangle:
-    def __init__(self, w, h):
-        pass
-
-    def get_area(self):
-        pass
-",
-                testCode: `
-try:
-    rect1 = Rectangle(10, 5)
-    assert rect1.get_area() == 50, "Площадь 10x5 должна быть равна 50"
-    
-    rect2 = Rectangle(2, 3)
-    assert rect2.get_area() == 6, "Площадь 2x3 должна быть 6"
-    print("✅ ООП класс работает безупречно! Методы написаны верно.")
-except NameError:
-    print("❌ Ошибка: Класс Rectangle не найден.")
-except AttributeError as e:
-    print("❌ Объект не обладает нужным методом или атрибутом:", e)
-except AssertionError as e:
-    print(f"❌ Ошибка: {e}")
-except Exception as e:
-    print(f"❌ Ошибка: {e}")
-                `
-            },
-            {
-                id: "datetime_days",
-                title: "Разница в днях (datetime)",
-                difficulty: "hard",
-                desc: "<p>Заимпортируйте модуль <code>datetime</code>. Напишите функцию <code>get_days_diff(date1_str, date2_str)</code>. Даты приходят в формате <code>YYYY-MM-DD</code>. Верните целое количество дней (разницу) между первой и второй датой.</p>",
-                startCode: "from datetime import datetime
-
-def get_days_diff(date1_str, date2_str):
-    # Вам поможет datetime.strptime()
-    pass
-",
-                testCode: `
-try:
-    assert get_days_diff('2025-01-01', '2025-01-10') in [9, -9], "Разница между 1 и 10 января - 9 дней"
-    assert abs(get_days_diff('2024-02-01', '2024-03-01')) == 29, "2024 високосный год, должно быть 29 дней!"
-    print("✅ Вы отлично подружились с классом datetime!")
-except NameError:
-    print("❌ Ошибка: Функция get_days_diff не найдена.")
-except AssertionError as e:
-    print(f"❌ Ошибка: {e}")
-except Exception as e:
-    print(f"❌ Выброшено исключение: {e}")
-                `
-            },
-            {
-                id: "fibonacci",
-                title: "Числа Фибоначчи",
-                difficulty: "hard",
-                desc: "<p>Сложный алгоритм! Напишите функцию <code>fib(n)</code>. Она возвращает n-ое число Фибоначчи. Пример ряда: 0, 1, 1, 2, 3, 5, 8. Где fib(0)=0, fib(1)=1, fib(2)=1, fib(6)=8.</p>",
-                startCode: "def fib(n):
-    # Ваш код
-    pass
-",
-                testCode: `
-try:
-    assert fib(0) == 0, "fib(0) должно быть 0"
-    assert fib(1) == 1, "fib(1) должно быть 1"
-    assert fib(2) == 1, "fib(2) должно быть 1"
-    assert fib(6) == 8, "fib(6) должно быть 8"
-    assert fib(10) == 55, "fib(10) должно быть 55"
-    print("✅ Браво! Математическая логика идеальна.")
-except NameError:
-    print("❌ Ошибка: Функция fib не найдена.")
-except AssertionError as e:
-    print(f"❌ Ошибка результата: {e}")
-except Exception as e:
-    print(f"❌ Ошибка: {e}")
-                `
-            }
-        ];
-
-
         let currentTaskIndex = 0;
         let pyodideInstance = null;
 
-        // Initialize CodeMirror editor
         const editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
             mode: "python",
             theme: "dracula",
             lineNumbers: true,
-            indentUnit: 4,
-            matchBrackets: true
+            indentUnit: 4
         });
-        editor.setSize("100%", "300px");
+        editor.setSize("100%", "350px");
 
-        // Autosave logic
-        editor.on('change', () => {
-            if (currentTaskIndex !== null && tasks[currentTaskIndex]) {
-                const taskId = tasks[currentTaskIndex].id;
-                const userCode = editor.getValue();
-                localStorage.setItem(`saved_code_${taskId}`, userCode);
-            }
-        });
-
-        const btnSubmit = document.getElementById("btn-submit");
-        const resultsDiv = document.getElementById("test-results");
-
-        // Load Pyodide environment
-        // Initialize UI immediately
-        renderTasks();
-        selectTask(0);
-
-        async function loadPython() {
+        async function initPython() {
             try {
                 pyodideInstance = await loadPyodide();
-                btnSubmit.innerHTML = "▶ Проверить решение";
-                btnSubmit.disabled = false;
-                resultsDiv.textContent = "✅ Python движок загружен. Напишите код и нажмите «Проверить».";
-                resultsDiv.style.color = "var(--text-color)";
-            } catch (err) {
-                resultsDiv.textContent = "❌ Ошибка загрузки движка Python: " + err;
+                const btn = document.getElementById('btn-submit');
+                btn.textContent = '▶ Проверить решение';
+                btn.disabled = false;
+            } catch (e) {
+                document.getElementById('test-results').textContent = "Ошибка загрузки Python";
             }
         }
 
         function renderTasks() {
-            const list = document.getElementById("tasks-list");
-            list.innerHTML = "";
+            const list = document.getElementById('tasks-list');
+            list.innerHTML = '';
             tasks.forEach((task, index) => {
-                const div = document.createElement("div");
-                div.className = "task-item" + (index === currentTaskIndex ? " active" : "");
-                const diffLabel = task.difficulty === 'easy' ? '🟢 Обычная' : (task.difficulty === 'medium' ? '🟡 Средняя' : '🔴 Сложная');
-                const diffClass = task.difficulty === 'easy' ? 'diff-easy' : (task.difficulty === 'medium' ? 'diff-medium' : 'diff-hard');
-
-                div.innerHTML = `<span class="task-difficulty ${diffClass}">${diffLabel}</span><div style="font-weight: 600; color:var(--text-color);">${task.title}</div>`;
-
+                const div = document.createElement('div');
+                div.className = `task-item ${index === currentTaskIndex ? 'active' : ''}`;
+                const diff = task.difficulty === 'easy' ? '🟢 Легко' : (task.difficulty === 'medium' ? '🟡 Средне' : '🔴 Сложно');
+                const diffClass = `diff-${task.difficulty}`;
+                div.innerHTML = `<span class="task-difficulty ${diffClass}">${diff}</span><div style="font-weight:700;">${task.title}</div>`;
                 div.onclick = () => selectTask(index);
                 list.appendChild(div);
             });
@@ -761,62 +195,35 @@ except Exception as e:
 
         function selectTask(index) {
             currentTaskIndex = index;
-            renderTasks(); // update visual selection
-
             const task = tasks[index];
-            document.getElementById("task-title").textContent = task.title;
-            document.getElementById("task-text").innerHTML = task.desc;
-
-            // Load saved code or default starter code
-            const savedCode = localStorage.getItem(`saved_code_${task.id}`);
-            if (savedCode) {
-                editor.setValue(savedCode);
-            } else {
-                editor.setValue(task.startCode);
-            }
-
-            resultsDiv.textContent = "Ожидание запуска тестов...";
-            resultsDiv.style.color = "#f8f8f2";
+            document.getElementById('task-title').textContent = task.title;
+            document.getElementById('task-text').innerHTML = task.desc;
+            editor.setValue(task.startCode);
+            renderTasks();
         }
 
-        btnSubmit.addEventListener("click", async () => {
-            if (!pyodideInstance) return;
-
-            const userCode = editor.getValue();
-            const currentTask = tasks[currentTaskIndex];
-
-            // Соединяем код юзера со скрытыми тестами
-            const fullScript = userCode + "\n\n" + currentTask.testCode;
-
-            resultsDiv.textContent = "🤖 Робот запускает скрытые проверки...";
-            resultsDiv.style.color = "#f8f8f2";
-
+        document.getElementById('btn-submit').onclick = async () => {
+            const results = document.getElementById('test-results');
+            results.textContent = "🤖 Проверка...";
+            results.style.color = "white";
+            
             try {
-                // Перехватываем print() из Python
                 let output = "";
                 pyodideInstance.setStdout({ batched: (str) => output += str + "\n" });
-
-                await pyodideInstance.runPythonAsync(fullScript);
-
-                // Проверяем наличие галочки или крестика в выводе
-                resultsDiv.textContent = output;
-
-                if (output.includes("✅")) {
-                    resultsDiv.style.color = "var(--success-color)";
-                } else if (output.includes("❌")) {
-                    resultsDiv.style.color = "#ef4444";
-                }
-
+                const fullCode = editor.getValue() + "\n\n" + tasks[currentTaskIndex].testCode;
+                await pyodideInstance.runPythonAsync(fullCode);
+                results.textContent = output;
+                results.style.color = output.includes("✅") ? "#10b981" : "#ef4444";
             } catch (err) {
-                // Если код крашнулся полностью (синтаксическая ошибка)
-                resultsDiv.textContent = "❌ Фатальная ошибка в коде:\n" + err;
-                resultsDiv.style.color = "#ef4444";
+                results.textContent = "❌ Ошибка:\n" + err;
+                results.style.color = "#ef4444";
             }
-        });
+        };
 
-        // Запускаем инициализацию Python
-        loadPython();
+        initPython();
+        renderTasks();
+        selectTask(0);
     </script>
+    <script src="script.js"></script>
 </body>
-
 </html>
