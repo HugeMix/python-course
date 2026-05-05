@@ -858,3 +858,84 @@ body.dark-mode footer {
     -webkit-user-select: none;
     cursor: default;
 }
+/* ==== PASSWORD ACCESS MODAL ==== */
+.access-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.95);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    backdrop-filter: blur(10px);
+}
+
+.access-modal {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: var(--radius);
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.access-modal h2 {
+    color: var(--text-color);
+    margin-top: 0;
+    font-size: 1.8rem;
+}
+
+.access-modal p {
+    color: var(--text-color);
+    opacity: 0.8;
+    margin-bottom: 25px;
+}
+
+.access-input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+body.dark-mode .access-input {
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.access-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.access-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.access-error {
+    color: var(--error-color);
+    margin-top: 15px;
+    font-weight: 600;
+    display: none;
+}

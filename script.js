@@ -640,3 +640,55 @@ document.addEventListener('DOMContentLoaded', () => {
     initResetButton();
     initScrollAnimations();
 });
+
+// --- Password Access System ---
+const SECRET_PASSWORD = "admin"; // Вы можете изменить пароль здесь
+
+function checkLessonAccess() {
+    const currentPath = window.location.pathname.split('/').pop();
+    if (!currentPath.startsWith('lesson')) return;
+
+    const isUnlocked = localStorage.getItem('lessons_unlocked') === 'true';
+    if (isUnlocked) return;
+
+    // Create Overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'access-overlay';
+    overlay.innerHTML = `
+        <div class="access-modal">
+            <h2>🔒 Доступ ограничен</h2>
+            <p>Для перехода к любому уроку введите специальный пароль.</p>
+            <input type="password" class="access-input" id="access-password" placeholder="Введите пароль...">
+            <button class="access-btn" id="access-submit">Войти</button>
+            <div class="access-error" id="access-error">Неверный пароль!</div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    const input = document.getElementById('access-password');
+    const submit = document.getElementById('access-submit');
+    const error = document.getElementById('access-error');
+
+    function verify() {
+        if (input.value === SECRET_PASSWORD) {
+            localStorage.setItem('lessons_unlocked', 'true');
+            overlay.remove();
+            document.body.style.overflow = 'auto';
+        } else {
+            error.style.display = 'block';
+            input.style.borderColor = 'var(--error-color)';
+            input.value = '';
+            setTimeout(() => {
+                error.style.display = 'none';
+                input.style.borderColor = '';
+            }, 2000);
+        }
+    }
+
+    submit.onclick = verify;
+    input.onkeypress = (e) => { if (e.key === 'Enter') verify(); };
+}
+
+// Initialize access check
+checkLessonAccess();

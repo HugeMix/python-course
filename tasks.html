@@ -712,7 +712,7 @@ except Exception as e:
             const currentTask = tasks[currentTaskIndex];
 
             // Соединяем код юзера со скрытыми тестами
-            const fullScript = userCode + "\\n\\n" + currentTask.testCode;
+            const fullScript = userCode + "\n\n" + currentTask.testCode;
 
             resultsDiv.textContent = "🤖 Робот запускает скрытые проверки...";
             resultsDiv.style.color = "#f8f8f2";
@@ -735,7 +735,7 @@ except Exception as e:
 
             } catch (err) {
                 // Если код крашнулся полностью (синтаксическая ошибка)
-                resultsDiv.textContent = "❌ Фатальная ошибка в коде:\\n" + err;
+                resultsDiv.textContent = "❌ Фатальная ошибка в коде:\n" + err;
                 resultsDiv.style.color = "#ef4444";
             }
         });
