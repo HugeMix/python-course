@@ -3,8 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Введение в Python: История, Установка и Первая программа</title>
+    <title>Урок 1: Введение в Python — от философии до первой строки</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .theory-block {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border-left: 5px solid var(--accent-color);
+            box-shadow: var(--shadow);
+        }
+        .theory-block h3 {
+            color: var(--accent-color);
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        th { background: #f8fafc; }
+        .lesson-header-meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -14,7 +47,7 @@
                 <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color);">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
-                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 15px;">
+                <ul>
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="python-basic.html">Курс</a></li>
                     <li><a href="libraries.html">Библиотеки</a></li>
@@ -27,65 +60,86 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h2>Введение в Python: История, Установка и Первая программа</h2>
-            <p>Глубокое погружение в тему. Время изучения: ~30 минут.</p>
+            <h2>Урок 1: Введение в Python — от философии до первой строки</h2>
+            <div class="lesson-header-meta" style="justify-content: center;">
+                <span>⏱ Время изучения: ~30 минут</span>
+                <span>🎓 Уровень: Базовый+</span>
+            </div>
         </div>
     </section>
 
     <main class="container">
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Понять философию Python, настроить рабочее окружение и запустить первый скрипт.</p>
+            <p>Освоить основы синтаксиса, понять, почему Python так популярен, и настроить мышление программиста.</p>
         </section>
 
         <section class="lesson-content">
             
-            <h3>Что такое Python?</h3>
-            <p>Python — это интерпретируемый, объектно-ориентированный язык программирования высокого уровня с динамической типизацией. Созданный Гвидо ван Россумом в конце 80-х, Python стал стандартом в Data Science, веб-разработке и автоматизации.</p>
-            
-            <h3>Почему Python?</h3>
-            <ul>
-                <li><strong>Читаемость:</strong> Код на Python часто называют "исполняемым псевдокодом".</li>
-                <li><strong>Огромная стандартная библиотека:</strong> "Батарейки в комплекте".</li>
-                <li><strong>Сообщество:</strong> Миллионы разработчиков и готовых решений.</li>
-            </ul>
+            <div class="theory-block">
+                <h3>1. Философия Python (The Zen of Python)</h3>
+                <p>Python — это не просто инструмент, это философия. Наберите <code>import this</code> в консоли, и вы увидите принципы, которыми руководствуются разработчики:</p>
+                <ul>
+                    <li>Красивое лучше, чем уродливое.</li>
+                    <li>Явное лучше, чем неявное.</li>
+                    <li>Простое лучше, чем сложное.</li>
+                    <li>Читаемость имеет значение.</li>
+                </ul>
+                <p>Это делает Python идеальным для командной разработки: ваш код легко читать другим.</p>
+            </div>
 
-            <h3>Установка и Настройка</h3>
-            <p>Для работы вам понадобится интерпретатор с сайта python.org и редактор кода (VS Code, PyCharm или просто IDLE). Проверьте установку командой <code>python --version</code>.</p>
+            <div class="theory-block">
+                <h3>2. Как работает Python под капотом?</h3>
+                <p>Python — это <strong>интерпретируемый</strong> язык. Это значит, что код не компилируется сразу в машинные нули и единицы, а читается специальной программой (интерпретатором) строка за строкой. Это замедляет выполнение, но ускоряет разработку и отладку.</p>
+                <p><strong>Компиляция в байт-код:</strong> Перед выполнением Python создает файлы <code>.pyc</code> — это промежуточный код, который понимает виртуальная машина Python (PVM).</p>
+            </div>
 
-            <h3>Ваша первая программа</h3>
-            <pre><code>print("Привет, мир!")
-# Это комментарий. Он не выполняется.
-print(5 + 3)</code></pre>
-            <p>Функция <code>print()</code> выводит данные в консоль. В Python 3 она всегда требует скобок.</p>
+            <div class="theory-block">
+                <h3>3. Настройка окружения: PEP 8</h3>
+                <p>Профессионалы следуют стандарту <strong>PEP 8</strong>. Главные правила:</p>
+                <ul>
+                    <li>Отступы: всегда 4 пробела (не Tab!).</li>
+                    <li>Длина строки: до 79 символов.</li>
+                    <li>Имена: <code>snake_case</code> для переменных и функций.</li>
+                </ul>
+            </div>
+
+            <div class="theory-block">
+                <h3>4. Практика: Расширенный Print</h3>
+                <pre><code># Использование именованных аргументов
+print("Python", "is", "cool", sep="-", end="!!!\n")
+# Результат: Python-is-cool!!!</code></pre>
+                <p>Аргумент <code>sep</code> меняет разделитель, а <code>end</code> — то, что будет в конце строки.</p>
+            </div>
         
         </section>
 
-        <div style="text-align: center; margin: 50px 0;">
-            <button id="start-quiz-btn" class="btn" style="padding: 20px 50px; font-size: 1.2rem; background: var(--accent-color); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);">🚀 Перейти к тесту</button>
+        <div id="quiz-start-section" style="text-align: center; margin: 60px 0; padding: 40px; background: var(--card-bg); border-radius: 20px; box-shadow: var(--shadow-hover);">
+            <h3 style="margin-bottom: 20px;">Готовы проверить знания?</h3>
+            <p style="margin-bottom: 30px; color: #666;">Тест состоит из вопросов по всей теории урока. Для прохождения нужно ответить на все вопросы верно.</p>
+            <button id="start-quiz-btn" class="btn" style="padding: 20px 60px; font-size: 1.2rem; background: var(--accent-color); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.3s;">🚀 Начать финальный тест</button>
         </div>
 
         <div id="quiz-container" style="display: none;"></div>
 
-        <div class="lesson-navigation" style="display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee;">
-            <a href="lesson0.html" class="btn" style="display: none">← Предыдущий урок</a>
-            <a href="lesson2.html" id="next-lesson-btn" class="btn" style="display: none; background: var(--success-color); color: white;">Следующий урок →</a>
+        <div class="lesson-navigation" style="display: flex; justify-content: space-between; margin-top: 50px; padding: 30px 0; border-top: 1px solid #e2e8f0;">
+            <a href="lesson0.html" class="btn-nav" style="display: none">← Назад</a>
+            <a href="lesson2.html" id="next-lesson-btn" class="btn-nav next" style="display: none;">Следующий урок →</a>
         </div>
     </main>
 
     <footer>
-        <p>© 2025 PythonBasic. Все права защищены.</p>
+        <p>© 2025 PythonBasic. Образовательная платформа нового поколения.</p>
     </footer>
 
     <script src="script.js"></script>
     <script>
         document.getElementById('start-quiz-btn').onclick = function() {
-            this.style.display = 'none';
+            document.getElementById('quiz-start-section').style.display = 'none';
             document.getElementById('quiz-container').style.display = 'block';
             window.scrollTo({ top: document.getElementById('quiz-container').offsetTop - 100, behavior: 'smooth' });
         };
         
-        // Постоянно проверяем, пройден ли тест, чтобы показать кнопку "Следующий"
         setInterval(() => {
             const progress = JSON.parse(localStorage.getItem('python_quiz_progress') || '{}');
             if (progress['lesson1.html']) {
@@ -96,5 +150,3 @@ print(5 + 3)</code></pre>
     </script>
 </body>
 </html>
-
-<!-- Cache bust: 1777957262 -->

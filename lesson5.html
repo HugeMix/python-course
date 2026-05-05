@@ -3,8 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Циклы: Автоматизация повторений</title>
+    <title>Урок 5: Циклы и Итераторы</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .theory-block {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border-left: 5px solid var(--accent-color);
+            box-shadow: var(--shadow);
+        }
+        .theory-block h3 {
+            color: var(--accent-color);
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        th { background: #f8fafc; }
+        .lesson-header-meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -14,7 +47,7 @@
                 <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color);">Python<span style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
-                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 15px;">
+                <ul>
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="python-basic.html">Курс</a></li>
                     <li><a href="libraries.html">Библиотеки</a></li>
@@ -27,64 +60,69 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h2>Циклы: Автоматизация повторений</h2>
-            <p>Глубокое погружение в тему. Время изучения: ~30 минут.</p>
+            <h2>Урок 5: Циклы и Итераторы</h2>
+            <div class="lesson-header-meta" style="justify-content: center;">
+                <span>⏱ Время изучения: ~30 минут</span>
+                <span>🎓 Уровень: Базовый+</span>
+            </div>
         </div>
     </section>
 
     <main class="container">
         <section class="lesson-goal">
             <h2>🎯 Цель урока</h2>
-            <p>Изучить циклы for и while для эффективной обработки данных.</p>
+            <p>Глубокое понимание циклов, работа с else в циклах и предотвращение утечек памяти.</p>
         </section>
 
         <section class="lesson-content">
             
-            <h3>Цикл for</h3>
-            <p>Используется для перебора последовательностей (списков, строк, диапазонов).</p>
-            <pre><code>for i in range(5):
-    print(f"Итерация {i}")</code></pre>
+            <div class="theory-block">
+                <h3>1. Цикл for и функция range()</h3>
+                <p><code>range(start, stop, step)</code> не создает список в памяти, а генерирует числа на лету. Это экономит ресурсы.</p>
+            </div>
 
-            <h3>Цикл while</h3>
-            <p>Выполняется, пока условие истинно. Опасайтесь бесконечных циклов!</p>
-            <pre><code>count = 0
-while count < 3:
-    print("Работаю...")
-    count += 1</code></pre>
+            <div class="theory-block">
+                <h3>2. Конструкция for-else</h3>
+                <p>Уникальная фишка Python: блок <code>else</code> выполнится, если цикл завершился "естественно" (без <code>break</code>).</p>
+                <pre><code>for i in range(5):
+    if i == 10: break
+else:
+    print("Цикл не был прерван!")</code></pre>
+            </div>
 
-            <h3>Управление циклом</h3>
-            <ul>
-                <li><code>break</code> — немедленный выход.</li>
-                <li><code>continue</code> — переход к следующей итерации.</li>
-            </ul>
+            <div class="theory-block">
+                <h3>3. Вложенные циклы и сложность</h3>
+                <p>Будьте осторожны: вложенный цикл внутри другого цикла увеличивает время выполнения в геометрической прогрессии (O(n²)).</p>
+            </div>
         
         </section>
 
-        <div style="text-align: center; margin: 50px 0;">
-            <button id="start-quiz-btn" class="btn" style="padding: 20px 50px; font-size: 1.2rem; background: var(--accent-color); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);">🚀 Перейти к тесту</button>
+        <div id="quiz-start-section" style="text-align: center; margin: 60px 0; padding: 40px; background: var(--card-bg); border-radius: 20px; box-shadow: var(--shadow-hover);">
+            <h3 style="margin-bottom: 20px;">Готовы проверить знания?</h3>
+            <p style="margin-bottom: 30px; color: #666;">Тест состоит из вопросов по всей теории урока. Для прохождения нужно ответить на все вопросы верно.</p>
+            <button id="start-quiz-btn" class="btn" style="padding: 20px 60px; font-size: 1.2rem; background: var(--accent-color); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: 800; transition: 0.3s;">🚀 Начать финальный тест</button>
         </div>
 
         <div id="quiz-container" style="display: none;"></div>
 
-        <div class="lesson-navigation" style="display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee;">
-            <a href="lesson4.html" class="btn" style="display: inline-block">← Предыдущий урок</a>
-            <a href="lesson6.html" id="next-lesson-btn" class="btn" style="display: none; background: var(--success-color); color: white;">Следующий урок →</a>
+        <div class="lesson-navigation" style="display: flex; justify-content: space-between; margin-top: 50px; padding: 30px 0; border-top: 1px solid #e2e8f0;">
+            <a href="lesson4.html" class="btn-nav" style="display: flex">← Назад</a>
+            <a href="lesson6.html" id="next-lesson-btn" class="btn-nav next" style="display: none;">Следующий урок →</a>
         </div>
     </main>
 
     <footer>
-        <p>© 2025 PythonBasic. Все права защищены.</p>
+        <p>© 2025 PythonBasic. Образовательная платформа нового поколения.</p>
     </footer>
 
     <script src="script.js"></script>
     <script>
         document.getElementById('start-quiz-btn').onclick = function() {
-            this.style.display = 'none';
+            document.getElementById('quiz-start-section').style.display = 'none';
             document.getElementById('quiz-container').style.display = 'block';
             window.scrollTo({ top: document.getElementById('quiz-container').offsetTop - 100, behavior: 'smooth' });
         };
         
-        // Постоянно проверяем, пройден ли тест, чтобы показать кнопку "Следующий"
         setInterval(() => {
             const progress = JSON.parse(localStorage.getItem('python_quiz_progress') || '{}');
             if (progress['lesson5.html']) {
@@ -95,5 +133,3 @@ while count < 3:
     </script>
 </body>
 </html>
-
-<!-- Cache bust: 1777957262 -->
