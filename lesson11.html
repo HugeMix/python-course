@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Обработка исключений: Надежный код</title>
+    <meta name="description"
+        content="Урок 11: Обработка ошибок в Python. Конструкции try-except-finally, raise и типы исключений.">
+    <title>Урок 11: Обработка ошибок (try-except)</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
     <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+            <a href="index.html"
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+                <span
+                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
+                        style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -25,56 +34,109 @@
         </div>
     </header>
 
-    <main class="container lesson-page">
-        <section class="lesson-header">
-            <h1>Урок 11: Обработка исключений: Надежный код</h1>
-            <div class="lesson-meta">
-                <span>⏱ Время изучения: ~30 минут</span>
-                <span>📊 Уровень: Базовый</span>
-            </div>
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Урок 11: Обработка ошибок (try-except)</h2>
+            <p>Научимся перехватывать ошибки в коде и правильно их обрабатывать.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="lesson-goal">
+            <h2>🎯 Цель урока</h2>
+            <p>Понять, как использовать конструкции <code>try-except</code> для обработки ошибок и
+                предотвращения «краша» программы.</p>
         </section>
 
-        <article class="lesson-content">
-            
-            <h3>1. Что такое исключение?</h3>
-            <p>Это ошибка, возникающая во время выполнения программы (Runtime Error). Например, деление на ноль или попытка открыть несуществующий файл.</p>
+        <section class="lesson-content">
+            <h2>❓ Зачем нужна обработка ошибок?</h2>
+            <p>Любая программа может столкнуться с ситуацией, которую не предусмотрел программист:
+                пользователь ввёл текст вместо числа, файл не найден, нет подключения к сети.
+                Без обработки ошибок программа просто «падает». Блок <code>try-except</code> позволяет
+                перехватить ошибку и <strong>сообщить о ней пользователю</strong>, а не аварийно завершиться.</p>
 
-            <h3>2. Блок try-except</h3>
-            <p>Позволяет "перехватить" ошибку и не дать программе упасть.</p>
+            <h2>⚠️ Базовая конструкция try-except</h2>
+            <p>Код, который может вызвать ошибку, помещается в блок <code>try</code>. В блоке
+                <code>except</code> описывается, что делать при возникновении ошибки:
+            </p>
             <pre><code>try:
-    res = 10 / 0
+    число = int(input("Введите число: "))
+    print("Вы ввели:", число)
+except ValueError:
+    print("Ошибка! Нужно ввести число, а не текст.")</code></pre>
+            <p>Если пользователь введёт буквы вместо числа, возникнет ошибка <code>ValueError</code>,
+                и выполнится блок <code>except</code> вместо «краша».</p>
+
+            <h2>🔄 Блок finally - выполняется всегда</h2>
+            <p>Блок <code>finally</code> выполняется <strong>всегда</strong> - и при ошибке, и при
+                успешном выполнении. Удобен для закрытия ресурсов:</p>
+            <pre><code>try:
+    файл = open("data.txt", "r")
+    содержимое = файл.read()
+    print(содержимое)
+except FileNotFoundError:
+    print("Ошибка! Файл не найден.")
+finally:
+    print("Попытка чтения файла завершена.")</code></pre>
+
+            <h2>🚨 Типы ошибок (исключений) в Python</h2>
+            <p>Популярные встроенные типы ошибок:</p>
+            <ul>
+                <li><code>ValueError</code> - неверное значение (например, int("abc"))</li>
+                <li><code>ZeroDivisionError</code> - деление на ноль (<code>10 / 0</code>)</li>
+                <li><code>FileNotFoundError</code> - файл не найден</li>
+                <li><code>TypeError</code> - операция с неверным типом данных</li>
+                <li><code>Exception</code> - <strong>базовый класс</strong> всех ошибок. Перехватывает
+                    <em>любую</em> ошибку. Используйте его с осторожностью.
+                </li>
+            </ul>
+            <pre><code># Перехватить любую ошибку и вывести её описание:
+try:
+    result = 10 / 0
+except Exception as e:
+    print("Произошла ошибка:", e)</code></pre>
+
+            <h2>🚀 Ключевое слово raise - принудительный вызов ошибки</h2>
+            <p>Иногда нужно <strong>намеренно вызвать ошибку</strong>, если данные некорректны.
+                Для этого используется ключевое слово <code>raise</code>:</p>
+            <pre><code>age = -5
+if age < 0:
+    raise ValueError("Возраст не может быть отрицательным!")
+print("Возраст:", age)</code></pre>
+            <p>Если выполнить этот код, программа выбросит ошибку <code>ValueError</code> с нашим сообщением.</p>
+
+            <h2>🔗 Несколько блоков except</h2>
+            <p>Можно обработать разные типы ошибок по-разному:</p>
+            <pre><code>try:
+    x = int(input("Введите делимое: "))
+    y = int(input("Введите делитель: "))
+    print("Результат:", x / y)
+except ValueError:
+    print("Введите только числа!")
 except ZeroDivisionError:
     print("На ноль делить нельзя!")</code></pre>
+        </section>
 
-            <h3>3. Иерархия ошибок</h3>
-            <p>Вы можете ловить конкретные ошибки или несколько сразу. <code>Exception</code> — базовый класс для большинства ошибок. Не ловите всё подряд через пустой <code>except:</code>, это плохая практика!</p>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
 
-            <h3>4. Блоки else и finally</h3>
+        <!-- Домашнее задание -->
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
             <ul>
-                <li><code>else</code>: Выполнится, если в блоке try <b>не было</b> ошибок.</li>
-                <li><code>finally</code>: Выполнится <b>всегда</b> (удобно для очистки ресурсов).</li>
+                <li>Напишите программу, которая запрашивает делимое и делитель, выполняет деление и
+                    обрабатывает ошибку деления на ноль.</li>
+                <li>Добавьте блок <code>finally</code>, который всегда выводит сообщение «Программа завершена».</li>
+                <li>Попробуйте использовать <code>raise</code>, чтобы вручную вызвать ошибку при вводе
+                    отрицательного числа.</li>
+                <li>Напишите обработчик, который перехватывает и <code>ValueError</code>, и
+                    <code>ZeroDivisionError</code> в одной программе.
+                </li>
             </ul>
+        </section>
 
-            <h3>5. Вызов исключений (raise)</h3>
-            <p>Вы можете сами создать ошибку: <code>raise ValueError("Некорректное значение")</code>.</p>
-
-            <h3>6. Пользовательские исключения</h3>
-            <p>Вы можете создавать свои классы ошибок, наследуясь от <code>Exception</code>.</p>
-        
-        </article>
-
-        <div id="quiz-container" style="margin-top: 50px;">
-            <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 16px; box-shadow: var(--shadow);">
-                <h2 style="margin-bottom: 20px;">🎓 Готовы проверить знания?</h2>
-                <p style="margin-bottom: 30px; color: #666;">После прочтения теории пройдите тест из 5 вопросов, чтобы разблокировать следующий урок.</p>
-                <button id="start-quiz-btn" class="btn" style="padding: 15px 40px; font-size: 1.1rem; font-weight: 700;">🚀 Начать финальный тест</button>
-            </div>
-        </div>
-
-        <div class="lesson-navigation" style="margin-top: 40px; display: flex; justify-content: space-between; align-items: center;">
-            <a href="python-basic.html" class="btn-secondary">⬅ К списку уроков</a>
-            <a href="lesson12.html" id="next-lesson-btn" class="btn" style="display: none;">Следующий урок ➡</a>
-        </div>
+        <!-- Навигация -->
+        <div class="lesson-navigation"></div>
     </main>
 
     <footer>
@@ -83,4 +145,5 @@ except ZeroDivisionError:
 
     <script src="script.js"></script>
 </body>
+
 </html>

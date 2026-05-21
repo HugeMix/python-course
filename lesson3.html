@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Математические и логические операторы</title>
+    <meta name="description"
+        content="Урок 3: Операторы в Python. Арифметические, логические операторы и операторы сравнения с примерами.">
+    <title>Урок 3: Операторы в Python</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
     <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+            <a href="index.html"
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+                <span
+                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
+                        style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -25,62 +34,91 @@
         </div>
     </header>
 
-    <main class="container lesson-page">
-        <section class="lesson-header">
-            <h1>Урок 3: Математические и логические операторы</h1>
-            <div class="lesson-meta">
-                <span>⏱ Время изучения: ~30 минут</span>
-                <span>📊 Уровень: Базовый</span>
-            </div>
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Урок 3: Операторы в Python</h2>
+            <p>Изучаем арифметические, логические операторы и операторы сравнения.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="lesson-goal">
+            <h2>🎯 Цель урока</h2>
+            <p>Познакомиться с основными операторами в Python и научиться применять их в программах.</p>
         </section>
 
-        <article class="lesson-content">
-            
-            <h3>1. Арифметические операторы</h3>
+        <section class="lesson-content">
+            <h2>➕ Арифметические операторы</h2>
+            <p>Арифметические операторы позволяют выполнять математические действия над числами:</p>
+            <pre><code>print(10 + 5)   # Сложение → 15
+print(10 - 5)   # Вычитание → 5
+print(10 * 5)   # Умножение → 50
+print(10 / 5)   # Деление → 2.0 (результат всегда float!)
+print(10 // 3)  # Целочисленное деление → 3 (отбрасывает дробную часть)
+print(10 % 3)   # Остаток от деления → 1
+print(2 ** 3)   # Возведение в степень → 8</code></pre>
+
+            <p>Обратите внимание: оператор <code>//</code> (целочисленное деление) возвращает только целую часть.
+                Например, <code>10 // 3 = 3</code>, а не 3.333. Оператор <code>**</code> - это возведение в степень
+                (в Python не используют <code>^</code> для этого).</p>
+
+            <h2>🔄 Операторы сравнения</h2>
+            <p>Используются для сравнения значений. Всегда возвращают <code>True</code> или <code>False</code>:</p>
+            <pre><code>print(10 > 5)    # Больше → True
+print(10 < 5)    # Меньше → False
+print(10 == 5)   # Равно → False
+print(10 != 5)   # Не равно → True
+print(10 >= 10)  # Больше или равно → True
+print(10 <= 5)   # Меньше или равно → False</code></pre>
+
+            <p><strong>Важно:</strong> для проверки равенства используется двойной знак равно <code>==</code>, а
+                одинарный
+                <code>=</code> - это присваивание значения переменной.
+            </p>
+
+            <h2>🧠 Логические операторы</h2>
+            <p>Логические операторы позволяют комбинировать несколько условий:</p>
+            <pre><code>a = True
+b = False
+print(a and b)   # Логическое И: True только если ОБА True → False
+print(a or b)    # Логическое ИЛИ: True если хотя бы ОДНО True → True
+print(not a)     # Логическое НЕ: меняет на противоположное → False</code></pre>
+
+            <p>Логические операторы возвращают <code>True</code> или <code>False</code>. Правила:</p>
             <ul>
-                <li><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> — база.</li>
-                <li><code>//</code> — целочисленное деление (отбрасывает дробную часть).</li>
-                <li><code>%</code> — остаток от деления (Modulo).</li>
-                <li><code>**</code> — возведение в степень.</li>
+                <li><code>and</code> - правда только если <strong>оба</strong> условия истинны.</li>
+                <li><code>or</code> - правда если <strong>хотя бы одно</strong> условие истинно.</li>
+                <li><code>not</code> - <strong>меняет</strong> логическое состояние на противоположное: из
+                    <code>True</code> делает <code>False</code> и наоборот.
+                </li>
             </ul>
 
-            <h3>2. Приоритет операций</h3>
-            <p>Как и в математике: сначала скобки, потом степень, потом умножение/деление, и в конце сложение/вычитание.</p>
+            <h2>💡 Операторы присваивания</h2>
+            <p>Помимо обычного <code>=</code>, есть сокращённые операторы присваивания:</p>
+            <pre><code>x = 10
+x += 5   # То же самое что x = x + 5 → x станет 15
+x -= 3   # x = x - 3 → x станет 12
+x *= 2   # x = x * 2 → x станет 24
+x //= 4  # x = x // 4 → x станет 6</code></pre>
+        </section>
 
-            <h3>3. Операторы сравнения</h3>
-            <p>Результатом всегда является <code>bool</code> (True или False):</p>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Домашнее задание -->
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
             <ul>
-                <li><code>==</code> (равно), <code>!=</code> (не равно).</li>
-                <li><code>></code>, <code><</code>, <code>>=</code>, <code><=</code>.</li>
+                <li>Напишите программу, которая запрашивает два числа у пользователя и выполняет с ними все
+                    арифметические операции.</li>
+                <li>Создайте программу, которая сравнивает возраст пользователя с 18 и выводит результат
+                    сравнения (<code>True</code> или <code>False</code>).</li>
+                <li>Используйте логические операторы, чтобы проверить, попадает ли число в диапазон от 10 до 50.</li>
             </ul>
+        </section>
 
-            <h3>4. Логические операторы</h3>
-            <ul>
-                <li><code>and</code>: Истинно, если ОБА условия верны.</li>
-                <li><code>or</code>: Истинно, если ХОТЯ БЫ ОДНО условие верно.</li>
-                <li><code>not</code>: Инвертирует значение (True -> False).</li>
-            </ul>
-
-            <h3>5. Комбинированное присваивание</h3>
-            <p>Вместо <code>x = x + 5</code> можно писать короче: <code>x += 5</code>. Это работает для всех операторов: <code>-=</code>, <code>*=</code>, <code>/=</code> и т.д.</p>
-
-            <h3>6. Особенности float</h3>
-            <p>Помните, что <code>0.1 + 0.2</code> не всегда равно <code>0.3</code> из-за особенностей хранения дробных чисел в двоичной системе. Для точных вычислений используйте модуль <code>decimal</code>.</p>
-        
-        </article>
-
-        <div id="quiz-container" style="margin-top: 50px;">
-            <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 16px; box-shadow: var(--shadow);">
-                <h2 style="margin-bottom: 20px;">🎓 Готовы проверить знания?</h2>
-                <p style="margin-bottom: 30px; color: #666;">После прочтения теории пройдите тест из 5 вопросов, чтобы разблокировать следующий урок.</p>
-                <button id="start-quiz-btn" class="btn" style="padding: 15px 40px; font-size: 1.1rem; font-weight: 700;">🚀 Начать финальный тест</button>
-            </div>
-        </div>
-
-        <div class="lesson-navigation" style="margin-top: 40px; display: flex; justify-content: space-between; align-items: center;">
-            <a href="python-basic.html" class="btn-secondary">⬅ К списку уроков</a>
-            <a href="lesson4.html" id="next-lesson-btn" class="btn" style="display: none;">Следующий урок ➡</a>
-        </div>
+        <!-- Навигация -->
+        <div class="lesson-navigation"></div>
     </main>
 
     <footer>
@@ -89,4 +127,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

@@ -1,122 +1,330 @@
 const tasks = [
+    // ================= ЛЕГКИЙ УРОВЕНЬ (5 ЗАДАЧ) =================
     {
-        id: "l1",
-        title: "Задача 1: Первая программа",
+        id: "sum",
+        title: "Сумма двух чисел",
         difficulty: "easy",
-        desc: "<p>Выведите в консоль фразу <code>Hello, Python!</code> с помощью функции <code>print()</code>.</p>",
-        startCode: "# Напишите код ниже\n",
-        testCode: "import io, sys\noutput = io.StringIO()\nsys.stdout = output\ntry:\n    # User code runs here\n    sys.stdout = sys.__stdout__\n    if 'Hello, Python!' in output.getvalue():\n        print('✅ Тест пройден!')\n    else:\n        print('❌ Ошибка: Вывод должен содержать \"Hello, Python!\"')\nexcept Exception as e:\n    print(f'❌ Ошибка: {e}')"
+        desc: "<p>Напишите функцию <code>add(a, b)</code>, которая принимает два числа и возвращает их сумму.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>add(2, 3) -> 5</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>add(-1, 1) -> 0</code>",
+        startCode: "def add(a, b):\n    # Ваш код пишите здесь\n    pass\n",
+        testCode: `
+import sys
+try:
+    assert add(2, 3) == 5, "add(2, 3) должно вернуть 5"
+    assert add(-1, 1) == 0, "add(-1, 1) должно вернуть 0"
+    assert add(100, 200) == 300, "add(100, 200) должно вернуть 300"
+    print("✅ Все скрытые тесты успешно пройдены!\\nЛогика функции add работает абсолютно верно при любых числах.")
+except NameError:
+    print("❌ Ошибка: Функция add не найдена.\\nВы точно назвали её add?")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Неизвестная ошибка: {e}")
+        `
     },
     {
-        id: "l2",
-        title: "Задача 2: Переменные",
+        id: "even",
+        title: "Чётные числа",
         difficulty: "easy",
-        desc: "<p>Создайте переменную <code>x</code> со значением <code>10</code> и переменную <code>y</code> со значением <code>5</code>. Выведите их сумму.</p>",
-        startCode: "x = \ny = \nprint(x + y)",
-        testCode: "try:\n    assert x == 10\n    assert y == 5\n    print('✅ Тест пройден! Переменные заданы верно.')\nexcept:\n    print('❌ Ошибка: Проверьте значения x и y.')"
+        desc: "<p>Напишите функцию <code>is_even(n)</code>. Она должна возвращать логическое <code>True</code>, если число <code>n</code> чётное, и <code>False</code>, если нечётное (остаток от деления <code>%</code>).</p>",
+        startCode: "def is_even(n):\n    # Ваш код пишите здесь\n    pass\n",
+        testCode: `
+try:
+    assert is_even(4) == True, "Для чётного числа 4 должен быть ответ True"
+    assert is_even(7) == False, "Для нечётного числа 7 должен быть ответ False"
+    assert is_even(0) == True, "Ноль математически считается чётным числом (ожидается True)"
+    assert is_even(-2) == True, "Отрицательные чётные числа тоже должны возвращать True"
+    print("✅ Все тесты пройдены. Отличная работа!")
+except NameError:
+    print("❌ Ошибка: Функция is_even не найдена.")
+except AssertionError as e:
+    print(f"❌ Провален тест: {e}")
+except Exception as e:
+    print(f"❌ Возникла фатальная ошибка: {e}")
+        `
     },
     {
-        id: "l3",
-        title: "Задача 3: Математика",
+        id: "max",
+        title: "Поиск максимума без max()",
         difficulty: "easy",
-        desc: "<p>Найдите остаток от деления <code>17</code> на <code>5</code> и сохраните его в переменную <code>result</code>.</p>",
-        startCode: "result = ",
-        testCode: "try:\n    assert result == 2\n    print('✅ Тест пройден! 17 % 5 = 2')\nexcept:\n    print('❌ Ошибка: Неверный результат.')"
+        desc: "<p>Напишите функцию <code>find_max(a, b)</code>, которая принимает два числа и возвращает наибольшее из них. <strong>Внимание:</strong> Запрещено использовать встроенную функцию <code>max()</code>. Используйте условный оператор if - else.</p>",
+        startCode: "def find_max(a, b):\n    # Ваш код пишите здесь\n    pass\n",
+        testCode: `
+import sys
+try:
+    assert find_max(10, 5) == 10, "find_max(10, 5) должно вернуть 10"
+    assert find_max(-5, -2) == -2, "find_max(-5, -2) должно вернуть -2"
+    assert find_max(7, 7) == 7, "find_max(7, 7) должно вернуть 7"
+    
+    import inspect
+    source = inspect.getsource(find_max)
+    assert "max(" not in source, "Нарушено правило: нельзя использовать встроенную функцию max()!"
+    
+    print("✅ Все тесты пройдены! Отличная работа с условиями if-else.")
+except NameError:
+    print("❌ Ошибка: Функция find_max не найдена.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {e}")
+        `
     },
     {
-        id: "l4",
-        title: "Задача 4: Условия",
+        id: "power",
+        title: "Возведение в степень",
         difficulty: "easy",
-        desc: "<p>Напишите условие: если <code>age</code> больше или равно 18, выведите <code>Доступ разрешен</code>, иначе — <code>Доступ запрещен</code>.</p>",
-        startCode: "age = 20\n# Ваш код здесь",
-        testCode: "print('✅ Тест пройден! Логика условий верна.')"
+        desc: "<p>Напишите функцию <code>fast_power(base, exp)</code>, которая возводит число <code>base</code> в степень <code>exp</code> без использования операторов цикла (используйте оператор **).</p>",
+        startCode: "def fast_power(base, exp):\n    # Ваш код пишите здесь\n    pass\n",
+        testCode: `
+try:
+    assert fast_power(2, 3) == 8, "2 в степени 3 равно 8"
+    assert fast_power(5, 2) == 25, "5 в квадрате равно 25"
+    assert fast_power(10, 0) == 1, "Любое число в нулевой степени равно 1"
+    print("✅ Отлично! Тесты пройдены.")
+except NameError:
+    print("❌ Ошибка: Функция fast_power не найдена.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {e}")
+        `
     },
     {
-        id: "l5",
-        title: "Задача 5: Цикл For",
+        id: "greet",
+        title: "Приветствие",
+        difficulty: "easy",
+        desc: "<p>Напишите функцию <code>greet(name)</code>, которая принимает одну строку (имя) и возвращает строку вида <code>\"Привет, ИМЯ!\"</code>. Например: <code>\"Привет, Иван!\"</code>. Не забывайте запятую и восклицательный знак.</p>",
+        startCode: "def greet(name):\n    # Ваш код пишите здесь\n    pass\n",
+        testCode: `
+try:
+    assert greet("Иван") == "Привет, Иван!", "Для Иван должно быть 'Привет, Иван!'"
+    assert greet("Python") == "Привет, Python!", "Должно быть 'Привет, Python!'"
+    print("✅ Строка правильно склеена! Отличная работа.")
+except NameError:
+    print("❌ Ошибка: Функция greet не найдена.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {e}")
+        `
+    },
+
+    // ================= СРЕДНИЙ УРОВЕНЬ (5 ЗАДАЧ) =================
+    {
+        id: "reverse",
+        title: "Перевернуть текст",
         difficulty: "medium",
-        desc: "<p>С помощью цикла <code>for</code> и <code>range()</code> выведите числа от 0 до 4.</p>",
-        startCode: "for i in range(5):\n    print(i)",
-        testCode: "print('✅ Тест пройден! Цикл вывел верную последовательность.')"
+        desc: "<p>Напишите функцию <code>reverse_string(text)</code>, которая принимает строку и возвращает её задом наперёд.</p><strong>Примените срезы (slices) или цикл for:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>reverse_string('собака') -> 'акабос'</code>",
+        startCode: "def reverse_string(text):\n    # Ваш код пишите здесь\n    pass\n",
+        testCode: `
+try:
+    assert reverse_string("кот") == "ток", "Слово 'кот' должно стать 'ток'"
+    assert reverse_string("Python") == "nohtyP", "Строка 'Python' не перевернулась должным образом"
+    assert reverse_string("") == "", "Пустая строка должна остаться пустой"
+    print("✅ Великолепно! Строки переворачиваются корректно на 100%.")
+except NameError:
+    print("❌ Ошибка: Функция reverse_string не найдена.")
+except AssertionError as e:
+    print(f"❌ Ошибка в результате: {e}")
+except Exception as e:
+    print(f"❌ Сбой выполнения: {e}")
+        `
     },
     {
-        id: "l6",
-        title: "Задача 6: Списки",
+        id: "count_vowels",
+        title: "Подсчет гласных",
         difficulty: "medium",
-        desc: "<p>Создайте список <code>colors</code> с элементами 'red', 'green', 'blue'. Добавьте в конец 'yellow'.</p>",
-        startCode: "colors = ['red', 'green', 'blue']\ncolors.append('yellow')",
-        testCode: "try:\n    assert 'yellow' in colors and len(colors) == 4\n    print('✅ Тест пройден! Список обновлен.')\nexcept:\n    print('❌ Ошибка: Проверьте метод append().')"
+        desc: "<p>Напишите функцию <code>count_vowels(word)</code>, которая принимает строку и возвращает <strong>количество гласных</strong> букв в ней (а, е, ё, и, о, у, ы, э, ю, я - для русского алфавита). Регистр не имеет значения.</p>",
+        startCode: "def count_vowels(word):\n    # Ваш код пишите здесь\n    pass\n",
+        testCode: `
+try:
+    assert count_vowels("Привет") == 2, "В 'Привет' две гласные (и, е)"
+    assert count_vowels("Яблоко") == 3, "В 'Яблоко' три гласные (Я, о, о)"
+    assert count_vowels("КРТК") == 0, "В 'КРТК' нет гласных"
+    assert count_vowels("") == 0, "Пустая строка возвращает 0"
+    print("✅ Циклы и условия работают правильно! Функция считает верно.")
+except NameError:
+    print("❌ Ошибка: Функция count_vowels не найдена.")
+except AssertionError as e:
+    print(f"❌ Ошибка в результате: {e}")
+except Exception as e:
+    print(f"❌ Сбой выполнения: {e}")
+        `
     },
     {
-        id: "l7",
-        title: "Задача 7: Функции",
+        id: "list_sum",
+        title: "Сумма списка",
         difficulty: "medium",
-        desc: "<p>Напишите функцию <code>square(n)</code>, которая возвращает квадрат числа.</p>",
-        startCode: "def square(n):\n    return n * n",
-        testCode: "try:\n    assert square(4) == 16\n    assert square(5) == 25\n    print('✅ Тест пройден! Функция работает верно.')\nexcept:\n    print('❌ Ошибка в расчетах.')"
+        desc: "<p>Напишите функцию <code>sum_list(numbers)</code>, которая принимает список чисел и возвращает их сумму. <strong>Запрещено</strong> использовать встроенную функцию <code>sum()</code>. Используйте цикл <code>for</code>.</p>",
+        startCode: "def sum_list(numbers):\n    # Ваш код пишите здесь\n    pass\n",
+        testCode: `
+try:
+    assert sum_list([1, 2, 3]) == 6, "Сумма 1+2+3 равна 6"
+    assert sum_list([-5, 10, 5]) == 10, "Сумма -5+10+5 равна 10"
+    assert sum_list([]) == 0, "Сумма пустого списка должна быть 0"
+    
+    import inspect
+    source = inspect.getsource(sum_list)
+    assert "sum(" not in source, "Нарушено правило: нельзя использовать встроенную функцию sum()!"
+    
+    print("✅ Правильно работают циклы и накопитель суммы!")
+except NameError:
+    print("❌ Ошибка: Функция sum_list не найдена.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {e}")
+        `
     },
     {
-        id: "l8",
-        title: "Задача 8: Словари",
+        id: "palindrome",
+        title: "Палиндром",
         difficulty: "medium",
-        desc: "<p>Создайте словарь <code>car</code> с ключами 'brand' (Ford) и 'year' (2020).</p>",
-        startCode: "car = {'brand': 'Ford', 'year': 2020}",
-        testCode: "try:\n    assert car['brand'] == 'Ford' and car['year'] == 2020\n    print('✅ Тест пройден! Словарь создан.')\nexcept:\n    print('❌ Ошибка в структуре словаря.')"
+        desc: "<p>Напишите функцию <code>is_palindrome(text)</code>, которая возвращает <code>True</code>, если текст читается одинаково туда и обратно (без учета пробелов и регистра!), иначе <code>False</code>. Пример: <code>\"Леша на полке клопа нашел\" -> True</code>.</p>",
+        startCode: "def is_palindrome(text):\n    # Очистите текст от пробелов и приведите к одному регистру\n    pass\n",
+        testCode: `
+try:
+    assert is_palindrome("казак") == True, "'казак' это палиндром"
+    assert is_palindrome("собака") == False, "'собака' это не палиндром"
+    assert is_palindrome("А роза упала на лапу Азора") == True, "Многословный палиндром не прошел тест"
+    print("✅ Срезы, приведение типов и строки работают идеально!")
+except NameError:
+    print("❌ Ошибка: Функция is_palindrome не найдена.")
+except AssertionError as e:
+    print(f"❌ Ошибка: {e}")
+except Exception as e:
+    print(f"❌ Сбой выполнения: {e}")
+        `
     },
     {
-        id: "l9",
-        title: "Задача 9: Строки",
+        id: "unique_dict",
+        title: "Словарь возрастов",
         difficulty: "medium",
-        desc: "<p>Преобразуйте строку <code>text = 'python'</code> в верхний регистр и сохраните в <code>result</code>.</p>",
-        startCode: "text = 'python'\nresult = ",
-        testCode: "try:\n    assert result == 'PYTHON'\n    print('✅ Тест пройден! Регистр изменен.')\nexcept:\n    print('❌ Ошибка: Используйте метод upper().')"
+        desc: "<p>Напишите функцию <code>get_oldest(people)</code>. На вход подается словарь, где ключ - имя, значение - возраст. <code>{'Иван': 20, 'Анна': 25}</code>. Верните ИМЯ самого старшего человека.</p>",
+        startCode: "def get_oldest(people):\n    # Ваш код пишите здесь\n    pass\n",
+        testCode: `
+try:
+    assert get_oldest({'Иван': 20, 'Анна': 25}) == 'Анна', "Анна (25) старше Ивана (20)"
+    assert get_oldest({'Борис': 50, 'Глеб': 15, 'Алла': 40}) == 'Борис', "Должен быть выбран Борис (50)"
+    print("✅ Отличная работа со словарями и ключами/значениями!")
+except NameError:
+    print("❌ Ошибка: Функция get_oldest не найдена.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка: {e}")
+        `
     },
+
+    // ================= ТЯЖЕЛЫЙ УРОВЕНЬ (5 ЗАДАЧ) =================
     {
-        id: "l10",
-        title: "Задача 10: Файлы",
+        id: "safe_divide",
+        title: "Безопасное деление",
         difficulty: "hard",
-        desc: "<p>Используя <code>with</code>, запишите строку 'Hello' в файл 'test.txt'.</p>",
-        startCode: "with open('test.txt', 'w') as f:\n    ",
-        testCode: "try:\n    with open('test.txt', 'r') as f:\n        assert f.read().strip() == 'Hello'\n    print('✅ Тест пройден! Файл записан.')\nexcept:\n    print('❌ Ошибка при записи файла.')"
+        desc: "<p>Напишите функцию <code>safe_divide(a, b)</code>, которая делит <code>a</code> на <code>b</code>. Если возникает ошибка деления на ноль, используйте блок <code>try-except</code> и возвращайте строку <code>\"Ошибка\"</code>.</p>",
+        startCode: "def safe_divide(a, b):\n    # Ваш код пишите здесь\n    pass\n",
+        testCode: `
+try:
+    assert safe_divide(10, 2) == 5, "10 / 2 должно быть 5"
+    assert safe_divide(10, 0) == "Ошибка", "На 0 делить нельзя, должна возвращаться строка 'Ошибка'"
+    
+    import inspect
+    source = inspect.getsource(safe_divide)
+    assert "except " in source or "except:" in source, "Нарушено условие: используйте try-except блок."
+    
+    print("✅ Вы отлично справились с обработкой исключений!")
+except NameError:
+    print("❌ Ошибка: Функция safe_divide не найдена.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка: {e}")
+        `
     },
     {
-        id: "l11",
-        title: "Задача 11: Ошибки",
+        id: "count_words",
+        title: "Частота слов",
         difficulty: "hard",
-        desc: "<p>Оберните деление <code>10 / 0</code> в <code>try-except</code>, чтобы программа не падала, а выводила 'Error'.</p>",
-        startCode: "try:\n    res = 10 / 0\nexcept ZeroDivisionError:\n    print('Error')",
-        testCode: "print('✅ Тест пройден! Ошибка обработана.')"
+        desc: "<p>Напишите функцию <code>word_counts(text)</code>, которая принимает строку и возвращает <strong>словарь</strong>, где ключ - слово (в нижнем регистре), а значение - сколько раз оно встретилось. Знаков препинания в строке не будет.</p>",
+        startCode: "def word_counts(text):\n    # Подсказка: .split() разбивает на слова\n    pass\n",
+        testCode: `
+try:
+    d = word_counts("Кот ест кот спит")
+    assert d == {'кот': 2, 'ест': 1, 'спит': 1}, f"Ожидалось {{'кот': 2, 'ест': 1, 'спит': 1}}, а получено {d}"
+    
+    d2 = word_counts("раз два РАЗ")
+    assert d2 == {'раз': 2, 'два': 1}, f"Регистр важен: 'РАЗ' и 'раз' - одно слово! Получено: {d2}"
+    print("✅ Словарь частот построен абсолютно правильно!")
+except NameError:
+    print("❌ Ошибка: Функция word_counts не найдена.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка: {e}")
+        `
     },
     {
-        id: "l12",
-        title: "Задача 12: Модули",
+        id: "oop_rectangle",
+        title: "Основы ООП (Прямоугольник)",
         difficulty: "hard",
-        desc: "<p>Импортируйте модуль <code>math</code> и найдите квадратный корень из 16, сохранив в <code>res</code>.</p>",
-        startCode: "import math\nres = ",
-        testCode: "try:\n    assert res == 4.0\n    print('✅ Тест пройден! Корень найден.')\nexcept:\n    print('❌ Ошибка: Используйте math.sqrt().')"
+        desc: "<p>Напишите класс <code>Rectangle</code>, у которого в конструкторе <code>__init__</code> задаются ширина и высота. Добавьте метод <code>get_area()</code>, который возвращает его площадь (ширина на высоту).</p>",
+        startCode: "class Rectangle:\n    def __init__(self, w, h):\n        pass\n\n    def get_area(self):\n        pass\n",
+        testCode: `
+try:
+    rect1 = Rectangle(10, 5)
+    assert rect1.get_area() == 50, "Площадь 10x5 должна быть равна 50"
+    
+    rect2 = Rectangle(2, 3)
+    assert rect2.get_area() == 6, "Площадь 2x3 должна быть 6"
+    print("✅ ООП класс работает безупречно! Методы написаны верно.")
+except NameError:
+    print("❌ Ошибка: Класс Rectangle не найден.")
+except AttributeError as e:
+    print("❌ Объект не обладает нужным методом или атрибутом:", e)
+except AssertionError as e:
+    print(f"❌ Ошибка: {e}")
+except Exception as e:
+    print(f"❌ Ошибка: {e}")
+        `
     },
     {
-        id: "l13",
-        title: "Задача 13: Классы",
+        id: "datetime_days",
+        title: "Разница в днях (datetime)",
         difficulty: "hard",
-        desc: "<p>Создайте класс <code>Cat</code> с методом <code>meow()</code>, возвращающим 'Meow!'.</p>",
-        startCode: "class Cat:\n    def meow(self):\n        return 'Meow!'",
-        testCode: "try:\n    c = Cat()\n    assert c.meow() == 'Meow!'\n    print('✅ Тест пройден! Класс работает.')\nexcept:\n    print('❌ Ошибка в классе.')"
+        desc: "<p>Заимпортируйте модуль <code>datetime</code>. Напишите функцию <code>get_days_diff(date1_str, date2_str)</code>. Даты приходят в формате <code>YYYY-MM-DD</code>. Верните целое количество дней (разницу) между первой и второй датой.</p>",
+        startCode: "from datetime import datetime\n\ndef get_days_diff(date1_str, date2_str):\n    # Вам поможет datetime.strptime()\n    pass\n",
+        testCode: `
+try:
+    assert get_days_diff('2025-01-01', '2025-01-10') in [9, -9], "Разница между 1 и 10 января - 9 дней"
+    assert abs(get_days_diff('2024-02-01', '2024-03-01')) == 29, "2024 високосный год, должно быть 29 дней!"
+    print("✅ Вы отлично подружились с классом datetime!")
+except NameError:
+    print("❌ Ошибка: Функция get_days_diff не найдена.")
+except AssertionError as e:
+    print(f"❌ Ошибка: {e}")
+except Exception as e:
+    print(f"❌ Выброшено исключение: {e}")
+        `
     },
     {
-        id: "l14",
-        title: "Задача 14: Генераторы",
-        difficulty: "expert",
-        desc: "<p>Напишите генератор <code>count_up(n)</code>, который выдает числа от 1 до n.</p>",
-        startCode: "def count_up(n):\n    for i in range(1, n+1):\n        yield i",
-        testCode: "try:\n    g = count_up(3)\n    assert next(g) == 1\n    assert next(g) == 2\n    assert next(g) == 3\n    print('✅ Тест пройден! Генератор работает.')\nexcept:\n    print('❌ Ошибка в генераторе.')"
-    },
-    {
-        id: "l15",
-        title: "Задача 15: Финал",
-        difficulty: "expert",
-        desc: "<p>Напишите функцию <code>is_prime(n)</code>, которая возвращает True, если число простое, и False иначе.</p>",
-        startCode: "def is_prime(n):\n    if n < 2: return False\n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0: return False\n    return True",
-        testCode: "try:\n    assert is_prime(7) == True\n    assert is_prime(10) == False\n    print('✅ Тест пройден! Вы мастер Python!')\nexcept:\n    print('❌ Ошибка в логике простых чисел.')"
+        id: "fibonacci",
+        title: "Числа Фибоначчи",
+        difficulty: "hard",
+        desc: "<p>Сложный алгоритм! Напишите функцию <code>fib(n)</code>. Она возвращает n-ое число Фибоначчи. Пример ряда: 0, 1, 1, 2, 3, 5, 8. Где fib(0)=0, fib(1)=1, fib(2)=1, fib(6)=8.</p>",
+        startCode: "def fib(n):\n    # Ваш код\n    pass\n",
+        testCode: `
+try:
+    assert fib(0) == 0, "fib(0) должно быть 0"
+    assert fib(1) == 1, "fib(1) должно быть 1"
+    assert fib(2) == 1, "fib(2) должно быть 1"
+    assert fib(6) == 8, "fib(6) должно быть 8"
+    assert fib(10) == 55, "fib(10) должно быть 55"
+    print("✅ Браво! Математическая логика идеальна.")
+except NameError:
+    print("❌ Ошибка: Функция fib не найдена.")
+except AssertionError as e:
+    print(f"❌ Ошибка результата: {e}")
+except Exception as e:
+    print(f"❌ Ошибка: {e}")
+        `
     }
 ];

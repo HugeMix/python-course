@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Словари и множества: Хэш-таблицы</title>
+    <meta name="description"
+        content="Урок 8: Словари и множества в Python. Работа с dict, set и их основными методами.">
+    <title>Урок 8: Словари и множества</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
     <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+            <a href="index.html"
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+                <span
+                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
+                        style="color: var(--accent-color);">Basic</span></span>
             </a>
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
@@ -25,58 +34,96 @@
         </div>
     </header>
 
-    <main class="container lesson-page">
-        <section class="lesson-header">
-            <h1>Урок 8: Словари и множества: Хэш-таблицы</h1>
-            <div class="lesson-meta">
-                <span>⏱ Время изучения: ~30 минут</span>
-                <span>📊 Уровень: Базовый</span>
-            </div>
+    <section class="lesson-title">
+        <div class="container">
+            <h2>Урок 8: Словари и множества</h2>
+            <p>Изучаем работу со словарями и множествами в Python.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="lesson-goal">
+            <h2>🎯 Цель урока</h2>
+            <p>Научиться работать со словарями и множествами, использовать их методы для хранения и
+                обработки данных.</p>
         </section>
 
-        <article class="lesson-content">
-            
-            <h3>1. Словари (Dict)</h3>
-            <p>Словари хранят данные в формате <b>ключ: значение</b>. Ключи должны быть уникальными и неизменяемыми (строки, числа, кортежи).</p>
-            <pre><code>person = {"name": "Ivan", "age": 25}</code></pre>
+        <section class="lesson-content">
+            <h2>📖 Словари (dict) в Python</h2>
+            <p>Словарь - это структура данных, которая хранит <strong>пары ключ-значение</strong> в фигурных
+                скобках. Значение извлекается по ключу, а не по индексу:</p>
+            <pre><code>student = {"имя": "Алекс", "возраст": 20, "город": "Москва"}
+print(student["имя"])      # Выведет: Алекс
+print(student["возраст"])  # Выведет: 20</code></pre>
 
-            <h3>2. Работа со словарями</h3>
+            <h2>🔑 Методы словарей</h2>
+            <p>Основные методы для работы со словарями:</p>
             <ul>
-                <li><code>dict[key]</code>: Получить значение (ошибка, если ключа нет).</li>
-                <li><code>dict.get(key, default)</code>: Безопасное получение.</li>
-                <li><code>dict.keys()</code>, <code>dict.values()</code>, <code>dict.items()</code>.</li>
+                <li><code>keys()</code> - возвращает все <strong>ключи</strong> словаря.</li>
+                <li><code>values()</code> - возвращает все <strong>значения</strong> словаря.</li>
+                <li><code>items()</code> - возвращает все пары <strong>ключ-значение</strong>.</li>
+                <li><code>get(ключ)</code> - безопасно получает значение. Если ключа нет - возвращает
+                    <code>None</code>, а не ошибку.
+                </li>
+            </ul>
+            <pre><code>student = {"имя": "Алекс", "возраст": 20}
+
+print(student.keys())    # dict_keys(['имя', 'возраст'])
+print(student.values())  # dict_values(['Алекс', 20])
+
+# Безопасное получение:
+print(student.get("город"))  # Выведет None (ключа нет, но без ошибки!)
+print(student.get("город", "Не указан"))  # Выведет: Не указан</code></pre>
+
+            <h2>➕ Добавление и удаление элементов словаря</h2>
+            <pre><code>student = {"имя": "Алекс"}
+
+# Добавление / изменение значения по ключу:
+student["возраст"] = 21
+
+# Удаление ключа и его значения:
+del student["возраст"]   # удаляет ключ 'возраст' полностью
+
+print(student)  # {'имя': 'Алекс'}</code></pre>
+
+            <h2>🔢 Множества (set)</h2>
+            <p>Множество - это структура данных, которая хранит <strong>только уникальные элементы</strong>
+                без повторений. Порядок элементов не гарантирован:</p>
+            <pre><code>numbers = {1, 2, 3, 4, 5, 5}
+print(numbers)  # Выведет: {1, 2, 3, 4, 5}  - дублирующийся 5 удалён!</code></pre>
+
+            <h2>🛠️ Операции с множествами</h2>
+            <ul>
+                <li><code>add()</code> - добавить элемент.</li>
+                <li><code>remove()</code> - удалить элемент (ошибка если нет).</li>
+                <li><code>union()</code> - объединение двух множеств.</li>
+                <li><code>intersection()</code> - пересечение (общие элементы).</li>
             </ul>
 
-            <h3>3. Множества (Set)</h3>
-            <p>Неупорядоченные коллекции <b>уникальных</b> элементов. Идеальны для удаления дубликатов из списка: <code>set(my_list)</code>.</p>
+            <h2>⚠️ Важно: как создать пустое множество</h2>
+            <p>Нельзя создать пустое множество через <code>{}</code> - это создаст пустой <strong>словарь</strong>!
+                Для пустого множества нужно использовать <code>set()</code>:</p>
+            <pre><code>empty_dict = {}       # Это пустой СЛОВАРЬ
+empty_set = set()     # Это пустое МНОЖЕСТВО</code></pre>
+        </section>
 
-            <h3>4. Операции с множествами</h3>
+        <!-- Квиз -->
+        <div id="quiz-container"></div>
+
+        <!-- Домашнее задание -->
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
             <ul>
-                <li><code>union()</code>: Объединение.</li>
-                <li><code>intersection()</code>: Пересечение.</li>
-                <li><code>difference()</code>: Разность.</li>
+                <li>Создай словарь с информацией о себе (имя, возраст, город) и выведи его на экран.</li>
+                <li>Добавь новый ключ в словарь и удали один из существующих с помощью <code>del</code>.</li>
+                <li>Попробуй получить несуществующий ключ через <code>get()</code> - убедись, что
+                    ошибки нет.</li>
+                <li>Создай множество из списка с повторениями и убедись, что дубликаты удалены.</li>
             </ul>
+        </section>
 
-            <h3>5. Хэширование</h3>
-            <p>Словари и множества работают очень быстро (O(1)), потому что используют хэш-таблицы. Поиск в словаре из миллиона элементов почти мгновенный.</p>
-
-            <h3>6. frozenset</h3>
-            <p>Неизменяемая версия множества. Его можно использовать как ключ в словаре.</p>
-        
-        </article>
-
-        <div id="quiz-container" style="margin-top: 50px;">
-            <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 16px; box-shadow: var(--shadow);">
-                <h2 style="margin-bottom: 20px;">🎓 Готовы проверить знания?</h2>
-                <p style="margin-bottom: 30px; color: #666;">После прочтения теории пройдите тест из 5 вопросов, чтобы разблокировать следующий урок.</p>
-                <button id="start-quiz-btn" class="btn" style="padding: 15px 40px; font-size: 1.1rem; font-weight: 700;">🚀 Начать финальный тест</button>
-            </div>
-        </div>
-
-        <div class="lesson-navigation" style="margin-top: 40px; display: flex; justify-content: space-between; align-items: center;">
-            <a href="python-basic.html" class="btn-secondary">⬅ К списку уроков</a>
-            <a href="lesson9.html" id="next-lesson-btn" class="btn" style="display: none;">Следующий урок ➡</a>
-        </div>
+        <!-- Навигация -->
+        <div class="lesson-navigation"></div>
     </main>
 
     <footer>
@@ -85,4 +132,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
