@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
         'lesson11.html', 'lesson12.html', 'lesson13.html', 'lesson14.html', 'lesson15.html'
     ];
 
+    function safeGetProgress() {
+        try { return JSON.parse(localStorage.getItem('quiz_results')) || {}; }
+        catch (e) { localStorage.removeItem('quiz_results'); return {}; }
+    }
+
     // --- Navigation & Active Link Logic ---
     let currentPath = window.location.pathname.split('/').pop();
     if (currentPath === '') currentPath = 'index.html';
@@ -46,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Какая функция позволяет узнать тип переменной?", options: ["kind()", "type()", "typeof()", "datatype()"], correct: 1 },
             { question: "Какая функция считывает ввод пользователя и всегда возвращает строку?", options: ["read()", "scan()", "input()", "get()"], correct: 2 },
             { question: "Создайте переменную age и присвойте ей значение 20", type: "code", correct: ["age=20", "age = 20"] },
-            { question: "Конвертируйте строку '10' в целое число и запишите в переменную x", type: "code", correct: ["x=int('10')", "x=int(\"10\")", "x = int('10')", "x = int(\"10\")", "x=int(10)", "x = int(10)"] }
+            { question: "Конвертируйте строку '10' в целое число и запишите в переменную x", type: "code", correct: ["x=int('10')", "x=int(\"10\")", "x = int('10')", "x = int(\"10\")"] }
         ],
         'lesson3.html': [
             { question: "Чему равен результат операции 10 // 3?", options: ["3.333", "3", "4", "3.0"], correct: 1 },
@@ -64,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Какое ключевое слово выполняется, когда ВСЕ предыдущие условия if/elif оказались ложны?", options: ["elif", "else", "finally", "default"], correct: 1 },
             { question: "Что такое elif в Python?", options: ["Другое слово для else", "Сокращение от 'else if' - дополнительная проверка условия", "Ошибочное написание слова else", "Оператор выхода из условия"], correct: 1 },
             { question: "Что ОБЯЗАТЕЛЬНО ставить в конце строки с if, elif или else?", options: ["Точку с запятой (;)", "Двоеточие (:)", "Скобки ()", "Запятую (,)"], correct: 1 },
-            { question: "Какого отступа требует Python внутри блока if?", options: ["2 пробела", "Отступ не важен", "1 табуляция или 2 пробела", "4 пробела"], correct: 3 },
+            { question: "Какой отступ рекомендует стандарт PEP 8 внутри блока if?", options: ["2 пробела", "Отступ не важен", "1 табуляция или 2 пробела", "4 пробела (рекомендация PEP 8)"], correct: 3 },
             { question: "Что считается 'ложным' значением в условии Python?", options: ["Число 1", "Пустая строка (\"\"\", 0, [], None)", "Слово 'False'", "Любая переменная"], correct: 1 },
             { question: "В каком порядке Python проверяет ветки if-elif-else?", options: ["Случайном", "Снизу вверх", "Сверху вниз, останавливаясь на первой подошедшей", "Все проверяет одновременно"], correct: 2 },
             { question: "Напишите заголовок условия: если a меньше b", type: "code", correct: ["if a<b:", "if a < b:"] },
@@ -186,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 2. Locking System & Navigation ---
     function initLockSystem() {
-        const progress = JSON.parse(localStorage.getItem('quiz_results')) || {};
+        const progress = safeGetProgress();
 
         // A. Handle 'python-basic.html' (Course List)
         if (currentPath === 'python-basic.html') {
@@ -342,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.style.display = 'block';
 
         // Check if already passed
-        const savedResults = JSON.parse(localStorage.getItem('quiz_results')) || {};
+        const savedResults = safeGetProgress();
         if (savedResults[currentPath]) {
             startBtn.style.display = 'none';
             quizContainer.style.display = 'block';
@@ -421,8 +426,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (userCode === normAns) return true;
                             // 2. Без пробелов (любое форматирование)
                             if (userStrict === normAnsStrict) return true;
-                            // 3. Contains-match (ответ содержит правильную конструкцию)
-                            if (userCode.includes(normAns)) return true;
+                            // 3. Contains-match только для длинных ответов (исключает ложные срабатывания)
+                            if (normAns.length > 5 && userCode.includes(normAns)) return true;
                             // 4. Без учёта регистра
                             if (userCode.toLowerCase() === normAns.toLowerCase()) return true;
                             if (userStrict.toLowerCase() === normAnsStrict.toLowerCase()) return true;
@@ -525,7 +530,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Quiz Finished
             if (wrongCount === 0) {
                 // SUCCESS
-                const progress = JSON.parse(localStorage.getItem('quiz_results')) || {};
+                const progress = safeGetProgress();
                 progress[currentPath] = true;
                 localStorage.setItem('quiz_results', JSON.stringify(progress));
 
@@ -787,4 +792,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initResetButton();
     initScrollAnimations();
+    document.querySelectorAll('footer p').forEach(el => {
+        el.innerHTML = el.innerHTML.replace(/©\s*\d{4}/, '© ' + new Date().getFullYear());
+    });
 });

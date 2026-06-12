@@ -354,6 +354,7 @@ body.dark-mode .lesson-card {
     box-shadow: var(--shadow);
 }
 
+.lesson-title h1,
 .lesson-title h2 {
     font-size: 2.5rem;
     font-weight: 800;
