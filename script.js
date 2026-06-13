@@ -34,66 +34,66 @@ document.addEventListener('DOMContentLoaded', () => {
     // Для каждого вопроса с вариантами ответов: correct - оригинальный индекс правильного ответа в массиве options
     const quizData = {
         'lesson1.html': [
-            { question: "Какая команда используется для вывода текста на экран?", options: ["input()", "print()", "scan()", "output()"], correct: 1 },
-            { question: "Какое расширение имеют файлы Python?", options: [".txt", ".exe", ".py", ".pyt"], correct: 2 },
-            { question: "В каком году был выпущен первый релиз Python?", options: ["1991", "2000", "1985", "1995"], correct: 0 },
-            { question: "Какую роль выполняет функция print()?", options: ["Считывает ввод с клавиатуры", "Выводит переданные данные в консоль", "Удаляет пробелы", "Объявляет функцию"], correct: 1 },
-            { question: "Является ли Python регистрозависимым языком (print и Print - разные вещи)?", options: ["Да, регистр важен (print и Print - разные)", "Нет, регистр не имеет значения", "Только для переменных", "Только в Windows"], correct: 0 },
-            { question: "Кто создал язык программирования Python?", options: ["Линус Торвальдс", "Гвидо ван Россум", "Деннис Ритчи", "Джеймс Гослинг"], correct: 1 },
+            { question: "Какая команда используется для вывода текста на экран?", options: ["input()", "print()", "scan()", "output()"], correct: 1, explanation: "print() — встроенная функция вывода. Именно она 'печатает' результат в консоль." },
+            { question: "Какое расширение имеют файлы Python?", options: [".txt", ".exe", ".py", ".pyt"], correct: 2, explanation: ".py — обязательное расширение для Python-файлов. Без него интерпретатор не запустит код." },
+            { question: "В каком году был выпущен первый релиз Python?", options: ["1991", "2000", "1985", "1995"], correct: 0, explanation: "Гвидо ван Россум начал разработку Python в 1989 году, первый релиз вышел в 1991-м." },
+            { question: "Какую роль выполняет функция print()?", options: ["Считывает ввод с клавиатуры", "Выводит переданные данные в консоль", "Удаляет пробелы", "Объявляет функцию"], correct: 1, explanation: "print() от английского 'print' (печатать). Единственная задача — вывести данные на экран." },
+            { question: "Является ли Python регистрозависимым языком (print и Print - разные вещи)?", options: ["Да, регистр важен (print и Print - разные)", "Нет, регистр не имеет значения", "Только для переменных", "Только в Windows"], correct: 0, explanation: "Python чувствителен к регистру: print(), Print() и PRINT() — совершенно разные идентификаторы." },
+            { question: "Кто создал язык программирования Python?", options: ["Линус Торвальдс", "Гвидо ван Россум", "Деннис Ритчи", "Джеймс Гослинг"], correct: 1, explanation: "Guido van Rossum — создатель Python. Начал работу в декабре 1989 года в Нидерландах." },
             { question: "Напишите код, который выводит слово: Привет", type: "code", correct: ["print('Привет')", "print(\"Привет\")", "print('привет')", "print(\"привет\")"] },
             { question: "Напишите код, который выводит число 42", type: "code", correct: ["print(42)", "print('42')", "print(\"42\")"] }
         ],
         'lesson2.html': [
-            { question: "Как правильно объявить переменную x = 5 в Python?", options: ["var x = 5", "int x = 5", "x = 5", "$x = 5"], correct: 2 },
-            { question: "Какой тип данных у значения 3.14?", options: ["int", "float", "str", "bool"], correct: 1 },
-            { question: "Что выведет print(type(\"10\"))?", options: ["<class 'int'>", "<class 'str'>", "<class 'float'>", "Ошибка"], correct: 1 },
-            { question: "Какое имя переменной НЕДОПУСТИМО в Python?", options: ["my_var", "var1", "1var", "_var_"], correct: 2 },
-            { question: "Что будет результатом выражения: str(5) + '5'?", options: ["10", "Ошибка", "'55'", "55"], correct: 2 },
-            { question: "Какая функция позволяет узнать тип переменной?", options: ["kind()", "type()", "typeof()", "datatype()"], correct: 1 },
-            { question: "Какая функция считывает ввод пользователя и всегда возвращает строку?", options: ["read()", "scan()", "input()", "get()"], correct: 2 },
+            { question: "Как правильно объявить переменную x = 5 в Python?", options: ["var x = 5", "int x = 5", "x = 5", "$x = 5"], correct: 2, explanation: "В Python переменные создаются простым присваиванием без ключевых слов var, int или let." },
+            { question: "Какой тип данных у значения 3.14?", options: ["int", "float", "str", "bool"], correct: 1, explanation: "3.14 содержит дробную часть — это тип float. Целые числа (1, 2, 3) — тип int." },
+            { question: "Что выведет print(type(\"10\"))?", options: ["<class 'int'>", "<class 'str'>", "<class 'float'>", "Ошибка"], correct: 1, explanation: "'10' взято в кавычки, значит это строка (str), а не число (int). Кавычки определяют тип." },
+            { question: "Какое имя переменной НЕДОПУСТИМО в Python?", options: ["my_var", "var1", "1var", "_var_"], correct: 2, explanation: "Имена переменных не могут начинаться с цифры — SyntaxError. Начинай с буквы или _." },
+            { question: "Что будет результатом выражения: str(5) + '5'?", options: ["10", "Ошибка", "'55'", "55"], correct: 2, explanation: "str(5) → '5', затем '5' + '5' = '55'. Оператор + для строк делает конкатенацию, не сложение." },
+            { question: "Какая функция позволяет узнать тип переменной?", options: ["kind()", "type()", "typeof()", "datatype()"], correct: 1, explanation: "type() — встроенная функция для определения типа данных. Пример: type(3.14) → <class 'float'>." },
+            { question: "Какая функция считывает ввод пользователя и всегда возвращает строку?", options: ["read()", "scan()", "input()", "get()"], correct: 2, explanation: "input() всегда возвращает строку str! Даже если пользователь введёт 42, это будет '42'." },
             { question: "Создайте переменную age и присвойте ей значение 20", type: "code", correct: ["age=20", "age = 20"] },
             { question: "Конвертируйте строку '10' в целое число и запишите в переменную x", type: "code", correct: ["x=int('10')", "x=int(\"10\")", "x = int('10')", "x = int(\"10\")"] }
         ],
         'lesson3.html': [
-            { question: "Чему равен результат операции 10 // 3?", options: ["3.333", "3", "4", "3.0"], correct: 1 },
-            { question: "Какой оператор используется для возведения в степень в Python?", options: ["^", "*", "**", "^^"], correct: 2 },
-            { question: "Как проверить равенство двух переменных x и y?", options: ["x = y", "x == y", "x === y", "equals(x, y)"], correct: 1 },
-            { question: "Что выведет код: print(True and False)?", options: ["True", "False", "Ошибка", "None"], correct: 1 },
-            { question: "Какой логический оператор меняет значение на противоположное?", options: ["not", "!=!", "reverse", "invert"], correct: 0 },
-            { question: "Что означает оператор % в Python?", options: ["Процент от числа", "Остаток от деления", "Умножение", "Степень"], correct: 1 },
-            { question: "Что делает оператор x += 5?", options: ["Сравнивает x с 5", "Прибавляет 5 к x (аналог x = x + 5)", "Создаёт переменную x=5", "Вычитает 5 из x"], correct: 1 },
-            { question: "Когда оператор 'or' возвращает True?", options: ["Только если оба условия истинны", "Если хотя бы одно условие истинно", "Только если оба условия ложны", "Никогда"], correct: 1 },
+            { question: "Чему равен результат операции 10 // 3?", options: ["3.333", "3", "4", "3.0"], correct: 1, explanation: "// — целочисленное деление, результат округляется вниз. 10 // 3 = 3 (остаток 1 отбрасывается)." },
+            { question: "Какой оператор используется для возведения в степень в Python?", options: ["^", "*", "**", "^^"], correct: 2, explanation: "В Python степень — это **. Знак ^ — это побитовое XOR, совсем другая операция!" },
+            { question: "Как проверить равенство двух переменных x и y?", options: ["x = y", "x == y", "x === y", "equals(x, y)"], correct: 1, explanation: "= это присваивание, == — сравнение. Путаница между ними — одна из самых частых ошибок новичков." },
+            { question: "Что выведет код: print(True and False)?", options: ["True", "False", "Ошибка", "None"], correct: 1, explanation: "and требует чтобы ОБА условия были True. True and False = False — одно ложное, всё ложное." },
+            { question: "Какой логический оператор меняет значение на противоположное?", options: ["not", "!=!", "reverse", "invert"], correct: 0, explanation: "not инвертирует: not True = False, not False = True. Это логическое отрицание." },
+            { question: "Что означает оператор % в Python?", options: ["Процент от числа", "Остаток от деления", "Умножение", "Степень"], correct: 1, explanation: "% возвращает остаток: 10 % 3 = 1 (потому что 10 = 3×3 + 1). Часто используется для проверки чётности." },
+            { question: "Что делает оператор x += 5?", options: ["Сравнивает x с 5", "Прибавляет 5 к x (аналог x = x + 5)", "Создаёт переменную x=5", "Вычитает 5 из x"], correct: 1, explanation: "x += 5 — сокращённая запись x = x + 5. Аналогично: -= вычитает, *= умножает, /= делит." },
+            { question: "Когда оператор 'or' возвращает True?", options: ["Только если оба условия истинны", "Если хотя бы одно условие истинно", "Только если оба условия ложны", "Никогда"], correct: 1, explanation: "or возвращает True если ХОТЯ БЫ одно условие True. Оба ложных = False." },
             { question: "Напишите выражение для вычисления остатка от деления 10 на 3", type: "code", correct: ["10%3", "10 % 3", "print(10%3)", "print(10 % 3)"] }
         ],
         'lesson4.html': [
-            { question: "Как правильно записать условие 'если x больше 5'?", options: ["if x > 5 then:", "if (x > 5)", "if x > 5:", "if x > 5 ;"], correct: 2 },
-            { question: "Какое ключевое слово выполняется, когда ВСЕ предыдущие условия if/elif оказались ложны?", options: ["elif", "else", "finally", "default"], correct: 1 },
-            { question: "Что такое elif в Python?", options: ["Другое слово для else", "Сокращение от 'else if' - дополнительная проверка условия", "Ошибочное написание слова else", "Оператор выхода из условия"], correct: 1 },
-            { question: "Что ОБЯЗАТЕЛЬНО ставить в конце строки с if, elif или else?", options: ["Точку с запятой (;)", "Двоеточие (:)", "Скобки ()", "Запятую (,)"], correct: 1 },
-            { question: "Какой отступ рекомендует стандарт PEP 8 внутри блока if?", options: ["2 пробела", "Отступ не важен", "1 табуляция или 2 пробела", "4 пробела (рекомендация PEP 8)"], correct: 3 },
-            { question: "Что считается 'ложным' значением в условии Python?", options: ["Число 1", "Пустая строка (\"\"\", 0, [], None)", "Слово 'False'", "Любая переменная"], correct: 1 },
-            { question: "В каком порядке Python проверяет ветки if-elif-else?", options: ["Случайном", "Снизу вверх", "Сверху вниз, останавливаясь на первой подошедшей", "Все проверяет одновременно"], correct: 2 },
+            { question: "Как правильно записать условие 'если x больше 5'?", options: ["if x > 5 then:", "if (x > 5)", "if x > 5:", "if x > 5 ;"], correct: 2, explanation: "В Python условие пишется без скобок и обязательно с двоеточием в конце строки." },
+            { question: "Какое ключевое слово выполняется, когда ВСЕ предыдущие условия if/elif оказались ложны?", options: ["elif", "else", "finally", "default"], correct: 1, explanation: "else выполняется только если все предшествующие if/elif оказались ложными. Это 'иначе'." },
+            { question: "Что такое elif в Python?", options: ["Другое слово для else", "Сокращение от 'else if' - дополнительная проверка условия", "Ошибочное написание слова else", "Оператор выхода из условия"], correct: 1, explanation: "elif = 'else if'. Позволяет проверить дополнительное условие, не вкладывая if в else." },
+            { question: "Что ОБЯЗАТЕЛЬНО ставить в конце строки с if, elif или else?", options: ["Точку с запятой (;)", "Двоеточие (:)", "Скобки ()", "Запятую (,)"], correct: 1, explanation: "Двоеточие обязательно! Оно сигнализирует Python о начале блока кода (отступ после двоеточия)." },
+            { question: "Какой отступ рекомендует стандарт PEP 8 внутри блока if?", options: ["2 пробела", "Отступ не важен", "1 табуляция или 2 пробела", "4 пробела (рекомендация PEP 8)"], correct: 3, explanation: "PEP 8 — официальный стандарт Python — рекомендует ровно 4 пробела для отступов." },
+            { question: "Что считается 'ложным' значением в условии Python?", options: ["Число 1", "Пустая строка (\"\"\", 0, [], None)", "Слово 'False'", "Любая переменная"], correct: 1, explanation: "В Python 'ложные' значения: 0, 0.0, None, False, '', [], {}, set(). Всё остальное — истинное." },
+            { question: "В каком порядке Python проверяет ветки if-elif-else?", options: ["Случайном", "Снизу вверх", "Сверху вниз, останавливаясь на первой подошедшей", "Все проверяет одновременно"], correct: 2, explanation: "Python проверяет условия последовательно и останавливается на первом подходящем. Порядок важен!" },
             { question: "Напишите заголовок условия: если a меньше b", type: "code", correct: ["if a<b:", "if a < b:"] },
             { question: "Напишите ключевое слово Python для 'иначе если' (дополнительное условие после if):", type: "code", correct: ["elif"] }
         ],
         'lesson5.html': [
-            { question: "Какой цикл выполняется, пока его условие истинно (True)?", options: ["while", "for", "do-while", "loop"], correct: 0 },
-            { question: "Что генерирует функция range(5)?", options: ["Числа от 1 до 5", "Числа от 0 до 4", "Числа от 0 до 5", "Пять единиц"], correct: 1 },
-            { question: "Как досрочно ПОЛНОСТЬЮ выйти из цикла?", options: ["stop", "exit", "break", "return"], correct: 2 },
-            { question: "Как пропустить текущую итерацию и перейти к следующей?", options: ["skip", "pass", "continue", "next"], correct: 2 },
-            { question: "Что произойдёт, если условие цикла while НИКОГДА не станет ложным?", options: ["Программа выдаст ошибку сразу", "Цикл выполнится ровно 100 раз", "Бесконечный цикл - программа зависнет", "Цикл автоматически остановится"], correct: 2 },
-            { question: "Какие числа выведет диапазон range(1, 6)?", options: ["0, 1, 2, 3, 4, 5", "1, 2, 3, 4, 5", "1, 2, 3, 4, 5, 6", "0, 1, 2, 3, 4"], correct: 1 },
+            { question: "Какой цикл выполняется, пока его условие истинно (True)?", options: ["while", "for", "do-while", "loop"], correct: 0, explanation: "while работает пока условие = True. for перебирает элементы. Это разные инструменты." },
+            { question: "Что генерирует функция range(5)?", options: ["Числа от 1 до 5", "Числа от 0 до 4", "Числа от 0 до 5", "Пять единиц"], correct: 1, explanation: "range(5) генерирует 0, 1, 2, 3, 4. Отсчёт всегда с нуля, число 5 не включается." },
+            { question: "Как досрочно ПОЛНОСТЬЮ выйти из цикла?", options: ["stop", "exit", "break", "return"], correct: 2, explanation: "break немедленно прерывает цикл. Программа продолжается после тела цикла." },
+            { question: "Как пропустить текущую итерацию и перейти к следующей?", options: ["skip", "pass", "continue", "next"], correct: 2, explanation: "continue пропускает остаток текущей итерации и переходит к следующей." },
+            { question: "Что произойдёт, если условие цикла while НИКОГДА не станет ложным?", options: ["Программа выдаст ошибку сразу", "Цикл выполнится ровно 100 раз", "Бесконечный цикл - программа зависнет", "Цикл автоматически остановится"], correct: 2, explanation: "while True без break — бесконечный цикл. Программа зависнет. Всегда предусматривай выход." },
+            { question: "Какие числа выведет диапазон range(1, 6)?", options: ["0, 1, 2, 3, 4, 5", "1, 2, 3, 4, 5", "1, 2, 3, 4, 5, 6", "0, 1, 2, 3, 4"], correct: 1, explanation: "range(1, 6) начинается с 1, конец (6) не включается. Формула: range(start, stop) → [start, stop)." },
             { question: "Напишите команду для досрочного прерывания (выхода из) цикла", type: "code", correct: ["break"] },
             { question: "Напишите заголовок цикла for по диапазону из 3 элементов (i от 0 до 2):", type: "code", correct: ["for i in range(3):", "for i in range(0,3):", "for i in range(0, 3):"] }
         ],
         'lesson6.html': [
-            { question: "Как правильно создать список (list) в Python?", options: ["x = (1, 2)", "x = {1, 2}", "x = [1, 2]", "x = <1, 2>"], correct: 2 },
-            { question: "С какого индекса начинается нумерация элементов в Python-списке?", options: ["1", "0", "-1", "Любого"], correct: 1 },
-            { question: "Какой метод добавляет новый элемент В КОНЕЦ списка?", options: [".add()", ".insert()", ".append()", ".push()"], correct: 2 },
-            { question: "Какая встроенная функция возвращает количество элементов в списке?", options: ["list.count()", "size(list)", "list.length", "len()"], correct: 3 },
-            { question: "Чем кортеж (tuple) отличается от списка (list)?", options: ["Ничем, это одно и то же", "Кортеж нельзя изменить после создания", "Кортеж хранит только числа", "У кортежа нет индексов"], correct: 1 },
-            { question: "Что означает fruits[-1] в Python?", options: ["Ошибку, отрицательных индексов нет", "Последний элемент списка", "Предпоследний элемент", "Первый элемент"], correct: 1 },
-            { question: "Какой метод СОРТИРУЕТ список по возрастанию?", options: [".order()", ".arrange()", ".sort()", ".sorted()"], correct: 2 },
+            { question: "Как правильно создать список (list) в Python?", options: ["x = (1, 2)", "x = {1, 2}", "x = [1, 2]", "x = <1, 2>"], correct: 2, explanation: "Список создаётся квадратными скобками []. Скобки () — кортеж, {} — словарь/множество." },
+            { question: "С какого индекса начинается нумерация элементов в Python-списке?", options: ["1", "0", "-1", "Любого"], correct: 1, explanation: "Индексация в Python всегда с нуля. list[0] — первый, list[1] — второй элемент." },
+            { question: "Какой метод добавляет новый элемент В КОНЕЦ списка?", options: [".add()", ".insert()", ".append()", ".push()"], correct: 2, explanation: ".append() добавляет элемент в КОНЕЦ списка. .insert(i, x) добавляет на конкретную позицию." },
+            { question: "Какая встроенная функция возвращает количество элементов в списке?", options: ["list.count()", "size(list)", "list.length", "len()"], correct: 3, explanation: "len() — встроенная функция Python. Работает для строк, списков, кортежей, словарей." },
+            { question: "Чем кортеж (tuple) отличается от списка (list)?", options: ["Ничем, это одно и то же", "Кортеж нельзя изменить после создания", "Кортеж хранит только числа", "У кортежа нет индексов"], correct: 1, explanation: "Кортеж (tuple) — неизменяемая последовательность. После создания нельзя добавить или удалить элементы." },
+            { question: "Что означает fruits[-1] в Python?", options: ["Ошибку, отрицательных индексов нет", "Последний элемент списка", "Предпоследний элемент", "Первый элемент"], correct: 1, explanation: "Отрицательные индексы считают с конца: [-1] — последний, [-2] — предпоследний и т.д." },
+            { question: "Какой метод СОРТИРУЕТ список по возрастанию?", options: [".order()", ".arrange()", ".sort()", ".sorted()"], correct: 2, explanation: ".sort() сортирует список на месте (изменяет сам список). sorted() возвращает новый." },
             { question: "Создайте пустой список с именем numbers", type: "code", correct: ["numbers=[]", "numbers = []", "numbers=list()", "numbers = list()"] },
             { question: "Напишите метод списка, который удаляет элемент по его ЗНАЧЕНИЮ:", type: "code", correct: ["remove", "remove()", ".remove()"] }
         ],
@@ -475,6 +475,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             qBlock.classList.add('answered-wrong');
                         }
 
+                        // Show explanation
+                        if (q.explanation && !qBlock.querySelector('.quiz-explanation')) {
+                            const expEl = document.createElement('p');
+                            expEl.className = 'quiz-explanation';
+                            expEl.textContent = '💡 ' + q.explanation;
+                            qBlock.appendChild(expEl);
+                        }
+
                         checkQuizCompletion(questions.length);
                     };
 
@@ -496,7 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         btn.className = 'btn-quiz-opt';
                         btn.dataset.origIndex = optObj.originalIndex;
                         btn.setAttribute('aria-label', optObj.text);
-                        btn.onclick = () => checkAnswer(btn, optObj.originalIndex, q.correct, questions.length);
+                        btn.onclick = () => checkAnswer(btn, optObj.originalIndex, q.correct, questions.length, q.explanation);
                         optionsDiv.appendChild(btn);
                     });
                     qBlock.appendChild(optionsDiv);
@@ -533,7 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function checkAnswer(btn, selected, correct, total) {
+    function checkAnswer(btn, selected, correct, total, explanation) {
         const optionsDiv = btn.parentElement;
         const qBlock = optionsDiv.parentElement;
         const feedback = qBlock.querySelector('.quiz-feedback');
@@ -557,6 +565,14 @@ document.addEventListener('DOMContentLoaded', () => {
             feedback.textContent = '❌ Ошибка';
             feedback.style.color = '#dc3545';
             qBlock.classList.add('answered-wrong');
+        }
+
+        // Show explanation
+        if (explanation && !qBlock.querySelector('.quiz-explanation')) {
+            const expEl = document.createElement('p');
+            expEl.className = 'quiz-explanation';
+            expEl.textContent = '💡 ' + explanation;
+            feedback.after(expEl);
         }
 
         checkQuizCompletion(total);
@@ -705,21 +721,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 4. Utilities ---
     function initCopyButtons() {
         document.querySelectorAll('pre').forEach(pre => {
-            // Игнорируем технические блоки из онлайн-редактора
             if (pre.closest('.CodeMirror') || pre.id === 'terminal-output') return;
-
-            if (pre.querySelector('.btn-copy')) return; // Avoid duplicates
+            if (pre.querySelector('.btn-copy')) return;
 
             pre.style.position = 'relative';
+            const codeEl = pre.querySelector('code');
             const btn = document.createElement('button');
             btn.className = 'btn-copy';
-            btn.textContent = '📋';
-            btn.onclick = () => {
-                const text = pre.innerText.replace('📋', '').replace('✅', ''); // Clean text
-                navigator.clipboard.writeText(text);
-                btn.textContent = '✅';
-                setTimeout(() => btn.textContent = '📋', 2000);
-            };
+            btn.textContent = 'Копировать';
+            btn.setAttribute('aria-label', 'Копировать код');
+
+            btn.addEventListener('click', () => {
+                const text = codeEl ? codeEl.textContent : pre.textContent;
+                const copy = () => {
+                    btn.textContent = '✓ Скопировано';
+                    setTimeout(() => { btn.textContent = 'Копировать'; }, 2000);
+                };
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(text).then(copy).catch(() => {
+                        document.execCommand('copy');
+                        copy();
+                    });
+                } else {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.cssText = 'position:fixed;opacity:0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    ta.remove();
+                    copy();
+                }
+            });
             pre.appendChild(btn);
         });
     }
@@ -877,9 +910,83 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3500);
     }
 
+    function initMobileMenu() {
+        const headerContainer = document.querySelector('header .container');
+        if (!headerContainer) return;
+        const nav = headerContainer.querySelector('nav');
+        if (!nav) return;
+        const ul = nav.querySelector('ul');
+        if (!ul) return;
+
+        // Remove inline styles so CSS media queries can control display
+        ul.removeAttribute('style');
+
+        // Create hamburger button
+        const btn = document.createElement('button');
+        btn.className = 'nav-hamburger';
+        btn.setAttribute('aria-label', 'Открыть меню');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.innerHTML = '<span></span><span></span><span></span>';
+        headerContainer.insertBefore(btn, nav);
+
+        const toggle = (open) => {
+            ul.classList.toggle('is-open', open);
+            btn.classList.toggle('is-open', open);
+            btn.setAttribute('aria-expanded', String(open));
+        };
+
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            toggle(!ul.classList.contains('is-open'));
+        });
+        document.addEventListener('click', () => toggle(false));
+        nav.addEventListener('click', e => e.stopPropagation());
+        ul.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggle(false)));
+    }
+
+    function initReadingProgressBar() {
+        const bar = document.createElement('div');
+        bar.id = 'reading-progress';
+        document.body.insertBefore(bar, document.body.firstChild);
+
+        const update = () => {
+            const h = document.documentElement;
+            const total = h.scrollHeight - h.clientHeight;
+            bar.style.width = total > 0 ? Math.min((h.scrollTop / total) * 100, 100) + '%' : '0%';
+        };
+        window.addEventListener('scroll', update, { passive: true });
+        update();
+    }
+
+    function initSyntaxHighlighting() {
+        if (!document.querySelector('pre code')) return;
+
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
+        document.head.appendChild(link);
+
+        const overrideSt = document.createElement('style');
+        overrideSt.textContent = '.hljs{background:transparent!important;padding:0!important;font-size:inherit!important;line-height:inherit!important;}';
+        document.head.appendChild(overrideSt);
+
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js';
+        script.onload = () => {
+            document.querySelectorAll('pre code').forEach(block => {
+                if (!block.className) block.classList.add('language-python');
+                window.hljs.highlightElement(block);
+            });
+        };
+        document.head.appendChild(script);
+    }
+
     // Run All
+    initReadingProgressBar();
+    initMobileMenu();
     initLockSystem();
     initCopyButtons();
+    initSyntaxHighlighting();
     initQuiz();
     initTheme();
     initResetButton();
