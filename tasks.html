@@ -664,14 +664,21 @@ except Exception as e:
         selectTask(0);
 
         async function loadPython() {
+            const timeoutId = setTimeout(() => {
+                resultsDiv.textContent = "⚠️ Загрузка Python занимает слишком долго. Проверьте интернет-соединение и обновите страницу.";
+                resultsDiv.style.color = "#f59e0b";
+            }, 20000);
             try {
                 pyodideInstance = await loadPyodide();
+                clearTimeout(timeoutId);
                 btnSubmit.innerHTML = "▶ Проверить решение";
                 btnSubmit.disabled = false;
                 resultsDiv.textContent = "✅ Python движок загружен. Напишите код и нажмите «Проверить».";
                 resultsDiv.style.color = "var(--text-color)";
             } catch (err) {
-                resultsDiv.textContent = "❌ Ошибка загрузки движка Python: " + err;
+                clearTimeout(timeoutId);
+                resultsDiv.textContent = "❌ Не удалось загрузить Python. Проверьте интернет-соединение и обновите страницу.";
+                resultsDiv.style.color = "#ef4444";
             }
         }
 

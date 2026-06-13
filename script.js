@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (href === currentPath) {
             link.classList.add('active');
-        } else if (isLesson && href === 'python-basic.html') {
+        } else if (isLesson && href === 'courses.html') {
             link.classList.add('active');
         } else {
             link.classList.remove('active');
@@ -343,7 +343,6 @@ document.addEventListener('DOMContentLoaded', () => {
             quizContainer.parentNode.insertBefore(startBtn, quizContainer);
         }
 
-        // FIX: Ensure button is visible when resetting (e.g. after 'Retake')
         startBtn.style.display = 'block';
 
         // Check if already passed
@@ -381,14 +380,21 @@ document.addEventListener('DOMContentLoaded', () => {
             container.innerHTML = ''; // Clear
 
             const title = document.createElement('h2');
+            title.id = 'quiz-title';
             title.textContent = '🚀 Проверочный тест';
+            container.setAttribute('role', 'region');
+            container.setAttribute('aria-labelledby', 'quiz-title');
             container.appendChild(title);
 
             questions.forEach((q, index) => {
+                const qId = `quiz-q-${index}`;
                 const qBlock = document.createElement('div');
                 qBlock.className = 'quiz-question';
+                qBlock.setAttribute('role', 'group');
+                qBlock.setAttribute('aria-labelledby', qId);
 
                 const qText = document.createElement('p');
+                qText.id = qId;
                 qText.textContent = `${index + 1}. ${q.question}`;
                 qBlock.appendChild(qText);
 
@@ -403,13 +409,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     inputArea.style.resize = 'vertical';
                     inputArea.rows = 2;
                     inputArea.placeholder = 'Напишите ваш ответ...';
+                    inputArea.setAttribute('aria-label', 'Поле для ввода кода');
+                    inputArea.setAttribute('aria-describedby', qId);
 
                     const checkBtn = document.createElement('button');
                     checkBtn.textContent = '✔️ Проверить';
                     checkBtn.className = 'btn-quiz-opt';
+                    checkBtn.setAttribute('aria-label', 'Проверить ответ');
 
                     const feedback = document.createElement('p');
                     feedback.className = 'quiz-feedback';
+                    feedback.setAttribute('aria-live', 'polite');
 
                     checkBtn.onclick = () => {
                         // Нормализация: убираем лишние пробелы, приводим кавычки к одному виду
@@ -443,9 +453,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             feedback.style.color = '#10b981';
                             qBlock.classList.add('answered-correct');
                         } else {
-                            // Показываем правильный ответ при ошибке
                             const exampleAns = q.correct[0];
-                            feedback.innerHTML = `❌ Ошибка. Правильный ответ: <code style="background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;">${exampleAns}</code>`;
+                            feedback.textContent = '❌ Ошибка. Правильный ответ: ';
+                            const codeEl = document.createElement('code');
+                            codeEl.style.cssText = 'background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;';
+                            codeEl.textContent = exampleAns;
+                            feedback.appendChild(codeEl);
                             feedback.style.color = '#ef4444';
                             qBlock.classList.add('answered-wrong');
                         }
@@ -459,8 +472,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 } else {
                     const optionsDiv = document.createElement('div');
+                    optionsDiv.setAttribute('role', 'group');
+                    optionsDiv.setAttribute('aria-label', 'Варианты ответа');
 
-                    // SHUFFLE LOGIC - алгоритм Фишера-Йейтса для нейтрализации запоминания позиции
                     const indexedOptions = q.options.map((opt, i) => ({ text: opt, originalIndex: i }));
                     const shuffled = shuffleArray(indexedOptions);
 
@@ -468,8 +482,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         const btn = document.createElement('button');
                         btn.textContent = optObj.text;
                         btn.className = 'btn-quiz-opt';
-                        btn.dataset.origIndex = optObj.originalIndex; // Сохраняем оригинальный индекс
-                        // Сравниваем с оригинальным индексом правильного ответа
+                        btn.dataset.origIndex = optObj.originalIndex;
+                        btn.setAttribute('aria-label', optObj.text);
                         btn.onclick = () => checkAnswer(btn, optObj.originalIndex, q.correct, questions.length);
                         optionsDiv.appendChild(btn);
                     });
@@ -477,18 +491,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const feedback = document.createElement('p');
                     feedback.className = 'quiz-feedback';
+                    feedback.setAttribute('aria-live', 'polite');
                     qBlock.appendChild(feedback);
                 }
 
                 container.appendChild(qBlock);
             });
         } catch (e) {
-            container.innerHTML = `<div style="padding: 20px; background: #fee2e2; color: #b91c1c; border-radius: 12px; border: 2px solid #ef4444;">
-                <h3 style="margin-top:0;">ОШИБКА ОТРИСОВКИ ТЕСТА!</h3>
-                <p><strong>Мы не смогли загрузить тест из-за сбоя:</strong></p>
-                <div style="background: #fff; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 0.9em; overflow-x: auto;"><b>${e.name}</b>: ${e.message}<br><br>${e.stack}</div>
-                <button class="btn-retake" onclick="window.location.reload()">Перезагрузить страницу</button>
-            </div>`;
+            const errWrap = document.createElement('div');
+            errWrap.style.cssText = 'padding:20px;background:#fee2e2;color:#b91c1c;border-radius:12px;border:2px solid #ef4444;';
+            const errTitle = document.createElement('h3');
+            errTitle.style.marginTop = '0';
+            errTitle.textContent = 'ОШИБКА ОТРИСОВКИ ТЕСТА!';
+            const errDesc = document.createElement('p');
+            errDesc.innerHTML = '<strong>Мы не смогли загрузить тест из-за сбоя:</strong>';
+            const errDetails = document.createElement('div');
+            errDetails.style.cssText = 'background:#fff;padding:10px;border-radius:6px;font-family:monospace;font-size:0.9em;overflow-x:auto;';
+            errDetails.textContent = `${e.name}: ${e.message}\n\n${e.stack}`;
+            const reloadBtn = document.createElement('button');
+            reloadBtn.className = 'btn-retake';
+            reloadBtn.textContent = 'Перезагрузить страницу';
+            reloadBtn.onclick = () => window.location.reload();
+            errWrap.appendChild(errTitle);
+            errWrap.appendChild(errDesc);
+            errWrap.appendChild(errDetails);
+            errWrap.appendChild(reloadBtn);
+            container.innerHTML = '';
+            container.appendChild(errWrap);
         }
     }
 
@@ -528,8 +557,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (correctCount + wrongCount === total) {
             // Quiz Finished
-            if (wrongCount === 0) {
-                // SUCCESS
+            if (correctCount / total >= 0.7) {
+                // SUCCESS (70% threshold)
                 const progress = safeGetProgress();
                 progress[currentPath] = true;
                 localStorage.setItem('quiz_results', JSON.stringify(progress));
@@ -552,11 +581,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const wrong = total - score;
         let motivText = '';
         if (percent === 0) {
-            motivText = 'Не расстраивайся - повтори теорию и попробуй снова!';
+            motivText = 'Не расстраивайся — повтори теорию и попробуй снова! Для прохождения нужно 70%.';
         } else if (percent < 50) {
-            motivText = 'Хорошее начало! Повтори пропущенные темы и попробуй ещё раз.';
+            motivText = 'Хорошее начало! Повтори пропущенные темы. Для прохождения нужно набрать 70%.';
         } else {
-            motivText = 'Совсем чуть-чуть не хватило! Ты почти у цели - ещё одна попытка!';
+            motivText = 'Совсем чуть-чуть не хватило! Нужно 70% — ещё одна попытка и урок твой!';
         }
 
         container.innerHTML = `
