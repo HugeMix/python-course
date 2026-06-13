@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /tools/
 
-Sitemap: https://pythonbasic.ru/sitemap.xml
+Sitemap: https://hugemix.github.io/python-course/sitemap.xml
