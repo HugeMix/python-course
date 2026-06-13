@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="PB5AShHNGsG-dfBAULuSeg7o2y71hv0ZFsi54cPSQYg" />
     <meta name="description"
         content="Освойте язык программирования Python с нуля. Главная страница образовательной платформы с интерактивными уроками и практикой.">
     <title>Python с нуля - Главная</title>
@@ -12,6 +13,27 @@
     <meta property="og:description" content="Освойте язык программирования Python с нуля. Главная страница образовательной платформы с интерактивными уроками и практикой.">
     <meta property="og:image" content="logo.png">
     <link rel="stylesheet" href="style.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "PythonBasic",
+        "description": "Бесплатный курс по Python для начинающих на русском языке. 16 уроков, практические задачи, онлайн-компилятор и сертификат.",
+        "url": "https://pythonbasic.ru",
+        "inLanguage": "ru",
+        "teaches": "Python программирование",
+        "educationalLevel": "Beginner",
+        "hasCourse": {
+            "@type": "Course",
+            "name": "Базовый курс по Python",
+            "description": "Полный курс по Python с нуля: переменные, циклы, функции, ООП, работа с файлами и API. 16 уроков с квизами и практическими задачами.",
+            "provider": { "@type": "Organization", "name": "PythonBasic" },
+            "inLanguage": "ru",
+            "isAccessibleForFree": true,
+            "numberOfCredits": 16
+        }
+    }
+    </script>
 </head>
 
 <body>
@@ -49,7 +71,7 @@
         <section class="info">
             <div class="card">
                 <h3>🚀 Быстрый старт</h3>
-                <p>Начните изучать материалы и выучите один из популярных языков программирования - Python.</p>
+                <p>Начните изучать материалы и выучите один из популярных языков программирования — Python.</p>
             </div>
             <div class="card">
                 <h3>💡 Лёгкое объяснение</h3>
@@ -59,14 +81,22 @@
                 <h3>📜 Практика</h3>
                 <p>Каждый урок включает код, который можно сразу попробовать, изучить и выполнить домашнее задание.</p>
             </div>
+            <div class="card">
+                <h3>🏆 Сертификат</h3>
+                <p>По завершении всех уроков вы получаете сертификат об окончании курса, который можно распечатать.</p>
+            </div>
         </section>
     </main>
 
     <footer>
-        <p>© 2025 Python для начинающих. Все права защищены.</p>
+        <p>© <span id="footer-year"></span> Python для начинающих. Все права защищены. ·
+            <a href="certificate.html" style="color:var(--accent-color);">Сертификат</a> ·
+            <a href="next-steps.html" style="color:var(--accent-color);">Что дальше?</a>
+        </p>
     </footer>
 
     <script src="script.js"></script>
+    <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
 </body>
 
 </html>

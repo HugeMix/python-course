@@ -204,8 +204,11 @@ for i in range(1, 4):
         </div>
     </main>
 
-    <footer>
-        <p>© 2025 Python для начинающих. Все права защищены.</p>
+        <footer>
+        <p>© <span class="footer-year"></span> Python для начинающих. Все права защищены. ·
+            <a href="certificate.html" style="color:var(--accent-color);">Сертификат</a> ·
+            <a href="next-steps.html" style="color:var(--accent-color);">Что дальше?</a>
+        </p>
     </footer>
 
     <script src="script.js"></script>
@@ -239,17 +242,31 @@ for i in range(1, 4):
             terminal.scrollTop = terminal.scrollHeight;
         }
 
+        function showLoadError(msg) {
+            loadingOverlay.innerHTML = `<div style="text-align:center;padding:20px;color:white;max-width:400px;">
+                <p style="font-size:1.2rem;margin-bottom:8px;">${msg}</p>
+                <p style="font-size:0.9rem;opacity:0.8;">Проверьте интернет-соединение и
+                    <a href="" style="color:#fbbf24;" onclick="location.reload();return false;">обновите страницу</a>.
+                </p>
+            </div>`;
+        }
+
         async function initPyodide() {
+            const timeoutId = setTimeout(() => {
+                showLoadError('⚠️ Загрузка Python занимает слишком долго...');
+            }, 20000);
             try {
                 pyodide = await loadPyodide({
                     stdout: printToTerminal,
                     stderr: printToTerminal
                 });
+                clearTimeout(timeoutId);
                 loadingOverlay.style.display = "none";
                 runBtn.disabled = false;
                 printToTerminal("✅ Python успешно загружен и готов к работе!\n");
             } catch (err) {
-                printToTerminal("❌ Ошибка при загрузке Python: " + err + "\n");
+                clearTimeout(timeoutId);
+                showLoadError('❌ Не удалось загрузить Python.');
             }
         }
 
@@ -278,6 +295,7 @@ for i in range(1, 4):
         // Start initialization
         initPyodide();
     </script>
+    <script>document.querySelectorAll('.footer-year').forEach(el => el.textContent = new Date().getFullYear());</script>
 </body>
 
 </html>

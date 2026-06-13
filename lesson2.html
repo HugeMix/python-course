@@ -12,6 +12,7 @@
     <meta property="og:description" content="Урок 2: Переменные и типы данных в Python. Изучите int, float, str, bool и преобразование типов.">
     <meta property="og:image" content="logo.png">
     <link rel="stylesheet" href="style.css">
+<script>try{var _m=location.pathname.split("/").pop().match(/^lesson(\d+)\.html$/);if(_m&&+_m[1]>1){var _p=JSON.parse(localStorage.getItem("quiz_results")||"{}");if(!_p["lesson"+(_m[1]-1)+".html"])location.replace("python-basic.html");}}catch(e){}</script>
 </head>
 
 <body>
@@ -29,7 +30,7 @@
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
                     <li><a href="index.html">Главная</a></li>
-                    <li><a href="python-basic.html">Курс</a></li>
+                    <li><a href="courses.html">Курсы</a></li>
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
@@ -136,11 +137,15 @@ print("Через 10 лет тебе будет:", age + 10)</code></pre>
         <div class="lesson-navigation"></div>
     </main>
 
-    <footer>
-        <p>© 2025 Python для начинающих. Все права защищены.</p>
+        <footer>
+        <p>© <span class="footer-year"></span> Python для начинающих. Все права защищены. ·
+            <a href="certificate.html" style="color:var(--accent-color);">Сертификат</a> ·
+            <a href="next-steps.html" style="color:var(--accent-color);">Что дальше?</a>
+        </p>
     </footer>
 
     <script src="script.js"></script>
+    <script>document.querySelectorAll('.footer-year').forEach(el => el.textContent = new Date().getFullYear());</script>
 </body>
 
 </html>

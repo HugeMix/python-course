@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Урок 16 (бонусный): Работа с API и библиотека requests в Python. Научитесь делать HTTP-запросы и получать данные из интернета.">
+    <title>Урок 16: Работа с API | PythonBasic</title>
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Урок 16: Работа с API | PythonBasic">
+    <meta property="og:description" content="Бонусный урок: библиотека requests, HTTP-запросы, работа с JSON из API.">
+    <meta property="og:image" content="logo.png">
+    <link rel="stylesheet" href="style.css">
+    <script>try{var _m=location.pathname.split("/").pop().match(/^lesson(\d+)\.html$/);if(_m&&+_m[1]>1){var _p=JSON.parse(localStorage.getItem("quiz_results")||"{}");if(!_p["lesson"+(_m[1]-1)+".html"])location.replace("python-basic.html");}}catch(e){}</script>
+</head>
+
+<body>
+
+    <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="courses.html">Курсы</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="lesson-title">
+        <div class="container">
+            <h1>Урок 16: Работа с API <span style="font-size:0.6em; background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px; vertical-align:middle;">Бонус</span></h1>
+            <p>Научимся получать данные из интернета с помощью библиотеки requests.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="lesson-goal">
+            <h2>🎯 Цель урока</h2>
+            <p>Понять что такое API, научиться делать HTTP-запросы и обрабатывать JSON-ответы с помощью библиотеки <code>requests</code>.</p>
+        </section>
+
+        <section class="lesson-content">
+
+            <h2>🌐 Что такое API?</h2>
+            <p><strong>API</strong> (Application Programming Interface) — это способ, которым программы разговаривают друг с другом. Представь: ты в ресторане. Ты (программа) говоришь официанту (API) что хочешь, официант передаёт заказ на кухню (сервер) и приносит тебе результат.</p>
+            <p>Примеры API которые ты можешь использовать прямо сейчас:</p>
+            <ul>
+                <li><strong>Погода:</strong> OpenWeatherMap — запросил название города, получил температуру</li>
+                <li><strong>Случайный факт:</strong> запросил URL, получил интересный факт о числе</li>
+                <li><strong>Курс валют:</strong> запросил API Центробанка, получил актуальный курс</li>
+                <li><strong>Telegram Bot API:</strong> отправляешь запросы — бот пишет сообщения пользователям</li>
+            </ul>
+
+            <h2>📦 Библиотека requests</h2>
+            <p>Python не умеет делать HTTP-запросы из коробки (стандартная библиотека <code>urllib</code> слишком сложная). Поэтому все используют <strong>requests</strong> — самую популярную Python-библиотеку в мире.</p>
+            <p>Установка:</p>
+            <pre><code>pip install requests</code></pre>
+            <p>Подключение в коде:</p>
+            <pre><code>import requests</code></pre>
+
+            <h2>🚀 Первый GET-запрос</h2>
+            <p>GET-запрос — это запрос на <strong>получение</strong> данных. Как когда вы открываете сайт в браузере.</p>
+            <pre><code>import requests
+
+response = requests.get("https://numbersapi.com/42/math")
+
+print(response.status_code)  # 200 — значит успешно
+print(response.text)         # Текст ответа</code></pre>
+
+            <p>Объект <code>response</code> содержит всё что вернул сервер:</p>
+            <ul>
+                <li><code>response.status_code</code> — код статуса (200 = OK, 404 = не найдено, 500 = ошибка сервера)</li>
+                <li><code>response.text</code> — ответ в виде строки</li>
+                <li><code>response.json()</code> — ответ в виде Python-словаря (если сервер вернул JSON)</li>
+                <li><code>response.headers</code> — заголовки ответа</li>
+            </ul>
+
+            <h2>📋 Работа с JSON-ответом</h2>
+            <p>Большинство современных API возвращают данные в формате <strong>JSON</strong> — это тот же Python-словарь, только записанный в виде текста. Метод <code>.json()</code> автоматически превращает его в нормальный словарь.</p>
+            <pre><code>import requests
+
+response = requests.get("https://api.coindesk.com/v1/bpi/currentprice.json")
+
+if response.status_code == 200:
+    data = response.json()
+    price = data["bpi"]["USD"]["rate"]
+    print(f"Цена Bitcoin: {price} USD")
+else:
+    print(f"Ошибка: {response.status_code}")</code></pre>
+
+            <h2>🔍 Параметры запроса</h2>
+            <p>Часто API принимает параметры — например название города для погоды. Их передают через аргумент <code>params</code>:</p>
+            <pre><code>import requests
+
+params = {
+    "q": "Moscow",
+    "appid": "ВАШ_КЛЮЧ_API",
+    "units": "metric",
+    "lang": "ru"
+}
+
+response = requests.get("https://api.openweathermap.org/data/2.5/weather", params=params)
+data = response.json()
+
+if response.status_code == 200:
+    temp = data["main"]["temp"]
+    desc = data["weather"][0]["description"]
+    print(f"Москва: {temp}°C, {desc}")
+</code></pre>
+
+            <h2>⚠️ Обработка ошибок при запросах</h2>
+            <p>Интернет ненадёжен. Сервер может быть недоступен, URL неправильным, или сеть пропасть. Всегда оборачивайте запросы в <code>try-except</code>:</p>
+            <pre><code>import requests
+
+try:
+    response = requests.get("https://api.example.com/data", timeout=5)
+    response.raise_for_status()  # Вызывает ошибку если status_code >= 400
+    data = response.json()
+    print(data)
+
+except requests.exceptions.ConnectionError:
+    print("Нет интернет-соединения")
+except requests.exceptions.Timeout:
+    print("Сервер не ответил вовремя")
+except requests.exceptions.HTTPError as e:
+    print(f"Ошибка HTTP: {e}")
+except Exception as e:
+    print(f"Неожиданная ошибка: {e}")</code></pre>
+
+            <p>Аргумент <code>timeout=5</code> означает: если сервер не ответил за 5 секунд — выбрасывается исключение. Без таймаута программа может висеть вечно.</p>
+
+            <h2>📬 POST-запросы</h2>
+            <p>POST используется для <strong>отправки</strong> данных на сервер (создание аккаунта, отправка сообщения, публикация поста):</p>
+            <pre><code>import requests
+
+data = {
+    "title": "Мой первый пост",
+    "body": "Привет, мир!",
+    "userId": 1
+}
+
+response = requests.post("https://jsonplaceholder.typicode.com/posts", json=data)
+print(response.status_code)  # 201 — создано
+print(response.json())       # Созданный объект с id</code></pre>
+
+            <h2>💡 Практический пример: получаем случайный факт</h2>
+            <pre><code>import requests
+
+def get_random_joke():
+    """Получает случайный анекдот из бесплатного API"""
+    try:
+        response = requests.get(
+            "https://official-joke-api.appspot.com/random_joke",
+            timeout=5
+        )
+        if response.status_code == 200:
+            joke = response.json()
+            print(f"Setup: {joke['setup']}")
+            print(f"Punchline: {joke['punchline']}")
+        else:
+            print("Не удалось получить анекдот")
+    except requests.exceptions.RequestException as e:
+        print(f"Ошибка сети: {e}")
+
+get_random_joke()</code></pre>
+
+        </section>
+
+        <div id="quiz-container"></div>
+
+        <section class="lesson-homework">
+            <h2>📝 Домашнее задание</h2>
+            <ul>
+                <li>Установи <code>requests</code> командой <code>pip install requests</code> и запусти пример с случайным фактом.</li>
+                <li>Зарегистрируйся на <a href="https://openweathermap.org/api" target="_blank">openweathermap.org</a> и получи бесплатный ключ API. Напиши скрипт который выводит погоду в твоём городе.</li>
+                <li>Попробуй API <a href="https://api.agify.io/?name=Иван" target="_blank">agify.io</a> — он предсказывает возраст по имени. Сделай функцию которая принимает имя и возвращает предсказанный возраст.</li>
+                <li>Напиши функцию которая получает данные с <code>https://jsonplaceholder.typicode.com/users</code> и выводит имена всех пользователей.</li>
+            </ul>
+        </section>
+
+        <section class="lesson-content" style="background: linear-gradient(135deg, rgba(79,70,229,0.06), rgba(124,58,237,0.06)); border-left: 4px solid var(--accent-color);">
+            <h2>🎓 Поздравляем — вы прошли весь курс!</h2>
+            <p>Вы освоили основы Python и даже научились работать с внешними API. Это уже уровень Junior-разработчика.</p>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+                <a href="certificate.html" class="btn">🏆 Получить сертификат</a>
+                <a href="next-steps.html" class="btn" style="background: var(--success-color);">🗺️ Что дальше?</a>
+                <a href="tasks.html" class="btn" style="background: #f59e0b;">🏋️ Решать задачи</a>
+            </div>
+        </section>
+
+        <div class="lesson-navigation"></div>
+    </main>
+
+    <footer>
+        <p>© <span id="footer-year"></span> Python для начинающих. Все права защищены. ·
+            <a href="certificate.html" style="color:var(--accent-color);">Сертификат</a> ·
+            <a href="next-steps.html" style="color:var(--accent-color);">Что дальше?</a>
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
+</body>
+
+</html>
