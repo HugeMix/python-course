@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Вы завершили базовый курс Python. Узнайте что изучать дальше: Django, Data Science, алгоритмы, карьера разработчика.">
+    <title>Что дальше? | PythonBasic</title>
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Что дальше после Python? | PythonBasic">
+    <meta property="og:description" content="Вы прошли базовый курс Python. Вот дорожная карта дальнейшего обучения.">
+    <meta property="og:image" content="logo.png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .path-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .path-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--accent-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .path-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+
+        .path-card.path-web   { border-top-color: #4f46e5; }
+        .path-card.path-data  { border-top-color: #0ea5e9; }
+        .path-card.path-algo  { border-top-color: #f59e0b; }
+        .path-card.path-auto  { border-top-color: #10b981; }
+
+        .path-icon {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+        }
+
+        .path-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .path-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted-color, #64748b);
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+
+        .path-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .path-tag {
+            background: rgba(79,70,229,0.1);
+            color: var(--accent-color);
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .resources-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .resources-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.07));
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+
+        .resources-list li:last-child {
+            border-bottom: none;
+        }
+
+        .resources-list a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .resources-list a:hover {
+            text-decoration: underline;
+        }
+
+        .congrats-banner {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border-radius: var(--radius);
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .congrats-banner h1 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .congrats-banner p {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 500px;
+            margin: 0 auto 24px;
+        }
+
+        .congrats-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-white {
+            background: white;
+            color: #4f46e5;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn-outline-white {
+            background: transparent;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: 2px solid rgba(255,255,255,0.6);
+            transition: background 0.2s;
+        }
+
+        .btn-outline-white:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .support-section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-top: 40px;
+        }
+
+        .support-section h2 {
+            margin-bottom: 10px;
+        }
+
+        .support-section p {
+            color: var(--text-muted-color, #64748b);
+            margin-bottom: 20px;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .support-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="courses.html">Курсы</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="padding: 40px 20px;">
+
+        <div class="congrats-banner">
+            <div style="font-size:3rem; margin-bottom:12px;">🎉</div>
+            <h1>Вы прошли базовый курс Python!</h1>
+            <p>Это серьёзный шаг. Теперь вы знаете основы языка — самое время решить куда двигаться дальше.</p>
+            <div class="congrats-actions">
+                <a href="certificate.html" class="btn-white">🏆 Получить сертификат</a>
+                <a href="python-basic.html" class="btn-outline-white">📚 Вернуться к курсу</a>
+            </div>
+        </div>
+
+        <h2 style="margin-bottom: 8px;">🗺️ Выберите свой путь</h2>
+        <p style="color: var(--text-muted-color, #64748b); margin-bottom: 0;">Куда идти после базового Python — зависит от ваших целей.</p>
+
+        <div class="path-grid">
+            <div class="path-card path-web">
+                <div class="path-icon">🌐</div>
+                <h3>Веб-разработка</h3>
+                <p>Создавайте сайты и REST API. Python используется в бэкенде огромного количества сервисов.</p>
+                <div class="path-tags">
+                    <span class="path-tag">Flask</span>
+                    <span class="path-tag">Django</span>
+                    <span class="path-tag">FastAPI</span>
+                    <span class="path-tag">SQL</span>
+                </div>
+            </div>
+
+            <div class="path-card path-data">
+                <div class="path-icon">📊</div>
+                <h3>Data Science и ИИ</h3>
+                <p>Анализ данных, машинное обучение, нейросети. Python — язык №1 в этой области.</p>
+                <div class="path-tags">
+                    <span class="path-tag">NumPy</span>
+                    <span class="path-tag">Pandas</span>
+                    <span class="path-tag">Scikit-learn</span>
+                    <span class="path-tag">TensorFlow</span>
+                </div>
+            </div>
+
+            <div class="path-card path-algo">
+                <div class="path-icon">🧠</div>
+                <h3>Алгоритмы и структуры данных</h3>
+                <p>Необходимы для прохождения технических собеседований в крупные компании (Яндекс, VK, Google).</p>
+                <div class="path-tags">
+                    <span class="path-tag">LeetCode</span>
+                    <span class="path-tag">Сортировки</span>
+                    <span class="path-tag">Деревья</span>
+                    <span class="path-tag">Графы</span>
+                </div>
+            </div>
+
+            <div class="path-card path-auto">
+                <div class="path-icon">🤖</div>
+                <h3>Автоматизация и боты</h3>
+                <p>Автоматизируйте рутину: парсинг сайтов, Telegram-боты, скрипты для работы с файлами.</p>
+                <div class="path-tags">
+                    <span class="path-tag">requests</span>
+                    <span class="path-tag">BeautifulSoup</span>
+                    <span class="path-tag">Selenium</span>
+                    <span class="path-tag">aiogram</span>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="margin-bottom: 20px;">📖 Полезные ресурсы</h2>
+        <div class="card" style="padding: 8px 24px;">
+            <ul class="resources-list">
+                <li>
+                    <span>📘</span>
+                    <div>
+                        <strong>Официальная документация Python</strong><br>
+                        <a href="https://docs.python.org/ru/3/" target="_blank" rel="noopener">docs.python.org/ru/3</a>
+                        — полный справочник на русском языке
+                    </div>
+                </li>
+                <li>
+                    <span>🏋️</span>
+                    <div>
+                        <strong>LeetCode</strong><br>
+                        <a href="https://leetcode.com" target="_blank" rel="noopener">leetcode.com</a>
+                        — задачи на алгоритмы для подготовки к собеседованиям
+                    </div>
+                </li>
+                <li>
+                    <span>🎓</span>
+                    <div>
+                        <strong>Stepik — Python Generation</strong><br>
+                        <a href="https://stepik.org/course/58852" target="_blank" rel="noopener">stepik.org</a>
+                        — бесплатный продвинутый курс по Python на русском
+                    </div>
+                </li>
+                <li>
+                    <span>🐙</span>
+                    <div>
+                        <strong>GitHub</strong><br>
+                        <a href="https://github.com" target="_blank" rel="noopener">github.com</a>
+                        — создайте профиль, выкладывайте свои проекты, стройте портфолио
+                    </div>
+                </li>
+                <li>
+                    <span>💬</span>
+                    <div>
+                        <strong>Сообщество Python на Reddit</strong><br>
+                        <a href="https://reddit.com/r/learnpython" target="_blank" rel="noopener">r/learnpython</a>
+                        — задавайте вопросы, делитесь проектами (на английском)
+                    </div>
+                </li>
+                <li>
+                    <span>📺</span>
+                    <div>
+                        <strong>Хабр — Python</strong><br>
+                        <a href="https://habr.com/ru/hub/python/" target="_blank" rel="noopener">habr.com/ru/hub/python</a>
+                        — статьи русскоязычного сообщества разработчиков
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="support-section">
+            <div style="font-size: 2rem; margin-bottom: 8px;">❤️</div>
+            <h2>Поддержать проект</h2>
+            <p>Курс бесплатный и таким останется. Если он вам помог — поддержите развитие платформы. Это позволит добавлять новые уроки и улучшать материалы.</p>
+            <div class="support-btns">
+                <a href="https://boosty.to/ВАШ_ПРОФИЛЬ" target="_blank" rel="noopener" class="btn" style="background: #f97316;">
+                    ☕ Поддержать на Boosty
+                </a>
+                <a href="https://yoomoney.ru/to/ВАШ_КОШЕЛЁК" target="_blank" rel="noopener" class="btn" style="background: #6366f1;">
+                    💳 ЮMoney
+                </a>
+            </div>
+            <p style="margin-top: 12px; font-size: 0.8rem;">⚠️ Ссылки-заглушки — замените на свои в файле next-steps.html</p>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>© <span id="footer-year"></span> Python для начинающих. Все права защищены. ·
+            <a href="certificate.html" style="color:var(--accent-color);">Сертификат</a> ·
+            <a href="next-steps.html" style="color:var(--accent-color);">Что дальше?</a>
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

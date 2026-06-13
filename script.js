@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const lessonsList = [
         'lesson1.html', 'lesson2.html', 'lesson3.html', 'lesson4.html', 'lesson5.html',
         'lesson6.html', 'lesson7.html', 'lesson8.html', 'lesson9.html', 'lesson10.html',
-        'lesson11.html', 'lesson12.html', 'lesson13.html', 'lesson14.html', 'lesson15.html'
+        'lesson11.html', 'lesson12.html', 'lesson13.html', 'lesson14.html', 'lesson15.html',
+        'lesson16.html'
     ];
 
     function safeGetProgress() {
@@ -176,6 +177,17 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что означает %d в шаблоне strftime()?", options: ["Год (4 цифры)", "Месяц (01-12)", "День (01-31)", "Часы (00-23)"], correct: 2 },
             { question: "Напишите название метода, конвертирующего дату в строку по шаблону формата", type: "code", correct: ["strftime", "strftime()", ".strftime()"] },
             { question: "Напишите строку импорта класса datetime из модуля datetime", type: "code", correct: ["from datetime import datetime"] }
+        ],
+        'lesson16.html': [
+            { question: "Какая библиотека Python используется для выполнения HTTP-запросов?", options: ["urllib2", "requests", "httplib", "fetch"], correct: 1 },
+            { question: "Какой метод библиотеки requests используется для GET-запроса?", options: ["requests.fetch()", "requests.load()", "requests.get()", "requests.read()"], correct: 2 },
+            { question: "Что означает код ответа HTTP 200?", options: ["Ошибка сервера", "Страница не найдена", "Успешный запрос", "Нет прав доступа"], correct: 2 },
+            { question: "Как получить JSON-данные из объекта ответа requests?", options: ["response.text()", "response.data", "json.loads(response)", "response.json()"], correct: 3 },
+            { question: "Что такое API?", options: ["Язык программирования", "База данных", "Интерфейс взаимодействия программ между собой", "Протокол интернета"], correct: 2 },
+            { question: "Зачем указывать параметр timeout в requests.get()?", options: ["Чтобы ускорить запрос", "Чтобы установить приоритет запроса", "Чтобы программа не зависла при недоступном сервере", "Это обязательный параметр"], correct: 2 },
+            { question: "Какой метод вызывает исключение если код ответа >= 400?", options: ["response.check()", "response.raise_for_status()", "response.assert_ok()", "response.validate()"], correct: 1 },
+            { question: "Напишите команду для установки библиотеки requests", type: "code", correct: ["pip install requests"] },
+            { question: "Напишите GET-запрос к переменной url используя библиотеку requests", type: "code", correct: ["requests.get(url)", "response = requests.get(url)", "r = requests.get(url)"] }
         ],
         'lesson15.html': [
             { question: "Какая библиотека встроена в Python 'из коробки' для создания настольных окон (GUI)?", options: ["Pandas", "Tkinter", "Requests", "PyQt"], correct: 1 },
@@ -755,6 +767,57 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    function initProgressExportImport() {
+        const exportBtn = document.getElementById('btn-export-progress');
+        const importBtn = document.getElementById('btn-import-progress');
+        const importFile = document.getElementById('input-import-file');
+
+        if (exportBtn) {
+            exportBtn.onclick = () => {
+                const progress = safeGetProgress();
+                const blob = new Blob([JSON.stringify(progress, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'pythonbasic-progress.json';
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('✅ Прогресс сохранён в файл!', 'success');
+            };
+        }
+
+        if (importBtn && importFile) {
+            importBtn.onclick = () => importFile.click();
+            importFile.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const data = JSON.parse(ev.target.result);
+                        if (typeof data !== 'object') throw new Error('invalid');
+                        localStorage.setItem('quiz_results', JSON.stringify(data));
+                        showToast('✅ Прогресс загружен!', 'success');
+                        setTimeout(() => location.reload(), 1000);
+                    } catch {
+                        showToast('❌ Неверный формат файла', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            };
+        }
+    }
+
+    function initCourseCompletionBanner() {
+        if (currentPath !== 'python-basic.html') return;
+        const progress = safeGetProgress();
+        const allDone = lessonsList.every(l => progress[l]);
+        if (!allDone) return;
+
+        const banner = document.getElementById('course-completion-banner');
+        if (banner) banner.style.display = 'block';
+    }
+
     // --- Scroll Animations ---
     function initScrollAnimations() {
         const animatedElements = document.querySelectorAll('.card, .lesson-card, .lesson-content, .lesson-goal, .lesson-homework, #quiz-container, .tasks-sidebar, .task-description, .editor-container');
@@ -820,6 +883,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initQuiz();
     initTheme();
     initResetButton();
+    initProgressExportImport();
+    initCourseCompletionBanner();
     initScrollAnimations();
     document.querySelectorAll('footer p').forEach(el => {
         el.innerHTML = el.innerHTML.replace(/©\s*\d{4}/, '© ' + new Date().getFullYear());

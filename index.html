@@ -49,7 +49,7 @@
         <section class="info">
             <div class="card">
                 <h3>🚀 Быстрый старт</h3>
-                <p>Начните изучать материалы и выучите один из популярных языков программирования - Python.</p>
+                <p>Начните изучать материалы и выучите один из популярных языков программирования — Python.</p>
             </div>
             <div class="card">
                 <h3>💡 Лёгкое объяснение</h3>
@@ -59,14 +59,37 @@
                 <h3>📜 Практика</h3>
                 <p>Каждый урок включает код, который можно сразу попробовать, изучить и выполнить домашнее задание.</p>
             </div>
+            <div class="card">
+                <h3>🏆 Сертификат</h3>
+                <p>По завершении всех уроков вы получаете сертификат об окончании курса, который можно распечатать.</p>
+            </div>
+        </section>
+
+        <!-- Секция поддержки -->
+        <section style="background: var(--card-bg); border-radius: var(--radius); padding: 36px; text-align: center; box-shadow: var(--shadow); margin: 32px 0;">
+            <div style="font-size: 2rem; margin-bottom: 8px;">❤️</div>
+            <h2 style="font-size: 1.4rem; margin-bottom: 10px;">Нравится курс? Поддержите проект!</h2>
+            <p style="color: var(--text-muted-color, #64748b); max-width: 480px; margin: 0 auto 20px;">
+                Курс бесплатный и таким останется. Если он вам помог — ваша поддержка позволит добавлять новые уроки и улучшать платформу.
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://boosty.to/ВАШ_ПРОФИЛЬ" target="_blank" rel="noopener"
+                    class="btn" style="background: #f97316;">☕ Поддержать на Boosty</a>
+                <a href="https://yoomoney.ru/to/ВАШ_КОШЕЛЁК" target="_blank" rel="noopener"
+                    class="btn" style="background: #6366f1;">💳 ЮMoney</a>
+            </div>
         </section>
     </main>
 
     <footer>
-        <p>© 2025 Python для начинающих. Все права защищены.</p>
+        <p>© <span id="footer-year"></span> Python для начинающих. Все права защищены. ·
+            <a href="certificate.html" style="color:var(--accent-color);">Сертификат</a> ·
+            <a href="next-steps.html" style="color:var(--accent-color);">Что дальше?</a>
+        </p>
     </footer>
 
     <script src="script.js"></script>
+    <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
 </body>
 
 </html>

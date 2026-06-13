@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Сертификат об окончании Базового курса по Python на платформе PythonBasic.">
+    <title>Сертификат | PythonBasic</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .cert-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            background: var(--bg-color);
+        }
+
+        .cert-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cert-input {
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: 2px solid var(--accent-color);
+            font-size: 1rem;
+            background: var(--card-bg);
+            color: var(--text-color);
+            width: 280px;
+            outline: none;
+            transition: box-shadow 0.2s;
+        }
+
+        .cert-input:focus {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .cert-wrapper {
+            width: 100%;
+            max-width: 860px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 1.414 / 1;
+        }
+
+        .cert-border-outer {
+            position: absolute;
+            inset: 12px;
+            border: 3px solid #4f46e5;
+            border-radius: 2px;
+            pointer-events: none;
+        }
+
+        .cert-border-inner {
+            position: absolute;
+            inset: 18px;
+            border: 1px solid #c7d2fe;
+            border-radius: 1px;
+            pointer-events: none;
+        }
+
+        .cert-corner {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-color: #4f46e5;
+            border-style: solid;
+        }
+        .cert-corner.tl { top: 24px; left: 24px; border-width: 3px 0 0 3px; }
+        .cert-corner.tr { top: 24px; right: 24px; border-width: 3px 3px 0 0; }
+        .cert-corner.bl { bottom: 24px; left: 24px; border-width: 0 0 3px 3px; }
+        .cert-corner.br { bottom: 24px; right: 24px; border-width: 0 3px 3px 0; }
+
+        .cert-body {
+            position: relative;
+            padding: 50px 70px;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #1e293b;
+        }
+
+        .cert-logo-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .cert-logo-text {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #1e293b;
+        }
+
+        .cert-logo-text span {
+            color: #4f46e5;
+        }
+
+        .cert-headline {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .cert-title {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .cert-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .cert-name {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #4f46e5;
+            border-bottom: 2px solid #c7d2fe;
+            padding-bottom: 6px;
+            min-width: 300px;
+            margin-bottom: 14px;
+            font-style: italic;
+        }
+
+        .cert-course {
+            font-size: 0.95rem;
+            color: #475569;
+            margin-bottom: 20px;
+            max-width: 480px;
+        }
+
+        .cert-course strong {
+            color: #1e293b;
+        }
+
+        .cert-footer-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: auto;
+            padding-top: 10px;
+            font-size: 0.72rem;
+            color: #94a3b8;
+        }
+
+        .cert-seal {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 16px rgba(79,70,229,0.3);
+        }
+
+        .cert-divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(to right, #4f46e5, #7c3aed);
+            margin: 12px auto;
+            border-radius: 2px;
+        }
+
+        @media print {
+            header, footer, .cert-controls, .cert-note {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+            }
+            .cert-page {
+                padding: 0;
+            }
+            .cert-wrapper {
+                box-shadow: none;
+                max-width: 100%;
+                page-break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cert-body {
+                padding: 30px 30px;
+            }
+            .cert-title {
+                font-size: 1.4rem;
+            }
+            .cert-name {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="courses.html">Курсы</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="cert-page">
+            <section style="text-align:center; margin-bottom: 28px;">
+                <h1 style="font-size:1.8rem; margin-bottom:8px;">🏆 Ваш сертификат</h1>
+                <p style="color: var(--text-muted-color, #64748b);">Введите своё имя и распечатайте сертификат — он подтвердит прохождение курса.</p>
+            </section>
+
+            <div class="cert-controls">
+                <input
+                    class="cert-input"
+                    id="cert-name-input"
+                    type="text"
+                    placeholder="Введите ваше имя..."
+                    maxlength="40"
+                />
+                <button class="btn" onclick="window.print()">🖨️ Распечатать</button>
+            </div>
+
+            <div class="cert-wrapper" id="certificate">
+                <div class="cert-border-outer"></div>
+                <div class="cert-border-inner"></div>
+                <div class="cert-corner tl"></div>
+                <div class="cert-corner tr"></div>
+                <div class="cert-corner bl"></div>
+                <div class="cert-corner br"></div>
+
+                <div class="cert-body">
+                    <div class="cert-logo-row">
+                        <img src="logo.png" alt="PythonBasic" style="height:32px;">
+                        <div class="cert-logo-text">Python<span>Basic</span></div>
+                    </div>
+
+                    <div class="cert-headline">Образовательная платформа</div>
+
+                    <div class="cert-seal">🐍</div>
+
+                    <div class="cert-headline">Настоящий сертификат подтверждает, что</div>
+
+                    <div class="cert-name" id="cert-name-display">Иванов Иван</div>
+
+                    <div class="cert-divider"></div>
+
+                    <div class="cert-title">Базовый курс по Python</div>
+
+                    <div class="cert-course">
+                        успешно прошёл(а) все уроки курса, включая темы:<br>
+                        <strong>переменные, циклы, функции, ООП, исключения, файлы, модули и финальный проект</strong>
+                    </div>
+
+                    <div class="cert-footer-row">
+                        <span>pythonbasic.ru</span>
+                        <span id="cert-date"></span>
+                        <span id="cert-number"></span>
+                    </div>
+                </div>
+            </div>
+
+            <p class="cert-note" style="margin-top:20px; font-size:0.85rem; color:#94a3b8; text-align:center;">
+                Используйте браузерную печать (Ctrl+P) для сохранения в PDF.<br>
+                В настройках печати выберите «Сохранить как PDF» и отключите колонтитулы.
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <p>© <span id="footer-year"></span> Python для начинающих. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        const nameInput = document.getElementById('cert-name-input');
+        const nameDisplay = document.getElementById('cert-name-display');
+        const certDate = document.getElementById('cert-date');
+        const certNumber = document.getElementById('cert-number');
+        const footerYear = document.getElementById('footer-year');
+
+        footerYear.textContent = new Date().getFullYear();
+
+        const now = new Date();
+        certDate.textContent = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        const stored = localStorage.getItem('cert_number');
+        const num = stored || ('PB-' + now.getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000));
+        if (!stored) localStorage.setItem('cert_number', num);
+        certNumber.textContent = '№ ' + num;
+
+        const savedName = localStorage.getItem('cert_name') || '';
+        if (savedName) {
+            nameInput.value = savedName;
+            nameDisplay.textContent = savedName;
+        }
+
+        nameInput.addEventListener('input', () => {
+            const val = nameInput.value.trim();
+            nameDisplay.textContent = val || 'Ваше Имя';
+            if (val) localStorage.setItem('cert_name', val);
+        });
+    </script>
+</body>
+
+</html>

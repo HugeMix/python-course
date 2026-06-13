@@ -204,8 +204,11 @@ for i in range(1, 4):
         </div>
     </main>
 
-    <footer>
-        <p>© 2025 Python для начинающих. Все права защищены.</p>
+        <footer>
+        <p>© <span class="footer-year"></span> Python для начинающих. Все права защищены. ·
+            <a href="certificate.html" style="color:var(--accent-color);">Сертификат</a> ·
+            <a href="next-steps.html" style="color:var(--accent-color);">Что дальше?</a>
+        </p>
     </footer>
 
     <script src="script.js"></script>
@@ -292,6 +295,7 @@ for i in range(1, 4):
         // Start initialization
         initPyodide();
     </script>
+    <script>document.querySelectorAll('.footer-year').forEach(el => el.textContent = new Date().getFullYear());</script>
 </body>
 
 </html>
