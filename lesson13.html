@@ -34,6 +34,7 @@
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
                 </ul>
             </nav>
         </div>
@@ -122,6 +123,112 @@ my_car.start_engine()</code></pre>
 
     def get_balance(self):
         return self.__balance     # Безопасный доступ через метод</code></pre>
+
+            <h2>🧬 Наследование</h2>
+            <p>Наследование позволяет создавать новые классы на основе существующих. Дочерний класс
+                получает все атрибуты и методы родительского класса и может добавлять свои.
+                Функция <code>super()</code> обращается к родительскому классу.</p>
+            <pre><code># Базовый класс
+class Animal:
+    def __init__(self, name, sound):
+        self.name = name
+        self.sound = sound
+
+    def speak(self):
+        return f"{self.name} говорит: {self.sound}"
+
+    def __str__(self):
+        return f"Животное '{self.name}'"
+
+# Дочерние классы наследуют всё от Animal
+class Dog(Animal):
+    def __init__(self, name):
+        super().__init__(name, "Гав!")  # Вызываем родительский __init__
+
+    def fetch(self):
+        return f"{self.name} принёс мяч!"
+
+class Cat(Animal):
+    def __init__(self, name):
+        super().__init__(name, "Мяу!")
+
+    def purr(self):
+        return f"{self.name} мурлычет..."
+
+# Использование
+dog = Dog("Рекс")
+cat = Cat("Мурка")
+print(dog.speak())   # Рекс говорит: Гав!
+print(cat.speak())   # Мурка говорит: Мяу!
+print(dog.fetch())   # Рекс принёс мяч!
+print(str(dog))      # Животное 'Рекс'</code></pre>
+
+            <h2>✨ Магические методы</h2>
+            <p>Магические (дандер) методы — это специальные методы с двойным подчёркиванием в начале и
+                конце имени. Они позволяют настраивать поведение объектов со стандартными операторами
+                Python: <code>+</code>, <code>len()</code>, <code>==</code>, <code>str()</code> и другими.</p>
+            <pre><code>class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __str__(self):
+        return f"Vector({self.x}, {self.y})"
+
+    def __repr__(self):
+        return f"Vector(x={self.x}, y={self.y})"
+
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __len__(self):
+        import math
+        return int(math.sqrt(self.x**2 + self.y**2))
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+v1 = Vector(2, 3)
+v2 = Vector(1, 4)
+print(v1 + v2)     # Vector(3, 7) — через __add__
+print(len(v1))     # 3 — через __len__
+print(v1 == v2)    # False — через __eq__
+print(str(v1))     # Vector(2, 3) — через __str__</code></pre>
+
+            <h2>🏗️ Практический пример: банковский счёт</h2>
+            <p>Объединим инкапсуляцию и методы в полноценном классе <code>BankAccount</code>,
+                который хранит историю операций и защищает баланс от прямого изменения снаружи.</p>
+            <pre><code>class BankAccount:
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self.__balance = balance  # Приватный атрибут
+        self.__history = []
+
+    def deposit(self, amount):
+        if amount &lt;= 0:
+            raise ValueError("Сумма должна быть положительной")
+        self.__balance += amount
+        self.__history.append(f"Пополнение: +{amount} руб.")
+
+    def withdraw(self, amount):
+        if amount &gt; self.__balance:
+            raise ValueError("Недостаточно средств")
+        self.__balance -= amount
+        self.__history.append(f"Снятие: -{amount} руб.")
+
+    def get_balance(self):
+        return self.__balance
+
+    def print_history(self):
+        print(f"История счёта {self.owner}:")
+        for record in self.__history:
+            print(f"  {record}")
+        print(f"  Баланс: {self.__balance} руб.")
+
+account = BankAccount("Алекс", 1000)
+account.deposit(500)
+account.withdraw(200)
+account.print_history()</code></pre>
         </section>
 
         <!-- Квиз -->
@@ -135,6 +242,9 @@ my_car.start_engine()</code></pre>
                 <li>Добавь метод <code>greet</code>, который выводит приветствие с именем и возрастом.</li>
                 <li>Создай два объекта этого класса с разными данными и вызови метод <code>greet</code>.</li>
                 <li>Попробуй добавить приватный атрибут и метод для его получения.</li>
+                <li>Создай класс <code>Rectangle</code> с атрибутами <code>width</code> и <code>height</code>. Добавь методы <code>area()</code> и <code>perimeter()</code>, возвращающие площадь и периметр.</li>
+                <li>Реализуй наследование: создай базовый класс <code>Shape</code> с методом <code>describe()</code> и дочерние классы <code>Circle</code> и <code>Square</code>, переопределяющие этот метод.</li>
+                <li>Добавь к классу <code>BankAccount</code> из урока магические методы <code>__str__</code> (красивый вывод информации о счёте) и <code>__eq__</code> (сравнение двух счетов по балансу).</li>
             </ul>
         </section>
 

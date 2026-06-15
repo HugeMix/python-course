@@ -30,6 +30,7 @@
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
                 </ul>
             </nav>
         </div>
@@ -173,6 +174,105 @@ def get_random_joke():
 
 get_random_joke()</code></pre>
 
+            <h2>📤 POST-запросы и отправка данных</h2>
+            <p>POST-запрос используется, когда нужно не просто получить данные, а отправить их на сервер:
+                зарегистрировать пользователя, создать запись, отправить форму. Данные передаются
+                в теле запроса, а не в URL.</p>
+            <pre><code>import requests
+
+# POST — отправка данных на сервер
+url = "https://httpbin.org/post"
+
+# Отправка JSON
+data = {
+    "username": "alex",
+    "password": "secret123"
+}
+response = requests.post(url, json=data)
+print(response.status_code)  # 200
+print(response.json())
+
+# Отправка формы
+form_data = {"name": "Алекс", "email": "alex@example.com"}
+response = requests.post(url, data=form_data)
+print(response.json()["form"])</code></pre>
+
+            <h2>🔑 Заголовки и API-ключи</h2>
+            <p>Многие коммерческие API требуют ключ для доступа — он передаётся в заголовке
+                <code>Authorization</code>. Заголовки также используются для указания типа контента
+                и идентификации клиента.</p>
+            <pre><code>import requests
+
+# Многие API требуют ключ для доступа
+API_KEY = "твой_ключ_здесь"
+
+headers = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json",
+    "User-Agent": "MyPythonApp/1.0"
+}
+
+response = requests.get(
+    "https://api.example.com/data",
+    headers=headers
+)
+
+# Параметры запроса (query string)
+params = {
+    "city": "Moscow",
+    "units": "metric",
+    "lang": "ru"
+}
+# Результат: https://api.example.com/weather?city=Moscow&amp;units=metric&amp;lang=ru
+response = requests.get("https://api.example.com/weather", params=params)</code></pre>
+
+            <h2>🌤️ Практический пример: погодное API</h2>
+            <p>Open-Meteo — это бесплатное погодное API, которое не требует регистрации и ключа.
+                Пример ниже сначала получает координаты города через геокодинг, а затем запрашивает
+                по ним текущую погоду.</p>
+            <pre><code>import requests
+
+def get_weather(city):
+    """
+    Получить погоду через Open-Meteo API (бесплатно, без ключа)
+    Сначала получаем координаты, потом погоду
+    """
+    # Шаг 1: Геокодинг — название города → координаты
+    geo_url = "https://geocoding-api.open-meteo.com/v1/search"
+    geo_params = {"name": city, "count": 1, "language": "ru"}
+
+    geo_resp = requests.get(geo_url, params=geo_params, timeout=5)
+    geo_resp.raise_for_status()
+    geo_data = geo_resp.json()
+
+    if not geo_data.get("results"):
+        return f"Город '{city}' не найден"
+
+    result = geo_data["results"][0]
+    lat, lon = result["latitude"], result["longitude"]
+
+    # Шаг 2: Получить погоду по координатам
+    weather_url = "https://api.open-meteo.com/v1/forecast"
+    weather_params = {
+        "latitude": lat,
+        "longitude": lon,
+        "current_weather": True
+    }
+
+    w_resp = requests.get(weather_url, params=weather_params, timeout=5)
+    w_resp.raise_for_status()
+    w_data = w_resp.json()["current_weather"]
+
+    return (f"Погода в {result['name']}:\n"
+            f"  Температура: {w_data['temperature']}°C\n"
+            f"  Скорость ветра: {w_data['windspeed']} км/ч")
+
+try:
+    print(get_weather("Москва"))
+    print(get_weather("Санкт-Петербург"))
+except requests.RequestException as e:
+    print(f"Ошибка запроса: {e}")</code></pre>
+
         </section>
 
         <div id="quiz-container"></div>
@@ -184,6 +284,9 @@ get_random_joke()</code></pre>
                 <li>Зарегистрируйся на <a href="https://openweathermap.org/api" target="_blank">openweathermap.org</a> и получи бесплатный ключ API. Напиши скрипт который выводит погоду в твоём городе.</li>
                 <li>Попробуй API <a href="https://api.agify.io/?name=Иван" target="_blank">agify.io</a> — он предсказывает возраст по имени. Сделай функцию которая принимает имя и возвращает предсказанный возраст.</li>
                 <li>Напиши функцию которая получает данные с <code>https://jsonplaceholder.typicode.com/users</code> и выводит имена всех пользователей.</li>
+                <li>Используй функцию <code>get_weather</code> из урока: запроси погоду в трёх разных городах и выведи результаты в виде таблицы (выравнивание через f-строки).</li>
+                <li>Напиши скрипт, который делает POST-запрос на <code>https://httpbin.org/post</code> с твоими данными (имя, email, возраст) в формате JSON и красиво выводит ответ сервера.</li>
+                <li>Напиши функцию <code>safe_get(url, params=None)</code>, которая делает GET-запрос с таймаутом 5 секунд, обрабатывает все типы ошибок через <code>try-except</code> и возвращает либо словарь с данными, либо <code>None</code> при ошибке.</li>
             </ul>
         </section>
 

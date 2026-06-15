@@ -24,4 +24,16 @@
   <url><loc>https://hugemix.github.io/python-course/lesson14.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hugemix.github.io/python-course/lesson15.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hugemix.github.io/python-course/lesson16.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url>
+        <loc>https://hugemix.github.io/python-course/cheatsheet.html</loc>
+        <lastmod>2026-06-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://hugemix.github.io/python-course/glossary.html</loc>
+        <lastmod>2026-06-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
 </urlset>

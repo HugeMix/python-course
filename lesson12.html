@@ -34,6 +34,7 @@
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
                 </ul>
             </nav>
         </div>
@@ -104,6 +105,81 @@ print(response.status_code)  # Выведет 200, если запрос усп�
             <pre><code>import math as m
 
 print(m.sqrt(9))  # 3.0 - всё так же, но через псевдоним `m`</code></pre>
+
+            <h2>📦 Создание своего модуля</h2>
+            <p>Любой файл с расширением <code>.py</code> является модулем в Python. Вы можете разбить проект на несколько файлов и импортировать нужные функции и переменные из одного файла в другой — так код становится организованнее и удобнее для повторного использования:</p>
+            <pre><code># --- Файл mymath.py ---
+PI = 3.14159265
+
+def circle_area(radius):
+    """Площадь круга"""
+    return PI * radius ** 2
+
+def circle_perimeter(radius):
+    """Длина окружности"""
+    return 2 * PI * radius
+
+# --- Файл main.py ---
+import mymath
+
+area = mymath.circle_area(5)
+print(f"Площадь: {area:.2f}")
+
+# Или импортируем конкретные имена:
+from mymath import circle_area, PI
+print(f"Площадь: {circle_area(5):.2f}")
+print(f"π = {PI}")</code></pre>
+
+            <h2>🌐 Полезные стандартные модули</h2>
+            <p>Стандартная библиотека Python содержит сотни готовых модулей. Вот наиболее часто используемые в реальных проектах:</p>
+            <pre><code># os — работа с операционной системой
+import os
+print(os.getcwd())                     # Текущая директория
+os.makedirs("new_dir", exist_ok=True)  # Создать папку
+
+# sys — системные параметры
+import sys
+print(sys.version)   # Версия Python
+print(sys.platform)  # Платформа (win32, linux, darwin)
+
+# json — работа с JSON
+import json
+data = {"name": "Алекс", "age": 25}
+json_str = json.dumps(data, ensure_ascii=False)  # Объект → строка JSON
+print(json_str)  # {"name": "Алекс", "age": 25}
+
+loaded = json.loads(json_str)  # Строка JSON → объект
+print(loaded["name"])  # Алекс
+
+# re — регулярные выражения
+import re
+text = "Телефон: +7 (999) 123-45-67"
+phone = re.findall(r'\d+', text)
+print(phone)  # ['7', '999', '123', '45', '67']</code></pre>
+
+            <h2>🏠 Виртуальное окружение</h2>
+            <p>Виртуальное окружение (virtual environment) — это изолированная копия Python со своим набором установленных пакетов. Это позволяет разным проектам использовать разные версии одной библиотеки, не мешая друг другу и не засоряя системный Python:</p>
+            <pre><code># Создание виртуального окружения
+python -m venv myproject_env
+
+# Активация (Windows)
+myproject_env\Scripts\activate
+
+# Активация (Mac/Linux)
+source myproject_env/bin/activate
+
+# Установка пакетов (только в этом окружении)
+pip install requests
+
+# Сохранение списка зависимостей
+pip freeze > requirements.txt
+
+# Установка из файла зависимостей (для других разработчиков)
+pip install -r requirements.txt
+
+# Деактивация
+deactivate</code></pre>
+            <p>Файл <code>requirements.txt</code> — стандарт Python-проектов. Он перечисляет все необходимые библиотеки с их версиями, чтобы любой разработчик мог воспроизвести окружение одной командой <code>pip install -r requirements.txt</code>. Всегда добавляйте папку виртуального окружения в <code>.gitignore</code>, а <code>requirements.txt</code> — в репозиторий.</p>
         </section>
 
         <!-- Квиз -->
@@ -118,6 +194,10 @@ print(m.sqrt(9))  # 3.0 - всё так же, но через псевдоним
                     использовать её для округления числа 4.3.</li>
                 <li>Установи библиотеку <code>requests</code> через pip и попробуй сделать HTTP-запрос
                     к любому открытому API.</li>
+                <li>Создай свой модуль <code>converters.py</code> с функциями перевода: километры в мили, килограммы в фунты, градусы Цельсия в Фаренгейт. Импортируй и используй их в основном файле.</li>
+                <li>Используй модуль <code>json</code> для сохранения словаря с информацией о трёх студентах в файл <code>students.json</code>, а затем прочитай и выведи данные обратно.</li>
+                <li>Создай виртуальное окружение для учебного проекта, установи в него библиотеку <code>requests</code> и сохрани список зависимостей в <code>requirements.txt</code>.</li>
+                <li>Используй модуль <code>re</code>, чтобы написать функцию <code>extract_emails(text)</code>, которая находит все email-адреса в переданной строке и возвращает их списком.</li>
             </ul>
         </section>
 
