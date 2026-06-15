@@ -34,6 +34,7 @@
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
                 </ul>
             </nav>
         </div>
@@ -120,6 +121,99 @@ except ValueError:
     print("Введите только числа!")
 except ZeroDivisionError:
     print("На ноль делить нельзя!")</code></pre>
+
+            <h2>🔢 Основные виды исключений</h2>
+            <p>В Python существует множество встроенных исключений. Знание наиболее частых поможет быстро находить причину ошибки и писать более надёжный код:</p>
+            <pre><code># TypeError — несовместимые типы
+try:
+    result = "5" + 5
+except TypeError as e:
+    print(f"TypeError: {e}")
+
+# ValueError — неверное значение
+try:
+    number = int("привет")
+except ValueError as e:
+    print(f"ValueError: {e}")
+
+# IndexError — выход за границы
+try:
+    lst = [1, 2, 3]
+    print(lst[10])
+except IndexError as e:
+    print(f"IndexError: {e}")
+
+# KeyError — ключ не найден в словаре
+try:
+    d = {"a": 1}
+    print(d["z"])
+except KeyError as e:
+    print(f"KeyError: {e}")</code></pre>
+
+            <h2>🛡️ else и finally в связке с try-except</h2>
+            <p>Блок <code>else</code> выполняется только если в блоке <code>try</code> не возникло ни одной ошибки — это удобно для кода, который должен работать исключительно при успехе. Блок <code>finally</code> выполняется в любом случае:</p>
+            <pre><code>def safe_divide(a, b):
+    try:
+        result = a / b
+    except ZeroDivisionError:
+        print("Ошибка: деление на ноль!")
+        return None
+    except TypeError:
+        print("Ошибка: передайте числа, не строки!")
+        return None
+    else:
+        # Выполняется только если НЕ было ошибки
+        print("Деление выполнено успешно")
+        return result
+    finally:
+        # Выполняется ВСЕГДА
+        print("Функция завершена")
+
+print(safe_divide(10, 2))    # 5.0
+print(safe_divide(10, 0))    # None
+print(safe_divide("10", 2))  # None</code></pre>
+
+            <h2>🏗️ Создание своего исключения</h2>
+            <p>Когда встроенных исключений недостаточно для описания бизнес-логики, можно создать собственный класс исключения, унаследовав его от <code>Exception</code>:</p>
+            <pre><code># Свои исключения для бизнес-логики
+class AgeError(Exception):
+    """Исключение для неверного возраста"""
+    pass
+
+class NegativeValueError(Exception):
+    def __init__(self, value):
+        self.value = value
+        super().__init__(f"Значение не может быть отрицательным: {value}")
+
+def set_age(age):
+    if not isinstance(age, int):
+        raise TypeError("Возраст должен быть целым числом")
+    if age &lt; 0 or age &gt; 150:
+        raise AgeError(f"Невозможный возраст: {age}")
+    return age
+
+try:
+    set_age(-5)
+except AgeError as e:
+    print(f"Ошибка: {e}")</code></pre>
+
+            <h2>🔒 Практический пример: надёжный ввод</h2>
+            <p>Объединим обработку исключений с циклом, чтобы программа продолжала просить ввод до тех пор, пока пользователь не введёт корректное значение:</p>
+            <pre><code>def get_positive_number(prompt):
+    """Запрашивает положительное число до тех пор пока не введут верное"""
+    while True:
+        try:
+            value = float(input(prompt))
+            if value &lt;= 0:
+                raise ValueError("Число должно быть положительным")
+            return value
+        except ValueError as e:
+            print(f"Неверный ввод: {e}. Попробуй снова.")
+
+# Использование
+price = get_positive_number("Введи цену товара: ")
+quantity = get_positive_number("Введи количество: ")
+print(f"Итого: {price * quantity:.2f} руб.")</code></pre>
         </section>
 
         <!-- Квиз -->
@@ -137,6 +231,9 @@ except ZeroDivisionError:
                 <li>Напишите обработчик, который перехватывает и <code>ValueError</code>, и
                     <code>ZeroDivisionError</code> в одной программе.
                 </li>
+                <li>Напишите программу, которая открывает файл по имени, введённому пользователем, и обрабатывает исключение <code>FileNotFoundError</code>, выводя понятное сообщение об ошибке вместо краша.</li>
+                <li>Создайте собственный класс исключения <code>PasswordTooShortError</code> и используйте его в функции проверки пароля: если длина пароля меньше 8 символов — выбрасывайте это исключение.</li>
+                <li>Напишите функцию <code>safe_open_json(path)</code>, которая читает JSON-файл и обрабатывает сразу три исключения: <code>FileNotFoundError</code>, <code>PermissionError</code> и <code>ValueError</code> (невалидный JSON). В блоке <code>else</code> выводите количество ключей в данных.</li>
             </ul>
         </section>
 

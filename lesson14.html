@@ -34,6 +34,7 @@
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
                 </ul>
             </nav>
         </div>
@@ -108,6 +109,78 @@ print("До конца года осталось:", delta.days, "дней")</cod
 today = datetime.now()
 next_week = today + timedelta(days=7)
 print("Через неделю будет:", next_week.strftime("%d.%m.%Y"))</code></pre>
+
+            <h2>🔄 Парсинг строки в дату (strptime)</h2>
+            <p>Метод <code>strptime()</code> делает обратное по отношению к <code>strftime()</code>:
+                он превращает строку в объект <code>datetime</code>. Название:
+                <strong>str</strong>ing <strong>p</strong>arse <strong>time</strong>.</p>
+            <pre><code>from datetime import datetime
+
+# strptime — строка → объект datetime
+date_str = "25.12.2024"
+date = datetime.strptime(date_str, "%d.%m.%Y")
+print(date)             # 2024-12-25 00:00:00
+print(type(date))       # &lt;class 'datetime.datetime'&gt;
+
+# Различные форматы
+date1 = datetime.strptime("2024-03-15", "%Y-%m-%d")
+date3 = datetime.strptime("25/12/2024 14:30", "%d/%m/%Y %H:%M")
+
+# Удобный паттерн: конвертация между форматами
+input_date = "2024-12-25"
+date_obj = datetime.strptime(input_date, "%Y-%m-%d")
+output_date = date_obj.strftime("%d.%m.%Y")
+print(output_date)  # 25.12.2024</code></pre>
+
+            <h2>⏱️ Практические вычисления с датами</h2>
+            <p>Комбинируя <code>strptime</code>, <code>datetime.now()</code> и <code>timedelta</code>,
+                можно решать реальные задачи: считать возраст, вычислять дедлайны и дни до события.</p>
+            <pre><code>from datetime import datetime, timedelta
+
+# Калькулятор возраста
+def calculate_age(birth_date_str):
+    birth = datetime.strptime(birth_date_str, "%d.%m.%Y")
+    today = datetime.now()
+    age = today.year - birth.year
+    # Проверяем был ли день рождения в этом году
+    if (today.month, today.day) &lt; (birth.month, birth.day):
+        age -= 1
+    return age
+
+age = calculate_age("15.08.1995")
+print(f"Возраст: {age} лет")
+
+# Дедлайн через N дней
+deadline = datetime.now() + timedelta(days=30)
+print(f"Дедлайн: {deadline.strftime('%d.%m.%Y')}")
+
+# Сколько дней до Нового года
+today = datetime.now()
+new_year = datetime(today.year + 1, 1, 1)
+days_left = (new_year - today).days
+print(f"До Нового года осталось {days_left} дней")</code></pre>
+
+            <h2>🌍 Unix timestamp</h2>
+            <p>Unix timestamp — это количество секунд, прошедших с 1 января 1970 года (эпохи Unix).
+                Широко используется в логах, базах данных и API-ответах, потому что не зависит
+                от часового пояса.</p>
+            <pre><code>from datetime import datetime
+
+# Unix timestamp — количество секунд с 1 января 1970 года
+import time
+timestamp = time.time()
+print(f"Timestamp: {timestamp}")  # Например: 1703500800.123
+
+# Преобразование timestamp в datetime
+dt = datetime.fromtimestamp(timestamp)
+print(dt.strftime("%d.%m.%Y %H:%M:%S"))
+
+# Datetime → timestamp
+dt = datetime(2024, 1, 1, 0, 0, 0)
+ts = dt.timestamp()
+print(ts)  # 1704056400.0
+
+# Полезно для сравнения дат, логов, API-ответов</code></pre>
         </section>
 
         <!-- Квиз -->
@@ -121,6 +194,9 @@ print("Через неделю будет:", next_week.strftime("%d.%m.%Y"))</co
                 <li>Создайте объект даты своего дня рождения и выведите его.</li>
                 <li>Вычислите, сколько дней прошло с вашего дня рождения (используйте <code>timedelta</code>).</li>
                 <li>Вычислите, какой будет дата через 100 дней с сегодня.</li>
+                <li>Напишите функцию <code>days_until(date_str)</code>, которая принимает дату в формате <code>"ДД.ММ.ГГГГ"</code> и возвращает количество дней до этой даты (или 0, если дата уже прошла).</li>
+                <li>Используйте <code>strptime</code>, чтобы принять от пользователя дату в формате <code>"ГГГГ-ММ-ДД"</code> и вывести её в формате <code>"ДД месяц ГГГГ"</code> (например, «25 декабря 2024»).</li>
+                <li>Напишите скрипт, который выводит Unix timestamp для начала текущего дня (00:00:00) и конца текущего дня (23:59:59).</li>
             </ul>
         </section>
 

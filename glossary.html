@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Глоссарий Python — объяснение основных терминов и понятий языка программирования Python для начинающих.">
+    <title>Глоссарий Python — термины и определения | PythonBasic</title>
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Глоссарий Python — термины и определения | PythonBasic">
+    <meta property="og:description" content="Глоссарий Python — объяснение основных терминов и понятий языка программирования Python для начинающих.">
+    <meta property="og:image" content="logo.png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .glossary-term {
+            background: var(--card-bg);
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: var(--shadow);
+        }
+        .glossary-term h3 {
+            margin: 0 0 8px;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+        }
+        .glossary-term p {
+            margin: 0 0 8px;
+            line-height: 1.6;
+        }
+        .glossary-term pre {
+            margin: 8px 0 0;
+            padding: 12px 16px;
+        }
+        .glossary-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            letter-spacing: 0.1em;
+        }
+        .glossary-nav a {
+            color: var(--accent-color);
+            text-decoration: none;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .glossary-nav a:hover {
+            background: var(--accent-color);
+            color: #fff;
+        }
+        .glossary-letter {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin: 32px 0 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html"
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span
+                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
+                        style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="courses.html">Курсы</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="lesson-title">
+        <div class="container">
+            <h1>📖 Глоссарий Python</h1>
+            <p>Основные термины и понятия языка программирования Python</p>
+        </div>
+    </section>
+
+    <main class="container">
+
+        <section class="lesson-goal">
+            <h2>💡 Как пользоваться</h2>
+            <p>Нажми на букву в навигации чтобы перейти к нужному разделу. Здесь собраны все ключевые термины Python с примерами кода.</p>
+        </section>
+
+        <section class="lesson-content">
+
+            <div class="glossary-nav">
+                <a href="#letter-a">А</a>
+                <a href="#letter-b">Б</a>
+                <a href="#letter-v">В</a>
+                <a href="#letter-g">Г</a>
+                <a href="#letter-d">Д</a>
+                <a href="#letter-z">З</a>
+                <a href="#letter-i">И</a>
+                <a href="#letter-k">К</a>
+                <a href="#letter-l">Л</a>
+                <a href="#letter-m">М</a>
+                <a href="#letter-n">Н</a>
+                <a href="#letter-o">О</a>
+                <a href="#letter-p">П</a>
+                <a href="#letter-r">Р</a>
+                <a href="#letter-s">С</a>
+                <a href="#letter-t">Т</a>
+                <a href="#letter-f">Ф</a>
+                <a href="#letter-c">Ц</a>
+                <a href="#letter-e">Э</a>
+            </div>
+
+            <!-- А -->
+            <div class="glossary-letter" id="letter-a">А</div>
+
+            <div class="glossary-term" id="term-argument">
+                <h3>Аргумент (Argument)</h3>
+                <p>Значение, передаваемое в функцию при её вызове. Аргументы заполняют параметры функции в момент вызова. Аргументы могут быть позиционными (по порядку) или именованными (по имени параметра).</p>
+                <pre><code>def greet(name, greeting):
+    print(f"{greeting}, {name}!")
+
+greet("Алекс", "Привет")  # "Алекс" и "Привет" — аргументы
+greet(greeting="Привет", name="Алекс")  # именованные аргументы</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-attribute">
+                <h3>Атрибут (Attribute)</h3>
+                <p>Переменная, привязанная к объекту или классу. Атрибуты хранят данные конкретного экземпляра (атрибуты объекта) или общие данные всех экземпляров (атрибуты класса). Доступ к атрибутам осуществляется через точку.</p>
+                <pre><code>class Person:
+    species = "Homo sapiens"  # атрибут класса
+
+    def __init__(self, name):
+        self.name = name  # атрибут объекта
+
+p = Person("Алекс")
+print(p.name)       # "Алекс"
+print(p.species)    # "Homo sapiens"</code></pre>
+            </div>
+
+            <!-- Б -->
+            <div class="glossary-letter" id="letter-b">Б</div>
+
+            <div class="glossary-term" id="term-boolean">
+                <h3>Булево значение (Boolean)</h3>
+                <p>Тип данных с двумя возможными значениями: <code>True</code> (истина) и <code>False</code> (ложь). Используется в условиях и логических операциях. В Python <code>0</code>, пустые строки, пустые коллекции и <code>None</code> считаются ложными.</p>
+                <pre><code>flag = True
+is_active = False
+
+print(bool(0))    # False
+print(bool(1))    # True
+print(bool(""))   # False
+print(bool("hi")) # True
+print(True and False)  # False
+print(True or False)   # True</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-byte">
+                <h3>Байт (Byte)</h3>
+                <p>Единица хранения данных, равная 8 битам. В Python тип <code>bytes</code> представляет неизменяемую последовательность байтов. Байты используются при работе с файлами, сетевыми запросами и двоичными данными.</p>
+                <pre><code>data = b"Hello"       # bytes литерал
+data = bytes([72, 101, 108, 108, 111])
+
+# Преобразование строки в байты и обратно
+text = "Привет"
+encoded = text.encode("utf-8")   # bytes
+decoded = encoded.decode("utf-8") # str</code></pre>
+            </div>
+
+            <!-- В -->
+            <div class="glossary-letter" id="letter-v">В</div>
+
+            <div class="glossary-term" id="term-builtin">
+                <h3>Встроенная функция (Built-in function)</h3>
+                <p>Функции Python, доступные без импорта каких-либо модулей — они всегда готовы к использованию. Python содержит более 70 встроенных функций для самых распространённых задач.</p>
+                <pre><code>print("Привет")       # вывод на экран
+len([1, 2, 3])        # длина → 3
+type(42)              # тип → &lt;class 'int'&gt;
+range(5)              # диапазон 0..4
+int("10")             # преобразование типа
+sum([1, 2, 3])        # сумма → 6
+max(3, 1, 4)          # максимум → 4
+sorted([3, 1, 2])     # сортировка → [1, 2, 3]
+enumerate([10, 20])   # пары (индекс, значение)</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-venv">
+                <h3>Виртуальное окружение (Virtual environment)</h3>
+                <p>Изолированная среда Python для конкретного проекта, которая содержит свой набор пакетов независимо от системного Python. Это позволяет разным проектам использовать разные версии одних и тех же библиотек без конфликтов.</p>
+                <pre><code># Создание виртуального окружения
+python -m venv myenv
+
+# Активация (Windows)
+myenv\Scripts\activate
+
+# Активация (Mac/Linux)
+source myenv/bin/activate
+
+# Установка пакета в окружение
+pip install requests
+
+# Деактивация
+deactivate</code></pre>
+            </div>
+
+            <!-- Г -->
+            <div class="glossary-letter" id="letter-g">Г</div>
+
+            <div class="glossary-term" id="term-listcomp">
+                <h3>Генератор списка (List comprehension)</h3>
+                <p>Компактный и читаемый способ создания нового списка на основе существующей последовательности. Позволяет заменить цикл <code>for</code> с <code>append</code> одной строкой. Может включать условие фильтрации.</p>
+                <pre><code># Обычный способ
+squares = []
+for x in range(10):
+    squares.append(x**2)
+
+# Генератор списка — то же самое
+squares = [x**2 for x in range(10)]
+
+# С условием
+evens = [x for x in range(20) if x % 2 == 0]
+
+# Вложенный
+pairs = [(x, y) for x in range(3) for y in range(3)]</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-global">
+                <h3>Глобальная переменная (Global variable)</h3>
+                <p>Переменная, объявленная вне функций и доступная во всей программе. Внутри функции для изменения глобальной переменной нужно объявить её с ключевым словом <code>global</code>, иначе будет создана локальная переменная с тем же именем.</p>
+                <pre><code>counter = 0  # глобальная переменная
+
+def increment():
+    global counter  # объявляем что используем глобальную
+    counter += 1
+
+increment()
+print(counter)  # 1</code></pre>
+            </div>
+
+            <!-- Д -->
+            <div class="glossary-letter" id="letter-d">Д</div>
+
+            <div class="glossary-term" id="term-decorator">
+                <h3>Декоратор (Decorator)</h3>
+                <p>Функция, которая принимает другую функцию и расширяет или изменяет её поведение без изменения исходного кода. Применяется с помощью символа <code>@</code> перед определением функции. Широко используется в веб-фреймворках и для логирования.</p>
+                <pre><code>def logger(func):
+    def wrapper(*args, **kwargs):
+        print(f"Вызов функции {func.__name__}")
+        result = func(*args, **kwargs)
+        print(f"Функция завершена")
+        return result
+    return wrapper
+
+@logger
+def greet(name):
+    print(f"Привет, {name}!")
+
+greet("Алекс")
+# Вызов функции greet
+# Привет, Алекс!
+# Функция завершена</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-dynamic-typing">
+                <h3>Динамическая типизация (Dynamic typing)</h3>
+                <p>Подход, при котором тип переменной определяется автоматически во время выполнения программы, а не при объявлении. В Python одна и та же переменная может в разные моменты хранить значения разных типов.</p>
+                <pre><code>x = 42        # x — int
+print(type(x))  # &lt;class 'int'&gt;
+
+x = "текст"   # теперь x — str
+print(type(x))  # &lt;class 'str'&gt;
+
+x = [1, 2, 3] # теперь x — list
+print(type(x))  # &lt;class 'list'&gt;</code></pre>
+            </div>
+
+            <!-- З -->
+            <div class="glossary-letter" id="letter-z">З</div>
+
+            <div class="glossary-term" id="term-closure">
+                <h3>Замыкание (Closure)</h3>
+                <p>Функция, которая запоминает переменные из внешней области видимости, даже когда внешняя функция уже завершила работу. Замыкания позволяют создавать фабрики функций и инкапсулировать состояние без использования классов.</p>
+                <pre><code>def make_multiplier(factor):
+    def multiply(x):
+        return x * factor  # запоминает factor
+    return multiply
+
+double = make_multiplier(2)
+triple = make_multiplier(3)
+
+print(double(5))  # 10
+print(triple(5))  # 15</code></pre>
+            </div>
+
+            <!-- И -->
+            <div class="glossary-letter" id="letter-i">И</div>
+
+            <div class="glossary-term" id="term-iteration">
+                <h3>Итерация (Iteration)</h3>
+                <p>Один шаг выполнения цикла — однократное прохождение блока кода внутри цикла. Термин также означает сам процесс повторения. Каждый проход цикла <code>for</code> или <code>while</code> является одной итерацией.</p>
+                <pre><code>for i in range(3):
+    print(i)  # 3 итерации: i=0, i=1, i=2
+
+# Счётчик итераций
+count = 0
+while count &lt; 5:
+    count += 1  # каждое выполнение — одна итерация</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-iterable">
+                <h3>Итерируемый объект (Iterable)</h3>
+                <p>Объект, по элементам которого можно пройтись в цикле <code>for</code>. К итерируемым объектам относятся: списки, строки, кортежи, словари, множества, файлы и генераторы. Любой объект, реализующий метод <code>__iter__</code>, является итерируемым.</p>
+                <pre><code>for ch in "Python":    # строка — итерируемая
+    print(ch)
+
+for x in [1, 2, 3]:   # список — итерируемый
+    print(x)
+
+for k in {"a": 1}:    # словарь — итерируемый
+    print(k)
+
+# Проверка
+from collections.abc import Iterable
+isinstance([1,2,3], Iterable)  # True</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-index">
+                <h3>Индекс (Index)</h3>
+                <p>Порядковый номер элемента в последовательности. В Python индексация начинается с <code>0</code>. Допустимы отрицательные индексы: <code>-1</code> означает последний элемент, <code>-2</code> — предпоследний и т.д.</p>
+                <pre><code>lst = ["а", "б", "в", "г"]
+
+lst[0]   # "а" — первый элемент
+lst[1]   # "б" — второй
+lst[-1]  # "г" — последний
+lst[-2]  # "в" — предпоследний
+
+# IndexError — если индекс за пределами
+lst[10]  # IndexError: list index out of range</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-exception">
+                <h3>Исключение (Exception)</h3>
+                <p>Ошибка, возникающая во время выполнения программы. Python останавливает выполнение и генерирует исключение, если что-то пошло не так. Исключения можно перехватывать с помощью блока <code>try/except</code>, чтобы программа продолжила работу.</p>
+                <pre><code>try:
+    x = int("не число")
+except ValueError as e:
+    print(f"Ошибка: {e}")
+
+# Частые исключения:
+# ValueError — неверное значение
+# TypeError — неверный тип
+# KeyError — ключ не найден в словаре
+# IndexError — индекс за пределами списка
+# ZeroDivisionError — деление на ноль
+# FileNotFoundError — файл не найден</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-import">
+                <h3>Импорт (Import)</h3>
+                <p>Подключение модуля или его части к текущей программе с помощью ключевого слова <code>import</code>. Позволяет использовать код, написанный в других файлах или сторонних библиотеках. Импорт выполняется один раз при первом обращении.</p>
+                <pre><code>import math                    # весь модуль
+import math as m               # с псевдонимом
+from math import pi, sqrt      # конкретные имена
+from math import *             # всё (не рекомендуется)
+
+print(math.pi)   # 3.14159...
+print(m.e)       # 2.71828...
+print(pi)        # 3.14159...</code></pre>
+            </div>
+
+            <!-- К -->
+            <div class="glossary-letter" id="letter-k">К</div>
+
+            <div class="glossary-term" id="term-class">
+                <h3>Класс (Class)</h3>
+                <p>Шаблон (чертёж) для создания объектов с заданными атрибутами и методами. Класс описывает общую структуру и поведение, а каждый объект (экземпляр) — конкретные данные. Классы являются основой объектно-ориентированного программирования.</p>
+                <pre><code>class Dog:
+    def __init__(self, name, breed):
+        self.name = name
+        self.breed = breed
+
+    def bark(self):
+        return f"{self.name} говорит: Гав!"
+
+rex = Dog("Рекс", "Овчарка")
+print(rex.bark())  # Рекс говорит: Гав!</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-tuple">
+                <h3>Кортеж (Tuple)</h3>
+                <p>Неизменяемая последовательность элементов, аналогичная списку, но защищённая от изменений. После создания кортежа нельзя добавить, удалить или изменить его элементы. Используется для хранения связанных данных, которые не должны меняться.</p>
+                <pre><code>t = (1, 2, 3)
+point = (10.5, 20.3)  # координаты
+colors = ("красный", "зелёный", "синий")
+
+t[0]           # 1 — доступ по индексу
+a, b, c = t    # распаковка
+
+# Кортеж из одного элемента — нужна запятая!
+single = (42,)  # не (42) — это просто скобки</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-constructor">
+                <h3>Конструктор (Constructor)</h3>
+                <p>Специальный метод <code>__init__</code>, который автоматически вызывается при создании нового объекта класса. Используется для задания начальных значений атрибутов объекта. Первым параметром всегда принимает <code>self</code> — ссылку на создаваемый объект.</p>
+                <pre><code>class Car:
+    def __init__(self, brand, year):
+        self.brand = brand  # инициализация атрибутов
+        self.year = year
+        self.speed = 0      # атрибут со значением по умолчанию
+
+my_car = Car("Toyota", 2023)  # вызывает __init__
+print(my_car.brand)  # "Toyota"</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-constant">
+                <h3>Константа (Constant)</h3>
+                <p>Переменная, значение которой не должно изменяться в течение выполнения программы. В Python нет встроенного механизма для констант — по соглашению их имена пишутся ЗАГЛАВНЫМИ_БУКВАМИ. Это сигнал другим разработчикам не изменять значение.</p>
+                <pre><code>PI = 3.14159265358979
+MAX_USERS = 1000
+DATABASE_URL = "postgresql://localhost/mydb"
+DEFAULT_TIMEOUT = 30
+
+# Технически изменить можно, но не нужно:
+# PI = 3  # плохая практика!</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-comment">
+                <h3>Комментарий (Comment)</h3>
+                <p>Текст в коде, который Python полностью игнорирует при выполнении. Начинается с символа <code>#</code> для однострочных комментариев. Используется для объяснения кода, временного отключения строк и документирования логики.</p>
+                <pre><code># Это однострочный комментарий
+
+x = 5  # комментарий в конце строки
+
+# Временно отключить код:
+# print("эта строка не выполнится")
+
+"""
+Это многострочная строка —
+часто используется как
+многострочный комментарий
+"""</code></pre>
+            </div>
+
+            <!-- Л -->
+            <div class="glossary-letter" id="letter-l">Л</div>
+
+            <div class="glossary-term" id="term-lambda">
+                <h3>Лямбда (Lambda)</h3>
+                <p>Анонимная функция в одну строку, которая не требует ключевого слова <code>def</code> и имени. Удобна для простых операций, особенно при передаче функции как аргумента (например, в <code>sorted()</code>, <code>map()</code>, <code>filter()</code>).</p>
+                <pre><code>double = lambda x: x * 2
+print(double(5))  # 10
+
+add = lambda x, y: x + y
+print(add(3, 4))  # 7
+
+# Использование в sorted()
+words = ["банан", "яблоко", "вишня"]
+words.sort(key=lambda w: len(w))
+print(words)  # ['банан', 'яблоко', 'вишня']</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-local">
+                <h3>Локальная переменная (Local variable)</h3>
+                <p>Переменная, объявленная внутри функции и существующая только в её пределах. После завершения функции локальная переменная уничтожается. Локальные переменные не доступны за пределами функции.</p>
+                <pre><code>def calculate():
+    result = 42  # локальная переменная
+    return result
+
+calculate()
+# print(result)  # NameError — result недоступна здесь!
+
+# У каждого вызова — своя копия
+def counter():
+    count = 0   # своя локальная count
+    count += 1
+    return count</code></pre>
+            </div>
+
+            <!-- М -->
+            <div class="glossary-letter" id="letter-m">М</div>
+
+            <div class="glossary-term" id="term-method">
+                <h3>Метод (Method)</h3>
+                <p>Функция, принадлежащая объекту или классу и описывающая его поведение. Методы вызываются через точку. Методы экземпляра получают объект как первый аргумент (<code>self</code>), методы класса — класс (<code>cls</code>).</p>
+                <pre><code>text = "привет"
+text.upper()     # метод строки → "ПРИВЕТ"
+text.split()     # метод строки → ["привет"]
+
+lst = [3, 1, 2]
+lst.sort()       # метод списка
+lst.append(4)    # метод списка
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+
+    def area(self):  # метод экземпляра
+        return 3.14 * self.radius ** 2</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-module">
+                <h3>Модуль (Module)</h3>
+                <p>Файл с расширением <code>.py</code>, содержащий Python-код (функции, классы, переменные), который можно подключить к другой программе через <code>import</code>. Модули помогают организовывать код и избегать повторений.</p>
+                <pre><code># Файл utils.py — это модуль
+def add(a, b):
+    return a + b
+
+GREETING = "Привет!"
+
+# Использование модуля в другом файле
+import utils
+print(utils.add(2, 3))  # 5
+print(utils.GREETING)   # Привет!
+
+# Стандартные модули Python:
+import math, random, os, json, datetime</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-mutable">
+                <h3>Мутабельный (Mutable)</h3>
+                <p>Изменяемый объект, содержимое которого можно менять после создания. В Python мутабельными являются: списки, словари, множества. В отличие от них, строки, числа, кортежи являются неизменяемыми (иммутабельными).</p>
+                <pre><code># Мутабельные — можно изменять
+lst = [1, 2, 3]
+lst[0] = 10     # OK → [10, 2, 3]
+lst.append(4)   # OK → [10, 2, 3, 4]
+
+d = {"a": 1}
+d["b"] = 2      # OK
+
+# Иммутабельные — нельзя изменять
+t = (1, 2, 3)
+# t[0] = 10    # TypeError!
+
+s = "hello"
+# s[0] = "H"  # TypeError!</code></pre>
+            </div>
+
+            <!-- Н -->
+            <div class="glossary-letter" id="letter-n">Н</div>
+
+            <div class="glossary-term" id="term-inheritance">
+                <h3>Наследование (Inheritance)</h3>
+                <p>Механизм объектно-ориентированного программирования, при котором дочерний класс получает атрибуты и методы родительского класса. Позволяет переиспользовать код и строить иерархии классов. Дочерний класс может переопределять методы родителя.</p>
+                <pre><code>class Animal:
+    def __init__(self, name):
+        self.name = name
+
+    def speak(self):
+        return "..."
+
+class Dog(Animal):  # Dog наследует Animal
+    def speak(self):  # переопределение метода
+        return "Гав!"
+
+class Cat(Animal):
+    def speak(self):
+        return "Мяу!"
+
+dog = Dog("Рекс")
+print(dog.name)   # "Рекс" — унаследовано
+print(dog.speak()) # "Гав!" — переопределено</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-none">
+                <h3>None</h3>
+                <p>Специальное значение в Python, означающее «ничего» или «отсутствие значения». Тип <code>NoneType</code> имеет единственное значение — <code>None</code>. Функции без явного <code>return</code> возвращают <code>None</code>. Для проверки на <code>None</code> используется <code>is None</code>.</p>
+                <pre><code>result = None
+
+def no_return():
+    x = 42  # нет return
+
+print(no_return())  # None
+
+# Правильная проверка на None
+if result is None:
+    print("значение не задано")
+
+# Часто используется как значение по умолчанию
+def find_user(user_id):
+    # если не найден — вернёт None
+    return None</code></pre>
+            </div>
+
+            <!-- О -->
+            <div class="glossary-letter" id="letter-o">О</div>
+
+            <div class="glossary-term" id="term-object">
+                <h3>Объект (Object)</h3>
+                <p>Конкретный экземпляр (представитель) класса, созданный по его шаблону. Каждый объект имеет собственные атрибуты (данные) и методы (поведение). В Python всё является объектом: числа, строки, списки, функции — всё это объекты.</p>
+                <pre><code>class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+p1 = Point(0, 0)   # объект p1
+p2 = Point(3, 4)   # объект p2 — другой экземпляр
+
+print(p1.x)  # 0
+print(p2.x)  # 3
+
+# Всё — объекты:
+isinstance(42, object)       # True
+isinstance("hi", object)     # True
+isinstance(print, object)    # True</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-operator">
+                <h3>Оператор (Operator)</h3>
+                <p>Символ или ключевое слово, выполняющее операцию над одним или несколькими операндами. Python имеет арифметические, сравнительные, логические, побитовые операторы и операторы принадлежности.</p>
+                <pre><code># Арифметические
++, -, *, /, //, %, **
+
+# Сравнение
+==, !=, &lt;, &gt;, &lt;=, &gt;=
+
+# Логические
+and, or, not
+
+# Присваивание
+=, +=, -=, *=, /=
+
+# Принадлежность
+in, not in
+
+# Тождественность
+is, is not
+
+2 ** 10   # 1024 — возведение в степень
+17 // 5   # 3 — целочисленное деление
+17 % 5    # 2 — остаток от деления</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-oop">
+                <h3>ООП — Объектно-Ориентированное Программирование</h3>
+                <p>Парадигма программирования, основанная на концепции объектов, которые объединяют данные и поведение. Четыре ключевых принципа ООП: инкапсуляция, наследование, полиморфизм и абстракция. Python полностью поддерживает ООП.</p>
+                <pre><code># Инкапсуляция — данные и методы вместе
+class BankAccount:
+    def __init__(self, balance):
+        self._balance = balance  # "защищённый" атрибут
+
+    def deposit(self, amount):
+        self._balance += amount
+
+    def get_balance(self):
+        return self._balance
+
+# Полиморфизм — разные объекты, одинаковый интерфейс
+for animal in [Dog("Рекс"), Cat("Мурка")]:
+    print(animal.speak())  # у каждого свой метод</code></pre>
+            </div>
+
+            <!-- П -->
+            <div class="glossary-letter" id="letter-p">П</div>
+
+            <div class="glossary-term" id="term-parameter">
+                <h3>Параметр (Parameter)</h3>
+                <p>Переменная, указанная в определении функции, которая принимает значение аргумента при вызове. Параметры — это «слоты» в объявлении функции, аргументы — конкретные значения, которыми они заполняются. Параметры могут иметь значения по умолчанию.</p>
+                <pre><code>def greet(name, greeting="Привет"):
+    #       ^^^^  ^^^^^^^^^^^^^^^^ — параметры
+    print(f"{greeting}, {name}!")
+
+greet("Алекс", "Здравствуй")
+#     ^^^^^^^  ^^^^^^^^^^^^^ — аргументы</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-package">
+                <h3>Пакет (Package)</h3>
+                <p>Директория, содержащая несколько модулей Python и специальный файл <code>__init__.py</code>. Пакеты позволяют организовывать модули в иерархическую структуру. Сторонние пакеты устанавливаются через <code>pip</code>.</p>
+                <pre><code># Структура пакета:
+# mypackage/
+#   __init__.py
+#   utils.py
+#   models.py
+
+# Импорт из пакета
+import mypackage.utils
+from mypackage import models
+from mypackage.utils import helper_func
+
+# Популярные пакеты:
+# numpy, pandas, requests, flask, django</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-pip">
+                <h3>pip</h3>
+                <p>Стандартный менеджер пакетов Python для установки, обновления и удаления сторонних библиотек из Python Package Index (PyPI). Устанавливается вместе с Python и используется из командной строки.</p>
+                <pre><code># Установка пакета
+pip install requests
+
+# Установка конкретной версии
+pip install numpy==1.24.0
+
+# Обновление пакета
+pip install --upgrade pandas
+
+# Удаление
+pip uninstall flask
+
+# Список установленных пакетов
+pip list
+
+# Сохранение зависимостей проекта
+pip freeze &gt; requirements.txt
+
+# Установка из файла зависимостей
+pip install -r requirements.txt</code></pre>
+            </div>
+
+            <!-- Р -->
+            <div class="glossary-letter" id="letter-r">Р</div>
+
+            <div class="glossary-term" id="term-recursion">
+                <h3>Рекурсия (Recursion)</h3>
+                <p>Приём программирования, при котором функция вызывает саму себя. Каждый рекурсивный вызов должен приближаться к базовому случаю (условию выхода), иначе возникнет бесконечная рекурсия и ошибка <code>RecursionError</code>.</p>
+                <pre><code>def factorial(n):
+    if n == 0 or n == 1:  # базовый случай
+        return 1
+    return n * factorial(n - 1)  # рекурсивный вызов
+
+print(factorial(5))  # 120
+
+def fibonacci(n):
+    if n &lt;= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))  # 55</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-refactoring">
+                <h3>Рефакторинг (Refactoring)</h3>
+                <p>Процесс улучшения внутренней структуры кода без изменения его внешнего поведения. Цель рефакторинга — сделать код чище, понятнее и проще для поддержки. Включает переименование переменных, извлечение функций, устранение дублирования.</p>
+                <pre><code># До рефакторинга:
+def calc(a, b, op):
+    if op == 1: return a + b
+    if op == 2: return a - b
+    if op == 3: return a * b
+
+# После рефакторинга:
+def add(a, b): return a + b
+def subtract(a, b): return a - b
+def multiply(a, b): return a * b
+
+operations = {"+": add, "-": subtract, "*": multiply}
+result = operations["+"](3, 4)  # 7</code></pre>
+            </div>
+
+            <!-- С -->
+            <div class="glossary-letter" id="letter-s">С</div>
+
+            <div class="glossary-term" id="term-dict">
+                <h3>Словарь (Dictionary)</h3>
+                <p>Коллекция пар «ключ — значение», где каждый ключ уникален. Позволяет быстро получать значение по ключу. Ключами могут быть неизменяемые типы (строки, числа, кортежи), значениями — любые объекты.</p>
+                <pre><code>person = {
+    "name": "Алекс",
+    "age": 25,
+    "city": "Москва"
+}
+
+person["name"]          # "Алекс"
+person.get("email")     # None (без ошибки)
+person["email"] = "a@b.com"  # добавить
+del person["age"]       # удалить
+
+for key, val in person.items():
+    print(f"{key}: {val}")</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-slice">
+                <h3>Срез (Slice)</h3>
+                <p>Извлечение части последовательности (строки, списка, кортежа) с помощью нотации <code>[start:stop:step]</code>. Индекс <code>start</code> включается, <code>stop</code> — исключается. Срез создаёт новый объект, не изменяя исходный.</p>
+                <pre><code>lst = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+lst[2:5]    # [2, 3, 4]
+lst[:3]     # [0, 1, 2] — от начала
+lst[7:]     # [7, 8, 9] — до конца
+lst[::2]    # [0, 2, 4, 6, 8] — каждый второй
+lst[::-1]   # [9, 8, ..., 0] — реверс
+
+text = "Python"
+text[1:4]   # "yth"
+text[::-1]  # "nohtyP"</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-syntax">
+                <h3>Синтаксис (Syntax)</h3>
+                <p>Набор правил, определяющих правильную структуру программы на языке Python. Нарушение синтаксиса приводит к ошибке <code>SyntaxError</code> ещё до запуска программы. Python использует отступы (4 пробела) вместо фигурных скобок для обозначения блоков кода.</p>
+                <pre><code># Правильный синтаксис
+if True:
+    print("да")  # отступ обязателен
+
+# SyntaxError — неверный синтаксис
+# if True
+#     print("да")  # нет двоеточия
+
+# SyntaxError — неверный отступ
+# if True:
+# print("да")  # нет отступа</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-string">
+                <h3>Строка (String)</h3>
+                <p>Последовательность символов, заключённая в одинарные, двойные или тройные кавычки. В Python строки неизменяемы — все методы строк возвращают новую строку, не изменяя исходную. Строки поддерживают индексацию и срезы.</p>
+                <pre><code>s1 = 'одинарные кавычки'
+s2 = "двойные кавычки"
+s3 = """многострочная
+строка"""
+
+# f-строки (форматирование)
+name = "Алекс"
+greeting = f"Привет, {name}!"
+
+# Строки неизменяемы:
+s = "привет"
+# s[0] = "П"  # TypeError!
+s = s.upper() # создаётся новая строка</code></pre>
+            </div>
+
+            <!-- Т -->
+            <div class="glossary-letter" id="letter-t">Т</div>
+
+            <div class="glossary-term" id="term-datatype">
+                <h3>Тип данных (Data type)</h3>
+                <p>Классификация данных, определяющая допустимые значения и операции над ними. Python автоматически определяет тип переменной по присвоенному значению. Основные встроенные типы: числа, строки, булевы значения, списки, кортежи, словари, множества.</p>
+                <pre><code>type(42)          # &lt;class 'int'&gt;
+type(3.14)        # &lt;class 'float'&gt;
+type("текст")     # &lt;class 'str'&gt;
+type(True)        # &lt;class 'bool'&gt;
+type([1, 2])      # &lt;class 'list'&gt;
+type((1, 2))      # &lt;class 'tuple'&gt;
+type({"a": 1})    # &lt;class 'dict'&gt;
+type({1, 2})      # &lt;class 'set'&gt;
+type(None)        # &lt;class 'NoneType'&gt;</code></pre>
+            </div>
+
+            <div class="glossary-term" id="term-traceback">
+                <h3>Трейсбэк (Traceback)</h3>
+                <p>Сообщение об ошибке, которое Python выводит при возникновении исключения. Содержит цепочку вызовов функций, приведших к ошибке, и указывает конкретную строку кода, где произошла ошибка. Умение читать трейсбэк — важный навык разработчика.</p>
+                <pre><code># При запуске этого кода:
+def divide(a, b):
+    return a / b
+
+result = divide(10, 0)
+
+# Python выведет трейсбэк:
+# Traceback (most recent call last):
+#   File "script.py", line 4, in &lt;module&gt;
+#     result = divide(10, 0)
+#   File "script.py", line 2, in divide
+#     return a / b
+# ZeroDivisionError: division by zero</code></pre>
+            </div>
+
+            <!-- Ф -->
+            <div class="glossary-letter" id="letter-f">Ф</div>
+
+            <div class="glossary-term" id="term-function">
+                <h3>Функция (Function)</h3>
+                <p>Именованный блок кода, выполняющий конкретную задачу и доступный для многократного вызова. Функции принимают аргументы, обрабатывают данные и могут возвращать результат. Помогают структурировать код и избегать повторений.</p>
+                <pre><code>def square(n):
+    """Возводит число в квадрат."""
+    return n ** 2
+
+print(square(4))   # 16
+print(square(10))  # 100
+
+# Функция с несколькими возвращаемыми значениями
+def min_max(lst):
+    return min(lst), max(lst)
+
+lo, hi = min_max([3, 1, 4, 1, 5, 9])
+print(lo, hi)  # 1 9</code></pre>
+            </div>
+
+            <!-- Ц -->
+            <div class="glossary-letter" id="letter-c">Ц</div>
+
+            <div class="glossary-term" id="term-loop">
+                <h3>Цикл (Loop)</h3>
+                <p>Конструкция, обеспечивающая повторное выполнение блока кода. Python предоставляет два типа циклов: <code>for</code> — для перебора последовательностей, и <code>while</code> — для повторения пока истинно условие. Циклы управляются операторами <code>break</code> и <code>continue</code>.</p>
+                <pre><code># for — перебор элементов
+for i in range(5):
+    print(i)  # 0 1 2 3 4
+
+# while — повторение по условию
+count = 0
+while count &lt; 3:
+    print(count)
+    count += 1
+
+# break — выход из цикла
+for x in range(10):
+    if x == 5:
+        break  # остановить на 5
+
+# continue — пропустить итерацию
+for x in range(5):
+    if x == 2:
+        continue  # пропустить 2
+    print(x)  # 0 1 3 4</code></pre>
+            </div>
+
+            <!-- Э -->
+            <div class="glossary-letter" id="letter-e">Э</div>
+
+            <div class="glossary-term" id="term-instance">
+                <h3>Экземпляр (Instance)</h3>
+                <p>Конкретный объект, созданный из класса. Один класс может порождать неограниченное количество экземпляров, каждый из которых имеет собственные значения атрибутов. Создание экземпляра происходит при вызове класса как функции.</p>
+                <pre><code>class Car:
+    def __init__(self, brand):
+        self.brand = brand
+
+car1 = Car("Toyota")   # экземпляр 1
+car2 = Car("BMW")      # экземпляр 2
+car3 = Car("Honda")    # экземпляр 3
+
+# Каждый — отдельный объект
+print(car1.brand)  # "Toyota"
+print(car2.brand)  # "BMW"
+
+# Проверка типа
+isinstance(car1, Car)  # True</code></pre>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© <span class="footer-year"></span> Python для начинающих. Все права защищены. ·
+            <a href="certificate.html" style="color:var(--accent-color);">Сертификат</a> ·
+            <a href="next-steps.html" style="color:var(--accent-color);">Что дальше?</a>
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>document.querySelectorAll('.footer-year').forEach(el => el.textContent = new Date().getFullYear());</script>
+</body>
+
+</html>

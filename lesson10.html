@@ -34,6 +34,7 @@
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
                 </ul>
             </nav>
         </div>
@@ -106,6 +107,92 @@ print(lines)  # ['Привет, мир!\n', 'Это вторая строка.\n
             </p>
             <pre><code>with open("data.txt", "w", encoding="utf-8") as f:
     f.write("Привет, это русский текст!")</code></pre>
+
+            <h2>✍️ Запись и дозапись в файл</h2>
+            <p>Режим <code>"w"</code> каждый раз создаёт файл заново, стирая предыдущее содержимое. Режим <code>"a"</code> добавляет данные в конец, не трогая уже записанное:</p>
+            <pre><code># Запись нескольких строк
+with open("students.txt", "w", encoding="utf-8") as f:
+    students = ["Алекс", "Боб", "Катя", "Дима"]
+    for student in students:
+        f.write(student + "\n")  # \n — перенос строки
+
+# Дозапись (не удаляя существующих)
+with open("students.txt", "a", encoding="utf-8") as f:
+    f.write("Маша\n")
+
+# Читаем результат
+with open("students.txt", "r", encoding="utf-8") as f:
+    content = f.read()
+print(content)</code></pre>
+
+            <h2>📊 Работа с CSV-данными</h2>
+            <p>Модуль <code>csv</code> из стандартной библиотеки Python позволяет легко читать и записывать данные в формате CSV (таблицы с разделителем-запятой), который понимают Excel и большинство баз данных:</p>
+            <pre><code>import csv
+
+# Запись CSV
+data = [
+    ["Имя", "Возраст", "Оценка"],
+    ["Алекс", "20", "95"],
+    ["Боб", "22", "88"],
+    ["Катя", "19", "92"]
+]
+
+with open("students.csv", "w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    writer.writerows(data)
+
+# Чтение CSV
+with open("students.csv", "r", encoding="utf-8") as f:
+    reader = csv.reader(f)
+    for row in reader:
+        print(", ".join(row))</code></pre>
+
+            <h2>📁 Работа с путями (модуль os)</h2>
+            <p>Модуль <code>os</code> позволяет проверять существование файлов, получать текущую директорию и формировать пути корректно на любой операционной системе:</p>
+            <pre><code>import os
+
+# Проверить существование файла
+if os.path.exists("myfile.txt"):
+    print("Файл существует")
+else:
+    print("Файл не найден")
+
+# Получить текущую директорию
+current_dir = os.getcwd()
+print(f"Текущая папка: {current_dir}")
+
+# Создать путь безопасно (на любой ОС)
+path = os.path.join("папка", "подпапка", "файл.txt")
+print(path)  # папка/подпапка/файл.txt (Linux) или папка\подпапка\файл.txt (Windows)
+
+# Список файлов в директории
+files = os.listdir(".")
+print(files)</code></pre>
+
+            <h2>📋 Практический пример: дневник</h2>
+            <p>Соединим всё изученное в небольшом приложении-дневнике, которое сохраняет записи с датой и временем в текстовый файл:</p>
+            <pre><code>import datetime
+import os
+
+DIARY_FILE = "diary.txt"
+
+def add_entry(text):
+    now = datetime.datetime.now()
+    date_str = now.strftime("%d.%m.%Y %H:%M")
+
+    with open(DIARY_FILE, "a", encoding="utf-8") as f:
+        f.write(f"\n[{date_str}]\n{text}\n")
+    print("Запись добавлена!")
+
+def read_diary():
+    if not os.path.exists(DIARY_FILE):
+        print("Дневник пуст")
+        return
+    with open(DIARY_FILE, "r", encoding="utf-8") as f:
+        print(f.read())
+
+add_entry("Сегодня изучил работу с файлами в Python!")
+read_diary()</code></pre>
         </section>
 
         <!-- Квиз -->
@@ -121,6 +208,9 @@ print(lines)  # ['Привет, мир!\n', 'Это вторая строка.\n
                 <li>Напиши код, который читает этот файл и выводит его содержимое.</li>
                 <li>Добавь новые строки в файл без удаления старых данных (режим <code>"a"</code>).</li>
                 <li>Используй <code>readlines()</code> и выведи только третью строку файла.</li>
+                <li>Создай CSV-файл со списком из пяти товаров (название, цена, количество) и выведи содержимое на экран, используя модуль <code>csv</code>.</li>
+                <li>Напиши программу, которая с помощью <code>os.path.exists()</code> проверяет наличие файла, и если файл не найден — создаёт его с заголовком.</li>
+                <li>Реализуй простой счётчик запусков программы: при каждом запуске читай число из файла <code>counter.txt</code>, увеличивай на 1 и записывай обратно. Выводи сообщение «Запуск №N».</li>
             </ul>
         </section>
 

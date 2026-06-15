@@ -34,6 +34,7 @@
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
                 </ul>
             </nav>
         </div>
@@ -107,6 +108,91 @@ greet("Дмитрий") # Выведет: Привет, Дмитрий !</code><
 
 print(add(3, 7))   # Выведет: 10
 print(add(10, 20)) # Выведет: 30</code></pre>
+
+            <h2>📦 *args и **kwargs</h2>
+            <p><code>*args</code> позволяет принять <strong>произвольное количество позиционных аргументов</strong> — они собираются в кортеж. <code>**kwargs</code> делает то же самое для <strong>именованных аргументов</strong> — они собираются в словарь. Это делает функции очень гибкими.</p>
+            <pre><code># *args — произвольное количество позиционных аргументов
+def sum_all(*args):
+    total = 0
+    for num in args:
+        total += num
+    return total
+
+print(sum_all(1, 2, 3))        # 6
+print(sum_all(10, 20, 30, 40)) # 100
+
+# **kwargs — произвольное количество именованных аргументов
+def print_info(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+print_info(name="Алекс", age=25, city="Москва")
+# name: Алекс
+# age: 25
+# city: Москва</code></pre>
+
+            <h2>🏠 Область видимости (scope)</h2>
+            <p>Переменные бывают <strong>глобальными</strong> (доступны во всей программе) и <strong>локальными</strong> (существуют только внутри функции). Чтобы изменить глобальную переменную изнутри функции, нужно объявить её с ключевым словом <code>global</code>.</p>
+            <pre><code>x = 10  # Глобальная переменная
+
+def my_func():
+    y = 20  # Локальная переменная (только внутри функции)
+    print(x)  # Можно читать глобальную
+    print(y)  # Локальная доступна
+
+my_func()
+# print(y)  # NameError! y не существует снаружи
+
+# Изменение глобальной переменной
+counter = 0
+
+def increment():
+    global counter  # Объявляем что работаем с глобальной
+    counter += 1
+
+increment()
+increment()
+print(counter)  # 2</code></pre>
+
+            <h2>⚡ Lambda-функции</h2>
+            <p>Lambda — это <strong>анонимная функция</strong>, записанная в одну строку. Она не имеет имени и обычно используется там, где функция нужна только один раз: в сортировке, фильтрации или трансформации данных.</p>
+            <pre><code># Обычная функция
+def square(x):
+    return x ** 2
+
+# То же самое как lambda
+square = lambda x: x ** 2
+print(square(5))  # 25
+
+# Lambda полезны для сортировки
+students = [("Алекс", 85), ("Боб", 92), ("Катя", 78)]
+students.sort(key=lambda student: student[1], reverse=True)
+print(students)  # [('Боб', 92), ('Алекс', 85), ('Катя', 78)]
+
+# sorted() с lambda
+words = ["banana", "apple", "cherry", "date"]
+sorted_words = sorted(words, key=lambda w: len(w))
+print(sorted_words)  # ['date', 'apple', 'banana', 'cherry']</code></pre>
+
+            <h2>🔄 Рекурсия</h2>
+            <p>Рекурсия — это когда функция <strong>вызывает саму себя</strong>. Обязательно нужен <strong>базовый случай</strong> (условие остановки), иначе функция будет вызывать себя бесконечно. Рекурсия хорошо подходит для задач, которые естественно делятся на меньшие подзадачи того же вида.</p>
+            <pre><code># Функция которая вызывает саму себя
+def factorial(n):
+    if n == 0 or n == 1:  # Базовый случай
+        return 1
+    return n * factorial(n - 1)  # Рекурсивный вызов
+
+print(factorial(5))  # 120 (5! = 5x4x3x2x1)
+print(factorial(10)) # 3628800
+
+# Числа Фибоначчи
+def fibonacci(n):
+    if n &lt;= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+for i in range(10):
+    print(fibonacci(i), end=" ")  # 0 1 1 2 3 5 8 13 21 34</code></pre>
         </section>
 
         <!-- Квиз -->
@@ -121,6 +207,10 @@ print(add(10, 20)) # Выведет: 30</code></pre>
                     (используй оператор <code>%</code>).</li>
                 <li>Создай функцию с параметром по умолчанию - например, функцию приветствия, которая
                     говорит «Привет, Гость!» если имя не передано.</li>
+                <li>Напиши функцию <code>sum_all(*args)</code>, которая принимает произвольное количество чисел и возвращает их сумму. Проверь её с разным числом аргументов.</li>
+                <li>Напиши функцию с использованием <code>**kwargs</code>, которая принимает любые именованные аргументы и выводит их в формате <code>ключ = значение</code>, по одному на строку.</li>
+                <li>Создай lambda-функцию для сортировки списка слов по их длине (от короткого к длинному) и примени её с помощью <code>sorted()</code>.</li>
+                <li>Реализуй рекурсивную функцию <code>power(base, exp)</code>, которая вычисляет <code>base</code> в степени <code>exp</code> без использования оператора <code>**</code>. Базовый случай: <code>exp == 0</code> возвращает 1.</li>
             </ul>
         </section>
 

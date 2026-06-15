@@ -34,6 +34,7 @@
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
                 </ul>
             </nav>
         </div>
@@ -110,6 +111,59 @@ print(numbers)  # Выведет: {1, 2, 3, 4, 5}  - дублирующийся 
                 Для пустого множества нужно использовать <code>set()</code>:</p>
             <pre><code>empty_dict = {}       # Это пустой СЛОВАРЬ
 empty_set = set()     # Это пустое МНОЖЕСТВО</code></pre>
+
+            <h2>🔄 Перебор словаря</h2>
+            <p>Словарь можно перебирать тремя способами: по ключам, по значениям или по парам ключ-значение. Чаще всего используют <code>items()</code>, чтобы работать сразу и с ключом, и со значением.</p>
+            <pre><code>person = {"имя": "Алекс", "возраст": 25, "город": "Москва"}
+
+# Перебор ключей
+for key in person:
+    print(key)
+
+# Перебор значений
+for value in person.values():
+    print(value)
+
+# Перебор пар ключ-значение (чаще всего нужно это)
+for key, value in person.items():
+    print(f"{key}: {value}")</code></pre>
+
+            <h2>🧩 Словарные включения</h2>
+            <p>Словарные включения (dict comprehension) — это компактный способ создать словарь по формуле, аналогично генераторам списков. Синтаксис: <code>{ключ: значение for элемент in последовательность}</code>.</p>
+            <pre><code># Обычный способ
+squares = {}
+for i in range(5):
+    squares[i] = i ** 2
+
+# Словарное включение (dict comprehension)
+squares = {i: i ** 2 for i in range(5)}
+print(squares)  # {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+
+# С условием
+even_squares = {i: i**2 for i in range(10) if i % 2 == 0}
+print(even_squares)  # {0: 0, 2: 4, 4: 16, 6: 36, 8: 64}
+
+# Инвертировать словарь
+original = {"a": 1, "b": 2, "c": 3}
+inverted = {v: k for k, v in original.items()}
+print(inverted)  # {1: 'a', 2: 'b', 3: 'c'}</code></pre>
+
+            <h2>📊 Практический пример: частота слов</h2>
+            <p>Словари отлично подходят для подсчёта частоты встречаемости элементов. Метод <code>get(ключ, значение_по_умолчанию)</code> позволяет безопасно увеличивать счётчик без проверки на существование ключа.</p>
+            <pre><code>text = "apple banana apple cherry banana apple"
+words = text.split()
+
+# Считаем частоту каждого слова
+frequency = {}
+for word in words:
+    frequency[word] = frequency.get(word, 0) + 1
+
+print(frequency)
+# {'apple': 3, 'banana': 2, 'cherry': 1}
+
+# Самое частое слово
+most_common = max(frequency, key=frequency.get)
+print(f"Самое частое слово: '{most_common}' ({frequency[most_common]} раз)")</code></pre>
         </section>
 
         <!-- Квиз -->
@@ -124,6 +178,9 @@ empty_set = set()     # Это пустое МНОЖЕСТВО</code></pre>
                 <li>Попробуй получить несуществующий ключ через <code>get()</code> - убедись, что
                     ошибки нет.</li>
                 <li>Создай множество из списка с повторениями и убедись, что дубликаты удалены.</li>
+                <li>Перебери словарь с помощью <code>items()</code> и выведи каждую пару в формате «Ключ → Значение».</li>
+                <li>С помощью словарного включения создай словарь, где ключи — слова из списка <code>["python", "java", "go", "rust"]</code>, а значения — длина каждого слова.</li>
+                <li>Напиши программу, которая принимает строку текста, разбивает её на слова и с помощью словаря подсчитывает частоту каждого слова. Выведи слово, встречающееся чаще всего.</li>
             </ul>
         </section>
 

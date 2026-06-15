@@ -34,6 +34,7 @@
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
                 </ul>
             </nav>
         </div>
@@ -182,6 +183,108 @@ for i, task in enumerate(tasks, 1):  # start=1 начинает нумераци
 # 3. Сделать зарядку</code></pre>
             <p>Именно так в проекте выводится пронумерованный список задач:
                 <code>for i, task in enumerate(tasks, 1)</code>.</p>
+
+            <h2>🌟 Расширение проекта: фильтрация и поиск</h2>
+            <p>Улучшим базовый менеджер задач: добавим приоритеты, дату создания, статус выполнения
+                и возможность фильтровать задачи. Каждая задача теперь хранится как словарь.</p>
+            <pre><code>import json
+import datetime
+
+TASKS_FILE = "tasks.json"
+
+def load_tasks():
+    try:
+        with open(TASKS_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+def save_tasks(tasks):
+    with open(TASKS_FILE, "w", encoding="utf-8") as f:
+        json.dump(tasks, f, ensure_ascii=False, indent=2)
+
+def add_task(title, priority="средний"):
+    tasks = load_tasks()
+    task = {
+        "id": len(tasks) + 1,
+        "title": title,
+        "priority": priority,
+        "done": False,
+        "created": datetime.datetime.now().strftime("%d.%m.%Y")
+    }
+    tasks.append(task)
+    save_tasks(tasks)
+    print(f"Добавлено: {title} [{priority}]")
+
+def show_tasks(filter_done=None, priority=None):
+    tasks = load_tasks()
+    for task in tasks:
+        if filter_done is not None and task["done"] != filter_done:
+            continue
+        if priority and task["priority"] != priority:
+            continue
+        status = "+" if task["done"] else "o"
+        print(f"{status} [{task['id']}] {task['title']} — {task['priority']}")
+
+def complete_task(task_id):
+    tasks = load_tasks()
+    for task in tasks:
+        if task["id"] == task_id:
+            task["done"] = True
+            save_tasks(tasks)
+            print(f"Задача '{task['title']}' выполнена!")
+            return
+    print("Задача не найдена")</code></pre>
+
+            <h2>📁 Структура профессионального проекта</h2>
+            <p>Когда проект вырастает за пределы одного файла, важно правильно организовать структуру
+                папок. Вот стандартная структура Python-проекта:</p>
+            <pre><code>my_project/
+│
+├── main.py           # Точка входа
+├── requirements.txt  # Зависимости (pip freeze &gt; requirements.txt)
+├── README.md         # Описание проекта
+│
+├── src/              # Исходный код
+│   ├── __init__.py
+│   ├── tasks.py      # Логика задач
+│   └── utils.py      # Вспомогательные функции
+│
+├── data/             # Данные
+│   └── tasks.json
+│
+└── tests/            # Тесты
+    └── test_tasks.py</code></pre>
+            <p>Назначение папок: <code>src/</code> содержит весь бизнес-код, разбитый по модулям;
+                <code>data/</code> хранит файлы данных отдельно от кода; <code>tests/</code> содержит
+                автоматические тесты; <code>requirements.txt</code> позволяет любому разработчику
+                установить все зависимости одной командой <code>pip install -r requirements.txt</code>.</p>
+
+            <h2>🔧 Git: контроль версий</h2>
+            <p>Git — это система контроля версий, которая отслеживает каждое изменение в вашем коде.
+                Она незаменима при работе в команде и позволяет безопасно экспериментировать:
+                если что-то сломалось, всегда можно вернуться к рабочей версии.</p>
+            <pre><code># Инициализация нового репозитория
+git init
+
+# Добавить все файлы в отслеживание
+git add .
+
+# Создать коммит (снимок версии)
+git commit -m "Первая версия менеджера задач"
+
+# Просмотр истории
+git log --oneline
+
+# Создать ветку для новой функции
+git checkout -b feature/search
+
+# Вернуться на главную ветку
+git checkout main
+
+# Загрузить на GitHub (после создания репозитория на github.com)
+git remote add origin https://github.com/username/my_project.git
+git push -u origin main</code></pre>
         </section>
 
 
@@ -196,6 +299,9 @@ for i, task in enumerate(tasks, 1):  # start=1 начинает нумераци
                 <li>Попробуйте изменить код, добавив возможность редактирования задач.</li>
                 <li>Попробуйте создать простой графический интерфейс с помощью библиотеки <strong>Tkinter</strong>.</li>
                 <li>Создайте аккаунт на GitHub и загрузите туда ваш проект!</li>
+                <li>Реализуйте функцию <code>search_tasks(keyword)</code>, которая ищет задачи по ключевому слову в названии и выводит только совпадения.</li>
+                <li>Добавьте в менеджер задач поле <code>deadline</code> (срок выполнения). Реализуйте предупреждение при выводе задач, если дедлайн наступит менее чем через 2 дня.</li>
+                <li>Организуйте проект по стандартной структуре папок: перенесите логику в <code>src/tasks.py</code>, а точку входа оставьте в <code>main.py</code>. Создайте <code>requirements.txt</code>.</li>
             </ul>
         </section>
 
