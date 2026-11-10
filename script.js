@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Какую роль выполняет функция print()?", options: ["Считывает ввод с клавиатуры", "Выводит переданные данные в консоль", "Удаляет пробелы", "Объявляет функцию"], correct: 1, explanation: "print() от английского 'print' (печатать). Единственная задача — вывести данные на экран." },
             { question: "Является ли Python регистрозависимым языком (print и Print - разные вещи)?", options: ["Да, регистр важен (print и Print - разные)", "Нет, регистр не имеет значения", "Только для переменных", "Только в Windows"], correct: 0, explanation: "Python чувствителен к регистру: print(), Print() и PRINT() — совершенно разные идентификаторы." },
             { question: "Кто создал язык программирования Python?", options: ["Линус Торвальдс", "Гвидо ван Россум", "Деннис Ритчи", "Джеймс Гослинг"], correct: 1, explanation: "Guido van Rossum — создатель Python. Начал работу в декабре 1989 года в Нидерландах." },
-            { question: "Напишите код, который выводит слово: Привет", type: "code", correct: ["print('Привет')", "print(\"Привет\")", "print('привет')", "print(\"привет\")"] },
-            { question: "Напишите код, который выводит число 42", type: "code", correct: ["print(42)", "print('42')", "print(\"42\")"] }
+            { question: "Напишите код, который выводит слово: Привет", type: "code", correct: ["print('Привет')", "print(\"Привет\")", "print('привет')", "print(\"привет\")"], explanation: "Функция print() выводит на экран то, что передано в скобках. Текст (строку) обязательно берём в кавычки — одинарные или двойные." },
+            { question: "Напишите код, который выводит число 42", type: "code", correct: ["print(42)", "print('42')", "print(\"42\")"], explanation: "Числа в print() можно писать без кавычек: print(42). С кавычками '42' — это уже строка, но на экране результат будет тот же." }
         ],
         'lesson2.html': [
             { question: "Как правильно объявить переменную x = 5 в Python?", options: ["var x = 5", "int x = 5", "x = 5", "$x = 5"], correct: 2, explanation: "В Python переменные создаются простым присваиванием без ключевых слов var, int или let." },
@@ -51,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что будет результатом выражения: str(5) + '5'?", options: ["10", "Ошибка", "'55'", "55"], correct: 2, explanation: "str(5) → '5', затем '5' + '5' = '55'. Оператор + для строк делает конкатенацию, не сложение." },
             { question: "Какая функция позволяет узнать тип переменной?", options: ["kind()", "type()", "typeof()", "datatype()"], correct: 1, explanation: "type() — встроенная функция для определения типа данных. Пример: type(3.14) → <class 'float'>." },
             { question: "Какая функция считывает ввод пользователя и всегда возвращает строку?", options: ["read()", "scan()", "input()", "get()"], correct: 2, explanation: "input() всегда возвращает строку str! Даже если пользователь введёт 42, это будет '42'." },
-            { question: "Создайте переменную age и присвойте ей значение 20", type: "code", correct: ["age=20", "age = 20"] },
-            { question: "Конвертируйте строку '10' в целое число и запишите в переменную x", type: "code", correct: ["x=int('10')", "x=int(\"10\")", "x = int('10')", "x = int(\"10\")"] }
+            { question: "Создайте переменную age и присвойте ей значение 20", type: "code", correct: ["age=20", "age = 20"], explanation: "Переменная создаётся присваиванием: имя = значение. Знак = в Python означает «положить значение в переменную», а не «равно»." },
+            { question: "Конвертируйте строку '10' в целое число и запишите в переменную x", type: "code", correct: ["x=int('10')", "x=int(\"10\")", "x = int('10')", "x = int(\"10\")"], explanation: "int() превращает строку с цифрами в целое число. Без этого '10' + 5 вызовет ошибку TypeError." }
         ],
         'lesson3.html': [
             { question: "Чему равен результат операции 10 // 3?", options: ["3.333", "3", "4", "3.0"], correct: 1, explanation: "// — целочисленное деление, результат округляется вниз. 10 // 3 = 3 (остаток 1 отбрасывается)." },
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что означает оператор % в Python?", options: ["Процент от числа", "Остаток от деления", "Умножение", "Степень"], correct: 1, explanation: "% возвращает остаток: 10 % 3 = 1 (потому что 10 = 3×3 + 1). Часто используется для проверки чётности." },
             { question: "Что делает оператор x += 5?", options: ["Сравнивает x с 5", "Прибавляет 5 к x (аналог x = x + 5)", "Создаёт переменную x=5", "Вычитает 5 из x"], correct: 1, explanation: "x += 5 — сокращённая запись x = x + 5. Аналогично: -= вычитает, *= умножает, /= делит." },
             { question: "Когда оператор 'or' возвращает True?", options: ["Только если оба условия истинны", "Если хотя бы одно условие истинно", "Только если оба условия ложны", "Никогда"], correct: 1, explanation: "or возвращает True если ХОТЯ БЫ одно условие True. Оба ложных = False." },
-            { question: "Напишите выражение для вычисления остатка от деления 10 на 3", type: "code", correct: ["10%3", "10 % 3", "print(10%3)", "print(10 % 3)"] }
+            { question: "Напишите выражение для вычисления остатка от деления 10 на 3", type: "code", correct: ["10%3", "10 % 3", "print(10%3)", "print(10 % 3)"], explanation: "Оператор % возвращает остаток от деления: 10 % 3 = 1, потому что 10 = 3·3 + 1." }
         ],
         'lesson4.html': [
             { question: "Как правильно записать условие 'если x больше 5'?", options: ["if x > 5 then:", "if (x > 5)", "if x > 5:", "if x > 5 ;"], correct: 2, explanation: "В Python условие пишется без скобок и обязательно с двоеточием в конце строки." },
@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Какой отступ рекомендует стандарт PEP 8 внутри блока if?", options: ["2 пробела", "Отступ не важен", "1 табуляция или 2 пробела", "4 пробела (рекомендация PEP 8)"], correct: 3, explanation: "PEP 8 — официальный стандарт Python — рекомендует ровно 4 пробела для отступов." },
             { question: "Что считается 'ложным' значением в условии Python?", options: ["Число 1", "Пустая строка (\"\"\", 0, [], None)", "Слово 'False'", "Любая переменная"], correct: 1, explanation: "В Python 'ложные' значения: 0, 0.0, None, False, '', [], {}, set(). Всё остальное — истинное." },
             { question: "В каком порядке Python проверяет ветки if-elif-else?", options: ["Случайном", "Снизу вверх", "Сверху вниз, останавливаясь на первой подошедшей", "Все проверяет одновременно"], correct: 2, explanation: "Python проверяет условия последовательно и останавливается на первом подходящем. Порядок важен!" },
-            { question: "Напишите заголовок условия: если a меньше b", type: "code", correct: ["if a<b:", "if a < b:"] },
-            { question: "Напишите ключевое слово Python для 'иначе если' (дополнительное условие после if):", type: "code", correct: ["elif"] }
+            { question: "Напишите заголовок условия: если a меньше b", type: "code", correct: ["if a<b:", "if a < b:"], explanation: "Условие начинается с if, затем само сравнение, а в конце обязательно двоеточие — без него будет SyntaxError." },
+            { question: "Напишите ключевое слово Python для 'иначе если' (дополнительное условие после if):", type: "code", correct: ["elif"], explanation: "elif — сокращение от else if. Ключевые слова Python пишутся строчными буквами: Elif или ELIF Python не поймёт." }
         ],
         'lesson5.html': [
             { question: "Какой цикл выполняется, пока его условие истинно (True)?", options: ["while", "for", "do-while", "loop"], correct: 0, explanation: "while работает пока условие = True. for перебирает элементы. Это разные инструменты." },
@@ -83,8 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Как пропустить текущую итерацию и перейти к следующей?", options: ["skip", "pass", "continue", "next"], correct: 2, explanation: "continue пропускает остаток текущей итерации и переходит к следующей." },
             { question: "Что произойдёт, если условие цикла while НИКОГДА не станет ложным?", options: ["Программа выдаст ошибку сразу", "Цикл выполнится ровно 100 раз", "Бесконечный цикл - программа зависнет", "Цикл автоматически остановится"], correct: 2, explanation: "while True без break — бесконечный цикл. Программа зависнет. Всегда предусматривай выход." },
             { question: "Какие числа выведет диапазон range(1, 6)?", options: ["0, 1, 2, 3, 4, 5", "1, 2, 3, 4, 5", "1, 2, 3, 4, 5, 6", "0, 1, 2, 3, 4"], correct: 1, explanation: "range(1, 6) начинается с 1, конец (6) не включается. Формула: range(start, stop) → [start, stop)." },
-            { question: "Напишите команду для досрочного прерывания (выхода из) цикла", type: "code", correct: ["break"] },
-            { question: "Напишите заголовок цикла for по диапазону из 3 элементов (i от 0 до 2):", type: "code", correct: ["for i in range(3):", "for i in range(0,3):", "for i in range(0, 3):"] }
+            { question: "Напишите команду для досрочного прерывания (выхода из) цикла", type: "code", correct: ["break"], explanation: "break сразу завершает цикл. Не путайте с continue — он только пропускает текущую итерацию." },
+            { question: "Напишите заголовок цикла for по диапазону из 3 элементов (i от 0 до 2):", type: "code", correct: ["for i in range(3):", "for i in range(0,3):", "for i in range(0, 3):"], explanation: "range(3) выдаёт числа 0, 1, 2 — правая граница не включается. В конце заголовка цикла нужно двоеточие." }
         ],
         'lesson6.html': [
             { question: "Как правильно создать список (list) в Python?", options: ["x = (1, 2)", "x = {1, 2}", "x = [1, 2]", "x = <1, 2>"], correct: 2, explanation: "Список создаётся квадратными скобками []. Скобки () — кортеж, {} — словарь/множество." },
@@ -94,8 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Чем кортеж (tuple) отличается от списка (list)?", options: ["Ничем, это одно и то же", "Кортеж нельзя изменить после создания", "Кортеж хранит только числа", "У кортежа нет индексов"], correct: 1, explanation: "Кортеж (tuple) — неизменяемая последовательность. После создания нельзя добавить или удалить элементы." },
             { question: "Что означает fruits[-1] в Python?", options: ["Ошибку, отрицательных индексов нет", "Последний элемент списка", "Предпоследний элемент", "Первый элемент"], correct: 1, explanation: "Отрицательные индексы считают с конца: [-1] — последний, [-2] — предпоследний и т.д." },
             { question: "Какой метод СОРТИРУЕТ список по возрастанию?", options: [".order()", ".arrange()", ".sort()", ".sorted()"], correct: 2, explanation: ".sort() сортирует список на месте (изменяет сам список). sorted() возвращает новый." },
-            { question: "Создайте пустой список с именем numbers", type: "code", correct: ["numbers=[]", "numbers = []", "numbers=list()", "numbers = list()"] },
-            { question: "Напишите метод списка, который удаляет элемент по его ЗНАЧЕНИЮ:", type: "code", correct: ["remove", "remove()", ".remove()"] }
+            { question: "Создайте пустой список с именем numbers", type: "code", correct: ["numbers=[]", "numbers = []", "numbers=list()", "numbers = list()"], explanation: "Пустой список создаётся квадратными скобками [] или функцией list()." },
+            { question: "Напишите метод списка, который удаляет элемент по его ЗНАЧЕНИЮ:", type: "code", correct: ["remove", "remove()", ".remove()"], explanation: "remove(значение) удаляет первое найденное совпадение. Удалить по ИНДЕКСУ можно через pop(индекс) или del." }
         ],
         'lesson7.html': [
             { question: "Какое ключевое слово Python используется для объявления функции?", options: ["function", "func", "def", "create"], correct: 2, explanation: "Функции объявляются ключевым словом def (от 'define' — определить). Без def Python не знает, что это функция." },
@@ -104,8 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что такое параметр по умолчанию?", options: ["Параметр, который нельзя изменить", "Параметр со значением, используемым если аргумент не передан при вызове", "Обязательный первый параметр", "Такого нет в Python"], correct: 1, explanation: "Параметр по умолчанию: def f(x=10). Если x не передан при вызове, используется 10." },
             { question: "Какой принцип программирования означает: 'не повторяй себя' (Don't Repeat Yourself)?", options: ["OOP", "DRY", "MVC", "SOLID"], correct: 1, explanation: "DRY = Don't Repeat Yourself. Выноси повторяющийся код в функции — так код чище и легче менять." },
             { question: "Функция может принимать сколько аргументов?", options: ["Только один", "Только два", "Не более пяти", "Любое количество"], correct: 3, explanation: "Функция принимает любое число аргументов. Можно использовать *args для произвольного количества." },
-            { question: "Напишите оператор для возврата значения переменной x из функции", type: "code", correct: ["return x", "return(x)"] },
-            { question: "Напишите объявление функции greet без аргументов", type: "code", correct: ["def greet():", "def greet() :"] }
+            { question: "Напишите оператор для возврата значения переменной x из функции", type: "code", correct: ["return x", "return(x)"], explanation: "return возвращает значение из функции и сразу завершает её. Без return функция вернёт None." },
+            { question: "Напишите объявление функции greet без аргументов", type: "code", correct: ["def greet():", "def greet() :"], explanation: "Функция объявляется через def, затем имя, пустые скобки (аргументов нет) и двоеточие." }
         ],
         'lesson8.html': [
             { question: "Что такое словарь (dict) в Python?", options: ["Список чисел", "Коллекция пар ключ-значение, например: {'a': 1}", "Список строк", "Кортеж из двух элементов"], correct: 1, explanation: "Словарь (dict) хранит пары 'ключ: значение'. Доступ по ключу, не по порядковому индексу." },
@@ -114,8 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Какой метод возвращает все КЛЮЧИ словаря d?", options: ["d.keys()", "d.get()", "d.values()", "d.items()"], correct: 0, explanation: ".keys() — ключи, .values() — значения, .items() — пары (ключ, значение) для перебора." },
             { question: "Что вернёт метод get(), если ключа нет в словаре?", options: ["Ошибку KeyError", "None (или заданное значение по умолчанию)", "Пустую строку", "Ноль"], correct: 1, explanation: ".get(ключ) безопасен: возвращает None (или указанное значение) если ключа нет, без ошибки KeyError." },
             { question: "Каким оператором удалить ключ из словаря?", options: ["remove", "del", "pop", "erase"], correct: 1, explanation: "del d[ключ] удаляет пару ключ-значение из словаря. Оператор del, не метод." },
-            { question: "Напишите обращение к значению ключа 'name' в словаре data", type: "code", correct: ["data['name']", "data[\"name\"]"] },
-            { question: "Напишите команду удаления ключа 'age' из словаря d оператором del", type: "code", correct: ["del d['age']", "del d[\"age\"]", "del(d['age'])", "del(d[\"age\"])"] }
+            { question: "Напишите обращение к значению ключа 'name' в словаре data", type: "code", correct: ["data['name']", "data[\"name\"]"], explanation: "Значение словаря получают по ключу в квадратных скобках: data['name']. Если ключа нет — будет KeyError (безопаснее data.get('name'))." },
+            { question: "Напишите команду удаления ключа 'age' из словаря d оператором del", type: "code", correct: ["del d['age']", "del d[\"age\"]", "del(d['age'])", "del(d[\"age\"])"], explanation: "del d['age'] удаляет пару ключ-значение. Если такого ключа нет, будет KeyError." }
         ],
         'lesson9.html': [
             { question: "Как получить длину (количество символов) строки s?", options: ["s.length()", "len(s)", "s.size()", "count(s)"], correct: 1, explanation: "len() — встроенная функция Python. Вызывается как len(s), а не s.len(). Работает для всех последовательностей." },
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что делает метод s.strip()?", options: ["Очищает всю строку полностью", "Удаляет пробелы и спецсимволы по краям строки", "Переводит в нижний регистр", "Удаляет все цифры"], correct: 1, explanation: ".strip() убирает пробелы и переносы строк с обеих сторон. .lstrip() — слева, .rstrip() — справа." },
             { question: "Как называется современный способ вставки переменных в строку (буква перед кавычками)?", options: ["d-строки", "f-строки", "s-строки", "r-строки"], correct: 1, explanation: "f-строки: f'Привет, {name}!' — самый удобный способ вставки переменных. Буква f перед кавычками обязательна." },
             { question: "len() - это функция или метод строки?", options: ["Метод строки, вызывается как s.len()", "Встроенная функция Python, вызывается как len(s)", "И то и другое", "Зависит от версии Python"], correct: 1, explanation: "len() — глобальная функция. Метод строки вызывается через точку: s.upper(). len() вызывается иначе: len(s)." },
-            { question: "Напишите вызов функции для получения длины строки t", type: "code", correct: ["len(t)", "print(len(t))"] }
+            { question: "Напишите вызов функции для получения длины строки t", type: "code", correct: ["len(t)", "print(len(t))"], explanation: "len() возвращает количество символов в строке (и количество элементов в списке, словаре и т.д.)." }
         ],
         'lesson10.html': [
             { question: "Какая встроенная функция Python открывает файл?", options: ["file.open()", "read()", "open()", "start()"], correct: 2, explanation: "open(путь, режим) — встроенная функция Python для работы с файлами." },
@@ -136,8 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Какую кодировку рекомендуется указывать при работе с файлами с русским текстом?", options: ["ascii", "utf-8", "windows-1251", "latin-1"], correct: 1, explanation: "UTF-8 — универсальная кодировка, поддерживает все языки. Для русского текста особенно важно указывать encoding='utf-8'." },
             { question: "Какой режим открытия файла добавляет данные В КОНЕЦ, не удаляя существующие?", options: ["'w'", "'r'", "'a'", "'x'"], correct: 2, explanation: "Режим 'a' (append) добавляет данные в конец файла. Существующие данные не удаляются." },
             { question: "Какой метод читает все строки файла и возвращает их в виде СПИСКА?", options: [".readall()", ".readlines()", ".getlines()", ".lines()"], correct: 1, explanation: ".readlines() возвращает список строк файла. Каждая строка включает символ переноса \\n в конце." },
-            { question: "Напишите режим открытия файла для ДОЗАПИСИ в конец (без удаления данных)", type: "code", correct: ["'a'", "\"a\"", "a"] },
-            { question: "Напишите вызов метода для закрытия файла f", type: "code", correct: ["f.close()", "f.close"] }
+            { question: "Напишите режим открытия файла для ДОЗАПИСИ в конец (без удаления данных)", type: "code", correct: ["'a'", "\"a\"", "a"], explanation: "Режим 'a' (append) дописывает в конец файла. Режим 'w' стирает файл перед записью, 'r' — только чтение." },
+            { question: "Напишите вызов метода для закрытия файла f", type: "code", correct: ["f.close()"], explanation: "close() обязательно со скобками: f.close без скобок только обращается к методу, но не вызывает его — файл останется открытым. Ещё надёжнее использовать with open(...)." }
         ],
         'lesson11.html': [
             { question: "Зачем нужен блок try-except?", options: ["Для создания циклов", "Для перехвата ошибок и предотвращения 'краша' программы", "Для ускорения кода", "Для работы с файлами"], correct: 1, explanation: "try-except перехватывает исключения и не даёт программе 'упасть'. Это обязательный паттерн в реальном коде." },
@@ -146,8 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Какая ошибка возникает при делении числа на 0 в Python?", options: ["ValueError", "TypeError", "ZeroDivisionError", "SyntaxError"], correct: 2, explanation: "Python поднимает ZeroDivisionError при делении на ноль. Имена исключений всегда с большой буквы." },
             { question: "Как называется базовый класс всех ошибок, который перехватывает ЛЮБОЕ исключение?", options: ["Error", "BaseError", "Exception", "AnyError"], correct: 2, explanation: "Exception — базовый класс большинства ошибок. except Exception поймает почти любую ошибку." },
             { question: "Что произойдёт с программой при ошибке, если НЕТ блока try-except?", options: ["Python выдаст предупреждение и продолжит", "Программа аварийно завершится (упадёт)", "Ничего - ошибка проигнорируется", "Запустится блок finally"], correct: 1, explanation: "Без try-except необработанное исключение останавливает программу и выводит трейсбэк в консоль." },
-            { question: "Напишите ключевое слово для принудительного вызова исключения", type: "code", correct: ["raise"] },
-            { question: "Напишите имя базового класса для перехвата ЛЮБОЙ ошибки: except _______:", type: "code", correct: ["Exception"] }
+            { question: "Напишите ключевое слово для принудительного вызова исключения", type: "code", correct: ["raise"], explanation: "raise выбрасывает исключение, например: raise ValueError('Неверное значение')." },
+            { question: "Напишите имя базового класса для перехвата ЛЮБОЙ ошибки: except _______:", type: "code", correct: ["Exception"], explanation: "Exception — базовый класс почти всех ошибок. Но лучше ловить конкретные исключения (ValueError, ZeroDivisionError), чтобы не скрыть настоящие баги." }
         ],
         'lesson12.html': [
             { question: "Для чего служит ключевое слово import?", options: ["Экспортирует функции", "Подключает встроенные и сторонние модули/библиотеки", "Компилирует код", "Сжимает файл"], correct: 1, explanation: "import подключает модули (файлы с кодом). Без import модуль недоступен." },
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Как дать псевдоним модулю при импорте (например, math сократить до m)?", options: ["import math = m", "import math as m", "alias math m", "math aka m"], correct: 1, explanation: "as создаёт псевдоним. Классика: import numpy as np, import pandas as pd." },
             { question: "Модуль - это:", options: ["Специальный тип данных Python", "Файл с готовым кодом Python, который можно подключить", "Встроенная функция", "Тип исключения"], correct: 1, explanation: "Любой .py файл — это модуль. Можно импортировать свои файлы так же, как встроенные модули." },
             { question: "Что вернёт math.sqrt(25) из модуля math?", options: ["5", "5.0", "625", "Ошибку"], correct: 1, explanation: "math.sqrt() всегда возвращает float. sqrt(25) = 5.0, не 5. Для int используй int(math.sqrt(25))." },
-            { question: "Напишите команду терминала для установки библиотеки requests", type: "code", correct: ["pip install requests"] }
+            { question: "Напишите команду терминала для установки библиотеки requests", type: "code", correct: ["pip install requests"], explanation: "pip — менеджер пакетов Python. Команда pip install имя_пакета скачивает и устанавливает библиотеку. Её вводят в терминале, а не в коде Python." }
         ],
         'lesson13.html': [
             { question: "Что в ООП является 'чертежом' (шаблоном) для создания объектов?", options: ["Функция", "Класс", "Переменная", "Пакет"], correct: 1, explanation: "Класс (class) — это шаблон для создания объектов. Объект (instance) — конкретный экземпляр класса." },
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Инкапсуляция - это:", options: ["Скрытие внутренней реализации и данных объекта от внешнего кода", "Наследование атрибутов", "Перегрузка методов", "Копирование объекта"], correct: 0, explanation: "Инкапсуляция скрывает внутренние данные объекта. Пользователь работает через публичные методы." },
             { question: "Что хранится в атрибутах объекта, заданных в __init__ через self?", options: ["Функции модуля", "Данные (свойства) конкретного объекта", "Общие методы класса", "Ошибки выполнения"], correct: 1, explanation: "self.имя = значение создаёт атрибут объекта. У каждого экземпляра класса свои значения атрибутов." },
             { question: "Как в Python обозначают 'приватный' (скрытый) атрибут класса?", options: ["Знаком @ перед именем", "Двойным подчёркиванием __ перед именем", "Словом private перед именем", "Заглавными буквами"], correct: 1, explanation: "__ (двойной underscore) перед именем делает атрибут 'приватным' — защищает от случайного обращения снаружи." },
-            { question: "Создайте экземпляр класса Car и сохраните в переменную obj", type: "code", correct: ["obj=Car()", "obj = Car()"] }
+            { question: "Создайте экземпляр класса Car и сохраните в переменную obj", type: "code", correct: ["obj=Car()", "obj = Car()"], explanation: "Объект создаётся вызовом класса со скобками: Car(). При этом автоматически вызывается метод __init__." }
         ],
         'lesson14.html': [
             { question: "Какая функция возвращает текущую дату и время?", options: ["time.now()", "calendar.today()", "datetime.now()", "datetime.today()"], correct: 2, explanation: "datetime.now() возвращает текущие дату и время. datetime.today() делает то же самое." },
@@ -175,19 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Из какого модуля импортируют класс datetime?", options: ["calendar", "time", "datetime", "clock"], correct: 2, explanation: "Модуль называется datetime И класс в нём называется datetime. from datetime import datetime." },
             { question: "Что можно делать с помощью timedelta помимо вычисления разницы между датами?", options: ["Только смотреть разницу в днях", "Прибавлять или вычитать дни из даты", "Форматировать дату в строку", "Конвертировать строку в дату"], correct: 1, explanation: "timedelta(days=7) можно прибавлять к дате: deadline = today + timedelta(days=7)." },
             { question: "Что означает %d в шаблоне strftime()?", options: ["Год (4 цифры)", "Месяц (01-12)", "День (01-31)", "Часы (00-23)"], correct: 2, explanation: "%d — день (01-31), %m — месяц (01-12), %Y — год (2024), %H:%M — часы:минуты." },
-            { question: "Напишите название метода, конвертирующего дату в строку по шаблону формата", type: "code", correct: ["strftime", "strftime()", ".strftime()"] },
-            { question: "Напишите строку импорта класса datetime из модуля datetime", type: "code", correct: ["from datetime import datetime"] }
-        ],
-        'lesson16.html': [
-            { question: "Какая библиотека Python используется для выполнения HTTP-запросов?", options: ["urllib2", "requests", "httplib", "fetch"], correct: 1, explanation: "requests — самая популярная библиотека для HTTP. Не входит в стандартную библиотеку, нужно: pip install requests." },
-            { question: "Какой метод библиотеки requests используется для GET-запроса?", options: ["requests.fetch()", "requests.load()", "requests.get()", "requests.read()"], correct: 2, explanation: "GET-запрос запрашивает данные с сервера. Это самый распространённый тип HTTP-запроса." },
-            { question: "Что означает код ответа HTTP 200?", options: ["Ошибка сервера", "Страница не найдена", "Успешный запрос", "Нет прав доступа"], correct: 2, explanation: "HTTP 200 OK — успешный ответ. 404 — не найдено, 403 — нет прав, 500 — ошибка сервера." },
-            { question: "Как получить JSON-данные из объекта ответа requests?", options: ["response.text()", "response.data", "json.loads(response)", "response.json()"], correct: 3, explanation: ".json() парсит JSON из ответа в Python-словарь. Это удобнее, чем json.loads(response.text)." },
-            { question: "Что такое API?", options: ["Язык программирования", "База данных", "Интерфейс взаимодействия программ между собой", "Протокол интернета"], correct: 2, explanation: "API (Application Programming Interface) — 'розетка' для соединения программ. Через API берём данные погоды, курсы валют и т.д." },
-            { question: "Зачем указывать параметр timeout в requests.get()?", options: ["Чтобы ускорить запрос", "Чтобы установить приоритет запроса", "Чтобы программа не зависла при недоступном сервере", "Это обязательный параметр"], correct: 2, explanation: "timeout=5 означает: ждать не более 5 секунд. Без timeout программа может зависнуть навсегда." },
-            { question: "Какой метод вызывает исключение если код ответа >= 400?", options: ["response.check()", "response.raise_for_status()", "response.assert_ok()", "response.validate()"], correct: 1, explanation: ".raise_for_status() автоматически поднимает исключение при ошибочных кодах (4xx, 5xx). Удобно для проверки." },
-            { question: "Напишите команду для установки библиотеки requests", type: "code", correct: ["pip install requests"] },
-            { question: "Напишите GET-запрос к переменной url используя библиотеку requests", type: "code", correct: ["requests.get(url)", "response = requests.get(url)", "r = requests.get(url)"] }
+            { question: "Напишите название метода, конвертирующего дату в строку по шаблону формата", type: "code", correct: ["strftime", "strftime()", ".strftime()"], explanation: "strftime — string format time: дата → строка. Обратная операция strptime: строка → дата." },
+            { question: "Напишите строку импорта класса datetime из модуля datetime", type: "code", correct: ["from datetime import datetime"], explanation: "Модуль и класс называются одинаково — datetime. from datetime import datetime позволяет писать datetime.now() вместо datetime.datetime.now()." }
         ],
         'lesson15.html': [
             { question: "Какая библиотека встроена в Python 'из коробки' для создания настольных окон (GUI)?", options: ["Pandas", "Tkinter", "Requests", "PyQt"], correct: 1, explanation: "tkinter входит в стандартную библиотеку Python — устанавливать не нужно. import tkinter as tk." },
@@ -197,11 +186,24 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Какой модуль используется в итоговом проекте для сохранения задач в файл?", options: ["csv", "pickle", "json", "xml"], correct: 2, explanation: "Модуль json — стандартная библиотека Python. json.dump() сохраняет, json.load() читает." },
             { question: "Какую конструкцию использует итоговый проект для бесконечного главного меню с выходом через break?", options: ["for i in range(999):", "while True: ... break", "repeat until False", "loop(): ... stop"], correct: 1, explanation: "while True создаёт бесконечный цикл меню. break выходит из него при выборе нужного пункта." },
             { question: "Что делает функция enumerate() при переборе списка?", options: ["Возвращает только индексы", "Возвращает пары (индекс, элемент) одновременно", "Сортирует список", "Возвращает только элементы"], correct: 1, explanation: "enumerate(['a','b','c']) → (0,'a'), (1,'b'), (2,'c'). Удобно когда нужен и индекс и значение." },
-            { question: "Напишите сокращённое название системы контроля версий", type: "code", correct: ["Git", "git"] }
+            { question: "Напишите сокращённое название системы контроля версий", type: "code", correct: ["Git", "git"], explanation: "Git — самая популярная система контроля версий: она хранит историю изменений кода и позволяет откатываться к прошлым версиям." }
+        ],
+        'lesson16.html': [
+            { question: "Какая библиотека Python используется для выполнения HTTP-запросов?", options: ["urllib2", "requests", "httplib", "fetch"], correct: 1, explanation: "requests — самая популярная библиотека для HTTP. Не входит в стандартную библиотеку, нужно: pip install requests." },
+            { question: "Какой метод библиотеки requests используется для GET-запроса?", options: ["requests.fetch()", "requests.load()", "requests.get()", "requests.read()"], correct: 2, explanation: "GET-запрос запрашивает данные с сервера. Это самый распространённый тип HTTP-запроса." },
+            { question: "Что означает код ответа HTTP 200?", options: ["Ошибка сервера", "Страница не найдена", "Успешный запрос", "Нет прав доступа"], correct: 2, explanation: "HTTP 200 OK — успешный ответ. 404 — не найдено, 403 — нет прав, 500 — ошибка сервера." },
+            { question: "Как получить JSON-данные из объекта ответа requests?", options: ["response.text()", "response.data", "json.loads(response)", "response.json()"], correct: 3, explanation: ".json() парсит JSON из ответа в Python-словарь. Это удобнее, чем json.loads(response.text)." },
+            { question: "Что такое API?", options: ["Язык программирования", "База данных", "Интерфейс взаимодействия программ между собой", "Протокол интернета"], correct: 2, explanation: "API (Application Programming Interface) — 'розетка' для соединения программ. Через API берём данные погоды, курсы валют и т.д." },
+            { question: "Зачем указывать параметр timeout в requests.get()?", options: ["Чтобы ускорить запрос", "Чтобы установить приоритет запроса", "Чтобы программа не зависла при недоступном сервере", "Это обязательный параметр"], correct: 2, explanation: "timeout=5 означает: ждать не более 5 секунд. Без timeout программа может зависнуть навсегда." },
+            { question: "Какой метод вызывает исключение если код ответа >= 400?", options: ["response.check()", "response.raise_for_status()", "response.assert_ok()", "response.validate()"], correct: 1, explanation: ".raise_for_status() автоматически поднимает исключение при ошибочных кодах (4xx, 5xx). Удобно для проверки." },
+            { question: "Напишите, как получить код статуса ответа, сохранённого в переменной response", type: "code", correct: ["response.status_code", "print(response.status_code)"], explanation: "status_code — атрибут (не метод, поэтому без скобок) с числовым кодом ответа сервера: 200 — успех, 404 — не найдено, 500 — ошибка сервера." },
+            { question: "Напишите GET-запрос к переменной url используя библиотеку requests", type: "code", correct: ["requests.get(url)", "response = requests.get(url)", "r = requests.get(url)"], explanation: "requests.get(url) отправляет GET-запрос и возвращает объект ответа: у него есть status_code, text и метод json()." }
         ]
     };
 
     // --- 2. Locking System & Navigation ---
+    let lessonLocked = false;
+
     function initLockSystem() {
         const progress = safeGetProgress();
 
@@ -210,8 +212,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const cards = document.querySelectorAll('.lesson-card');
             let passedCount = 0;
 
-            cards.forEach((card, index) => {
-                const lessonFileName = `lesson${index + 1}.html`;
+            cards.forEach((card) => {
+                const cardLink = card.querySelector('a.btn');
+                const lessonFileName = cardLink ? cardLink.getAttribute('href') : '';
+                const index = lessonsList.indexOf(lessonFileName);
+                if (index < 0) return;
                 const isPassed = progress[lessonFileName];
 
                 // Add Checkmark
@@ -221,17 +226,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Prevent double checkmarks
                     if (!card.querySelector('.check-mark')) {
                         card.style.position = 'relative'; // Ensure relative for absolute checkmark
-                        card.innerHTML += `<div class="check-mark">✅ Пройдено</div>`;
+                        const mark = document.createElement('div');
+                        mark.className = 'check-mark';
+                        mark.textContent = '✅ Пройдено';
+                        card.appendChild(mark);
                     }
                 }
 
                 // Lock Logic: Lesson 1 is always open. Others need prev one passed.
                 if (index > 0) {
-                    const prevLesson = `lesson${index}.html`; // e.g. lesson1.html for lesson2
+                    const prevLesson = lessonsList[index - 1];
                     if (!progress[prevLesson]) {
                         // Locked!
                         card.classList.add('locked');
-                        const link = card.querySelector('a.btn');
+                        const link = cardLink;
                         if (link) {
                             link.href = '#';
                             link.textContent = '🔒 Закрыто';
@@ -271,25 +279,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // B. Handle Individual Lesson Pages (Redirect if locked)
+        // B. Урок закрыт, если не пройден предыдущий.
+        //    Текст урока остаётся доступен (его могут прочитать и ученик, и поисковик),
+        //    а тест и переход дальше откроются только после прохождения предыдущего урока.
         const lessonIndex = lessonsList.indexOf(currentPath);
-        if (lessonIndex > 0) { // If not lesson1
+        if (lessonIndex > 0 && !progress[lessonsList[lessonIndex - 1]]) {
+            lessonLocked = true;
             const prevLesson = lessonsList[lessonIndex - 1];
-
-            if (!progress[prevLesson]) {
-                // If previous not done, REDIRECT
-                document.body.innerHTML = `
-                    <div style="text-align:center; padding-top: 100px; color: #dc3545;">
-                        <h1>🚫 Доступ закрыт!</h1>
-                        <p>Сначала пройдите предыдущий урок.</p>
-                        <p>Перенаправление...</p>
-                    </div>
-                `;
-                setTimeout(() => {
-                    window.location.href = 'python-basic.html';
-                }, 2000);
-                return; // Stop execution
-            }
+            const banner = document.createElement('div');
+            banner.className = 'lesson-locked-banner';
+            banner.setAttribute('role', 'note');
+            banner.innerHTML = `🔒 <strong>Урок пока закрыт.</strong> Читать теорию можно, но тест откроется после
+                прохождения <a href="${prevLesson}">урока ${lessonIndex}</a>.`;
+            const main = document.querySelector('main');
+            if (main) main.insertBefore(banner, main.firstChild);
         }
 
         // C. Generate Nav Buttons (Prev/Next)
@@ -332,6 +335,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function initQuiz() {
         const quizContainer = document.getElementById('quiz-container');
         if (!quizContainer || !quizData[currentPath]) return;
+        if (lessonLocked) {
+            quizContainer.style.display = 'block';
+            quizContainer.innerHTML = '<p class="quiz-locked-note">🔒 Тест станет доступен после прохождения предыдущего урока.</p>';
+            return;
+        }
 
         // Ensure clean state
         quizContainer.innerHTML = '';
@@ -413,12 +421,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (q.type === 'code') {
                     const inputArea = document.createElement('textarea');
                     inputArea.className = 'code-input';
-                    inputArea.style.width = '100%';
-                    inputArea.style.border = '1px solid #ccc';
-                    inputArea.style.borderRadius = '5px';
-                    inputArea.style.padding = '10px';
-                    inputArea.style.margin = '10px 0';
-                    inputArea.style.resize = 'vertical';
                     inputArea.rows = 2;
                     inputArea.placeholder = 'Напишите ваш ответ...';
                     inputArea.setAttribute('aria-label', 'Поле для ввода кода');
@@ -434,44 +436,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     feedback.setAttribute('aria-live', 'polite');
 
                     checkBtn.onclick = () => {
-                        // Нормализация: убираем лишние пробелы, приводим кавычки к одному виду
-                        const norm = (s) => s.trim().replace(/\s+/g, ' ').replace(/"/g, "'");
-                        const normStrict = (s) => norm(s).replace(/\s/g, '');
+                        // Нормализация: убираем пробелы вокруг знаков и скобок и лишние пробелы между словами.
+                        // Регистр не меняем: для Python Print и print — разные имена.
+                        const norm = (str) => str.trim()
+                            .replace(/\s+/g, ' ')
+                            .replace(/\s*([()\[\]{}=<>!+\-*/%,:.])\s*/g, '$1');
+                        // Кавычки допускаем любые, но парные: 'текст' и "текст" — одно и то же
+                        const swapQuotes = (str) => str.replace(/['"]/g, c => (c === '"' ? "'" : '"'));
 
                         const userCode = norm(inputArea.value);
-                        const userStrict = normStrict(inputArea.value);
-
                         const isCorrect = q.correct.some(ans => {
                             const normAns = norm(ans);
-                            const normAnsStrict = normStrict(ans);
-                            // 1. Точное совпадение после нормализации пробелов и кавычек
-                            if (userCode === normAns) return true;
-                            // 2. Без пробелов (любое форматирование)
-                            if (userStrict === normAnsStrict) return true;
-                            // 3. Contains-match только для длинных ответов (исключает ложные срабатывания)
-                            if (normAns.length > 5 && userCode.includes(normAns)) return true;
-                            // 4. Без учёта регистра
-                            if (userCode.toLowerCase() === normAns.toLowerCase()) return true;
-                            if (userStrict.toLowerCase() === normAnsStrict.toLowerCase()) return true;
-                            return false;
+                            return userCode === normAns || userCode === swapQuotes(normAns);
                         });
 
                         inputArea.disabled = true;
                         checkBtn.disabled = true;
-                        checkBtn.style.opacity = '0.7';
 
                         if (isCorrect) {
                             feedback.textContent = '✅ Верно!';
-                            feedback.style.color = '#10b981';
+                            feedback.classList.add('is-correct');
                             qBlock.classList.add('answered-correct');
                         } else {
                             const exampleAns = q.correct[0];
                             feedback.textContent = '❌ Ошибка. Правильный ответ: ';
                             const codeEl = document.createElement('code');
-                            codeEl.style.cssText = 'background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;';
                             codeEl.textContent = exampleAns;
                             feedback.appendChild(codeEl);
-                            feedback.style.color = '#ef4444';
+                            feedback.classList.add('is-wrong');
                             qBlock.classList.add('answered-wrong');
                         }
 
@@ -552,7 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selected === correct) {
             btn.classList.add('correct');
             feedback.textContent = '✅ Верно!';
-            feedback.style.color = '#28a745';
+            feedback.classList.add('is-correct');
             qBlock.classList.add('answered-correct');
         } else {
             btn.classList.add('incorrect');
@@ -563,7 +555,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             feedback.textContent = '❌ Ошибка';
-            feedback.style.color = '#dc3545';
+            feedback.classList.add('is-wrong');
             qBlock.classList.add('answered-wrong');
         }
 
@@ -590,6 +582,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const progress = safeGetProgress();
                 progress[currentPath] = true;
                 localStorage.setItem('quiz_results', JSON.stringify(progress));
+                if (lessonsList.every(l => progress[l]) && !localStorage.getItem('course_completed_at')) {
+                    localStorage.setItem('course_completed_at', new Date().toISOString());
+                }
 
                 setTimeout(() => {
                     renderQuizCompleted(container);
@@ -732,25 +727,26 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.setAttribute('aria-label', 'Копировать код');
 
             btn.addEventListener('click', () => {
-                const text = codeEl ? codeEl.textContent : pre.textContent;
-                const copy = () => {
-                    btn.textContent = '✓ Скопировано';
+                const text = (codeEl ? codeEl.textContent : pre.textContent).replace(/Копировать$|✓ Скопировано$/, '');
+                const done = (ok) => {
+                    btn.textContent = ok ? '✓ Скопировано' : 'Не удалось';
                     setTimeout(() => { btn.textContent = 'Копировать'; }, 2000);
                 };
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(text).then(copy).catch(() => {
-                        document.execCommand('copy');
-                        copy();
-                    });
-                } else {
+                const fallbackCopy = () => {
                     const ta = document.createElement('textarea');
                     ta.value = text;
                     ta.style.cssText = 'position:fixed;opacity:0';
                     document.body.appendChild(ta);
                     ta.select();
-                    document.execCommand('copy');
+                    let ok = false;
+                    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
                     ta.remove();
-                    copy();
+                    done(ok);
+                };
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(text).then(() => done(true)).catch(fallbackCopy);
+                } else {
+                    fallbackCopy();
                 }
             });
             pre.appendChild(btn);
@@ -814,7 +810,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 a.href = url;
                 a.download = 'pythonbasic-progress.json';
                 a.click();
-                URL.revokeObjectURL(url);
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
                 showToast('✅ Прогресс сохранён в файл!', 'success');
             };
         }
@@ -828,8 +824,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 reader.onload = (ev) => {
                     try {
                         const data = JSON.parse(ev.target.result);
-                        if (typeof data !== 'object') throw new Error('invalid');
-                        localStorage.setItem('quiz_results', JSON.stringify(data));
+                        if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('invalid');
+                        const clean = {};
+                        lessonsList.forEach(l => { if (data[l] === true) clean[l] = true; });
+                        if (Object.keys(clean).length === 0) throw new Error('invalid');
+                        localStorage.setItem('quiz_results', JSON.stringify(clean));
                         showToast('✅ Прогресс загружен!', 'success');
                         setTimeout(() => location.reload(), 1000);
                     } catch {
@@ -993,7 +992,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initProgressExportImport();
     initCourseCompletionBanner();
     initScrollAnimations();
-    document.querySelectorAll('footer p').forEach(el => {
-        el.innerHTML = el.innerHTML.replace(/©\s*\d{4}/, '© ' + new Date().getFullYear());
+    document.querySelectorAll('.footer-year, #footer-year').forEach(el => {
+        el.textContent = new Date().getFullYear();
     });
 });

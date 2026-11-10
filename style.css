@@ -1,5 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
+/* Ширина элемента включает padding и border.
+   Без этого блоки с width: 100% и отступами вылезали за экран на телефоне. */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Атрибут hidden должен скрывать элемент, даже если в CSS задан display */
+[hidden] {
+    display: none !important;
+}
+
 /* ==== CSS VARIABLES & THEME ==== */
 :root {
     --bg-color: #f8fafc;
@@ -438,6 +451,31 @@ pre {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Подпись «Python» над блоками кода.
+   Строки редактора CodeMirror — тоже <pre>, и терминал — <pre>, поэтому их исключаем:
+   иначе подпись и отступ появлялись бы у каждой строки редактора. */
+pre:not(.CodeMirror-line):not(#terminal-output) {
+    padding-top: 36px;
+}
+
+pre:not(.CodeMirror-line):not(#terminal-output)::before {
+    content: 'Python';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 6px 16px;
+    font-size: 0.75rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px 12px 0 0;
+}
+
 code {
     font-family: 'Fira Code', 'Consolas', monospace;
     background: rgba(128, 128, 128, 0.1);
@@ -509,16 +547,31 @@ body.dark-mode .btn-quiz-opt {
 .btn-quiz-opt.correct {
     background: var(--success-bg);
     border-color: var(--success-color);
-    color: #047857;
+    color: #065f46;
 }
 
 .btn-quiz-opt.incorrect {
     background: var(--error-bg);
     border-color: var(--error-color);
-    color: #b91c1c;
+    color: #991b1b;
+}
+
+body.dark-mode .btn-quiz-opt.correct {
+    color: #6ee7b7;
+}
+
+body.dark-mode .btn-quiz-opt.incorrect {
+    color: #fca5a5;
 }
 
 textarea.code-input {
+    display: block;
+    width: 100%;
+    min-height: 50px;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 6px;
+    resize: vertical;
     background: var(--bg-color);
     color: var(--text-color);
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -556,6 +609,7 @@ textarea.code-input:focus {
     display: flex;
     justify-content: space-between;
     margin-top: 50px;
+    margin-bottom: 40px;
     gap: 20px;
 }
 
@@ -654,16 +708,33 @@ body.dark-mode .btn-nav {
 /* Копирование */
 .btn-copy {
     position: absolute;
-    top: 10px;
+    top: 6px;
     right: 10px;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
-    padding: 6px 10px;
+    padding: 5px 10px;
     border-radius: 6px;
-    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
     cursor: pointer;
-    transition: var(--transition);
+    opacity: 0;
+    transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+pre:hover .btn-copy,
+.btn-copy:focus-visible {
+    opacity: 1;
+}
+
+/* На телефонах и планшетах наведения мышью нет — кнопка видна всегда */
+@media (hover: none) {
+    .btn-copy {
+        opacity: 1;
+    }
 }
 
 .btn-copy:hover {
@@ -822,6 +893,7 @@ body.dark-mode footer {
 
 .libraries {
     flex: 1;
+    min-width: 0; /* иначе длинный код в <pre> растягивает колонку шире экрана */
 }
 
 .library {
@@ -845,6 +917,7 @@ body.dark-mode footer {
 @media (max-width: 900px) {
     .libraries-layout {
         flex-direction: column;
+        align-items: stretch;
     }
 
     .libraries-sidebar {
@@ -886,14 +959,6 @@ body.dark-mode footer {
     padding: 15px 20px;
 }
 
-/* ==== ЛЁГКИЙ ОТСТУП ДЛЯ ВОПРОСОВ С КОДОМ ==== */
-textarea.code-input {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    min-height: 50px;
-}
-
 /* ==== FEEDBACK ТЕКСТ ==== */
 .quiz-feedback {
     margin-top: 8px;
@@ -902,31 +967,9 @@ textarea.code-input {
     min-height: 24px;
 }
 
-/* ==== КОРРЕКТИРОВКИ СВЕТЛОЙ ТЕМЫ ДЛЯ КВИЗА ==== */
-.btn-quiz-opt.correct {
-    color: #065f46 !important;
-}
-
-.btn-quiz-opt.incorrect {
-    color: #991b1b !important;
-}
-
-body.dark-mode .btn-quiz-opt.correct {
-    color: #6ee7b7 !important;
-}
-
-body.dark-mode .btn-quiz-opt.incorrect {
-    color: #fca5a5 !important;
-}
-
 /* ==== QUIZ PASSED CONTAINER В DARK MODE ==== */
 body.dark-mode .quiz-passed-container {
     color: #34d399;
-}
-
-/* ==== LESSON NAVIGATION MARGIN ==== */
-.lesson-navigation {
-    margin-bottom: 40px;
 }
 
 /* ==== БЛОК "ТЕСТ НЕ ПРОЙДЕН" ==== */
@@ -1175,6 +1218,11 @@ body.dark-mode .quiz-failed-percent {
     border-radius: 0 2px 2px 0;
 }
 
+/* Пункты меню не переносим на две строки («Python Online») */
+nav ul li a {
+    white-space: nowrap;
+}
+
 /* ==== HAMBURGER BUTTON ==== */
 .nav-hamburger {
     display: none;
@@ -1218,9 +1266,12 @@ body.dark-mode .quiz-failed-percent {
 }
 
 /* ==== MOBILE NAV OVERRIDE ==== */
-@media (max-width: 768px) {
+/* 7 пунктов меню в одну строку помещаются только от ~1200px, поэтому «гамбургер» включаем раньше,
+   чем остальную мобильную вёрстку — иначе на планшетах меню вылезало за экран */
+@media (max-width: 1200px) {
     .nav-hamburger {
         display: flex;
+        margin-left: auto;
     }
 
     header .container {
@@ -1289,48 +1340,6 @@ body.dark-mode .quiz-explanation {
     background: rgba(99, 102, 241, 0.1);
 }
 
-/* ==== CODE BLOCK LANGUAGE LABEL ==== */
-pre {
-    padding-top: 36px !important;
-}
-
-pre::before {
-    content: 'Python';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 6px 16px;
-    font-size: 0.75rem;
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.35);
-    background: rgba(255, 255, 255, 0.04);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px 12px 0 0;
-}
-
-/* ==== COPY BUTTON IMPROVEMENT ==== */
-.btn-copy {
-    font-size: 11px !important;
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.02em !important;
-    padding: 5px 10px !important;
-    top: 6px !important;
-    right: 10px !important;
-    border-radius: 6px !important;
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.2s ease, background 0.2s ease !important;
-}
-
-pre:hover .btn-copy {
-    opacity: 1;
-}
-
 /* ==== LESSON CONTENT TYPOGRAPHY IMPROVEMENTS ==== */
 .lesson-content h2 {
     margin-top: 36px;
@@ -1361,4 +1370,60 @@ pre:hover .btn-copy {
     padding: 0 !important;
     font-size: inherit !important;
     line-height: inherit !important;
+}
+
+/* ==== ЛОГОТИП В ШАПКЕ ==== */
+.logo-link:hover {
+    transform: scale(1.05);
+}
+
+/* ==== ЗАКРЫТЫЙ УРОК ==== */
+.lesson-locked-banner {
+    margin: 20px 0;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.lesson-locked-banner a {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.quiz-locked-note {
+    text-align: center;
+    font-weight: 600;
+    margin: 0;
+}
+
+.quiz-feedback.is-correct {
+    color: var(--success-color);
+}
+
+.quiz-feedback.is-wrong {
+    color: var(--error-color);
+}
+
+.quiz-feedback code {
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* ==== ЗАПАСНОЙ РЕДАКТОР (если CodeMirror не загрузился) ==== */
+textarea.editor-fallback {
+    display: block;
+    width: 100%;
+    min-height: 300px;
+    padding: 12px 15px;
+    border: none;
+    background: #282a36;
+    color: #f8f8f2;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.5;
+    resize: vertical;
+    tab-size: 4;
 }

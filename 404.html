@@ -9,65 +9,8 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="404 — Страница не найдена | PythonBasic">
     <meta property="og:description" content="Страница не найдена. Вернитесь на главную страницу PythonBasic.">
-    <meta property="og:image" content="logo.png">
+    <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
     <link rel="stylesheet" href="style.css">
-    <style>
-        .error-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 80px 20px;
-            min-height: 60vh;
-        }
-
-        .error-code {
-            font-size: 8rem;
-            font-weight: 900;
-            line-height: 1;
-            color: var(--accent-color);
-            margin-bottom: 10px;
-        }
-
-        .error-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: var(--text-color);
-        }
-
-        .error-description {
-            font-size: 1.1rem;
-            color: var(--text-muted, #6b7280);
-            max-width: 480px;
-            margin-bottom: 35px;
-            line-height: 1.6;
-        }
-
-        .error-actions {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid var(--accent-color);
-            color: var(--accent-color);
-            padding: 12px 28px;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-
-        .btn-secondary:hover {
-            background: var(--accent-color);
-            color: white;
-        }
-    </style>
 </head>
 
 <body>
@@ -75,8 +18,7 @@
     <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
             <a href="index.html"
-                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" class="logo-link">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
                 <span
                     style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
@@ -90,6 +32,7 @@
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
                     <li><a href="cheatsheet.html">Шпаргалка</a></li>
+                    <li><a href="glossary.html">Глоссарий</a></li>
                 </ul>
             </nav>
         </div>
@@ -114,7 +57,6 @@
     </footer>
 
     <script src="script.js"></script>
-    <script>document.querySelectorAll('.footer-year').forEach(el => el.textContent = new Date().getFullYear());</script>
 </body>
 
 </html>
