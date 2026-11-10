@@ -959,11 +959,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function initSyntaxHighlighting() {
         if (!document.querySelector('pre code')) return;
 
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
-        document.head.appendChild(link);
-
+        // Цвета подсветки заданы в style.css (те же, что в редакторе кода), отдельная тема не нужна
         const overrideSt = document.createElement('style');
         overrideSt.textContent = '.hljs{background:transparent!important;padding:0!important;font-size:inherit!important;line-height:inherit!important;}';
         document.head.appendChild(overrideSt);
