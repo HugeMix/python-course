@@ -993,7 +993,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initProgressExportImport();
     initCourseCompletionBanner();
     initScrollAnimations();
-    document.querySelectorAll('footer p').forEach(el => {
-        el.innerHTML = el.innerHTML.replace(/©\s*\d{4}/, '© ' + new Date().getFullYear());
+    document.querySelectorAll('.footer-year, #footer-year').forEach(el => {
+        el.textContent = new Date().getFullYear();
     });
 });

@@ -1362,3 +1362,8 @@ pre:hover .btn-copy {
     font-size: inherit !important;
     line-height: inherit !important;
 }
+
+/* ==== ЛОГОТИП В ШАПКЕ ==== */
+.logo-link:hover {
+    transform: scale(1.05);
+}

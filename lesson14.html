@@ -20,8 +20,7 @@
     <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
             <a href="index.html"
-                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" class="logo-link">
                 <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
                 <span
                     style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
@@ -212,7 +211,6 @@ print(ts)  # 1704056400.0
     </footer>
 
     <script src="script.js"></script>
-    <script>document.querySelectorAll('.footer-year').forEach(el => el.textContent = new Date().getFullYear());</script>
 </body>
 
 </html>

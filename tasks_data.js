@@ -7,7 +7,6 @@ const tasks = [
         desc: "<p>Напишите функцию <code>add(a, b)</code>, которая принимает два числа и возвращает их сумму.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>add(2, 3) -> 5</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>add(-1, 1) -> 0</code>",
         startCode: "def add(a, b):\n    # Ваш код пишите здесь\n    pass\n",
         testCode: `
-import sys
 try:
     assert add(2, 3) == 5, "add(2, 3) должно вернуть 5"
     assert add(-1, 1) == 0, "add(-1, 1) должно вернуть 0"
@@ -49,7 +48,6 @@ except Exception as e:
         desc: "<p>Напишите функцию <code>find_max(a, b)</code>, которая принимает два числа и возвращает наибольшее из них. <strong>Внимание:</strong> Запрещено использовать встроенную функцию <code>max()</code>. Используйте условный оператор if - else.</p>",
         startCode: "def find_max(a, b):\n    # Ваш код пишите здесь\n    pass\n",
         testCode: `
-import sys
 try:
     assert find_max(10, 5) == 10, "find_max(10, 5) должно вернуть 10"
     assert find_max(-5, -2) == -2, "find_max(-5, -2) должно вернуть -2"
