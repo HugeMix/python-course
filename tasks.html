@@ -16,19 +16,12 @@
     <link rel="stylesheet" href="style.css">
     <!-- CodeMirror for the editor -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/selection/active-line.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/matchbrackets.min.js"></script>
 
     <style>
-        .CodeMirror {
-            font-family: 'Fira Code', 'Consolas', monospace;
-            font-size: 16px !important;
-        }
-
-
-
         .tasks-layout {
             display: flex;
             gap: 20px;
@@ -119,80 +112,11 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .editor-container {
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            background: #282a36;
-            margin-bottom: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
 
-        body.dark-mode .editor-container {
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
 
-        .editor-header {
-            background: #f8f9fa;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #333;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
 
-        body.dark-mode .editor-header {
-            background: #1e1f29;
-            color: #f8f8f2;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .btn-run-tests {
-            background: var(--success-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
-        }
-
-        .btn-run-tests:hover:not(:disabled) {
-            background: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-run-tests:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .btn-stop-tests {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .editor-buttons {
-            display: flex;
-            gap: 8px;
+        .tasks-ide {
+            margin-bottom: 16px;
         }
 
         .tasks-sidebar-head {
@@ -279,25 +203,6 @@
             font-weight: 700;
         }
 
-        .test-results {
-            background: #f8f9fa;
-            color: #333;
-            padding: 20px;
-            border-radius: var(--radius);
-            font-family: monospace;
-            white-space: pre-wrap;
-            min-height: 100px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            font-size: 1.05rem;
-            line-height: 1.5;
-        }
-
-        body.dark-mode .test-results {
-            background: #1e1f29;
-            color: #f8f8f2;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
         .explanation-block {
             background: rgba(79, 70, 229, 0.05);
             border: 1px solid rgba(79, 70, 229, 0.2);
@@ -380,25 +285,63 @@
                         здесь...</div>
                 </div>
 
-                <div class="editor-container">
-                    <div class="editor-header">
-                        <span>Напишите решение:</span>
-                        <div class="editor-buttons">
-                            <button class="btn-stop-tests" id="btn-stop" hidden>Стоп</button>
-                            <button class="btn-run-tests" id="btn-submit" disabled>Загрузка движка...</button>
+                <div class="ide tasks-ide">
+                    <div class="ide-bar">
+                        <div class="ide-title">
+                            <span class="ide-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                            <span class="ide-tab">solution.py</span>
+                        </div>
+                        <div class="ide-actions">
+                            <span class="ide-kbd">Ctrl + Enter</span>
+                            <button type="button" class="ide-btn ide-btn-ghost" id="btn-reset" title="Вернуть исходный код задачи">Сбросить</button>
+                            <button type="button" class="ide-btn ide-btn-danger" id="btn-stop" hidden>Стоп</button>
+                            <button type="button" class="ide-btn ide-btn-primary" id="btn-submit" disabled><span class="ide-play" aria-hidden="true"></span><span class="btn-label">Загрузка Python…</span></button>
                         </div>
                     </div>
-                    <textarea id="code-editor"></textarea>
+                    <div class="ide-editor">
+                        <textarea id="code-editor" aria-label="Редактор кода"></textarea>
+                    </div>
                 </div>
 
-                <div>
-                    <h4 style="margin-top:0;">Результаты автоматической проверки:</h4>
-                    <div class="test-results" id="test-results">Выберите задачу и нажмите "Проверить", чтобы посмотреть
-                        результаты.</div>
+                <div class="ide tasks-console">
+                    <div class="ide-bar">
+                        <span class="ide-label">Результат проверки</span>
+                        <span class="ide-status" id="test-status" data-state="idle">Ожидание</span>
+                    </div>
+                    <div class="ide-console-body" id="test-results" aria-live="polite">Напишите решение и нажмите «Проверить».</div>
                 </div>
             </div>
         </div>
     </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="footer-logo">Python<span>Basic</span></a>
+                <p>Курс Python с нуля на русском языке: уроки, тесты и задачи с автоматической проверкой.</p>
+                <a class="footer-cta" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Записаться на занятия в Telegram</a>
+            </div>
+            <div class="footer-col" role="navigation" aria-label="Обучение">
+                <h4>Обучение</h4>
+                <ul>
+                    <li><a href="python-basic.html">Базовый курс</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="certificate.html">Сертификат</a></li>
+                </ul>
+            </div>
+            <div class="footer-col" role="navigation" aria-label="Справочник">
+                <h4>Справочник</h4>
+                <ul>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
+                    <li><a href="glossary.html">Глоссарий</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="next-steps.html">Что дальше?</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">© <span class="footer-year"></span> PythonBasic — Python для начинающих</div>
+    </footer>
 
     <!-- Скрипты -->
     <script src="script.js"></script>
@@ -408,26 +351,48 @@
         let currentTaskIndex = 0;
 
         const btnSubmit = document.getElementById("btn-submit");
+        const btnLabel = btnSubmit.querySelector(".btn-label");
         const btnStop = document.getElementById("btn-stop");
+        const btnReset = document.getElementById("btn-reset");
         const resultsDiv = document.getElementById("test-results");
+        const statusEl = document.getElementById("test-status");
 
         const editor = createEditor(document.getElementById("code-editor"), {
             mode: "python",
-            theme: "dracula",
+            theme: "pybasic",
             lineNumbers: true,
             indentUnit: 4,
-            matchBrackets: true
+            matchBrackets: true,
+            styleActiveLine: true,
+            // Tab ставит 4 пробела, а не символ табуляции (Python не любит смешивать их)
+            extraKeys: {
+                Tab: (cm) => cm.somethingSelected() ? cm.indentSelection("add") : cm.replaceSelection("    ", "end")
+            }
         });
-        editor.setSize("100%", "300px");
 
         function getSolved() {
             try { return JSON.parse(localStorage.getItem("solved_tasks")) || {}; }
             catch (e) { return {}; }
         }
 
-        function setResult(text, color) {
-            resultsDiv.textContent = text;
-            resultsDiv.style.color = color || "var(--text-color)";
+        // Вывод в консоль: строки с ✅ — зелёные, с ❌ — красные
+        function setResult(text, kind) {
+            resultsDiv.textContent = "";
+            String(text).replace(/\s+$/, "").split("\n").forEach((line, i, all) => {
+                const span = document.createElement("span");
+                if (line.startsWith("✅")) span.className = "line-ok";
+                else if (line.startsWith("❌") || kind === "err") span.className = "line-err";
+                else if (kind === "warn") span.className = "line-warn";
+                else if (kind === "muted") span.className = "line-muted";
+                span.textContent = line + (i < all.length - 1 ? "\n" : "");
+                resultsDiv.appendChild(span);
+            });
+        }
+
+        const STATUS = { idle: "Ожидание", running: "Проверяем…", ok: "Решено", fail: "Есть ошибки", warn: "Остановлено", loading: "Загрузка Python…" };
+        function setStatus(state, text) {
+            statusEl.dataset.state = state === "loading" ? "running" : state;
+            statusEl.textContent = text || STATUS[state];
         }
 
         // Автосохранение кода по каждой задаче
@@ -523,25 +488,33 @@
             document.getElementById("task-title").textContent = task.title;
             document.getElementById("task-text").innerHTML = task.desc;
             editor.setValue(localStorage.getItem(`saved_code_${task.id}`) || task.startCode);
-            setResult(runner.ready ? "Ожидание запуска тестов..." : "Загружается Python...");
+            if (runner.ready) {
+                setResult("Напишите решение и нажмите «Проверить» (или Ctrl + Enter).", "muted");
+                setStatus("idle");
+            } else {
+                setResult("Загружается Python, подождите несколько секунд…", "muted");
+                setStatus("loading");
+            }
         }
 
         function setLoading() {
             btnSubmit.disabled = true;
-            btnSubmit.textContent = "Загрузка движка...";
+            btnLabel.textContent = "Загрузка Python…";
         }
 
         const runner = new PyRunner({
             timeoutMs: 5000,
             onReady: () => {
                 btnSubmit.disabled = false;
-                btnSubmit.textContent = "▶ Проверить решение";
+                btnLabel.textContent = "Проверить";
                 if (!runner.busy && /Загружается Python|перезапускается/.test(resultsDiv.textContent)) {
-                    setResult("✅ Python загружен. Напишите код и нажмите «Проверить».");
+                    setResult("Python готов. Напишите решение и нажмите «Проверить» (или Ctrl + Enter).", "muted");
+                    setStatus("idle");
                 }
             },
             onLoadError: () => {
-                setResult("❌ Не удалось загрузить Python. Проверьте интернет-соединение и обновите страницу.", "#ef4444");
+                setResult("❌ Не удалось загрузить Python. Проверьте интернет-соединение и обновите страницу.");
+                setStatus("fail", "Ошибка загрузки");
             }
         });
 
@@ -551,7 +524,8 @@
 
             btnSubmit.disabled = true;
             btnStop.hidden = false;
-            setResult("Проверяем решение скрытыми тестами...");
+            setResult("Проверяем решение скрытыми тестами...", "muted");
+            setStatus("running");
 
             let output = "";
             const result = await runner.run({
@@ -567,26 +541,45 @@
                 const why = result.timedOut
                     ? "Код выполнялся дольше 5 секунд и был остановлен.\nСкорее всего, в нём бесконечный цикл (например, while без изменения условия)."
                     : "Выполнение остановлено.";
-                setResult(why + "\n\nPython перезапускается, подождите несколько секунд...", "#f59e0b");
+                setResult(why + "\n\nPython перезапускается, подождите несколько секунд...", "warn");
+                setStatus("warn");
                 return;
             }
 
             btnSubmit.disabled = false;
 
             if (result.error) {
-                setResult((output ? output + "\n" : "") + "❌ Ошибка в коде:\n" + result.error, "#ef4444");
+                setResult((output ? output + "\n" : "") + "❌ Ошибка в коде:\n" + result.error);
+                setStatus("fail", "Ошибка в коде");
             } else if (result.passed) {
                 const solved = getSolved();
                 solved[task.id] = true;
                 localStorage.setItem("solved_tasks", JSON.stringify(solved));
                 renderTasks();
-                setResult(output, "var(--success-color)");
+                setResult(output);
+                setStatus("ok");
             } else {
-                setResult(output || "❌ Тесты не пройдены.", "#ef4444");
+                setResult(output || "❌ Тесты не пройдены.");
+                setStatus("fail");
             }
         });
 
         btnStop.addEventListener("click", () => runner.stop());
+
+        btnReset.addEventListener("click", () => {
+            const task = tasks[currentTaskIndex];
+            if (editor.getValue() !== task.startCode && !confirm("Вернуть исходный код задачи? Ваш текущий код будет удалён.")) return;
+            localStorage.removeItem(`saved_code_${task.id}`);
+            editor.setValue(task.startCode);
+        });
+
+        // Ctrl + Enter (на Mac — Cmd + Enter) запускает проверку
+        document.addEventListener("keydown", (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+                e.preventDefault();
+                btnSubmit.click();
+            }
+        });
 
         renderTasks();
         selectTask(0);

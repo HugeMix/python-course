@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* Ширина элемента включает padding и border.
    Без этого блоки с width: 100% и отступами вылезали за экран на телефоне. */
@@ -31,6 +31,21 @@
     --font-family: 'Inter', sans-serif;
     --radius: 16px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Единый стиль кода на всём сайте: блоки в уроках, редактор, терминал */
+    --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, 'Courier New', monospace;
+    --code-bg: #0f172a;
+    --code-bar: #1e293b;
+    --code-border: rgba(148, 163, 184, 0.18);
+    --code-text: #e2e8f0;
+    --code-muted: #94a3b8;
+    --tk-keyword: #c792ea;
+    --tk-func: #82aaff;
+    --tk-string: #c3e88d;
+    --tk-number: #f78c6c;
+    --tk-comment: #6b7a90;
+    --tk-builtin: #ffcb6b;
+    --tk-op: #89ddff;
 }
 
 body.dark-mode {
@@ -47,6 +62,9 @@ body.dark-mode {
     --error-bg: rgba(239, 68, 68, 0.1);
     --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
     --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    --code-bg: #0b1120;
+    --code-bar: #151f33;
+    --code-border: rgba(148, 163, 184, 0.22);
 }
 
 /* ==== ОБЩИЕ СТИЛИ ==== */
@@ -358,25 +376,28 @@ body.dark-mode .lesson-card {
 
 /* ==== СТИЛИ УРОКА ==== */
 .lesson-title {
-    background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+    background: linear-gradient(135deg, #312e81 0%, #4f46e5 55%, #7c3aed 100%);
     color: white;
     text-align: center;
-    padding: 60px 20px;
-    border-radius: 0 0 30px 30px;
+    padding: 56px 20px 60px;
     margin-bottom: 40px;
-    box-shadow: var(--shadow);
 }
 
 .lesson-title h1,
 .lesson-title h2 {
     font-size: 2.5rem;
     font-weight: 800;
-    margin-bottom: 15px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 0 auto 14px;
+    max-width: 900px;
 }
 
 .lesson-title p {
     font-size: 1.1rem;
-    opacity: 0.9;
+    opacity: 0.88;
+    max-width: 720px;
+    margin: 0 auto;
 }
 
 .lesson-content,
@@ -439,23 +460,40 @@ body.dark-mode .lesson-homework {
 }
 
 pre {
-    background: #1e1e1e;
-    color: #d4d4d4;
-    padding: 20px;
-    border-radius: 12px;
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 20px 22px;
+    border-radius: 14px;
+    border: 1px solid var(--code-border);
     overflow-x: auto;
-    font-family: 'Fira Code', 'Consolas', monospace;
-    font-size: 0.95rem;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.7;
     position: relative;
-    margin: 20px 0;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 22px 0;
+}
+
+/* Без «склеек» символов: новичок должен видеть >=, != и -> так, как их нужно печатать, а не ≥ ≠ → */
+pre, code, kbd, samp, textarea, .CodeMirror, .ide-console-body, .ide-tab, .ide-kbd {
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "calt" 0;
+}
+
+/* Строки редактора CodeMirror — тоже <pre>: общие правила блоков кода к ним не применяем */
+.CodeMirror pre.CodeMirror-line,
+.CodeMirror pre.CodeMirror-line-like {
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+    padding: 0 8px;
+    margin: 0;
 }
 
 /* Подпись «Python» над блоками кода.
    Строки редактора CodeMirror — тоже <pre>, и терминал — <pre>, поэтому их исключаем:
    иначе подпись и отступ появлялись бы у каждой строки редактора. */
 pre:not(.CodeMirror-line):not(#terminal-output):not(.code-window-body) {
-    padding-top: 36px;
+    padding-top: 46px;
 }
 
 pre:not(.CodeMirror-line):not(#terminal-output):not(.code-window-body)::before {
@@ -464,20 +502,24 @@ pre:not(.CodeMirror-line):not(#terminal-output):not(.code-window-body)::before {
     top: 0;
     left: 0;
     right: 0;
-    padding: 6px 16px;
-    font-size: 0.75rem;
-    font-family: 'Inter', sans-serif;
+    padding: 7px 16px 7px 52px;
+    font-size: 0.72rem;
+    font-family: var(--font-family);
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.35);
-    background: rgba(255, 255, 255, 0.04);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px 12px 0 0;
+    color: var(--code-muted);
+    background-color: var(--code-bar);
+    background-image:
+        radial-gradient(circle at 16px 50%, rgba(248, 113, 113, 0.85) 4px, transparent 4.5px),
+        radial-gradient(circle at 29px 50%, rgba(251, 191, 36, 0.85) 4px, transparent 4.5px),
+        radial-gradient(circle at 42px 50%, rgba(52, 211, 153, 0.85) 4px, transparent 4.5px);
+    border-bottom: 1px solid var(--code-border);
+    border-radius: 13px 13px 0 0;
 }
 
 code {
-    font-family: 'Fira Code', 'Consolas', monospace;
+    font-family: var(--font-mono);
     background: rgba(128, 128, 128, 0.1);
     padding: 2px 6px;
     border-radius: 4px;
@@ -575,7 +617,7 @@ textarea.code-input {
     background: var(--bg-color);
     color: var(--text-color);
     border: 1px solid rgba(0, 0, 0, 0.1);
-    font-family: 'Fira Code', 'Consolas', monospace;
+    font-family: var(--font-mono);
     font-size: 1rem;
     transition: var(--transition);
 }
@@ -1418,9 +1460,10 @@ textarea.editor-fallback {
     min-height: 300px;
     padding: 12px 15px;
     border: none;
-    background: #282a36;
-    color: #f8f8f2;
-    font-family: 'Fira Code', 'Consolas', monospace;
+    outline: none;
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: var(--font-mono);
     font-size: 15px;
     line-height: 1.5;
     resize: vertical;
@@ -1589,7 +1632,7 @@ textarea.editor-fallback {
 
 /* Окно с кодом на первом экране */
 .code-window {
-    background: #1e1b4b;
+    background: var(--code-bg);
     border-radius: 16px;
     box-shadow: 0 30px 60px rgba(15, 12, 60, 0.45);
     overflow: hidden;
@@ -1623,23 +1666,24 @@ pre.code-window-body {
     background: transparent;
     box-shadow: none;
     border-radius: 0;
-    color: #e0e7ff;
+    color: var(--code-text);
     font-size: 0.95rem;
     line-height: 1.7;
+    border: 0;
     white-space: pre;
     overflow-x: auto;
 }
 
-.tk-kw { color: #f472b6; }
-.tk-fn { color: #67e8f9; }
-.tk-str { color: #fde68a; }
+.tk-kw { color: var(--tk-keyword); }
+.tk-fn { color: var(--tk-func); }
+.tk-str { color: var(--tk-string); }
 
 .code-window-out {
     display: flex;
     flex-direction: column;
     padding: 14px 22px 18px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    font-family: 'Fira Code', 'Consolas', monospace;
+    font-family: var(--font-mono);
     font-size: 0.9rem;
     color: #a7f3d0;
 }
@@ -2318,4 +2362,456 @@ body.dark-mode .present-bottom {
     .btn-present {
         display: none;
     }
+}
+
+/* ==================================================================
+   ПОДСВЕТКА КОДА В УРОКАХ (highlight.js) — те же цвета, что в редакторе
+   ================================================================== */
+.hljs { color: var(--code-text); background: transparent; }
+.hljs-keyword, .hljs-selector-tag { color: var(--tk-keyword); }
+.hljs-title, .hljs-title.function_ { color: var(--tk-func); }
+.hljs-title.class_, .hljs-built_in, .hljs-type { color: var(--tk-builtin); }
+.hljs-string, .hljs-regexp { color: var(--tk-string); }
+.hljs-number, .hljs-literal { color: var(--tk-number); }
+.hljs-comment, .hljs-quote { color: var(--tk-comment); font-style: italic; }
+.hljs-operator, .hljs-meta, .hljs-punctuation { color: var(--tk-op); }
+.hljs-params, .hljs-subst, .hljs-variable { color: var(--code-text); }
+.hljs-attr, .hljs-property { color: var(--tk-func); }
+
+/* ==================================================================
+   РЕДАКТОР КОДА (CodeMirror, тема pybasic)
+   ================================================================== */
+.cm-s-pybasic.CodeMirror {
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: var(--font-mono);
+    font-size: 15px;
+    line-height: 1.7;
+    height: 100%;
+}
+
+.cm-s-pybasic .CodeMirror-gutters {
+    background: var(--code-bg);
+    border-right: 1px solid var(--code-border);
+}
+
+.cm-s-pybasic .CodeMirror-linenumber {
+    color: #4b5a73;
+    padding: 0 14px 0 10px;
+}
+
+.cm-s-pybasic .CodeMirror-activeline-gutter .CodeMirror-linenumber {
+    color: var(--code-muted);
+}
+
+.cm-s-pybasic .CodeMirror-activeline-background {
+    background: rgba(148, 163, 184, 0.07);
+}
+
+.cm-s-pybasic .CodeMirror-activeline-gutter {
+    background: rgba(148, 163, 184, 0.07);
+}
+
+.cm-s-pybasic .CodeMirror-cursor {
+    border-left: 2px solid #a5b4fc;
+}
+
+.cm-s-pybasic div.CodeMirror-selected,
+.cm-s-pybasic.CodeMirror-focused div.CodeMirror-selected {
+    background: rgba(99, 102, 241, 0.35);
+}
+
+.cm-s-pybasic .CodeMirror-line::selection,
+.cm-s-pybasic .CodeMirror-line > span::selection,
+.cm-s-pybasic .CodeMirror-line > span > span::selection {
+    background: rgba(99, 102, 241, 0.35);
+}
+
+.cm-s-pybasic .CodeMirror-lines {
+    padding: 14px 0;
+}
+
+.cm-s-pybasic .cm-keyword { color: var(--tk-keyword); }
+.cm-s-pybasic .cm-def { color: var(--tk-func); }
+.cm-s-pybasic .cm-builtin { color: var(--tk-builtin); }
+.cm-s-pybasic .cm-string, .cm-s-pybasic .cm-string-2 { color: var(--tk-string); }
+.cm-s-pybasic .cm-number, .cm-s-pybasic .cm-atom { color: var(--tk-number); }
+.cm-s-pybasic .cm-comment { color: var(--tk-comment); font-style: italic; }
+.cm-s-pybasic .cm-operator, .cm-s-pybasic .cm-meta { color: var(--tk-op); }
+.cm-s-pybasic .cm-variable { color: var(--code-text); }
+.cm-s-pybasic .cm-variable-2 { color: #f07178; }
+.cm-s-pybasic .cm-property { color: var(--tk-func); }
+.cm-s-pybasic .cm-error { color: #ff5370; background: transparent; }
+
+.cm-s-pybasic .CodeMirror-matchingbracket {
+    color: #fff !important;
+    background: rgba(99, 102, 241, 0.45);
+    border-radius: 2px;
+}
+
+/* ==================================================================
+   ОКНО РЕДАКТОРА И КОНСОЛЬ (страницы «Задачи» и «Python Online»)
+   ================================================================== */
+.ide {
+    display: flex;
+    flex-direction: column;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 18px 40px -18px rgba(15, 23, 42, 0.55);
+}
+
+.ide-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px 10px 16px;
+    background: var(--code-bar);
+    border-bottom: 1px solid var(--code-border);
+    color: var(--code-text);
+    min-height: 56px;
+}
+
+.ide-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.ide-dots {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.ide-dots i {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: rgba(248, 113, 113, 0.85);
+}
+
+.ide-dots i:nth-child(2) { background: rgba(251, 191, 36, 0.85); }
+.ide-dots i:nth-child(3) { background: rgba(52, 211, 153, 0.85); }
+
+.ide-tab {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--code-text);
+    padding: 5px 12px;
+    border-radius: 8px;
+    background: rgba(148, 163, 184, 0.12);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ide-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--code-muted);
+    white-space: nowrap;
+}
+
+.ide-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.ide-kbd {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--code-muted);
+    white-space: nowrap;
+}
+
+.ide-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+    white-space: nowrap;
+}
+
+.ide-btn-primary {
+    background: #10b981;
+    color: #fff;
+}
+
+.ide-btn-primary:hover:not(:disabled) {
+    background: #059669;
+}
+
+.ide-btn-primary:disabled {
+    background: #334155;
+    color: var(--code-muted);
+    cursor: wait;
+}
+
+.ide-btn-ghost {
+    background: transparent;
+    border-color: var(--code-border);
+    color: var(--code-text);
+}
+
+.ide-btn-ghost:hover {
+    border-color: #a5b4fc;
+    color: #fff;
+}
+
+.ide-btn-danger {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #fca5a5;
+}
+
+.ide-btn-danger:hover {
+    background: rgba(239, 68, 68, 0.3);
+    color: #fff;
+}
+
+.ide-play {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 0 5px 8px;
+    border-color: transparent transparent transparent currentColor;
+}
+
+.ide-editor {
+    flex: 1;
+    min-height: 0;
+}
+
+.ide-editor .CodeMirror {
+    height: 340px;
+}
+
+/* Консоль */
+.ide-console-body {
+    margin: 0;
+    padding: 16px 18px;
+    min-height: 140px;
+    max-height: 420px;
+    overflow: auto;
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+    border: 0;
+    border-radius: 0;
+}
+
+.ide-console-body .line-ok { color: #6ee7b7; }
+.ide-console-body .line-err { color: #fca5a5; }
+.ide-console-body .line-warn { color: #fcd34d; }
+.ide-console-body .line-muted { color: var(--code-muted); }
+
+.ide-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.14);
+    color: var(--code-muted);
+    white-space: nowrap;
+}
+
+.ide-status::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.ide-status[data-state="running"] { color: #93c5fd; background: rgba(59, 130, 246, 0.15); }
+.ide-status[data-state="running"]::before { animation: ide-pulse 1s ease-in-out infinite; }
+.ide-status[data-state="ok"] { color: #6ee7b7; background: rgba(16, 185, 129, 0.15); }
+.ide-status[data-state="fail"] { color: #fca5a5; background: rgba(239, 68, 68, 0.15); }
+.ide-status[data-state="warn"] { color: #fcd34d; background: rgba(245, 158, 11, 0.15); }
+
+@keyframes ide-pulse {
+    50% { opacity: 0.3; }
+}
+
+.ide-console-clear {
+    background: transparent;
+    border: 0;
+    color: var(--code-muted);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 4px 6px;
+}
+
+.ide-console-clear:hover {
+    color: #fff;
+}
+
+.ide-stdin {
+    display: block;
+    width: 100%;
+    min-height: 88px;
+    resize: vertical;
+    padding: 14px 18px;
+    border: 0;
+    outline: none;
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.ide-stdin::placeholder {
+    color: #4b5a73;
+}
+
+@media (max-width: 600px) {
+    .ide-bar {
+        flex-wrap: wrap;
+        padding: 10px 12px;
+    }
+
+    .ide-kbd {
+        display: none;
+    }
+
+    .ide-editor .CodeMirror {
+        height: 280px;
+        font-size: 14px;
+    }
+}
+
+/* ==================================================================
+   ПОДВАЛ САЙТА
+   ================================================================== */
+footer.site-footer {
+    text-align: left;
+    opacity: 1;
+    padding: 56px 0 28px;
+    margin-top: auto;
+    background: var(--card-bg);
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    font-size: 0.95rem;
+}
+
+body.dark-mode footer.site-footer {
+    border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+}
+
+.footer-logo {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-color);
+}
+
+.footer-logo span {
+    color: var(--accent-color);
+}
+
+.footer-logo:hover {
+    color: var(--text-color);
+}
+
+.footer-brand p {
+    margin: 10px 0 18px;
+    max-width: 380px;
+    opacity: 0.75;
+}
+
+.footer-cta {
+    display: inline-flex;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+.footer-cta:hover {
+    background: var(--accent-color);
+    color: #fff;
+}
+
+.footer-col h4 {
+    margin: 0 0 14px;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
+.footer-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-col li {
+    margin-bottom: 10px;
+}
+
+.footer-col a {
+    color: var(--text-color);
+    opacity: 0.85;
+}
+
+.footer-col a:hover {
+    color: var(--accent-color);
+    opacity: 1;
+}
+
+.footer-bottom {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(128, 128, 128, 0.15);
+    font-size: 0.88rem;
+    opacity: 0.6;
+}
+
+@media (max-width: 760px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+    }
+
+    .footer-brand {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Мягкая пометка «В разработке» на странице курсов */
+.badge.badge-soft {
+    align-self: flex-start;
+    background: rgba(79, 70, 229, 0.1);
+    color: var(--accent-color);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
 }
