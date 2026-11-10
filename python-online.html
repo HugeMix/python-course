@@ -24,7 +24,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/anyword-hint.min.js"></script>
 
     <!-- Pyodide -->
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
 
     <style>
         .ide-layout {
@@ -98,6 +97,40 @@
             transform: translateY(-2px);
         }
 
+        .btn-stop {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .panel-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        #stdin-input {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 70px;
+            resize: vertical;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border: none;
+            padding: 12px 15px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 15px;
+        }
+
+        .panel-hint {
+            font-weight: normal;
+            opacity: 0.7;
+        }
+
         .btn-run:disabled {
             background: #6c757d;
             cursor: not-allowed;
@@ -159,6 +192,7 @@
                     <li><a href="libraries.html">Библиотеки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
                     <li><a href="python-online.html" class="active">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
                 </ul>
             </nav>
         </div>
@@ -181,7 +215,10 @@
             <div class="editor-container">
                 <div class="panel-header">
                     <span>📝 Редактор кода (main.py)</span>
-                    <button id="run-btn" class="btn-run" disabled>▶ Запустить</button>
+                    <div class="panel-buttons">
+                        <button id="stop-btn" class="btn-stop" hidden>⏹ Стоп</button>
+                        <button id="run-btn" class="btn-run" disabled>▶ Запустить</button>
+                    </div>
                 </div>
                 <!-- Textarea mapped with CodeMirror -->
                 <textarea id="code-editor"># Напиши свой первый код здесь!
@@ -190,6 +227,14 @@ print("Привет, PythonBasic!")
 for i in range(1, 4):
     print(f"Запуск #{i}")
 </textarea>
+            </div>
+
+            <div class="output-container">
+                <div class="panel-header">
+                    <label for="stdin-input">⌨️ Ввод данных для input()</label>
+                    <span class="panel-hint">по одной строке на каждый input()</span>
+                </div>
+                <textarea id="stdin-input" placeholder="Например:&#10;Аня&#10;25"></textarea>
             </div>
 
             <div class="output-container">
@@ -211,15 +256,16 @@ for i in range(1, 4):
     </footer>
 
     <script src="script.js"></script>
+    <script src="py-runner.js"></script>
     <script>
-        let pyodide = null;
         const terminal = document.getElementById("terminal-output");
         const runBtn = document.getElementById("run-btn");
+        const stopBtn = document.getElementById("stop-btn");
         const clearBtn = document.getElementById("clear-btn");
+        const stdinInput = document.getElementById("stdin-input");
         const loadingOverlay = document.getElementById("loading");
 
-        // Initialize CodeMirror Editor
-        const editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
+        const editor = createEditor(document.getElementById("code-editor"), {
             mode: "python",
             theme: "dracula",
             lineNumbers: true,
@@ -228,20 +274,20 @@ for i in range(1, 4):
             extraKeys: { "Ctrl-Space": "autocomplete" }
         });
 
-        // Настройка автодополнения (подсказок)
+        // Подсказки автодополнения при наборе
         editor.on("inputRead", function (instance, change) {
             if (change.origin !== "paste" && change.text[0].match(/[a-zA-Z0-9_]/)) {
                 instance.showHint({ completeSingle: false });
             }
         });
 
-        // Redirect Python's stdout to our terminal
         function printToTerminal(text) {
             terminal.textContent += text;
             terminal.scrollTop = terminal.scrollHeight;
         }
 
         function showLoadError(msg) {
+            loadingOverlay.style.display = "flex";
             loadingOverlay.innerHTML = `<div style="text-align:center;padding:20px;color:white;max-width:400px;">
                 <p style="font-size:1.2rem;margin-bottom:8px;">${msg}</p>
                 <p style="font-size:0.9rem;opacity:0.8;">Проверьте интернет-соединение и
@@ -250,49 +296,54 @@ for i in range(1, 4):
             </div>`;
         }
 
-        async function initPyodide() {
-            const timeoutId = setTimeout(() => {
-                showLoadError('⚠️ Загрузка Python занимает слишком долго...');
-            }, 20000);
-            try {
-                pyodide = await loadPyodide({
-                    stdout: printToTerminal,
-                    stderr: printToTerminal
-                });
-                clearTimeout(timeoutId);
+        const loadTimer = setTimeout(() => showLoadError("⚠️ Загрузка Python занимает слишком долго..."), 30000);
+        let firstLoad = true;
+
+        const runner = new PyRunner({
+            timeoutMs: 15000,
+            onReady: () => {
+                clearTimeout(loadTimer);
                 loadingOverlay.style.display = "none";
                 runBtn.disabled = false;
-                printToTerminal("✅ Python успешно загружен и готов к работе!\n");
-            } catch (err) {
-                clearTimeout(timeoutId);
-                showLoadError('❌ Не удалось загрузить Python.');
+                if (firstLoad) printToTerminal("✅ Python успешно загружен и готов к работе!\n");
+                else printToTerminal("✅ Python перезапущен, можно запускать код снова.\n");
+                firstLoad = false;
+            },
+            onLoadError: () => {
+                clearTimeout(loadTimer);
+                showLoadError("❌ Не удалось загрузить Python.");
             }
-        }
+        });
 
         runBtn.addEventListener("click", async () => {
-            const code = editor.getValue();
-            terminal.textContent = ""; // clear before running
-            if (!pyodide) {
-                printToTerminal("⚠️ Python еще загружается...");
-                return;
-            }
+            if (!runner.ready || runner.busy) return;
+            terminal.textContent = "";
             runBtn.disabled = true;
             runBtn.textContent = "⏳ Выполнение...";
-            try {
-                await pyodide.runPythonAsync(code);
-            } catch (err) {
-                printToTerminal("\n[Ошибка]:\n" + err);
+            stopBtn.hidden = false;
+
+            const result = await runner.run({
+                code: editor.getValue(),
+                stdin: stdinInput.value,
+                onOutput: printToTerminal
+            });
+
+            stopBtn.hidden = true;
+            runBtn.textContent = "▶ Запустить";
+
+            if (result.timedOut || result.stopped) {
+                printToTerminal(result.timedOut
+                    ? "\n⏱ Программа работала дольше 15 секунд и была остановлена (возможно, бесконечный цикл).\n"
+                    : "\n⏹ Выполнение остановлено.\n");
+                printToTerminal("⏳ Перезапускаем Python...\n");
+                return; // кнопка включится, когда Python загрузится заново (onReady)
             }
+            if (result.error) printToTerminal("\n[Ошибка]:\n" + result.error + "\n");
             runBtn.disabled = false;
-            runBtn.innerHTML = "▶ Запустить";
         });
 
-        clearBtn.addEventListener("click", () => {
-            terminal.textContent = "";
-        });
-
-        // Start initialization
-        initPyodide();
+        stopBtn.addEventListener("click", () => runner.stop());
+        clearBtn.addEventListener("click", () => { terminal.textContent = ""; });
     </script>
 </body>
 

@@ -19,9 +19,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
 
 
-    <!-- Pyodide -->
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
-
     <style>
         .CodeMirror {
             font-family: 'Fira Code', 'Consolas', monospace;
@@ -180,6 +177,28 @@
             box-shadow: none;
         }
 
+        .btn-stop-tests {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .editor-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .task-item.solved .task-solved-mark {
+            float: right;
+            color: var(--success-color);
+            font-weight: 700;
+        }
+
         .test-results {
             background: #f8f9fa;
             color: #333;
@@ -261,8 +280,8 @@
             цели.
             А здесь находится <strong>тренажер программиста</strong>, необходимый для закрепления знаний!<br><br>
             Вам даётся конкретное задание: написать функцию. Когда вы нажимаете кнопку «Проверить», в работу вступает
-            наш скрытый проверяющий робот. Он мгновенно подставит в ваш код десятки разных скрытых данных (нестандартные
-            числа, отрицательные значения или пустые строки), чтобы убедиться, что ваша логика на 100% надёжна и не
+            наш скрытый проверяющий робот. Он подставит в ваш код несколько скрытых наборов данных (в том числе нестандартные
+            числа, отрицательные значения или пустые строки), чтобы убедиться, что ваша логика надёжна и не
             ломается в трудных ситуациях. Именно так тренируются программисты на настоящих собеседованиях.
         </div>
 
@@ -283,7 +302,10 @@
                 <div class="editor-container">
                     <div class="editor-header">
                         <span>Напишите решение:</span>
-                        <button class="btn-run-tests" id="btn-submit" disabled>Загрузка движка...</button>
+                        <div class="editor-buttons">
+                            <button class="btn-stop-tests" id="btn-stop" hidden>⏹ Стоп</button>
+                            <button class="btn-run-tests" id="btn-submit" disabled>Загрузка движка...</button>
+                        </div>
                     </div>
                     <textarea id="code-editor"></textarea>
                 </div>
@@ -300,12 +322,15 @@
     <!-- Скрипты -->
     <script src="script.js"></script>
     <script src="tasks_data.js"></script>
+    <script src="py-runner.js"></script>
     <script>
         let currentTaskIndex = 0;
-        let pyodideInstance = null;
 
-        // Initialize CodeMirror editor
-        const editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
+        const btnSubmit = document.getElementById("btn-submit");
+        const btnStop = document.getElementById("btn-stop");
+        const resultsDiv = document.getElementById("test-results");
+
+        const editor = createEditor(document.getElementById("code-editor"), {
             mode: "python",
             theme: "dracula",
             lineNumbers: true,
@@ -314,115 +339,127 @@
         });
         editor.setSize("100%", "300px");
 
-        // Autosave logic
-        editor.on('change', () => {
-            if (currentTaskIndex !== null && tasks[currentTaskIndex]) {
-                const taskId = tasks[currentTaskIndex].id;
-                const userCode = editor.getValue();
-                localStorage.setItem(`saved_code_${taskId}`, userCode);
-            }
-        });
-
-        const btnSubmit = document.getElementById("btn-submit");
-        const resultsDiv = document.getElementById("test-results");
-
-        // Load Pyodide environment
-        // Initialize UI immediately
-        renderTasks();
-        selectTask(0);
-
-        async function loadPython() {
-            const timeoutId = setTimeout(() => {
-                resultsDiv.textContent = "⚠️ Загрузка Python занимает слишком долго. Проверьте интернет-соединение и обновите страницу.";
-                resultsDiv.style.color = "#f59e0b";
-            }, 20000);
-            try {
-                pyodideInstance = await loadPyodide();
-                clearTimeout(timeoutId);
-                btnSubmit.innerHTML = "▶ Проверить решение";
-                btnSubmit.disabled = false;
-                resultsDiv.textContent = "✅ Python движок загружен. Напишите код и нажмите «Проверить».";
-                resultsDiv.style.color = "var(--text-color)";
-            } catch (err) {
-                clearTimeout(timeoutId);
-                resultsDiv.textContent = "❌ Не удалось загрузить Python. Проверьте интернет-соединение и обновите страницу.";
-                resultsDiv.style.color = "#ef4444";
-            }
+        function getSolved() {
+            try { return JSON.parse(localStorage.getItem("solved_tasks")) || {}; }
+            catch (e) { return {}; }
         }
+
+        function setResult(text, color) {
+            resultsDiv.textContent = text;
+            resultsDiv.style.color = color || "var(--text-color)";
+        }
+
+        // Автосохранение кода по каждой задаче
+        editor.on("change", () => {
+            const task = tasks[currentTaskIndex];
+            if (task) localStorage.setItem(`saved_code_${task.id}`, editor.getValue());
+        });
 
         function renderTasks() {
             const list = document.getElementById("tasks-list");
+            const solved = getSolved();
             list.innerHTML = "";
             tasks.forEach((task, index) => {
                 const div = document.createElement("div");
-                div.className = "task-item" + (index === currentTaskIndex ? " active" : "");
-                const diffLabel = task.difficulty === 'easy' ? '🟢 Обычная' : (task.difficulty === 'medium' ? '🟡 Средняя' : '🔴 Сложная');
-                const diffClass = task.difficulty === 'easy' ? 'diff-easy' : (task.difficulty === 'medium' ? 'diff-medium' : 'diff-hard');
+                div.className = "task-item" + (index === currentTaskIndex ? " active" : "") + (solved[task.id] ? " solved" : "");
+                const diffLabel = task.difficulty === "easy" ? "🟢 Обычная" : (task.difficulty === "medium" ? "🟡 Средняя" : "🔴 Сложная");
+                const diffClass = task.difficulty === "easy" ? "diff-easy" : (task.difficulty === "medium" ? "diff-medium" : "diff-hard");
 
-                div.innerHTML = `<span class="task-difficulty ${diffClass}">${diffLabel}</span><div style="font-weight: 600; color:var(--text-color);">${task.title}</div>`;
-
+                const label = document.createElement("span");
+                label.className = `task-difficulty ${diffClass}`;
+                label.textContent = diffLabel;
+                const title = document.createElement("div");
+                title.style.cssText = "font-weight: 600; color: var(--text-color);";
+                title.textContent = task.title;
+                if (solved[task.id]) {
+                    const mark = document.createElement("span");
+                    mark.className = "task-solved-mark";
+                    mark.textContent = "✓";
+                    mark.title = "Задача решена";
+                    title.appendChild(mark);
+                }
+                div.append(label, title);
                 div.onclick = () => selectTask(index);
                 list.appendChild(div);
             });
         }
 
         function selectTask(index) {
+            if (runner.busy) runner.stop();
             currentTaskIndex = index;
-            renderTasks(); // update visual selection
+            renderTasks();
 
             const task = tasks[index];
             document.getElementById("task-title").textContent = task.title;
             document.getElementById("task-text").innerHTML = task.desc;
-
-            // Load saved code or default starter code
-            const savedCode = localStorage.getItem(`saved_code_${task.id}`);
-            if (savedCode) {
-                editor.setValue(savedCode);
-            } else {
-                editor.setValue(task.startCode);
-            }
-
-            resultsDiv.textContent = "Ожидание запуска тестов...";
-            resultsDiv.style.color = "var(--text-color)";
+            editor.setValue(localStorage.getItem(`saved_code_${task.id}`) || task.startCode);
+            setResult(runner.ready ? "Ожидание запуска тестов..." : "⏳ Загружается Python...");
         }
 
-        btnSubmit.addEventListener("click", async () => {
-            if (!pyodideInstance) return;
+        function setLoading() {
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = "Загрузка движка...";
+        }
 
-            const userCode = editor.getValue();
-            const currentTask = tasks[currentTaskIndex];
-
-            // Соединяем код юзера со скрытыми тестами
-            const fullScript = userCode + "\n\n" + currentTask.testCode;
-
-            resultsDiv.textContent = "🤖 Робот запускает скрытые проверки...";
-            resultsDiv.style.color = "var(--text-color)";
-
-            try {
-                // Перехватываем print() из Python
-                let output = "";
-                pyodideInstance.setStdout({ batched: (str) => output += str + "\n" });
-
-                await pyodideInstance.runPythonAsync(fullScript);
-
-                // Проверяем наличие галочки или крестика в выводе
-                resultsDiv.textContent = output;
-
-                if (output.includes("✅")) {
-                    resultsDiv.style.color = "var(--success-color)";
-                } else if (output.includes("❌")) {
-                    resultsDiv.style.color = "#ef4444";
+        const runner = new PyRunner({
+            timeoutMs: 5000,
+            onReady: () => {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = "▶ Проверить решение";
+                if (!runner.busy && /Загружается Python|перезапускается/.test(resultsDiv.textContent)) {
+                    setResult("✅ Python загружен. Напишите код и нажмите «Проверить».");
                 }
-
-            } catch (err) {
-                // Если код крашнулся полностью (синтаксическая ошибка)
-                resultsDiv.textContent = "❌ Фатальная ошибка в коде:\n" + err;
-                resultsDiv.style.color = "#ef4444";
+            },
+            onLoadError: () => {
+                setResult("❌ Не удалось загрузить Python. Проверьте интернет-соединение и обновите страницу.", "#ef4444");
             }
         });
 
-        // Запускаем инициализацию Python
-        loadPython();
+        btnSubmit.addEventListener("click", async () => {
+            if (!runner.ready || runner.busy) return;
+            const task = tasks[currentTaskIndex];
+
+            btnSubmit.disabled = true;
+            btnStop.hidden = false;
+            setResult("🤖 Робот запускает скрытые проверки...");
+
+            let output = "";
+            const result = await runner.run({
+                code: editor.getValue(),
+                testCode: task.testCode,
+                onOutput: (text) => { output += text; }
+            });
+
+            btnStop.hidden = true;
+
+            if (result.timedOut || result.stopped) {
+                setLoading();
+                const why = result.timedOut
+                    ? "⏱ Код выполнялся дольше 5 секунд и был остановлен.\nСкорее всего, в нём бесконечный цикл (например, while без изменения условия)."
+                    : "⏹ Выполнение остановлено.";
+                setResult(why + "\n\nPython перезапускается, подождите несколько секунд...", "#f59e0b");
+                return;
+            }
+
+            btnSubmit.disabled = false;
+
+            if (result.error) {
+                setResult((output ? output + "\n" : "") + "❌ Ошибка в коде:\n" + result.error, "#ef4444");
+            } else if (result.passed) {
+                const solved = getSolved();
+                solved[task.id] = true;
+                localStorage.setItem("solved_tasks", JSON.stringify(solved));
+                renderTasks();
+                setResult(output, "var(--success-color)");
+            } else {
+                setResult(output || "❌ Тесты не пройдены.", "#ef4444");
+            }
+        });
+
+        btnStop.addEventListener("click", () => runner.stop());
+
+        renderTasks();
+        selectTask(0);
     </script>
 </body>
 

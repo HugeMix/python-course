@@ -11,6 +11,7 @@ try:
     assert add(2, 3) == 5, "add(2, 3) должно вернуть 5"
     assert add(-1, 1) == 0, "add(-1, 1) должно вернуть 0"
     assert add(100, 200) == 300, "add(100, 200) должно вернуть 300"
+    __task_passed__ = True
     print("✅ Все скрытые тесты успешно пройдены!\\nЛогика функции add работает абсолютно верно при любых числах.")
 except NameError:
     print("❌ Ошибка: Функция add не найдена.\\nВы точно назвали её add?")
@@ -32,6 +33,7 @@ try:
     assert is_even(7) == False, "Для нечётного числа 7 должен быть ответ False"
     assert is_even(0) == True, "Ноль математически считается чётным числом (ожидается True)"
     assert is_even(-2) == True, "Отрицательные чётные числа тоже должны возвращать True"
+    __task_passed__ = True
     print("✅ Все тесты пройдены. Отличная работа!")
 except NameError:
     print("❌ Ошибка: Функция is_even не найдена.")
@@ -53,10 +55,9 @@ try:
     assert find_max(-5, -2) == -2, "find_max(-5, -2) должно вернуть -2"
     assert find_max(7, 7) == 7, "find_max(7, 7) должно вернуть 7"
     
-    import inspect
-    source = inspect.getsource(find_max)
-    assert "max(" not in source, "Нарушено правило: нельзя использовать встроенную функцию max()!"
+    assert not __uses_call__("max"), "Нарушено правило: нельзя использовать встроенную функцию max()!"
     
+    __task_passed__ = True
     print("✅ Все тесты пройдены! Отличная работа с условиями if-else.")
 except NameError:
     print("❌ Ошибка: Функция find_max не найдена.")
@@ -77,6 +78,7 @@ try:
     assert fast_power(2, 3) == 8, "2 в степени 3 равно 8"
     assert fast_power(5, 2) == 25, "5 в квадрате равно 25"
     assert fast_power(10, 0) == 1, "Любое число в нулевой степени равно 1"
+    __task_passed__ = True
     print("✅ Отлично! Тесты пройдены.")
 except NameError:
     print("❌ Ошибка: Функция fast_power не найдена.")
@@ -96,6 +98,7 @@ except Exception as e:
 try:
     assert greet("Иван") == "Привет, Иван!", "Для Иван должно быть 'Привет, Иван!'"
     assert greet("Python") == "Привет, Python!", "Должно быть 'Привет, Python!'"
+    __task_passed__ = True
     print("✅ Строка правильно склеена! Отличная работа.")
 except NameError:
     print("❌ Ошибка: Функция greet не найдена.")
@@ -118,6 +121,7 @@ try:
     assert reverse_string("кот") == "ток", "Слово 'кот' должно стать 'ток'"
     assert reverse_string("Python") == "nohtyP", "Строка 'Python' не перевернулась должным образом"
     assert reverse_string("") == "", "Пустая строка должна остаться пустой"
+    __task_passed__ = True
     print("✅ Великолепно! Строки переворачиваются корректно на 100%.")
 except NameError:
     print("❌ Ошибка: Функция reverse_string не найдена.")
@@ -139,6 +143,7 @@ try:
     assert count_vowels("Яблоко") == 3, "В 'Яблоко' три гласные (Я, о, о)"
     assert count_vowels("КРТК") == 0, "В 'КРТК' нет гласных"
     assert count_vowels("") == 0, "Пустая строка возвращает 0"
+    __task_passed__ = True
     print("✅ Циклы и условия работают правильно! Функция считает верно.")
 except NameError:
     print("❌ Ошибка: Функция count_vowels не найдена.")
@@ -160,10 +165,9 @@ try:
     assert sum_list([-5, 10, 5]) == 10, "Сумма -5+10+5 равна 10"
     assert sum_list([]) == 0, "Сумма пустого списка должна быть 0"
     
-    import inspect
-    source = inspect.getsource(sum_list)
-    assert "sum(" not in source, "Нарушено правило: нельзя использовать встроенную функцию sum()!"
+    assert not __uses_call__("sum"), "Нарушено правило: нельзя использовать встроенную функцию sum()!"
     
+    __task_passed__ = True
     print("✅ Правильно работают циклы и накопитель суммы!")
 except NameError:
     print("❌ Ошибка: Функция sum_list не найдена.")
@@ -184,6 +188,7 @@ try:
     assert is_palindrome("казак") == True, "'казак' это палиндром"
     assert is_palindrome("собака") == False, "'собака' это не палиндром"
     assert is_palindrome("А роза упала на лапу Азора") == True, "Многословный палиндром не прошел тест"
+    __task_passed__ = True
     print("✅ Срезы, приведение типов и строки работают идеально!")
 except NameError:
     print("❌ Ошибка: Функция is_palindrome не найдена.")
@@ -203,6 +208,7 @@ except Exception as e:
 try:
     assert get_oldest({'Иван': 20, 'Анна': 25}) == 'Анна', "Анна (25) старше Ивана (20)"
     assert get_oldest({'Борис': 50, 'Глеб': 15, 'Алла': 40}) == 'Борис', "Должен быть выбран Борис (50)"
+    __task_passed__ = True
     print("✅ Отличная работа со словарями и ключами/значениями!")
 except NameError:
     print("❌ Ошибка: Функция get_oldest не найдена.")
@@ -225,10 +231,9 @@ try:
     assert safe_divide(10, 2) == 5, "10 / 2 должно быть 5"
     assert safe_divide(10, 0) == "Ошибка", "На 0 делить нельзя, должна возвращаться строка 'Ошибка'"
     
-    import inspect
-    source = inspect.getsource(safe_divide)
-    assert "except " in source or "except:" in source, "Нарушено условие: используйте try-except блок."
+    assert __uses_node__("Try"), "Нарушено условие: используйте try-except блок."
     
+    __task_passed__ = True
     print("✅ Вы отлично справились с обработкой исключений!")
 except NameError:
     print("❌ Ошибка: Функция safe_divide не найдена.")
@@ -251,6 +256,7 @@ try:
     
     d2 = word_counts("раз два РАЗ")
     assert d2 == {'раз': 2, 'два': 1}, f"Регистр важен: 'РАЗ' и 'раз' - одно слово! Получено: {d2}"
+    __task_passed__ = True
     print("✅ Словарь частот построен абсолютно правильно!")
 except NameError:
     print("❌ Ошибка: Функция word_counts не найдена.")
@@ -273,6 +279,7 @@ try:
     
     rect2 = Rectangle(2, 3)
     assert rect2.get_area() == 6, "Площадь 2x3 должна быть 6"
+    __task_passed__ = True
     print("✅ ООП класс работает безупречно! Методы написаны верно.")
 except NameError:
     print("❌ Ошибка: Класс Rectangle не найден.")
@@ -294,6 +301,7 @@ except Exception as e:
 try:
     assert get_days_diff('2025-01-01', '2025-01-10') in [9, -9], "Разница между 1 и 10 января - 9 дней"
     assert abs(get_days_diff('2024-02-01', '2024-03-01')) == 29, "2024 високосный год, должно быть 29 дней!"
+    __task_passed__ = True
     print("✅ Вы отлично подружились с классом datetime!")
 except NameError:
     print("❌ Ошибка: Функция get_days_diff не найдена.")
@@ -316,6 +324,7 @@ try:
     assert fib(2) == 1, "fib(2) должно быть 1"
     assert fib(6) == 8, "fib(6) должно быть 8"
     assert fib(10) == 55, "fib(10) должно быть 55"
+    __task_passed__ = True
     print("✅ Браво! Математическая логика идеальна.")
 except NameError:
     print("❌ Ошибка: Функция fib не найдена.")
