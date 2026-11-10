@@ -4246,3 +4246,384 @@ details.cab-more > .send-card {
     align-self: flex-start;
     margin-bottom: 10px;
 }
+
+/* ==================================================================
+   ЖИВЫЕ УРОКИ: запуск примеров, «Попробуйте сами», ошибки, домашка
+   ================================================================== */
+.run-block {
+    margin: 22px 0;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--code-border);
+    background: var(--code-bg);
+}
+
+.run-block pre {
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+}
+
+.run-block pre::before {
+    border-radius: 0;
+}
+
+.run-block code[contenteditable] {
+    display: block;
+    outline: none;
+    caret-color: #a5b4fc;
+    min-height: 1.7em;
+}
+
+.run-block:focus-within {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.run-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    padding: 10px 14px;
+    background: var(--code-bar);
+    border-top: 1px solid var(--code-border);
+}
+
+.run-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 0;
+    border-radius: 10px;
+    background: #10b981;
+    color: #fff;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.run-btn:hover:not(:disabled) { background: #059669; }
+.run-btn:disabled { opacity: 0.6; cursor: wait; }
+
+.run-reset {
+    padding: 7px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--code-border);
+    background: transparent;
+    color: var(--code-text);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.run-reset:hover { border-color: #a5b4fc; }
+
+.run-hint {
+    font-size: 0.8rem;
+    color: var(--code-muted);
+}
+
+.run-output {
+    padding: 14px 18px;
+    background: #0b1120;
+    color: var(--code-text);
+    border-top: 1px solid var(--code-border);
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 320px;
+    overflow: auto;
+}
+
+.run-output .line-ok { color: #6ee7b7; }
+.run-output .line-err { color: #fca5a5; }
+.run-output .line-warn { color: #fcd34d; }
+.run-output .line-muted { color: var(--code-muted); }
+
+/* «Попробуйте сами» */
+.try-it {
+    margin: 30px 0;
+    padding: 22px 24px;
+    border-radius: 16px;
+    border: 2px dashed rgba(79, 70, 229, 0.35);
+    background: rgba(79, 70, 229, 0.04);
+}
+
+.try-it.is-done {
+    border-style: solid;
+    border-color: rgba(16, 185, 129, 0.45);
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.try-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.try-head h3 { margin: 0; font-size: 1.15rem; }
+
+.try-badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--accent-color);
+}
+
+.try-it.is-done .try-badge { background: #10b981; }
+
+.try-code {
+    display: block;
+    width: 100%;
+    margin-top: 6px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--code-border);
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    line-height: 1.65;
+    resize: vertical;
+    outline: none;
+    tab-size: 4;
+}
+
+.try-code:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25); }
+
+.try-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.try-output {
+    margin-top: 12px;
+    border-radius: 12px;
+    border: 1px solid var(--code-border);
+}
+
+.try-hint {
+    margin-top: 14px;
+}
+
+.try-hint summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.try-hint p { margin: 8px 0 0; }
+
+/* Шаги, таблица, выноски */
+.steps { padding-left: 22px; }
+.steps li { margin-bottom: 6px; }
+
+.table-wrap { overflow-x: auto; margin: 18px 0; }
+
+.lesson-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.98rem;
+}
+
+.lesson-table th,
+.lesson-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.18);
+    text-align: left;
+}
+
+.lesson-table th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.65;
+}
+
+.callout {
+    margin: 20px 0;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border-left: 4px solid #f59e0b;
+    background: rgba(245, 158, 11, 0.09);
+}
+
+.callout-soft {
+    border-left-color: var(--accent-color);
+    background: rgba(79, 70, 229, 0.06);
+}
+
+/* Частые ошибки */
+.mistake {
+    margin: 18px 0;
+    padding: 20px 22px;
+    border-radius: 14px;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    background: rgba(239, 68, 68, 0.04);
+}
+
+.mistake h3 { margin: 0 0 12px; font-size: 1.1rem; }
+
+.mistake-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.mistake-grid pre { margin: 6px 0 0; }
+
+.mistake-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.mistake-label-bad { color: var(--error-color); }
+.mistake-label-good { color: var(--success-color); }
+
+.mistake-error {
+    margin: 14px 0 6px;
+    font-size: 0.95rem;
+}
+
+.mistake-error span { font-weight: 700; }
+
+.mistake-error code {
+    color: #b91c1c;
+    background: rgba(239, 68, 68, 0.1);
+    word-break: break-word;
+}
+
+body.dark-mode .mistake-error code { color: #fca5a5; }
+
+/* Главное за урок */
+.lesson-summary {
+    list-style: none;
+    padding: 20px 22px;
+    margin: 16px 0 0;
+    border-radius: 14px;
+    background: rgba(16, 185, 129, 0.07);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.lesson-summary li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 10px;
+}
+
+.lesson-summary li:last-child { margin-bottom: 0; }
+
+.lesson-summary li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #10b981;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.3em;
+}
+
+.lesson-meta {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+/* Домашнее задание */
+.hw-counter {
+    font-weight: 700;
+    color: var(--success-color);
+}
+
+.hw-tasks {
+    list-style: none;
+    margin: 16px 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hw-tasks a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    background: var(--card-bg);
+    color: var(--text-color);
+    transition: border-color 0.2s ease;
+}
+
+.hw-tasks a:hover { border-color: var(--accent-color); color: var(--text-color); }
+
+.hw-check {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid rgba(128, 128, 128, 0.35);
+}
+
+.hw-tasks li.is-done .hw-check {
+    background: #10b981 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') center / 14px no-repeat;
+    border-color: #10b981;
+}
+
+.hw-main { flex: 1; display: flex; flex-direction: column; }
+.hw-main small { opacity: 0.6; font-size: 0.82rem; }
+
+.hw-status {
+    font-size: 0.82rem;
+    font-weight: 700;
+    opacity: 0.6;
+    white-space: nowrap;
+}
+
+.hw-tasks li.is-done .hw-status { color: var(--success-color); opacity: 1; }
+
+.hw-star {
+    margin-top: 18px;
+    padding: 18px 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    background: rgba(245, 158, 11, 0.07);
+}
+
+.hw-star h3 { margin: 0 0 8px; font-size: 1.1rem; }
+.hw-star p { margin: 0 0 6px; }
+
+/* Вопрос теста с кодом */
+.quiz-code {
+    margin: 4px 0 16px;
+    font-size: 0.88rem;
+}
+
+@media (max-width: 700px) {
+    .mistake-grid { grid-template-columns: 1fr; }
+    .try-it { padding: 18px 16px; }
+}

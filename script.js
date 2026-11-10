@@ -79,15 +79,20 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Напишите выражение для вычисления остатка от деления 10 на 3", type: "code", correct: ["10%3", "10 % 3", "print(10%3)", "print(10 % 3)"], explanation: "Оператор % возвращает остаток от деления: 10 % 3 = 1, потому что 10 = 3·3 + 1." }
         ],
         'lesson4.html': [
-            { question: "Как правильно записать условие 'если x больше 5'?", options: ["if x > 5 then:", "if (x > 5)", "if x > 5:", "if x > 5 ;"], correct: 2, explanation: "В Python условие пишется без скобок и обязательно с двоеточием в конце строки." },
-            { question: "Какое ключевое слово выполняется, когда ВСЕ предыдущие условия if/elif оказались ложны?", options: ["elif", "else", "finally", "default"], correct: 1, explanation: "else выполняется только если все предшествующие if/elif оказались ложными. Это 'иначе'." },
-            { question: "Что такое elif в Python?", options: ["Другое слово для else", "Сокращение от 'else if' - дополнительная проверка условия", "Ошибочное написание слова else", "Оператор выхода из условия"], correct: 1, explanation: "elif = 'else if'. Позволяет проверить дополнительное условие, не вкладывая if в else." },
-            { question: "Что ОБЯЗАТЕЛЬНО ставить в конце строки с if, elif или else?", options: ["Точку с запятой (;)", "Двоеточие (:)", "Скобки ()", "Запятую (,)"], correct: 1, explanation: "Двоеточие обязательно! Оно сигнализирует Python о начале блока кода (отступ после двоеточия)." },
-            { question: "Какой отступ рекомендует стандарт PEP 8 внутри блока if?", options: ["2 пробела", "Отступ не важен", "1 табуляция или 2 пробела", "4 пробела (рекомендация PEP 8)"], correct: 3, explanation: "PEP 8 — официальный стандарт Python — рекомендует ровно 4 пробела для отступов." },
-            { question: "Что считается 'ложным' значением в условии Python?", options: ["Число 1", "Пустая строка (\"\"\", 0, [], None)", "Слово 'False'", "Любая переменная"], correct: 1, explanation: "В Python 'ложные' значения: 0, 0.0, None, False, '', [], {}, set(). Всё остальное — истинное." },
-            { question: "В каком порядке Python проверяет ветки if-elif-else?", options: ["Случайном", "Снизу вверх", "Сверху вниз, останавливаясь на первой подошедшей", "Все проверяет одновременно"], correct: 2, explanation: "Python проверяет условия последовательно и останавливается на первом подходящем. Порядок важен!" },
-            { question: "Напишите заголовок условия: если a меньше b", type: "code", correct: ["if a<b:", "if a < b:"], explanation: "Условие начинается с if, затем само сравнение, а в конце обязательно двоеточие — без него будет SyntaxError." },
-            { question: "Напишите ключевое слово Python для 'иначе если' (дополнительное условие после if):", type: "code", correct: ["elif"], explanation: "elif — сокращение от else if. Ключевые слова Python пишутся строчными буквами: Elif или ELIF Python не поймёт." }
+            { question: "Что выведет программа?", code: "x = 7\nif x > 5:\n    print(\"A\")\nelse:\n    print(\"B\")", options: ["A", "B", "A и B", "Ничего"], correct: 0, explanation: "7 больше 5, условие верно — выполняется ветка if, а else пропускается." },
+            { question: "Что выведет программа?", code: "score = 50\nif score >= 90:\n    print(\"5\")\nelif score >= 50:\n    print(\"3\")\nelif score >= 30:\n    print(\"2\")", options: ["3", "2", "3 и 2", "Ничего"], correct: 0, explanation: "Python проверяет условия сверху вниз и выполняет только первое верное: score >= 50. До score >= 30 дело не доходит." },
+            { question: "Какой символ обязательно ставится в конце строки с if?", options: [";", ":", ".", ","], correct: 1, explanation: "После условия в if, elif и else всегда ставится двоеточие — без него будет SyntaxError: expected ':'." },
+            { question: "Чем отличаются = и ==?", options: ["= сравнивает, а == присваивает", "= присваивает значение, а == сравнивает", "Ничем, это одно и то же", "== используется только для строк"], correct: 1, explanation: "age = 18 кладёт 18 в переменную, а age == 18 спрашивает: «age равно 18?» и отвечает True или False." },
+            { question: "Найдите ошибку в программе", code: "age = 20\nif age > 18\n    print(\"Взрослый\")", options: ["Нет двоеточия после условия", "If нужно писать с большой буквы", "print нельзя писать внутри if", "Ошибки нет"], correct: 0, explanation: "В конце строки с if не хватает двоеточия: if age > 18:" },
+            { question: "Что выведет программа?", code: "a = 3\nb = 10\nif a > 5 and b > 5:\n    print(\"оба\")\nelif a > 5 or b > 5:\n    print(\"хотя бы одно\")\nelse:\n    print(\"ни одного\")", options: ["оба", "хотя бы одно", "ни одного", "Ошибка"], correct: 1, explanation: "a > 5 — ложь, поэтому and даёт False. Во втором условии b > 5 — правда, а or достаточно одного верного." },
+            { question: "Сколько веток elif можно написать после if?", options: ["Только одну", "Не больше трёх", "Сколько угодно", "Ни одной: elif пишут только после else"], correct: 2, explanation: "Веток elif может быть сколько угодно. Они идут после if и перед else (если он есть)." },
+            { question: "Что выведет print(not True)?", options: ["True", "False", "not True", "Ошибка"], correct: 1, explanation: "not переворачивает значение: not True — это False." },
+            { question: "Что выведет программа?", code: "name = \"Анна\"\nif name == \"анна\":\n    print(\"Привет, Анна\")\nelse:\n    print(\"Кто вы?\")", options: ["Привет, Анна", "Кто вы?", "Ошибка", "Ничего"], correct: 1, explanation: "Для Python «Анна» и «анна» — разные строки: заглавная и строчная буквы различаются." },
+            { question: "Что выведет программа?", code: "t = 15\nif t > 20:\n    print(\"жарко\")\nprint(\"конец\")", options: ["жарко, а потом конец", "конец", "жарко", "Ничего"], correct: 1, explanation: "Условие ложно, поэтому «жарко» не выводится. print(\"конец\") написан без отступа — он не относится к if и выполняется всегда." },
+            { question: "Почему эта программа выдаёт ошибку TypeError?", code: "age = input()\nif age > 13:\n    print(\"ok\")", options: ["input() возвращает текст, а текст нельзя сравнить с числом", "С числом 13 сравнивать нельзя", "Не хватает else", "age — запрещённое имя переменной"], correct: 0, explanation: "input() всегда возвращает строку. Нужно превратить её в число: age = int(input())." },
+            { question: "Если условие в if ложно, а else нет — что выполнится?", options: ["Строки внутри if", "Строки после условия, написанные без отступа", "Ничего, программа остановится", "Программа выдаст ошибку"], correct: 1, explanation: "Код внутри if пропускается, и программа просто продолжает работу со следующей строки без отступа." },
+            { question: "Напишите заголовок условия: если x не равно 0", type: "code", correct: ["if x != 0:", "if not x == 0:", "if 0 != x:"], explanation: "«Не равно» записывается как !=, а в конце строки нужно двоеточие: if x != 0:" },
+            { question: "Напишите ключевое слово для ветки «иначе если»", type: "code", correct: ["elif"], explanation: "elif — сокращение от else if. Ключевые слова пишутся строчными буквами." }
         ],
         'lesson5.html': [
             { question: "Какой цикл выполняется, пока его условие истинно (True)?", options: ["while", "for", "do-while", "loop"], correct: 0, explanation: "while работает пока условие = True. for перебирает элементы. Это разные инструменты." },
@@ -404,7 +409,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const questions = quizData[currentPath];
+            // Если вопросов больше 10 — каждый раз выбираем 10 случайных (при пересдаче будут другие)
+            const QUIZ_SIZE = 10;
+            const allQuestions = quizData[currentPath] || [];
+            const questions = allQuestions.length > QUIZ_SIZE ? shuffleArray(allQuestions).slice(0, QUIZ_SIZE) : allQuestions;
             if (!questions || questions.length === 0) {
                 container.innerHTML = `<h3 style="color:var(--error-color)">Вопросов пока нет</h3>`;
                 return;
@@ -429,6 +437,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 qText.id = qId;
                 qText.textContent = `${index + 1}. ${q.question}`;
                 qBlock.appendChild(qText);
+                // Вопрос с фрагментом кода («Что выведет программа?»)
+                if (q.code) {
+                    const pre = document.createElement('pre');
+                    pre.className = 'quiz-code';
+                    const codeEl = document.createElement('code');
+                    codeEl.className = 'language-python';
+                    codeEl.textContent = q.code;
+                    pre.appendChild(codeEl);
+                    qBlock.appendChild(pre);
+                    if (window.hljs) window.hljs.highlightElement(codeEl);
+                }
 
                 if (q.type === 'code') {
                     const inputArea = document.createElement('textarea');
@@ -743,7 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 4. Utilities ---
     function initCopyButtons() {
         document.querySelectorAll('pre').forEach(pre => {
-            if (pre.closest('.CodeMirror') || pre.id === 'terminal-output' || pre.classList.contains('code-window-body')) return;
+            if (pre.closest('.CodeMirror') || pre.closest('.mistake') || pre.id === 'terminal-output' || pre.classList.contains('code-window-body')) return;
             if (pre.querySelector('.btn-copy')) return;
 
             pre.style.position = 'relative';
@@ -1099,7 +1118,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const cleanClone = (node) => {
             const c = node.cloneNode(true);
             c.style.display = '';
-            c.querySelectorAll('.btn-copy, #quiz-container, #btn-start-quiz, .lesson-locked-banner').forEach(x => x.remove());
+            c.querySelectorAll('.btn-copy, #quiz-container, #btn-start-quiz, .lesson-locked-banner, .run-bar, .run-output, .try-bar, .try-output, .try-hint, .try-cases').forEach(x => x.remove());
+            c.querySelectorAll('[contenteditable]').forEach(x => x.removeAttribute('contenteditable'));
+            c.querySelectorAll('textarea').forEach(x => { x.readOnly = true; x.tabIndex = -1; });
             c.querySelectorAll('[id]').forEach(x => x.removeAttribute('id'));
             return c;
         };
@@ -1254,12 +1275,253 @@ document.addEventListener('DOMContentLoaded', () => {
         stage.focus();
     }
 
+    // --- Живые уроки: запуск примеров, «Попробуйте сами», домашка ---
+    // Python (Pyodide) загружается только при первом нажатии «Запустить» или «Проверить».
+    let lessonRunnerPromise = null;
+
+    function getLessonRunner() {
+        if (!lessonRunnerPromise) {
+            lessonRunnerPromise = new Promise((resolve, reject) => {
+                const create = () => {
+                    try {
+                        const runner = new PyRunner({
+                            timeoutMs: 10000,
+                            onReady: () => resolve(runner),
+                            onLoadError: (msg) => reject(new Error(msg || 'Python не загрузился'))
+                        });
+                    } catch (e) { reject(e); }
+                };
+                if (typeof PyRunner !== 'undefined') return create();
+                const s = document.createElement('script');
+                s.src = 'py-runner.js';
+                s.onload = create;
+                s.onerror = () => reject(new Error('Не удалось загрузить py-runner.js'));
+                document.head.appendChild(s);
+            });
+            lessonRunnerPromise.catch(() => { lessonRunnerPromise = null; });
+        }
+        return lessonRunnerPromise;
+    }
+
+    // После остановки зависшего кода Python перезапускается — ждём готовности
+    async function readyRunner() {
+        const runner = await getLessonRunner();
+        const started = Date.now();
+        while (!runner.ready) {
+            if (Date.now() - started > 60000) throw new Error('Python слишком долго перезапускается');
+            await new Promise(r => setTimeout(r, 200));
+        }
+        return runner;
+    }
+
+    function consoleLine(box, text, kind) {
+        const span = document.createElement('span');
+        if (kind) span.className = 'line-' + kind;
+        span.textContent = text;
+        box.appendChild(span);
+    }
+
+    function friendlyLoadError(box) {
+        box.textContent = '';
+        consoleLine(box, 'Не удалось загрузить Python. Проверьте интернет и обновите страницу.\n', 'err');
+    }
+
+    // Tab ставит 4 пробела, Enter в редактируемом блоке — перенос строки без лишней разметки
+    function editorKeys(e) {
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            document.execCommand('insertText', false, '    ');
+        } else if (e.key === 'Enter' && e.target.isContentEditable && e.target.contentEditable !== 'plaintext-only') {
+            e.preventDefault();
+            document.execCommand('insertText', false, '\n');
+        }
+    }
+
+    function initRunnableCode() {
+        document.querySelectorAll('pre[data-run]').forEach(pre => {
+            const code = pre.querySelector('code');
+            if (!code || pre.closest('.run-block')) return;
+            const original = code.textContent;
+
+            code.contentEditable = 'plaintext-only';
+            if (code.contentEditable !== 'plaintext-only') code.contentEditable = 'true';
+            code.spellcheck = false;
+            code.setAttribute('aria-label', 'Пример кода — его можно изменить и запустить');
+            code.addEventListener('keydown', editorKeys);
+
+            const block = document.createElement('div');
+            block.className = 'run-block';
+            pre.parentNode.insertBefore(block, pre);
+            block.appendChild(pre);
+
+            const bar = document.createElement('div');
+            bar.className = 'run-bar';
+            const runBtn = document.createElement('button');
+            runBtn.type = 'button';
+            runBtn.className = 'run-btn';
+            runBtn.innerHTML = '<span class="ide-play" aria-hidden="true"></span> Запустить';
+            const resetBtn = document.createElement('button');
+            resetBtn.type = 'button';
+            resetBtn.className = 'run-reset';
+            resetBtn.textContent = 'Вернуть как было';
+            resetBtn.hidden = true;
+            const hint = document.createElement('span');
+            hint.className = 'run-hint';
+            hint.textContent = pre.dataset.stdin
+                ? 'Ввод для input(): ' + pre.dataset.stdin.split('\n').join(', ')
+                : 'Код можно изменить и запустить снова';
+            bar.append(runBtn, resetBtn, hint);
+
+            const out = document.createElement('div');
+            out.className = 'run-output';
+            out.setAttribute('aria-live', 'polite');
+            out.hidden = true;
+            block.append(bar, out);
+
+            code.addEventListener('input', () => { resetBtn.hidden = code.textContent === original; });
+            resetBtn.addEventListener('click', () => {
+                code.textContent = original;
+                if (window.hljs) { delete code.dataset.highlighted; window.hljs.highlightElement(code); }
+                resetBtn.hidden = true;
+            });
+
+            runBtn.addEventListener('click', async () => {
+                out.hidden = false;
+                out.textContent = '';
+                runBtn.disabled = true;
+                consoleLine(out, lessonRunnerPromise ? 'Выполняем…\n' : 'Загружаем Python — первый запуск займёт несколько секунд…\n', 'muted');
+                let runner;
+                try { runner = await readyRunner(); } catch (e) { friendlyLoadError(out); runBtn.disabled = false; return; }
+                out.textContent = '';
+                let printed = false;
+                const result = await runner.run({
+                    code: code.textContent,
+                    stdin: pre.dataset.stdin || '',
+                    onOutput: (t) => { printed = true; consoleLine(out, t); }
+                });
+                if (result.timedOut) consoleLine(out, '\nКод работал дольше 10 секунд и был остановлен — похоже на бесконечный цикл.\n', 'warn');
+                else if (result.error) consoleLine(out, (printed ? '\n' : '') + result.error + '\n', 'err');
+                else if (!printed) consoleLine(out, 'Программа ничего не вывела на экран.\n', 'muted');
+                runBtn.disabled = false;
+            });
+        });
+    }
+
+    function normalizeOutput(s) {
+        return String(s).trim().toLowerCase().replace(/ё/g, 'е').replace(/[ \t]+/g, ' ').replace(/[.!]+$/g, '');
+    }
+
+    function initTryIt() {
+        let done = {};
+        try { done = JSON.parse(localStorage.getItem('try_done')) || {}; } catch (e) { done = {}; }
+
+        document.querySelectorAll('.try-it').forEach(box => {
+            const id = box.dataset.id;
+            const area = box.querySelector('.try-code');
+            const casesEl = box.querySelector('.try-cases');
+            if (!id || !area || !casesEl) return;
+            let cases = [];
+            try { cases = JSON.parse(casesEl.textContent); } catch (e) { return; }
+            const start = area.value;
+            try { const saved = localStorage.getItem('try_code_' + id); if (saved) area.value = saved; } catch (e) { /* нет */ }
+            area.spellcheck = false;
+            area.rows = Math.max(4, area.value.split('\n').length + 1);
+            area.addEventListener('keydown', editorKeys);
+            area.addEventListener('input', () => { try { localStorage.setItem('try_code_' + id, area.value); } catch (e) { /* нет */ } });
+
+            const badge = box.querySelector('.try-badge');
+            const markDone = () => { box.classList.add('is-done'); if (badge) badge.textContent = 'Решено ✓'; };
+            if (done[id]) markDone();
+
+            const bar = document.createElement('div');
+            bar.className = 'try-bar';
+            const check = document.createElement('button');
+            check.type = 'button';
+            check.className = 'hub-btn hub-btn-primary';
+            check.textContent = 'Проверить';
+            const reset = document.createElement('button');
+            reset.type = 'button';
+            reset.className = 'hub-btn hub-btn-ghost';
+            reset.textContent = 'Начать заново';
+            bar.append(check, reset);
+            const out = document.createElement('div');
+            out.className = 'run-output try-output';
+            out.setAttribute('aria-live', 'polite');
+            out.hidden = true;
+            area.after(bar, out);
+
+            reset.addEventListener('click', () => {
+                if (area.value !== start && !confirm('Вернуть исходный код? Ваш код будет удалён.')) return;
+                area.value = start;
+                try { localStorage.removeItem('try_code_' + id); } catch (e) { /* нет */ }
+            });
+
+            check.addEventListener('click', async () => {
+                out.hidden = false;
+                out.textContent = '';
+                check.disabled = true;
+                consoleLine(out, lessonRunnerPromise ? 'Проверяем…\n' : 'Загружаем Python — первый раз это займёт несколько секунд…\n', 'muted');
+                let runner;
+                try { runner = await readyRunner(); } catch (e) { friendlyLoadError(out); check.disabled = false; return; }
+                out.textContent = '';
+                let passed = 0;
+                for (const c of cases) {
+                    let printed = '';
+                    const r = await runner.run({ code: area.value, stdin: c.in || '', onOutput: (t) => { printed += t; } });
+                    const shownIn = (c.in || '').split('\n').join(', ');
+                    if (r.timedOut) { consoleLine(out, '⏱ Код работал слишком долго и был остановлен.\n', 'warn'); break; }
+                    if (r.error) {
+                        consoleLine(out, `❌ Ввод «${shownIn}»: ошибка в коде\n${r.error}\n`, 'err');
+                        break;
+                    }
+                    const ok = normalizeOutput(printed) === normalizeOutput(c.out);
+                    if (ok) { passed++; consoleLine(out, `✅ Ввод «${shownIn}» → ${printed.trim()}\n`, 'ok'); }
+                    else consoleLine(out, `❌ Ввод «${shownIn}»: ожидалось «${c.out}», а программа вывела «${printed.trim() || 'ничего'}»\n`, 'err');
+                }
+                if (passed === cases.length) {
+                    consoleLine(out, '\nОтлично, всё верно!\n', 'ok');
+                    done[id] = true;
+                    try { localStorage.setItem('try_done', JSON.stringify(done)); } catch (e) { /* нет */ }
+                    markDone();
+                }
+                check.disabled = false;
+            });
+        });
+    }
+
+    // Домашнее задание: отмечаем решённые задачи галочкой
+    function initHomeworkStatus() {
+        const items = document.querySelectorAll('.hw-tasks li[data-task]');
+        if (!items.length) return;
+        let solved = {};
+        try { solved = JSON.parse(localStorage.getItem('solved_tasks')) || {}; } catch (e) { solved = {}; }
+        let count = 0;
+        items.forEach(li => {
+            const isDone = !!solved[li.dataset.task];
+            if (isDone) count++;
+            li.classList.toggle('is-done', isDone);
+            const st = li.querySelector('.hw-status');
+            if (st) st.textContent = isDone ? 'Решена' : 'Не решена';
+        });
+        const counter = document.querySelector('.hw-counter');
+        if (counter) counter.textContent = `Решено ${count} из ${items.length}`;
+    }
+
+    function initLessonInteractive() {
+        if (!document.querySelector('pre[data-run], .try-it, .hw-tasks')) return;
+        initRunnableCode();
+        initTryIt();
+        initHomeworkStatus();
+        window.addEventListener('focus', initHomeworkStatus);
+    }
+
     // Run All
     initReadingProgressBar();
     initMobileMenu();
     initLockSystem();
     initCopyButtons();
     initSyntaxHighlighting();
+    initLessonInteractive();
     initQuiz();
     initPresentationMode();
     initDirectQuizLink();

@@ -42,8 +42,8 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h1>Урок 4: Условные операторы (if, else, elif)</h1>
-            <p>Как программа может принимать решения и выполнять разные действия в зависимости от условий.</p>
+            <h1>Условия: if, elif, else</h1>
+            <p>Учим программу принимать решения: «если так — делай одно, иначе — другое».</p>
         </div>
     </section>
 
@@ -51,143 +51,203 @@
         <!-- Цель урока -->
         <section class="lesson-goal">
             <h2>Цель урока</h2>
-            <p>Познакомиться с конструкцией if-else, научиться использовать условия в программах.</p>
+            <p>Научиться писать программы, которые принимают решения: проверять условия с помощью <code>if</code>, <code>elif</code> и <code>else</code>, сравнивать значения и объединять несколько условий через <code>and</code>, <code>or</code> и <code>not</code>.</p>
+            <p class="lesson-meta">Время: около 40 минут · 2 упражнения в уроке · тест · 4 задачи на дом</p>
         </section>
 
         <!-- Основной материал -->
         <section class="lesson-content">
-            <h2>Что такое условные операторы?</h2>
-            <p>Иногда программа должна выполнять разные действия в зависимости от ситуации. Для этого используются
-                <strong>условные операторы</strong>. Они позволяют задать вопрос: «Если это условие выполняется - делай
-                одно, иначе - другое».
-            </p>
+            <h2>Зачем это нужно</h2>
+            <p>Каждый день мы принимаем решения: <em>если</em> идёт дождь — берём зонт, <em>иначе</em> — нет. <em>Если</em> на карте хватает денег — покупка проходит, <em>иначе</em> — появляется сообщение «Недостаточно средств».</p>
+            <p>Программам тоже нужно принимать решения. Сайт проверяет, верный ли пароль. Игра решает, закончилась ли она, когда у героя кончились жизни. Без условий программа выполняла бы одни и те же строки одинаково, что бы ни случилось. В этом уроке вы научитесь писать программы, которые «думают» и выбирают, что делать.</p>
 
-            <h2>Оператор if - простая проверка условия</h2>
-            <p>Синтаксис условия <code>if</code>:</p>
-            <pre><code>age = 18
-if age >= 18:
-    print("Вы совершеннолетний!")</code></pre>
-            <p>Если условие <code>age >= 18</code> верно (True), выполняется код внутри блока <code>if</code>.
-                <strong>Важно:</strong> после условия всегда ставится <strong>двоеточие (:)</strong>, а код
-                внутри блока пишется с отступом в 4 пробела.
-            </p>
+            <h2>Первое условие: if</h2>
+            <p>Слово <code>if</code> по-английски значит «если». Условие пишется так:</p>
+            <ol class="steps">
+                <li>слово <code>if</code>;</li>
+                <li>то, что проверяем, — например, <code>temperature &gt; 20</code>;</li>
+                <li><strong>двоеточие</strong> в конце строки;</li>
+                <li>со следующей строки — действия с <strong>отступом в 4 пробела</strong>. Они выполнятся, только если условие верно.</li>
+            </ol>
+            <pre data-run><code class="language-python">temperature = 25
 
-            <h2>Добавляем else - ветка «иначе»</h2>
-            <p>Блок <code>else</code> выполняется тогда, когда условие <code>if</code> оказалось ложным:</p>
-            <pre><code>age = 16
-if age >= 18:
-    print("Вы совершеннолетний!")
+if temperature &gt; 20:
+    print(&quot;Тепло — можно идти без куртки&quot;)
+
+print(&quot;Программа закончилась&quot;)</code></pre>
+            <p>Нажмите «Запустить» и посмотрите результат. Потом поменяйте <code>25</code> на <code>10</code> прямо в примере и запустите снова: первая строка исчезнет, а «Программа закончилась» останется. Она написана без отступа, поэтому не относится к условию и выполняется всегда.</p>
+
+            <h2>Как сравнивать: операторы сравнения</h2>
+            <p>Условие — это вопрос, на который есть ответ «да» (<code>True</code>) или «нет» (<code>False</code>). Чтобы задать такой вопрос, используют операторы сравнения:</p>
+            <div class="table-wrap">
+                <table class="lesson-table">
+                    <thead><tr><th>Оператор</th><th>Что значит</th><th>Пример</th><th>Ответ</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>==</code></td><td>равно</td><td><code>5 == 5</code></td><td><code>True</code></td></tr>
+                        <tr><td><code>!=</code></td><td>не равно</td><td><code>5 != 3</code></td><td><code>True</code></td></tr>
+                        <tr><td><code>&gt;</code></td><td>больше</td><td><code>2 &gt; 7</code></td><td><code>False</code></td></tr>
+                        <tr><td><code>&lt;</code></td><td>меньше</td><td><code>2 &lt; 7</code></td><td><code>True</code></td></tr>
+                        <tr><td><code>&gt;=</code></td><td>больше или равно</td><td><code>18 &gt;= 18</code></td><td><code>True</code></td></tr>
+                        <tr><td><code>&lt;=</code></td><td>меньше или равно</td><td><code>3 &lt;= 1</code></td><td><code>False</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="callout">
+                <strong>Главное правило:</strong> одно <code>=</code> — это «положить значение в переменную», а два <code>==</code> — это «сравнить». <code>age = 18</code> записывает 18 в переменную, а <code>age == 18</code> спрашивает: «age равно 18?»
+            </div>
+            <pre data-run><code class="language-python">print(10 &gt; 3)
+print(10 == 3)
+print(&quot;кот&quot; == &quot;кот&quot;)
+print(&quot;Кот&quot; == &quot;кот&quot;)</code></pre>
+            <p>Обратите внимание на последнюю строку: для Python «Кот» и «кот» — разные слова, потому что заглавная и строчная буквы различаются.</p>
+
+            <h2>Иначе: else</h2>
+            <p>Слово <code>else</code> значит «иначе». Его действия выполняются, когда условие в <code>if</code> оказалось ложным. У <code>else</code> не бывает своего условия — только двоеточие.</p>
+            <pre data-run><code class="language-python">password = &quot;python123&quot;
+
+if password == &quot;python123&quot;:
+    print(&quot;Добро пожаловать!&quot;)
 else:
-    print("Вы ещё несовершеннолетний.")</code></pre>
-            <p>В данном примере, так как <code>age = 16</code>, выполнится ветка <code>else</code>.</p>
+    print(&quot;Неверный пароль&quot;)</code></pre>
+            <p>Попробуйте изменить пароль в первой строке и запустить снова — сработает ветка <code>else</code>.</p>
 
-            <h2>Проверка нескольких условий с elif</h2>
-            <p><code>elif</code> - сокращение от «else if» («иначе если»). Используется для проверки
-                дополнительных условий, когда первое оказалось ложным. Можно использовать несколько <code>elif</code>
-                подряд:</p>
-            <pre><code>age = 10
-if age >= 18:
-    print("Вы взрослый.")
-elif age >= 13:
-    print("Вы подросток.")
+            <div class="try-it" data-id="l4-even">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Чётное или нечётное</h3></div>
+                <p>Программа получает целое число через <code>input()</code>. Выведите слово <strong>чётное</strong>, если число делится на 2 без остатка, и <strong>нечётное</strong> — если нет.</p>
+                <textarea class="try-code" aria-label="Ваш код">n = int(input())
+
+# напишите условие ниже
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "4", "out": "чётное"}, {"in": "7", "out": "нечётное"}, {"in": "0", "out": "чётное"}, {"in": "-3", "out": "нечётное"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Остаток от деления даёт оператор <code>%</code>: у чётного числа <code>n % 2 == 0</code>. Нужны <code>if</code> и <code>else</code>, и не забудьте двоеточия.</p></details>
+            </div>
+
+            <h2>Несколько вариантов: elif</h2>
+            <p>Когда вариантов больше двух, используют <code>elif</code> — сокращение от «else if», «иначе если». Python проверяет условия <strong>сверху вниз</strong> и выполняет <strong>только первую</strong> подходящую ветку. Остальные он даже не смотрит.</p>
+            <pre data-run><code class="language-python">score = 78
+
+if score &gt;= 90:
+    print(&quot;Оценка: 5&quot;)
+elif score &gt;= 70:
+    print(&quot;Оценка: 4&quot;)
+elif score &gt;= 50:
+    print(&quot;Оценка: 3&quot;)
 else:
-    print("Вы ребёнок.")</code></pre>
-            <p>Python проверяет условия по очереди сверху вниз и выполняет первую подошедшую ветку.</p>
+    print(&quot;Оценка: 2&quot;)</code></pre>
+            <p>Число 78 больше 50, но выведется «Оценка: 4»: Python дошёл до условия <code>score &gt;= 70</code>, оно оказалось верным, и на этом проверка закончилась. Поэтому <strong>порядок условий важен</strong>: если поставить <code>score &gt;= 50</code> первым, у всех от 50 до 100 будет тройка.</p>
 
-            <h2>Логические операторы в условиях</h2>
-            <p>Можно проверять несколько условий одновременно, используя логические операторы из прошлого урока:</p>
-            <pre><code>temp = 25
-if temp > 20 and temp < 30:
-    print("Погода хорошая!")</code></pre>
+            <h2>Несколько условий сразу: and, or, not</h2>
+            <p>Иногда нужно проверить несколько вещей одновременно. Для этого есть три слова:</p>
             <ul>
-                <li><code>and</code> - оба условия должны быть верны.</li>
-                <li><code>or</code> - хотя бы одно условие должно быть верно.</li>
-                <li><code>not</code> - меняет значение на противоположное.</li>
+                <li><code>and</code> — «и»: верно, только если верны <strong>оба</strong> условия;</li>
+                <li><code>or</code> — «или»: верно, если верно <strong>хотя бы одно</strong>;</li>
+                <li><code>not</code> — «не»: переворачивает ответ, <code>True</code> становится <code>False</code>.</li>
             </ul>
-
-            <h2>Синтаксические правила</h2>
-            <p>Запомните два обязательных правила Python для условий:</p>
-            <ul>
-                <li>После <code>if</code>, <code>elif</code> или <code>else</code> всегда ставится
-                    <strong>двоеточие (:)</strong>.
-                </li>
-                <li>Код внутри блока условия <strong>обязательно</strong> пишется с одинаковым отступом -
-                    <strong>4 пробела</strong>. Это не стиль, а требование языка: их отсутствие вызовет ошибку.
-                </li>
-            </ul>
-
-            <h2>Проверка истинности значений</h2>
-            <p>В Python условие может быть не только сравнением, но и просто значением. Следующие значения
-                считаются «ложными» (<code>False</code>): <code>0</code>, <code>""</code> (пустая строка),
-                <code>[]</code> (пустой список), <code>None</code>. Всё остальное - «истинное»:
-            </p>
-            <pre><code>name = ""
-if name:
-    print("Имя введено:", name)
-else:
-    print("Имя не указано!")</code></pre>
-
-            <h2>Тернарный оператор</h2>
-            <p>Иногда нужно выбрать одно из двух значений в зависимости от условия. Вместо полного блока <code>if/else</code> можно использовать <strong>тернарный оператор</strong> — условие в одну строку. Синтаксис: <code>значение_если_истина if условие else значение_если_ложь</code>:</p>
-            <pre><code># Обычная запись
-age = 20
-if age &gt;= 18:
-    status = "взрослый"
-else:
-    status = "несовершеннолетний"
-
-# Тернарный оператор (в одну строку)
-status = "взрослый" if age &gt;= 18 else "несовершеннолетний"
-print(status)  # взрослый
-
-# Ещё примеры
-score = 75
-grade = "Сдал" if score &gt;= 60 else "Не сдал"
-number = -5
-abs_value = number if number &gt;= 0 else -number  # Аналог abs()</code></pre>
-            <p>Тернарный оператор делает код короче, но не злоупотребляй им — если условие сложное, лучше написать полный <code>if/else</code>: читаемость важнее краткости.</p>
-
-            <h2>Вложенные условия</h2>
-            <p>Блок <code>if</code> может находиться внутри другого блока <code>if</code> — это называется <strong>вложенными условиями</strong>. Каждый уровень вложенности добавляет 4 пробела отступа:</p>
-            <pre><code>age = 25
+            <pre data-run><code class="language-python">age = 16
 has_ticket = True
 
-if age &gt;= 18:
-    if has_ticket:
-        print("Добро пожаловать!")
-    else:
-        print("Нет билета — вход закрыт")
+if age &gt;= 12 and has_ticket:
+    print(&quot;Проходите на фильм&quot;)
 else:
-    print("Вход только для взрослых (18+)")
+    print(&quot;Вход запрещён&quot;)
 
-# Более читаемо через and:
-if age &gt;= 18 and has_ticket:
-    print("Добро пожаловать!")</code></pre>
-            <p>Если условия независимы и можно объединить через <code>and</code> или <code>or</code> — предпочти это вложению. Глубокая вложенность делает код трудночитаемым. Хорошее правило: не более 2-3 уровней вложенности.</p>
+day = &quot;суббота&quot;
+if day == &quot;суббота&quot; or day == &quot;воскресенье&quot;:
+    print(&quot;Сегодня выходной!&quot;)
 
-            <h2>Типичные ошибки в условиях</h2>
-            <p>Вот самые распространённые ошибки новичков при работе с условиями. Изучи их сейчас — это сэкономит тебе часы отладки:</p>
-            <pre><code>x = 5
+is_raining = False
+if not is_raining:
+    print(&quot;Можно гулять&quot;)</code></pre>
 
-# ОШИБКА 1: = вместо ==
-# if x = 5:  # SyntaxError!
-if x == 5:   # Правильно
+            <div class="try-it" data-id="l4-ride">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Пропуск на аттракцион</h3></div>
+                <p>Программа получает два числа: сначала возраст, потом рост в сантиметрах (каждое на своей строке). На аттракцион пускают, если возраст <strong>не меньше 10</strong> и рост <strong>не меньше 130</strong>. Выведите <strong>Можно</strong> или <strong>Нельзя</strong>.</p>
+                <textarea class="try-code" aria-label="Ваш код">age = int(input())
+height = int(input())
 
-# ОШИБКА 2: отсутствие двоеточия
-# if x &gt; 3   # SyntaxError!
-if x &gt; 3:    # Правильно
+# напишите условие ниже
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "12\n140", "out": "Можно"}, {"in": "9\n150", "out": "Нельзя"}, {"in": "15\n120", "out": "Нельзя"}, {"in": "10\n130", "out": "Можно"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Оба условия должны выполняться одновременно — значит, нужно <code>and</code>. «Не меньше 10» записывается как <code>age &gt;= 10</code>.</p></details>
+            </div>
 
-# ОШИБКА 3: неверный отступ
-if x &gt; 3:
-    print("больше 3")
-    print("эта строка внутри if")  # Оба print внутри if
+            <h2>Условие внутри условия</h2>
+            <p>Внутрь <code>if</code> можно положить ещё один <code>if</code> — это называется <strong>вложенное условие</strong>. Каждый уровень добавляет ещё 4 пробела отступа.</p>
+            <pre data-run><code class="language-python">login = &quot;admin&quot;
+password = &quot;12345&quot;
 
-# ОШИБКА 4: сравнение с None
-result = None
-# if result == None:  # Работает, но не по-питоновски
-if result is None:    # Правильно
-    print("Нет значения")</code></pre>
-            <p>Особенно запомни ошибку 1: одиночный <code>=</code> — это присваивание, двойной <code>==</code> — это сравнение. Python не позволит написать <code>if x = 5</code> и сразу выдаст <code>SyntaxError</code>, что помогает обнаружить ошибку быстро.</p>
+if login == &quot;admin&quot;:
+    if password == &quot;12345&quot;:
+        print(&quot;Вход выполнен&quot;)
+    else:
+        print(&quot;Неверный пароль&quot;)
+else:
+    print(&quot;Пользователь не найден&quot;)</code></pre>
+            <p>Вложенные условия удобны, когда второе действие имеет смысл только после первого (сначала нашли пользователя — потом проверяем пароль). Но больше 2–3 уровней лучше не делать: код становится трудно читать. Часто вложенность можно заменить на <code>and</code> или <code>elif</code>.</p>
+
+            <h2>Частые ошибки новичков</h2>
+            <p>Ошибаться — нормально, так учатся все программисты. Главное — научиться читать сообщение об ошибке: Python всегда подсказывает, что не так и в какой строке.</p>
+            <div class="mistake">
+                <h3>Забыли двоеточие</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">age = 20
+if age &gt;= 18
+    print(&quot;Взрослый&quot;)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">age = 20
+if age &gt;= 18:
+    print(&quot;Взрослый&quot;)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>SyntaxError: expected &#x27;:&#x27;</code></p>
+                <p>Python ожидал двоеточие в конце строки с <code>if</code>. Двоеточие нужно после <code>if</code>, <code>elif</code> и <code>else</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>Нет отступа</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">age = 20
+if age &gt;= 18:
+print(&quot;Взрослый&quot;)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">age = 20
+if age &gt;= 18:
+    print(&quot;Взрослый&quot;)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>IndentationError: expected an indented block after &#x27;if&#x27; statement on line 2</code></p>
+                <p>Действия внутри условия должны быть сдвинуты на 4 пробела. Нажмите Tab или поставьте 4 пробела.</p>
+            </div>
+            <div class="mistake">
+                <h3>Одно «=» вместо двух</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">age = 20
+if age = 18:
+    print(&quot;Ровно 18&quot;)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">age = 20
+if age == 18:
+    print(&quot;Ровно 18&quot;)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>SyntaxError: invalid syntax. Maybe you meant &#x27;==&#x27; or &#x27;:=&#x27; instead of &#x27;=&#x27;?</code></p>
+                <p>Python даже подсказывает решение: для сравнения нужно <code>==</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>Сравнили текст с числом</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">age = input(&quot;Сколько вам лет? &quot;)
+if age &gt; 13:
+    print(&quot;Добро пожаловать&quot;)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">age = int(input(&quot;Сколько вам лет? &quot;))
+if age &gt; 13:
+    print(&quot;Добро пожаловать&quot;)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: &#x27;&gt;&#x27; not supported between instances of &#x27;str&#x27; and &#x27;int&#x27;</code></p>
+                <p><code>input()</code> всегда возвращает текст, а текст нельзя сравнить с числом. Превратите ввод в число через <code>int()</code>.</p>
+            </div>
+
+            <h2>Главное за урок</h2>
+            <ul class="lesson-summary">
+                <li><code>if</code> выполняет код, только если условие верно. В конце строки — двоеточие, внутри — отступ 4 пробела.</li>
+                <li><code>else</code> срабатывает, когда условие ложно. Своего условия у него нет.</li>
+                <li><code>elif</code> добавляет ещё варианты. Python проверяет сверху вниз и выполняет только первую подходящую ветку.</li>
+                <li>Для сравнения — <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>. Одно <code>=</code> — это присваивание, а не сравнение.</li>
+                <li><code>and</code> — оба условия, <code>or</code> — хотя бы одно, <code>not</code> — наоборот.</li>
+            </ul>
         </section>
 
         <!-- Квиз -->
@@ -196,15 +256,19 @@ if result is None:    # Правильно
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>Домашнее задание</h2>
-            <ul>
-                <li>Напиши программу, которая спрашивает возраст и говорит, ребёнок это (до 13), подросток (13–17) или взрослый (18+).</li>
-                <li>Дополни её, чтобы программа реагировала на возраст ниже 0 — выводила сообщение об ошибке.</li>
-                <li>Создай программу, которая проверяет, является ли число положительным, отрицательным или нулём.</li>
-                <li>Перепиши одно из условий из прошлых заданий с помощью тернарного оператора в одну строку.</li>
-                <li>Напиши программу, которая определяет номер дня недели (от 1 до 7), введённый пользователем, и выводит его название (Понедельник, Вторник, ...) и тип — рабочий или выходной.</li>
-                <li>Напиши программу-светофор: пользователь вводит цвет (<code>красный</code>, <code>жёлтый</code> или <code>зелёный</code>), а программа выводит команду: «Стой!», «Приготовься!» или «Езжай!».</li>
-                <li>Намеренно допусти все четыре типичные ошибки из урока по очереди, запусти программу и прочитай сообщения Python. Запиши, какие сообщения об ошибках ты получил.</li>
+            <p>Задачи проверяются автоматически: откройте задачу, напишите решение и нажмите «Проверить». <span class="hw-counter"></span></p>
+            <div class="callout callout-soft">В задачах код пишется внутри готовой заготовки <code>def …:</code> — это функция, подробно о них будет в уроке 7. Пока просто напишите условия вместо <code>pass</code>, а ответ верните словом <code>return</code>, например: <code>return "ноль"</code>.</div>
+            <ul class="hw-tasks">
+                <li data-task="sign"><a href="tasks.html#task=sign"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Знак числа</strong><small>лёгкая · +1 балл</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="min_of_three"><a href="tasks.html#task=min_of_three"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Минимум из трёх без min()</strong><small>лёгкая · +1 балл</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="is_leap"><a href="tasks.html#task=is_leap"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Високосный год</strong><small>средняя · +2 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="ticket_price"><a href="tasks.html#task=ticket_price"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Цена билета в кино</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
             </ul>
+            <div class="hw-star">
+                <h3>Задание со звёздочкой: «Светофор»</h3>
+                <p>Напишите программу в <a href="python-online.html">Python Online</a>: пользователь вводит цвет — <code>красный</code>, <code>жёлтый</code> или <code>зелёный</code>, а программа отвечает «Стойте!», «Приготовьтесь!» или «Идите!». Если введено что-то другое — «Такого цвета у светофора нет».</p>
+                <p class="hub-muted">Эту задачу проверяет преподаватель: отправьте ему код или покажите на занятии.</p>
+            </div>
         </section>
 
         <!-- Навигация -->
