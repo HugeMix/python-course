@@ -7,6 +7,19 @@ document.addEventListener('DOMContentLoaded', () => {
         'lesson16.html'
     ];
 
+    // Уроки, которые преподаватель открыл по ссылке-заданию (страница «Моё задание»)
+    function getUnlockedLessons() {
+        try { return JSON.parse(localStorage.getItem('unlocked_lessons')) || []; }
+        catch (e) { return []; }
+    }
+
+    // Урок доступен: первый урок, или пройден предыдущий, или его открыл преподаватель
+    function isLessonOpen(lessonFile, progress) {
+        const i = lessonsList.indexOf(lessonFile);
+        if (i <= 0) return true;
+        return !!progress[lessonsList[i - 1]] || getUnlockedLessons().includes(lessonFile);
+    }
+
     function safeGetProgress() {
         try { return JSON.parse(localStorage.getItem('quiz_results')) || {}; }
         catch (e) { localStorage.removeItem('quiz_results'); return {}; }
@@ -23,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (href === currentPath) {
             link.classList.add('active');
-        } else if (isLesson && href === 'courses.html') {
+        } else if (isLesson && href === 'python-basic.html') {
             link.classList.add('active');
         } else {
             link.classList.remove('active');
@@ -235,16 +248,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Lock Logic: Lesson 1 is always open. Others need prev one passed.
                 if (index > 0) {
-                    const prevLesson = lessonsList[index - 1];
-                    if (!progress[prevLesson]) {
+                    if (!isLessonOpen(lessonFileName, progress)) {
                         // Locked!
                         card.classList.add('locked');
                         const link = cardLink;
                         if (link) {
                             link.href = '#';
-                            link.textContent = '🔒 Закрыто';
-                            link.style.background = '#6c757d';
-                            link.style.color = 'white';
+                            link.textContent = '🔒 Откроется после урока ' + index;
+                            link.classList.add('btn-locked');
+                            link.setAttribute('aria-disabled', 'true');
                             link.onclick = (e) => {
                                 e.preventDefault();
                                 showToast('Доступ закрыт: сначала пройдите предыдущий урок.', 'error');
@@ -283,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //    Текст урока остаётся доступен (его могут прочитать и ученик, и поисковик),
         //    а тест и переход дальше откроются только после прохождения предыдущего урока.
         const lessonIndex = lessonsList.indexOf(currentPath);
-        if (lessonIndex > 0 && !progress[lessonsList[lessonIndex - 1]]) {
+        if (lessonIndex > 0 && !isLessonOpen(currentPath, progress)) {
             lessonLocked = true;
             const prevLesson = lessonsList[lessonIndex - 1];
             const banner = document.createElement('div');
@@ -576,7 +588,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const wrongCount = container.querySelectorAll('.answered-wrong').length;
 
         if (correctCount + wrongCount === total) {
-            // Quiz Finished
+            // Quiz Finished — сохраняем результат в процентах (для отчёта преподавателю)
+            saveQuizScore(correctCount, total);
             if (correctCount / total >= 0.7) {
                 // SUCCESS (70% threshold)
                 const progress = safeGetProgress();
@@ -597,6 +610,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 800);
             }
         }
+    }
+
+    function saveQuizScore(correct, total) {
+        let scores = {};
+        try { scores = JSON.parse(localStorage.getItem('quiz_scores')) || {}; } catch (e) { scores = {}; }
+        const percent = Math.round(correct / total * 100);
+        const prev = scores[currentPath] || { best: 0, attempts: 0 };
+        scores[currentPath] = {
+            last: percent,
+            best: Math.max(prev.best || 0, percent),
+            attempts: (prev.attempts || 0) + 1,
+            correct, total,
+            at: new Date().toISOString()
+        };
+        try { localStorage.setItem('quiz_scores', JSON.stringify(scores)); } catch (e) { /* не страшно */ }
     }
 
     function renderQuizFailed(container, score, total) {
@@ -851,7 +879,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Scroll Animations ---
     function initScrollAnimations() {
-        const animatedElements = document.querySelectorAll('.card, .lesson-card, .lesson-content, .lesson-goal, .lesson-homework, #quiz-container, .tasks-sidebar, .task-description, .editor-container');
+        // Анимация только для небольших карточек: большие блоки (урок, редактор) не «выезжают»
+        if (!('IntersectionObserver' in window)) return;
+        const animatedElements = document.querySelectorAll('.card, .lesson-card, .landing-card, .program-module, .plan-card, .path-card');
 
         // Helper to add base class explicitly
         animatedElements.forEach(el => {
@@ -973,6 +1003,54 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
         document.head.appendChild(script);
+    }
+
+    // --- Ссылка lessonN.html#quiz сразу открывает тест урока ---
+    function initDirectQuizLink() {
+        if (location.hash !== '#quiz') return;
+        const startBtn = document.getElementById('btn-start-quiz');
+        const container = document.getElementById('quiz-container');
+        if (startBtn && startBtn.style.display !== 'none') {
+            startBtn.click();
+        } else if (container) {
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    // --- Для преподавателя (только в браузере, где выполнен вход в кабинет) ---
+    function isTeacherBrowser() {
+        try { return !!localStorage.getItem('pb_teacher_pin'); } catch (e) { return false; }
+    }
+
+    function initTeacherExtras() {
+        if (!isTeacherBrowser()) return;
+        // Ссылка на кабинет в подвале — её видит только преподаватель
+        const footerCol = document.querySelector('.site-footer .footer-col ul');
+        if (footerCol && !footerCol.querySelector('a[href="teacher.html"]')) {
+            const li = document.createElement('li');
+            li.innerHTML = '<a href="teacher.html">Кабинет преподавателя</a>';
+            footerCol.appendChild(li);
+        }
+        // На уроке — быстрые ссылки для отправки ученику
+        if (!lessonsList.includes(currentPath)) return;
+        const titleBox = document.querySelector('.lesson-title .container');
+        if (!titleBox) return;
+        const base = location.href.split('#')[0].split('?')[0];
+        const bar = document.createElement('div');
+        bar.className = 'teacher-bar';
+        bar.innerHTML = '<span>Для преподавателя:</span>';
+        [['Ссылка на урок', base], ['Ссылка на тест', base + '#quiz'], ['Ссылка на слайды', base + '#present']].forEach(([label, url]) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.textContent = label;
+            b.onclick = () => {
+                const done = () => showToast('Ссылка скопирована — отправьте её ученику', 'success');
+                if (navigator.clipboard) navigator.clipboard.writeText(url).then(done).catch(() => prompt('Скопируйте ссылку:', url));
+                else prompt('Скопируйте ссылку:', url);
+            };
+            bar.appendChild(b);
+        });
+        titleBox.appendChild(bar);
     }
 
     // --- Режим «Урок по созвону» ---
@@ -1176,6 +1254,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initSyntaxHighlighting();
     initQuiz();
     initPresentationMode();
+    initDirectQuizLink();
+    initTeacherExtras();
     initTheme();
     initResetButton();
     initProgressExportImport();

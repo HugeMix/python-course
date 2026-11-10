@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Кабинет преподавателя: задания, отчёты учеников и журнал оценок.">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Кабинет преподавателя | PythonBasic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html"
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" class="logo-link">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span
+                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
+                        style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="python-basic.html">Уроки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
+                    <li><a href="glossary.html">Глоссарий</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="lesson-title">
+        <div class="container">
+            <h1>Кабинет преподавателя</h1>
+            <p>Задания для учеников, отчёты, журнал оценок и ссылки на материалы.</p>
+        </div>
+    </section>
+
+    <main class="container hub" id="teacher-root" aria-live="polite">
+        <p class="hub-muted">Загружаем кабинет…</p>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="footer-logo">Python<span>Basic</span></a>
+                <p>Курс Python с нуля на русском языке: уроки, тесты и задачи с автоматической проверкой.</p>
+                <a class="footer-cta" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Записаться на занятия в Telegram</a>
+            </div>
+            <div class="footer-col" role="navigation" aria-label="Обучение">
+                <h4>Обучение</h4>
+                <ul>
+                    <li><a href="python-basic.html">Уроки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="certificate.html">Сертификат</a></li>
+                    <li><a href="assignment.html">Моё задание</a></li>
+                </ul>
+            </div>
+            <div class="footer-col" role="navigation" aria-label="Справочник">
+                <h4>Справочник</h4>
+                <ul>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
+                    <li><a href="glossary.html">Глоссарий</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="next-steps.html">Что дальше?</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">© <span class="footer-year"></span> PythonBasic — Python для начинающих</div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="tasks_data.js"></script>
+    <script src="pb-share.js"></script>
+    <script>
+        // Кабинет преподавателя. Все данные (журнал, PIN) хранятся только в этом браузере.
+        const root = document.getElementById('teacher-root');
+        const { el } = PB;
+        const DIFF = { easy: 'Лёгкая', medium: 'Средняя', hard: 'Сложная' };
+        const taskById = id => tasks.find(t => t.id === id);
+
+        // Отчёт из ссылки teacher.html#r=... запоминаем сразу и убираем из адреса
+        let pendingReport = PB.fromHash('r');
+        if (pendingReport) history.replaceState(null, '', location.pathname);
+        // Ссылку на отчёт открыли во вкладке, где кабинет уже открыт, — страница не перезагружается
+        window.addEventListener('hashchange', () => {
+            const r = PB.fromHash('r');
+            if (!r) return;
+            pendingReport = r;
+            history.replaceState(null, '', location.pathname);
+            if (isUnlocked()) start(); else renderGate();
+        });
+
+        // ---------- уведомления ----------
+        function toast(text, kind) {
+            const t = el('div', { class: 'hub-toast' + (kind === 'err' ? ' hub-toast-err' : ''), role: 'status', text });
+            document.body.append(t);
+            requestAnimationFrame(() => t.classList.add('is-shown'));
+            setTimeout(() => { t.classList.remove('is-shown'); setTimeout(() => t.remove(), 300); }, 3000);
+        }
+
+        function copyLink(link, what) {
+            PB.copy(link).then(() => toast((what || 'Ссылка') + ' скопирована')).catch(() => prompt('Скопируйте ссылку:', link));
+        }
+
+        // ---------- PIN-код ----------
+        async function sha256(text) {
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+            return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function checkPin(pin) {
+            const saved = PB.read('pb_teacher_pin', null);
+            return !!saved && saved.hash === await sha256(saved.salt + ':' + pin);
+        }
+
+        async function savePin(pin) {
+            const salt = PB.randomId();
+            PB.write('pb_teacher_pin', { salt, hash: await sha256(salt + ':' + pin) });
+        }
+
+        function isUnlocked() {
+            try { return sessionStorage.getItem('pb_teacher_ok') === '1'; } catch (e) { return false; }
+        }
+
+        function setUnlocked(on) {
+            try { on ? sessionStorage.setItem('pb_teacher_ok', '1') : sessionStorage.removeItem('pb_teacher_ok'); } catch (e) { /* ничего */ }
+        }
+
+        function renderGate() {
+            root.textContent = '';
+            const hasPin = !!PB.read('pb_teacher_pin', null);
+            if (!window.crypto || !crypto.subtle) {
+                root.append(el('section', { class: 'hub-card hub-gate' },
+                    el('h2', { text: 'Кабинет недоступен' }),
+                    el('p', { text: 'Откройте сайт по адресу, который начинается с https://, — так браузер разрешит защитить кабинет PIN-кодом.' })));
+                return;
+            }
+            const pin = el('input', { class: 'hub-input', type: 'password', inputmode: 'numeric', autocomplete: hasPin ? 'current-password' : 'new-password', placeholder: 'PIN-код', maxlength: '20', id: 'pin' });
+            const pin2 = hasPin ? null : el('input', { class: 'hub-input', type: 'password', inputmode: 'numeric', autocomplete: 'new-password', placeholder: 'Повторите PIN-код', maxlength: '20' });
+            const msg = el('p', { class: 'hub-error', role: 'alert' });
+            const btn = el('button', { class: 'hub-btn hub-btn-primary', type: 'submit', text: hasPin ? 'Войти' : 'Создать PIN и войти' });
+            const form = el('form', { class: 'hub-gate-form' },
+                el('label', { class: 'hub-label', for: 'pin', text: hasPin ? 'Введите PIN-код' : 'Придумайте PIN-код (не короче 4 символов)' }),
+                pin, pin2, btn, msg);
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                msg.textContent = '';
+                if (hasPin) {
+                    if (await checkPin(pin.value)) { setUnlocked(true); start(); }
+                    else { msg.textContent = 'Неверный PIN-код.'; pin.select(); }
+                } else {
+                    if (pin.value.length < 4) { msg.textContent = 'PIN-код должен быть не короче 4 символов.'; return; }
+                    if (pin.value !== pin2.value) { msg.textContent = 'PIN-коды не совпадают.'; return; }
+                    await savePin(pin.value); setUnlocked(true); start();
+                }
+            });
+            root.append(el('section', { class: 'hub-card hub-gate' },
+                el('h2', { text: hasPin ? 'Вход в кабинет' : 'Добро пожаловать в кабинет преподавателя' }),
+                el('p', { class: 'hub-muted', text: hasPin
+                    ? 'Кабинет защищён PIN-кодом, чтобы ученики не открыли его случайно на вашем устройстве.'
+                    : 'Здесь вы будете выдавать задания ученикам, получать от них отчёты и вести журнал оценок. Все данные хранятся только в этом браузере — время от времени сохраняйте резервную копию (вкладка «Настройки»).' }),
+                pendingReport ? el('div', { class: 'hub-alert hub-alert-ok', text: 'Вам прислали отчёт ученика. Войдите — он сохранится в журнал.' }) : null,
+                form));
+            pin.focus();
+        }
+
+        // ---------- журнал ----------
+        function loadJournal() {
+            const j = PB.read('pb_journal', null);
+            return j && Array.isArray(j.students) ? j : { students: [], assignments: [] };
+        }
+        let journal = loadJournal();
+        function saveJournal() { PB.write('pb_journal', journal); }
+        const norm = s => String(s || '').trim().toLowerCase().replace(/\s+/g, ' ');
+
+        function findOrCreateStudent(name) {
+            let st = journal.students.find(s => norm(s.name) === norm(name));
+            if (!st) {
+                st = { id: PB.randomId(), name: PB.cleanText(name.trim(), 60), created: new Date().toISOString(), reports: [], grades: [], note: '' };
+                journal.students.push(st);
+            }
+            return st;
+        }
+
+        function cleanReport(r) {
+            if (!r || r.t !== 'report') throw new Error('это не отчёт ученика');
+            const name = PB.cleanText(r.name, 60).trim();
+            if (!name) throw new Error('в отчёте нет имени');
+            const lessons = {};
+            Object.entries(r.lessons && typeof r.lessons === 'object' ? r.lessons : {}).forEach(([k, v]) => {
+                const n = PB.clampInt(k, 0, 99);
+                if (n >= 1 && n <= PB.LESSON_COUNT && v && typeof v === 'object') {
+                    lessons[n] = { p: v.p ? 1 : 0, b: PB.clampInt(v.b, 0, 100), a: PB.clampInt(v.a, 0, 999) };
+                }
+            });
+            const known = new Set(tasks.map(t => t.id));
+            const solved = [...new Set((Array.isArray(r.solved) ? r.solved : []).filter(id => known.has(id)))];
+            const code = {};
+            Object.entries(r.code && typeof r.code === 'object' ? r.code : {}).forEach(([id, c]) => {
+                if (known.has(id) && typeof c === 'string') code[id] = c.slice(0, 1500);
+            });
+            let assigned = null;
+            if (r.assigned && typeof r.assigned === 'object') {
+                assigned = {
+                    lessons: (Array.isArray(r.assigned.lessons) ? r.assigned.lessons : []).map(n => PB.clampInt(n, 0, 99)).filter(n => n >= 1 && n <= PB.LESSON_COUNT),
+                    tasks: (Array.isArray(r.assigned.tasks) ? r.assigned.tasks : []).filter(id => known.has(id))
+                };
+            }
+            const at = isNaN(new Date(r.at)) ? new Date().toISOString() : new Date(r.at).toISOString();
+            return { name, at, aid: PB.cleanText(r.aid, 20), lessons, solved, code, assigned, received: new Date().toISOString() };
+        }
+
+        async function importPendingReport() {
+            if (!pendingReport) return null;
+            const packed = pendingReport;
+            pendingReport = null; // один отчёт — одна обработка
+            try {
+                const r = cleanReport(await PB.decode(packed));
+                const st = findOrCreateStudent(r.name);
+                const duplicate = st.reports.some(x => x.at === r.at);
+                if (!duplicate) {
+                    st.reports.push(r);
+                    st.reports.sort((a, b) => a.at.localeCompare(b.at));
+                    saveJournal();
+                }
+                return { ok: true, student: st, duplicate };
+            } catch (e) {
+                return { ok: false, error: e.message };
+            }
+        }
+
+        function summary(st) {
+            const last = st.reports[st.reports.length - 1];
+            const grades = st.grades.map(g => g.v);
+            const avgGrade = grades.length ? (grades.reduce((a, b) => a + b, 0) / grades.length) : null;
+            if (!last) return { last: null, tests: 0, avg: null, solved: 0, points: 0, avgGrade };
+            const ls = Object.values(last.lessons);
+            return {
+                last,
+                tests: ls.filter(l => l.p).length,
+                avg: ls.length ? Math.round(ls.reduce((s, l) => s + l.b, 0) / ls.length) : null,
+                solved: last.solved.length,
+                points: PB.computePoints(last.lessons, last.solved),
+                avgGrade
+            };
+        }
+
+        // ---------- каркас кабинета ----------
+        const TABS = [['journal', 'Журнал'], ['assign', 'Новое задание'], ['materials', 'Материалы'], ['settings', 'Настройки']];
+        let currentTab = 'journal';
+        let openStudentId = null;
+        let notice = null;
+
+        function start() {
+            importPendingReport().then(res => {
+                if (res && res.ok) {
+                    notice = { kind: 'ok', text: res.duplicate ? `Этот отчёт от «${res.student.name}» уже есть в журнале.` : `Отчёт от «${res.student.name}» сохранён в журнал.` };
+                    currentTab = 'journal';
+                    openStudentId = res.student.id;
+                } else if (res && !res.ok) {
+                    notice = { kind: 'err', text: 'Не удалось прочитать отчёт: ' + res.error + '. Попросите ученика создать отчёт заново.' };
+                }
+                renderApp();
+            });
+        }
+
+        function renderApp() {
+            root.textContent = '';
+            const tabs = el('div', { class: 'hub-tabs', role: 'tablist' },
+                TABS.map(([id, name]) => el('button', {
+                    class: 'hub-tab' + (currentTab === id ? ' active' : ''), type: 'button', role: 'tab',
+                    'aria-selected': String(currentTab === id), text: name,
+                    onclick: () => { currentTab = id; openStudentId = null; notice = null; renderApp(); }
+                })),
+                el('button', { class: 'hub-tab hub-tab-lock', type: 'button', text: 'Выйти', title: 'Закрыть кабинет на этом устройстве', onclick: () => { setUnlocked(false); renderGate(); } }));
+            root.append(tabs);
+            if (notice) root.append(el('div', { class: 'hub-alert hub-alert-' + notice.kind, text: notice.text }));
+            const panel = el('div', { class: 'hub-panel' });
+            root.append(panel);
+            ({ journal: renderJournal, assign: renderAssign, materials: renderMaterials, settings: renderSettings })[currentTab](panel);
+        }
+
+        // ---------- вкладка «Журнал» ----------
+        function renderJournal(panel) {
+            if (openStudentId) {
+                const st = journal.students.find(s => s.id === openStudentId);
+                if (st) return renderStudent(panel, st);
+            }
+            const search = el('input', { class: 'hub-input', type: 'search', placeholder: 'Поиск ученика', 'aria-label': 'Поиск ученика' });
+            const addBtn = el('button', { class: 'hub-btn', type: 'button', text: 'Добавить ученика' });
+            addBtn.addEventListener('click', () => {
+                const name = (prompt('Имя и фамилия ученика:') || '').trim();
+                if (!name) return;
+                findOrCreateStudent(name); saveJournal(); renderApp();
+            });
+            const list = el('div', { class: 'hub-table-wrap' });
+            const draw = () => {
+                list.textContent = '';
+                const q = norm(search.value);
+                const students = journal.students.filter(s => !q || norm(s.name).includes(q))
+                    .sort((a, b) => (summary(b).last ? summary(b).last.at : b.created).localeCompare(summary(a).last ? summary(a).last.at : a.created));
+                if (!students.length) {
+                    list.append(el('div', { class: 'hub-empty' },
+                        el('strong', { text: journal.students.length ? 'Никого не нашли' : 'В журнале пока пусто' }),
+                        el('p', { text: journal.students.length ? 'Попробуйте другое имя.' : 'Создайте задание во вкладке «Новое задание» и отправьте ссылку ученику. Когда он пришлёт отчёт, откройте его — ученик появится здесь.' })));
+                    return;
+                }
+                const table = el('table', { class: 'hub-table' },
+                    el('thead', {}, el('tr', {}, ['Ученик', 'Последний отчёт', 'Тесты', 'Средний %', 'Задачи', 'Баллы', 'Оценка', ''].map(h => el('th', { text: h })))),
+                    el('tbody', {}, students.map(st => {
+                        const s = summary(st);
+                        return el('tr', {},
+                            el('td', { 'data-label': 'Ученик' }, el('strong', { text: st.name })),
+                            el('td', { 'data-label': 'Последний отчёт', text: s.last ? PB.formatDate(s.last.at) : 'нет' }),
+                            el('td', { 'data-label': 'Тесты', text: `${s.tests} / ${PB.LESSON_COUNT}` }),
+                            el('td', { 'data-label': 'Средний %', text: s.avg === null ? '—' : s.avg + '%' }),
+                            el('td', { 'data-label': 'Задачи', text: `${s.solved} / ${tasks.length}` }),
+                            el('td', { 'data-label': 'Баллы', text: String(s.points) }),
+                            el('td', { 'data-label': 'Оценка', text: s.avgGrade === null ? '—' : s.avgGrade.toFixed(1) }),
+                            el('td', {}, el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Открыть', onclick: () => { openStudentId = st.id; notice = null; renderApp(); } })));
+                    })));
+                list.append(table);
+            };
+            search.addEventListener('input', draw);
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Ученики' }), el('div', { class: 'hub-actions' }, search, addBtn)),
+                el('p', { class: 'hub-muted', text: `Баллы: тест — до 10 (лучший результат / 10), задача — лёгкая 1, средняя 2, сложная 3. Максимум — ${PB.maxPoints()}.` }),
+                list));
+            draw();
+        }
+
+        function renderStudent(panel, st) {
+            const s = summary(st);
+            const back = el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: '← Все ученики', onclick: () => { openStudentId = null; notice = null; renderApp(); } });
+            panel.append(el('div', { class: 'hub-actions' }, back));
+
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: st.name }),
+                    el('span', { class: 'hub-muted', text: s.last ? 'Последний отчёт: ' + PB.formatDate(s.last.at) : 'Отчётов пока нет' })),
+                el('div', { class: 'hub-stats' },
+                    el('div', { class: 'hub-stat' }, el('strong', { text: `${s.tests} / ${PB.LESSON_COUNT}` }), el('span', { text: 'тестов сдано' })),
+                    el('div', { class: 'hub-stat' }, el('strong', { text: s.avg === null ? '—' : s.avg + '%' }), el('span', { text: 'средний результат' })),
+                    el('div', { class: 'hub-stat' }, el('strong', { text: `${s.solved} / ${tasks.length}` }), el('span', { text: 'задач решено' })),
+                    el('div', { class: 'hub-stat' }, el('strong', { text: String(s.points) }), el('span', { text: 'баллов' })),
+                    el('div', { class: 'hub-stat' }, el('strong', { text: s.avgGrade === null ? '—' : s.avgGrade.toFixed(1) }), el('span', { text: 'средняя оценка' })))));
+
+            // Оценки
+            const gradeSel = el('select', { class: 'hub-input hub-input-short', 'aria-label': 'Оценка' }, [5, 4, 3, 2].map(v => el('option', { value: String(v), text: String(v) })));
+            const gradeNote = el('input', { class: 'hub-input', type: 'text', maxlength: '120', placeholder: 'За что (например: «Урок 4, домашнее задание»)' });
+            const addGrade = el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: 'Поставить оценку' });
+            addGrade.addEventListener('click', () => {
+                st.grades.push({ v: Number(gradeSel.value), note: gradeNote.value.trim().slice(0, 120), at: new Date().toISOString() });
+                saveJournal(); renderApp();
+            });
+            const gradeList = st.grades.length
+                ? el('ul', { class: 'hub-rows' }, st.grades.slice().reverse().map((g, i) => el('li', { class: 'hub-row' },
+                    el('span', { class: 'hub-grade hub-grade-' + g.v, text: String(g.v) }),
+                    el('span', { class: 'hub-row-title' }, g.note || 'Без комментария', el('small', { text: PB.formatDate(g.at) })),
+                    el('span', { class: 'hub-row-actions' }, el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Удалить', onclick: () => {
+                        if (!confirm('Удалить эту оценку?')) return;
+                        st.grades.splice(st.grades.length - 1 - i, 1); saveJournal(); renderApp();
+                    } })))))
+                : el('p', { class: 'hub-muted', text: 'Оценок пока нет.' });
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Оценки' })),
+                el('div', { class: 'hub-actions' }, gradeSel, gradeNote, addGrade),
+                gradeList));
+
+            // Заметка
+            const note = el('textarea', { class: 'hub-input hub-textarea', rows: '3', maxlength: '2000', placeholder: 'Заметки об ученике: что получается, над чем поработать…' });
+            note.value = st.note || '';
+            note.addEventListener('input', () => { st.note = note.value; saveJournal(); });
+            panel.append(el('section', { class: 'hub-card' }, el('div', { class: 'hub-card-head' }, el('h2', { text: 'Заметки' }), el('span', { class: 'hub-muted', text: 'сохраняются автоматически' })), note));
+
+            // Последний отчёт
+            if (s.last) {
+                const r = s.last;
+                const lessonNums = r.assigned && r.assigned.lessons.length ? r.assigned.lessons : Object.keys(r.lessons).map(Number).sort((a, b) => a - b);
+                const lessonRows = lessonNums.map(n => {
+                    const l = r.lessons[n];
+                    return el('li', { class: 'hub-row' },
+                        el('span', { class: 'hub-row-num', text: String(n).padStart(2, '0') }),
+                        el('span', { class: 'hub-row-title' }, PB.LESSON_TITLES[n - 1], l ? el('small', { text: `попыток: ${l.a}` }) : null),
+                        !l ? el('span', { class: 'hub-pill hub-pill-idle', text: 'Не начат' })
+                            : el('span', { class: 'hub-pill ' + (l.p ? 'hub-pill-ok' : 'hub-pill-warn'), text: (l.p ? 'Сдан · ' : 'Не сдан · ') + l.b + '%' }));
+                });
+                const taskIds = r.assigned && r.assigned.tasks.length ? r.assigned.tasks : r.solved;
+                const taskRows = taskIds.map(id => {
+                    const t = taskById(id); if (!t) return null;
+                    const solved = r.solved.includes(id);
+                    const code = r.code[id];
+                    return el('li', { class: 'hub-row hub-row-wrap' },
+                        el('span', { class: 'hub-row-num', text: '+' + PB.TASK_POINTS[t.difficulty] }),
+                        el('span', { class: 'hub-row-title' }, t.title, el('small', { text: DIFF[t.difficulty] })),
+                        el('span', { class: 'hub-pill ' + (solved ? 'hub-pill-ok' : 'hub-pill-idle'), text: solved ? 'Решена' : 'Не решена' }),
+                        code ? el('details', { class: 'hub-code' }, el('summary', { text: 'Код ученика' }), el('pre', {}, el('code', { class: 'language-python', text: code }))) : null);
+                });
+                panel.append(el('section', { class: 'hub-card' },
+                    el('div', { class: 'hub-card-head' }, el('h2', { text: r.assigned ? 'Последний отчёт по заданию' : 'Последний отчёт' }), el('span', { class: 'hub-muted', text: PB.formatDate(r.at) })),
+                    lessonRows.length ? el('h3', { class: 'hub-subtitle', text: 'Тесты' }) : null,
+                    lessonRows.length ? el('ul', { class: 'hub-rows' }, lessonRows) : el('p', { class: 'hub-muted', text: 'Тесты ещё не проходились.' }),
+                    taskRows.filter(Boolean).length ? el('h3', { class: 'hub-subtitle', text: 'Задачи' }) : null,
+                    taskRows.filter(Boolean).length ? el('ul', { class: 'hub-rows' }, taskRows) : null));
+                if (window.hljs) panel.querySelectorAll('.hub-code code').forEach(c => window.hljs.highlightElement(c));
+            }
+
+            // История
+            if (st.reports.length > 1) {
+                panel.append(el('section', { class: 'hub-card' },
+                    el('div', { class: 'hub-card-head' }, el('h2', { text: 'История отчётов' })),
+                    el('ul', { class: 'hub-rows' }, st.reports.slice().reverse().map(r => el('li', { class: 'hub-row' },
+                        el('span', { class: 'hub-row-title', text: PB.formatDate(r.at) }),
+                        el('span', { class: 'hub-pill hub-pill-idle', text: `${Object.values(r.lessons).filter(l => l.p).length} тестов · ${r.solved.length} задач · ${PB.computePoints(r.lessons, r.solved)} баллов` }))))));
+            }
+
+            panel.append(el('div', { class: 'hub-actions hub-actions-end' },
+                el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Задать задание этому ученику', onclick: () => { currentTab = 'assign'; prefillName = st.name; openStudentId = null; renderApp(); } }),
+                el('button', { class: 'hub-btn hub-btn-danger', type: 'button', text: 'Удалить ученика', onclick: () => {
+                    if (!confirm(`Удалить «${st.name}» вместе со всеми отчётами и оценками?`)) return;
+                    journal.students = journal.students.filter(x => x.id !== st.id); saveJournal(); openStudentId = null; renderApp();
+                } })));
+        }
+
+        // ---------- вкладка «Новое задание» ----------
+        let prefillName = '';
+        function renderAssign(panel) {
+            const name = el('input', { class: 'hub-input', id: 'as-name', type: 'text', maxlength: '60', placeholder: 'Например: Аня Иванова', value: prefillName });
+            prefillName = '';
+            const note = el('textarea', { class: 'hub-input hub-textarea', id: 'as-note', rows: '2', maxlength: '600', placeholder: 'Комментарий для ученика (необязательно): срок, подсказка, что повторить…' });
+
+            const lessonBoxes = PB.LESSON_TITLES.map((t, i) => {
+                const cb = el('input', { type: 'checkbox', value: String(i + 1) });
+                return { cb, node: el('label', { class: 'hub-chip' }, cb, el('span', { class: 'hub-chip-num', text: String(i + 1) }), el('span', { text: t })) };
+            });
+            const taskBoxes = tasks.map(t => {
+                const cb = el('input', { type: 'checkbox', value: t.id });
+                return { cb, t, node: el('label', { class: 'hub-chip' }, cb, el('span', { text: t.title })) };
+            });
+            const selectLessons = (fn) => () => lessonBoxes.forEach((b, i) => { b.cb.checked = fn(i + 1); });
+            const out = el('div', { class: 'hub-report-out', hidden: true });
+            const create = el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: 'Создать ссылку для ученика' });
+            const msg = el('p', { class: 'hub-error', role: 'alert' });
+            create.addEventListener('click', async () => {
+                msg.textContent = '';
+                const lessons = lessonBoxes.filter(b => b.cb.checked).map(b => Number(b.cb.value));
+                const taskIds = taskBoxes.filter(b => b.cb.checked).map(b => b.t.id);
+                if (!lessons.length && !taskIds.length) { msg.textContent = 'Выберите хотя бы один урок или задачу.'; return; }
+                const a = { v: 1, t: 'assign', id: PB.randomId(), name: name.value.trim().slice(0, 60), note: note.value.trim().slice(0, 600), lessons, tasks: taskIds, at: new Date().toISOString() };
+                const link = PB.pageUrl('assignment.html') + '#a=' + await PB.encode(a);
+                journal.assignments = (journal.assignments || []);
+                journal.assignments.unshift({ ...a, link });
+                journal.assignments = journal.assignments.slice(0, 30);
+                if (a.name) findOrCreateStudent(a.name);
+                saveJournal();
+                out.textContent = '';
+                const field = el('input', { class: 'hub-input', type: 'text', readonly: true, value: link, 'aria-label': 'Ссылка на задание' });
+                out.append(
+                    el('p', {}, el('strong', { text: 'Ссылка готова. ' }), 'Отправьте её ученику — по ней откроются выбранные уроки и список задач.'),
+                    field,
+                    el('div', { class: 'hub-actions' },
+                        el('button', { class: 'hub-btn', type: 'button', text: 'Скопировать', onclick: () => copyLink(link) }),
+                        el('a', { class: 'hub-btn hub-btn-primary', href: PB.telegramShare(link, 'Задание по Python' + (a.name ? ' для ' + a.name : '')), target: '_blank', rel: 'noopener', text: 'Отправить в Telegram' })));
+                out.hidden = false;
+                out.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+
+            const groups = ['easy', 'medium', 'hard'].map(d => el('div', { class: 'hub-chip-group' },
+                el('h4', { text: { easy: 'Лёгкие (+1)', medium: 'Средние (+2)', hard: 'Сложные (+3)' }[d] }),
+                el('div', { class: 'hub-chips hub-chips-col' }, taskBoxes.filter(b => b.t.difficulty === d).map(b => b.node))));
+
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Кому и что' })),
+                el('label', { class: 'hub-label', for: 'as-name', text: 'Имя ученика' }), name,
+                el('label', { class: 'hub-label', for: 'as-note', text: 'Комментарий' }), note));
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Уроки и тесты' }),
+                    el('div', { class: 'hub-actions' },
+                        el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Все', onclick: selectLessons(() => true) }),
+                        el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Очистить', onclick: selectLessons(() => false) }))),
+                el('p', { class: 'hub-muted', text: 'Выбранные уроки откроются у ученика сразу, даже если он не прошёл предыдущие.' }),
+                el('div', { class: 'hub-chips' }, lessonBoxes.map(b => b.node))));
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Задачи' }),
+                    el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Очистить', onclick: () => taskBoxes.forEach(b => { b.cb.checked = false; }) })),
+                el('div', { class: 'hub-chip-groups' }, groups)));
+            panel.append(el('section', { class: 'hub-card' }, el('div', { class: 'hub-actions' }, create), msg, out));
+
+            const recent = (journal.assignments || []).slice(0, 8);
+            if (recent.length) {
+                panel.append(el('section', { class: 'hub-card' },
+                    el('div', { class: 'hub-card-head' }, el('h2', { text: 'Недавние задания' })),
+                    el('ul', { class: 'hub-rows' }, recent.map(a => el('li', { class: 'hub-row' },
+                        el('span', { class: 'hub-row-title' }, a.name || 'Без имени', el('small', { text: `${PB.formatDate(a.at)} · уроков: ${a.lessons.length}, задач: ${a.tasks.length}` })),
+                        el('span', { class: 'hub-row-actions' }, el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Скопировать ссылку', onclick: () => copyLink(a.link) })))))));
+            }
+        }
+
+        // ---------- вкладка «Материалы» ----------
+        function renderMaterials(panel) {
+            const lessonRows = PB.LESSON_TITLES.map((t, i) => {
+                const base = PB.pageUrl(PB.lessonFile(i + 1));
+                return el('li', { class: 'hub-row' },
+                    el('span', { class: 'hub-row-num', text: String(i + 1).padStart(2, '0') }),
+                    el('span', { class: 'hub-row-title', text: t }),
+                    el('span', { class: 'hub-row-actions' },
+                        el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Урок', onclick: () => copyLink(base, 'Ссылка на урок') }),
+                        el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Тест', onclick: () => copyLink(base + '#quiz', 'Ссылка на тест') }),
+                        el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Слайды', onclick: () => copyLink(base + '#present', 'Ссылка на слайды') }),
+                        el('a', { class: 'hub-btn', href: PB.lessonFile(i + 1) + '#present', text: 'Провести' })));
+            });
+            const taskRows = tasks.map(t => el('li', { class: 'hub-row' },
+                el('span', { class: 'hub-row-num', text: '+' + PB.TASK_POINTS[t.difficulty] }),
+                el('span', { class: 'hub-row-title' }, t.title, el('small', { text: DIFF[t.difficulty] })),
+                el('span', { class: 'hub-row-actions' },
+                    el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Скопировать ссылку', onclick: () => copyLink(PB.pageUrl('tasks.html') + '#task=' + t.id, 'Ссылка на задачу') }))));
+
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Как вести занятия' })),
+                el('ol', { class: 'hub-steps' },
+                    el('li', {}, el('strong', { text: 'Объясните тему. ' }), 'Нажмите «Провести» у нужного урока — он откроется слайдами на весь экран. Покажите экран на созвоне.'),
+                    el('li', {}, el('strong', { text: 'Дайте задание. ' }), 'Во вкладке «Новое задание» выберите уроки и задачи и отправьте ссылку ученику.'),
+                    el('li', {}, el('strong', { text: 'Получите отчёт. ' }), 'Ученик нажимает «Отправить отчёт» на странице «Моё задание» и пересылает вам ссылку. Откройте её — результаты попадут в журнал.'),
+                    el('li', {}, el('strong', { text: 'Поставьте оценку. ' }), 'В журнале откройте ученика, посмотрите проценты по тестам и код решений, поставьте оценку и оставьте заметку.'))));
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Ссылки на уроки' }), el('span', { class: 'hub-muted', text: 'кнопки копируют ссылку' })),
+                el('ul', { class: 'hub-rows' }, lessonRows)));
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Ссылки на задачи' })),
+                el('ul', { class: 'hub-rows' }, taskRows)));
+        }
+
+        // ---------- вкладка «Настройки» ----------
+        function renderSettings(panel) {
+            const exportBtn = el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: 'Скачать резервную копию' });
+            exportBtn.addEventListener('click', () => {
+                const blob = new Blob([JSON.stringify({ app: 'pythonbasic-journal', v: 1, savedAt: new Date().toISOString(), journal }, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = el('a', { href: url, download: 'pythonbasic-journal-' + new Date().toISOString().slice(0, 10) + '.json' });
+                document.body.append(a); a.click(); a.remove();
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+                toast('Резервная копия сохранена');
+            });
+            const file = el('input', { type: 'file', accept: '.json,application/json', hidden: true });
+            file.addEventListener('change', () => {
+                const f = file.files[0]; if (!f) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    try {
+                        const data = JSON.parse(reader.result);
+                        if (!data || data.app !== 'pythonbasic-journal' || !data.journal || !Array.isArray(data.journal.students)) throw new Error();
+                        if (!confirm('Заменить текущий журнал данными из файла?')) return;
+                        journal = { students: data.journal.students, assignments: Array.isArray(data.journal.assignments) ? data.journal.assignments : [] };
+                        saveJournal(); toast('Журнал восстановлен'); renderApp();
+                    } catch (e) { toast('Это не резервная копия журнала', 'err'); }
+                };
+                reader.readAsText(f);
+            });
+            const importBtn = el('button', { class: 'hub-btn', type: 'button', text: 'Восстановить из файла', onclick: () => file.click() });
+
+            const oldPin = el('input', { class: 'hub-input', type: 'password', placeholder: 'Текущий PIN', autocomplete: 'current-password' });
+            const newPin = el('input', { class: 'hub-input', type: 'password', placeholder: 'Новый PIN (от 4 символов)', autocomplete: 'new-password' });
+            const pinMsg = el('p', { class: 'hub-error', role: 'alert' });
+            const pinBtn = el('button', { class: 'hub-btn', type: 'button', text: 'Сменить PIN' });
+            pinBtn.addEventListener('click', async () => {
+                pinMsg.textContent = '';
+                if (!(await checkPin(oldPin.value))) { pinMsg.textContent = 'Текущий PIN неверный.'; return; }
+                if (newPin.value.length < 4) { pinMsg.textContent = 'Новый PIN должен быть не короче 4 символов.'; return; }
+                await savePin(newPin.value); oldPin.value = newPin.value = ''; toast('PIN-код изменён');
+            });
+
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Резервная копия журнала' })),
+                el('p', { class: 'hub-muted', text: 'Журнал хранится только в этом браузере. Если очистить данные браузера или сменить компьютер, он пропадёт. Скачивайте копию время от времени — из неё журнал можно восстановить на любом устройстве.' }),
+                el('div', { class: 'hub-actions' }, exportBtn, importBtn, file)));
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'PIN-код' })),
+                el('div', { class: 'hub-actions' }, oldPin, newPin, pinBtn), pinMsg));
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Важно знать' })),
+                el('ul', { class: 'hub-list' },
+                    el('li', { text: 'У сайта нет сервера: задания и отчёты передаются ссылками, а журнал хранится в вашем браузере.' }),
+                    el('li', { text: 'PIN-код защищает кабинет от случайного просмотра на вашем устройстве. От человека, который разбирается в программировании, он не защитит.' }),
+                    el('li', { text: 'Отчёт создаётся в браузере ученика, поэтому теоретически его можно подделать. Для занятий с репетитором этого обычно достаточно; для экзаменов нужен сервер.' }))));
+        }
+
+        if (isUnlocked()) start(); else renderGate();
+    </script>
+
+</body>
+
+</html>

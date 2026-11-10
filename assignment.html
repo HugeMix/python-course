@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Задание от преподавателя: уроки, тесты и задачи, прогресс и отчёт.">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Моё задание | PythonBasic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html"
+                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" class="logo-link">
+                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
+                <span
+                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
+                        style="color: var(--accent-color);">Basic</span></span>
+            </a>
+            <nav>
+                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="python-basic.html">Уроки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
+                    <li><a href="glossary.html">Глоссарий</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="lesson-title">
+        <div class="container">
+            <h1>Моё задание</h1>
+            <p>Уроки и задачи от преподавателя, ваш прогресс и баллы. Когда закончите — отправьте отчёт.</p>
+        </div>
+    </section>
+
+    <main class="container hub" id="assignment-root" aria-live="polite">
+        <p class="hub-muted">Загружаем задание…</p>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="footer-logo">Python<span>Basic</span></a>
+                <p>Курс Python с нуля на русском языке: уроки, тесты и задачи с автоматической проверкой.</p>
+                <a class="footer-cta" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Записаться на занятия в Telegram</a>
+            </div>
+            <div class="footer-col" role="navigation" aria-label="Обучение">
+                <h4>Обучение</h4>
+                <ul>
+                    <li><a href="python-basic.html">Уроки</a></li>
+                    <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="certificate.html">Сертификат</a></li>
+                    <li><a href="assignment.html">Моё задание</a></li>
+                </ul>
+            </div>
+            <div class="footer-col" role="navigation" aria-label="Справочник">
+                <h4>Справочник</h4>
+                <ul>
+                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
+                    <li><a href="glossary.html">Глоссарий</a></li>
+                    <li><a href="libraries.html">Библиотеки</a></li>
+                    <li><a href="next-steps.html">Что дальше?</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">© <span class="footer-year"></span> PythonBasic — Python для начинающих</div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="tasks_data.js"></script>
+    <script src="pb-share.js"></script>
+    <script>
+        // «Моё задание»: задание приходит ссылкой assignment.html#a=..., отчёт уходит ссылкой teacher.html#r=...
+        const root = document.getElementById('assignment-root');
+        const { el } = PB;
+        const MAX_LINK = 3500; // длиннее Telegram не даст отправить одним сообщением
+
+        function validAssignment(obj) {
+            if (!obj || obj.t !== 'assign') return null;
+            const lessons = [...new Set((Array.isArray(obj.lessons) ? obj.lessons : [])
+                .map(n => PB.clampInt(n, 0, 99)).filter(n => n >= 1 && n <= PB.LESSON_COUNT))].sort((a, b) => a - b);
+            const taskIds = new Set(tasks.map(t => t.id));
+            const taskList = [...new Set((Array.isArray(obj.tasks) ? obj.tasks : []).filter(id => taskIds.has(id)))];
+            return {
+                id: PB.cleanText(obj.id, 20),
+                name: PB.cleanText(obj.name, 60),
+                note: PB.cleanText(obj.note, 600),
+                lessons, tasks: taskList,
+                at: PB.cleanText(obj.at, 40),
+                received: new Date().toISOString()
+            };
+        }
+
+        async function receiveFromLink() {
+            const packed = PB.fromHash('a');
+            if (!packed) return null;
+            history.replaceState(null, '', location.pathname); // убираем данные из адреса
+            try {
+                const a = validAssignment(await PB.decode(packed));
+                if (!a) throw new Error('это не задание');
+                PB.write('pb_assignment', a);
+                // Преподаватель открыл эти уроки — их тесты доступны без прохождения предыдущих
+                const unlocked = new Set(PB.read('unlocked_lessons', []));
+                a.lessons.forEach(n => unlocked.add(PB.lessonFile(n)));
+                PB.write('unlocked_lessons', [...unlocked]);
+                if (a.name && !PB.read('pb_student_name', '')) PB.write('pb_student_name', a.name);
+                return { ok: true };
+            } catch (e) {
+                return { ok: false, error: e.message };
+            }
+        }
+
+        function statusPill(kind, text) {
+            return el('span', { class: 'hub-pill hub-pill-' + kind, text });
+        }
+
+        function lessonRow(n, prog) {
+            const info = prog.lessons[n];
+            let pill;
+            if (info && info.p) pill = statusPill('ok', `Пройден · ${info.b}%`);
+            else if (info) pill = statusPill('warn', `Не сдан · ${info.b}%`);
+            else pill = statusPill('idle', 'Не начат');
+            return el('li', { class: 'hub-row' },
+                el('span', { class: 'hub-row-num', text: String(n).padStart(2, '0') }),
+                el('span', { class: 'hub-row-title', text: PB.LESSON_TITLES[n - 1] }),
+                pill,
+                el('span', { class: 'hub-row-actions' },
+                    el('a', { class: 'hub-btn hub-btn-ghost', href: PB.lessonFile(n), text: 'Урок' }),
+                    el('a', { class: 'hub-btn', href: PB.lessonFile(n) + '#quiz', text: 'Тест' }))
+            );
+        }
+
+        function taskRow(id, prog) {
+            const t = tasks.find(x => x.id === id);
+            const solved = prog.solved.includes(id);
+            const diff = { easy: 'Лёгкая', medium: 'Средняя', hard: 'Сложная' }[t.difficulty];
+            return el('li', { class: 'hub-row' },
+                el('span', { class: 'hub-row-num', text: '+' + PB.TASK_POINTS[t.difficulty] }),
+                el('span', { class: 'hub-row-title' }, t.title, el('small', { text: diff })),
+                solved ? statusPill('ok', 'Решена') : statusPill('idle', 'Не решена'),
+                el('span', { class: 'hub-row-actions' },
+                    el('a', { class: 'hub-btn', href: 'tasks.html#task=' + encodeURIComponent(id), text: solved ? 'Открыть' : 'Решать' }))
+            );
+        }
+
+        async function buildReport(name, a, prog) {
+            const report = {
+                v: 1, t: 'report',
+                aid: a ? a.id : '',
+                name: PB.cleanText(name, 60),
+                at: new Date().toISOString(),
+                lessons: prog.lessons,
+                solved: prog.solved,
+                assigned: a ? { lessons: a.lessons, tasks: a.tasks } : null,
+                code: {}
+            };
+            // Код решений заданных задач: сначала целиком (до 1500 символов), если ссылка
+            // получается слишком длинной — короче, а в крайнем случае без кода
+            const ids = a ? a.tasks : [];
+            for (const limit of [1500, 600, 250, 0]) {
+                report.code = {};
+                if (limit) ids.forEach(id => {
+                    let code = '';
+                    try { code = localStorage.getItem('saved_code_' + id) || ''; } catch (e) { /* нет кода */ }
+                    if (code.trim()) report.code[id] = code.slice(0, limit);
+                });
+                const link = PB.pageUrl('teacher.html') + '#r=' + await PB.encode(report);
+                if (link.length <= MAX_LINK || !limit) return { link, trimmed: limit < 1500 && ids.length > 0, noCode: !limit && ids.length > 0 };
+            }
+        }
+
+        function render(received) {
+            const a = PB.read('pb_assignment', null);
+            const prog = PB.collectProgress();
+            root.textContent = '';
+
+            if (received && received.ok) {
+                root.append(el('div', { class: 'hub-alert hub-alert-ok' },
+                    el('strong', { text: 'Задание получено. ' }),
+                    'Уроки из задания открыты — можно сразу проходить тесты.'));
+            } else if (received && !received.ok) {
+                root.append(el('div', { class: 'hub-alert hub-alert-err' },
+                    el('strong', { text: 'Не удалось открыть ссылку. ' }),
+                    'Попросите преподавателя прислать её ещё раз и откройте целиком, без пропущенных символов.'));
+            }
+
+            // Итоги
+            const lessonsDone = a ? a.lessons.filter(n => prog.lessons[n] && prog.lessons[n].p).length : 0;
+            const tasksDone = a ? a.tasks.filter(id => prog.solved.includes(id)).length : 0;
+            const totalItems = a ? a.lessons.length + a.tasks.length : 0;
+            const percent = totalItems ? Math.round((lessonsDone + tasksDone) / totalItems * 100) : 0;
+            const points = PB.computePoints(prog.lessons, prog.solved);
+
+            const summary = el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' },
+                    el('h2', { text: a ? (a.name ? `Задание для: ${a.name}` : 'Задание от преподавателя') : 'Задания пока нет' }),
+                    a && a.at ? el('span', { class: 'hub-muted', text: 'Выдано ' + PB.formatDate(a.at) }) : null),
+                a && a.note ? el('blockquote', { class: 'hub-note' }, el('span', { class: 'hub-note-label', text: 'Комментарий преподавателя' }), a.note) : null,
+                !a ? el('p', { class: 'hub-muted', text: 'Когда преподаватель пришлёт ссылку с заданием, откройте её — здесь появятся уроки и задачи. А пока можно учиться самостоятельно и отправить отчёт о своём прогрессе.' }) : null,
+                el('div', { class: 'hub-stats' },
+                    a ? el('div', { class: 'hub-stat' }, el('strong', { text: percent + '%' }), el('span', { text: 'задания выполнено' })) : null,
+                    a ? el('div', { class: 'hub-stat' }, el('strong', { text: `${lessonsDone} / ${a.lessons.length}` }), el('span', { text: 'тестов сдано' })) : null,
+                    a ? el('div', { class: 'hub-stat' }, el('strong', { text: `${tasksDone} / ${a.tasks.length}` }), el('span', { text: 'задач решено' })) : null,
+                    el('div', { class: 'hub-stat' }, el('strong', { text: String(points) }), el('span', { text: 'баллов всего' }))),
+                a ? el('div', { class: 'hub-bar' }, el('div', { class: 'hub-bar-fill', style: `width:${percent}%` })) : null
+            );
+            root.append(summary);
+
+            if (a && a.lessons.length) {
+                root.append(el('section', { class: 'hub-card' },
+                    el('div', { class: 'hub-card-head' }, el('h2', { text: 'Уроки и тесты' }), el('span', { class: 'hub-muted', text: `тест засчитывается от ${PB.PASS_PERCENT}%` })),
+                    el('ul', { class: 'hub-rows' }, a.lessons.map(n => lessonRow(n, prog)))));
+            }
+            if (a && a.tasks.length) {
+                root.append(el('section', { class: 'hub-card' },
+                    el('div', { class: 'hub-card-head' }, el('h2', { text: 'Задачи' }), el('span', { class: 'hub-muted', text: 'за задачу: лёгкая +1, средняя +2, сложная +3 балла' })),
+                    el('ul', { class: 'hub-rows' }, a.tasks.map(id => taskRow(id, prog)))));
+            }
+
+            // Отчёт
+            const nameInput = el('input', { class: 'hub-input', id: 'student-name', type: 'text', maxlength: '60', placeholder: 'Ваше имя и фамилия', value: PB.read('pb_student_name', '') || (a && a.name) || '' });
+            const out = el('div', { class: 'hub-report-out', hidden: true });
+            nameInput.addEventListener('input', () => PB.write('pb_student_name', nameInput.value.trim()));
+            const makeBtn = el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: 'Создать отчёт' });
+            makeBtn.addEventListener('click', async () => {
+                const name = nameInput.value.trim();
+                if (!name) { nameInput.focus(); nameInput.classList.add('hub-input-error'); return; }
+                nameInput.classList.remove('hub-input-error');
+                PB.write('pb_student_name', name);
+                makeBtn.disabled = true;
+                const { link, trimmed, noCode } = await buildReport(name, a, PB.collectProgress());
+                makeBtn.disabled = false;
+                out.textContent = '';
+                const field = el('input', { class: 'hub-input', type: 'text', readonly: true, value: link, 'aria-label': 'Ссылка на отчёт' });
+                const copyBtn = el('button', { class: 'hub-btn', type: 'button', text: 'Скопировать ссылку' });
+                copyBtn.addEventListener('click', () => PB.copy(link).then(() => { copyBtn.textContent = 'Скопировано ✓'; }).catch(() => { field.select(); }));
+                out.append(
+                    el('p', { text: 'Отчёт готов. Отправьте эту ссылку преподавателю:' }),
+                    field,
+                    el('div', { class: 'hub-actions' },
+                        copyBtn,
+                        el('a', { class: 'hub-btn hub-btn-primary', href: PB.telegramShare(link, `Отчёт: ${name}`), target: '_blank', rel: 'noopener', text: 'Отправить в Telegram' })),
+                    trimmed ? el('p', { class: 'hub-muted', text: noCode ? 'Код решений не поместился в ссылку — в отчёте только результаты.' : 'Код решений сокращён, чтобы ссылка поместилась в одно сообщение.' }) : ''
+                );
+                out.hidden = false;
+            });
+            root.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Отчёт преподавателю' })),
+                el('p', { class: 'hub-muted', text: 'В отчёт попадут результаты тестов, решённые задачи и код решений заданных задач. Отчёт создаётся из данных этого браузера.' }),
+                el('label', { class: 'hub-label', for: 'student-name', text: 'Как вас зовут' }),
+                el('div', { class: 'hub-actions' }, nameInput, makeBtn),
+                out));
+        }
+
+        receiveFromLink().then(render);
+        // Ссылку на задание открыли во вкладке, где эта страница уже открыта
+        window.addEventListener('hashchange', () => {
+            if (PB.fromHash('a')) receiveFromLink().then(render);
+        });
+        // Вернулись на вкладку после решения задач — обновляем статусы
+        // (но не трогаем страницу, если отчёт уже создан — иначе пропадёт готовая ссылка)
+        window.addEventListener('focus', () => {
+            if (!document.querySelector('.hub-report-out:not([hidden])')) render(null);
+        });
+    </script>
+
+</body>
+
+</html>
