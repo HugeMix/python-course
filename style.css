@@ -1218,6 +1218,11 @@ body.dark-mode .quiz-failed-percent {
     border-radius: 0 2px 2px 0;
 }
 
+/* Пункты меню не переносим на две строки («Python Online») */
+nav ul li a {
+    white-space: nowrap;
+}
+
 /* ==== HAMBURGER BUTTON ==== */
 .nav-hamburger {
     display: none;
@@ -1261,9 +1266,12 @@ body.dark-mode .quiz-failed-percent {
 }
 
 /* ==== MOBILE NAV OVERRIDE ==== */
-@media (max-width: 768px) {
+/* 7 пунктов меню в одну строку помещаются только от ~1200px, поэтому «гамбургер» включаем раньше,
+   чем остальную мобильную вёрстку — иначе на планшетах меню вылезало за экран */
+@media (max-width: 1200px) {
     .nav-hamburger {
         display: flex;
+        margin-left: auto;
     }
 
     header .container {
