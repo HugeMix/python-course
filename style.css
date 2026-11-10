@@ -2007,3 +2007,293 @@ body.dark-mode .faq details {
         gap: 20px;
     }
 }
+
+/* ==================================================================
+   РЕЖИМ «УРОК ПО СОЗВОНУ» (слайды)
+   ================================================================== */
+.btn-present {
+    margin-top: 18px;
+    padding: 12px 22px;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-present:hover {
+    background: #fff;
+    color: #312e81;
+}
+
+body.present-open {
+    overflow: hidden;
+}
+
+.present {
+    --present-scale: 1;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.present-top,
+.present-bottom {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: var(--card-bg);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.present-bottom {
+    border-bottom: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+body.dark-mode .present-top,
+body.dark-mode .present-bottom {
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+.present-lesson {
+    flex: 1;
+    min-width: 0;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.present-tools {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.present-tools button,
+.present-arrow {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    background: transparent;
+    color: var(--text-color);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.present-tools button:hover,
+.present-arrow:hover:not(:disabled) {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.present-tools [data-present="close"] {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #fff;
+}
+
+.present-tools [data-present="close"]:hover {
+    background: var(--accent-hover);
+    color: #fff;
+}
+
+.present-arrow {
+    font-size: 1.3rem;
+    padding: 6px 18px;
+}
+
+.present-arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.present-progress {
+    flex: 1;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(128, 128, 128, 0.2);
+    overflow: hidden;
+}
+
+.present-progress-fill {
+    height: 100%;
+    width: 0;
+    background: var(--accent-color);
+    transition: width 0.25s ease;
+}
+
+.present-counter {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    min-width: 64px;
+    text-align: center;
+}
+
+.present-stage {
+    flex: 1;
+    overflow-y: auto;
+    outline: none;
+    padding: 40px 24px 56px;
+}
+
+.present-slide {
+    display: none;
+    max-width: 1100px;
+    margin: 0 auto;
+    font-size: calc(1.3rem * var(--present-scale));
+    line-height: 1.6;
+}
+
+.present-slide.is-active {
+    display: block;
+}
+
+.present-slide h1 {
+    font-size: 2.4em;
+    line-height: 1.15;
+    margin: 0.2em 0 0.4em;
+}
+
+.present-slide h2 {
+    font-size: 1.8em;
+    line-height: 1.2;
+    margin: 0 0 0.7em;
+    padding-bottom: 0.3em;
+    border-bottom: 3px solid rgba(79, 70, 229, 0.2);
+}
+
+.present-slide h3 {
+    font-size: 1.25em;
+}
+
+.present-slide p,
+.present-slide li {
+    margin: 0 0 0.7em;
+}
+
+.present-slide pre {
+    font-size: 0.8em;
+    line-height: 1.55;
+}
+
+.present-slide code {
+    font-size: 0.9em;
+}
+
+.present-slide pre code {
+    font-size: inherit;
+}
+
+.present-slide-title {
+    text-align: center;
+    padding-top: 8vh;
+}
+
+.present-slide-title.is-active {
+    display: block;
+}
+
+.present-slide-title p {
+    font-size: 1.15em;
+    opacity: 0.8;
+    max-width: 800px;
+    margin: 0 auto 1em;
+}
+
+.present-slide-title h2 {
+    border-bottom: none;
+}
+
+.present-kicker {
+    display: inline-block;
+    font-size: 0.7em;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    background: rgba(79, 70, 229, 0.1);
+    padding: 6px 14px;
+    border-radius: 999px;
+}
+
+.present-final-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.2em;
+}
+
+.present-final-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7em 1.4em;
+    border-radius: 12px;
+    border: 2px solid var(--accent-color);
+    background: var(--accent-color);
+    color: #fff;
+    font: inherit;
+    font-size: 0.85em;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.present-final-btn:hover {
+    background: var(--accent-hover);
+    color: #fff;
+}
+
+.present-final-btn-ghost {
+    background: transparent;
+    color: var(--accent-color);
+}
+
+.present-final-btn-ghost:hover {
+    background: rgba(79, 70, 229, 0.08);
+    color: var(--accent-color);
+}
+
+@media (max-width: 700px) {
+    .present-top,
+    .present-bottom {
+        padding: 10px 12px;
+    }
+
+    .present-lesson {
+        display: none;
+    }
+
+    .present-tools {
+        flex: 1;
+        justify-content: flex-end;
+    }
+
+    .present-tools [data-present="fullscreen"] {
+        display: none;
+    }
+
+    .present-stage {
+        padding: 24px 16px 40px;
+    }
+
+    .present-slide {
+        font-size: calc(1.05rem * var(--present-scale));
+    }
+}
+
+@media print {
+    .btn-present {
+        display: none;
+    }
+}
