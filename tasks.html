@@ -195,6 +195,84 @@
             gap: 8px;
         }
 
+        .tasks-sidebar-head {
+            position: sticky;
+            top: -20px;
+            z-index: 2;
+            margin: -20px -20px 8px;
+            padding: 20px 20px 4px;
+            background: var(--card-bg);
+            border-bottom: 1px solid rgba(128, 128, 128, 0.12);
+        }
+
+        .tasks-progress {
+            margin-bottom: 14px;
+        }
+
+        .tasks-progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .tasks-progress-track {
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(128, 128, 128, 0.2);
+            overflow: hidden;
+        }
+
+        .tasks-progress-fill {
+            height: 100%;
+            background: var(--success-color);
+            transition: width 0.3s ease;
+        }
+
+        .tasks-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .tasks-filter-btn {
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(128, 128, 128, 0.3);
+            background: transparent;
+            color: var(--text-color);
+            font: inherit;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .tasks-filter-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .tasks-filter-btn.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+
+        button.task-item {
+            display: block;
+            width: 100%;
+            text-align: left;
+            font: inherit;
+            color: inherit;
+        }
+
+        .task-item-title {
+            display: block;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
         .task-item.solved .task-solved-mark {
             float: right;
             color: var(--success-color);
@@ -239,7 +317,7 @@
 
             .tasks-sidebar {
                 width: 100%;
-                max-height: 300px;
+                max-height: 60vh;
             }
         }
     </style>
@@ -358,21 +436,64 @@
             if (task) localStorage.setItem(`saved_code_${task.id}`, editor.getValue());
         });
 
+        let currentFilter = "all";
+        const FILTERS = [["all", "Все"], ["easy", "Лёгкие"], ["medium", "Средние"], ["hard", "Сложные"]];
+        const DIFF = {
+            easy: ["Лёгкая", "diff-easy"],
+            medium: ["Средняя", "diff-medium"],
+            hard: ["Сложная", "diff-hard"]
+        };
+
         function renderTasks() {
             const list = document.getElementById("tasks-list");
             const solved = getSolved();
+            const solvedCount = tasks.filter(t => solved[t.id]).length;
             list.innerHTML = "";
+
+            // Верх списка (счётчик и фильтр) закреплён и не уезжает при прокрутке
+            const head = document.createElement("div");
+            head.className = "tasks-sidebar-head";
+            list.appendChild(head);
+
+            // Счётчик решённых и полоска прогресса
+            const progress = document.createElement("div");
+            progress.className = "tasks-progress";
+            progress.innerHTML = `<div class="tasks-progress-text"><span>Решено</span><strong></strong></div>
+                <div class="tasks-progress-track"><div class="tasks-progress-fill"></div></div>`;
+            progress.querySelector("strong").textContent = `${solvedCount} из ${tasks.length}`;
+            progress.querySelector(".tasks-progress-fill").style.width = (solvedCount / tasks.length * 100) + "%";
+            head.appendChild(progress);
+
+            // Фильтр по сложности
+            const filter = document.createElement("div");
+            filter.className = "tasks-filter";
+            filter.setAttribute("role", "group");
+            filter.setAttribute("aria-label", "Фильтр по сложности");
+            FILTERS.forEach(([key, name]) => {
+                const count = key === "all" ? tasks.length : tasks.filter(t => t.difficulty === key).length;
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "tasks-filter-btn" + (currentFilter === key ? " active" : "");
+                btn.setAttribute("aria-pressed", String(currentFilter === key));
+                btn.textContent = `${name} · ${count}`;
+                btn.onclick = () => { currentFilter = key; renderTasks(); };
+                filter.appendChild(btn);
+            });
+            head.appendChild(filter);
+
             tasks.forEach((task, index) => {
-                const div = document.createElement("div");
-                div.className = "task-item" + (index === currentTaskIndex ? " active" : "") + (solved[task.id] ? " solved" : "");
-                const diffLabel = task.difficulty === "easy" ? "Лёгкая" : (task.difficulty === "medium" ? "Средняя" : "Сложная");
-                const diffClass = task.difficulty === "easy" ? "diff-easy" : (task.difficulty === "medium" ? "diff-medium" : "diff-hard");
+                if (currentFilter !== "all" && task.difficulty !== currentFilter) return;
+                const item = document.createElement("button");
+                item.type = "button";
+                item.className = "task-item" + (index === currentTaskIndex ? " active" : "") + (solved[task.id] ? " solved" : "");
+                if (index === currentTaskIndex) item.setAttribute("aria-current", "true");
+                const [diffLabel, diffClass] = DIFF[task.difficulty];
 
                 const label = document.createElement("span");
                 label.className = `task-difficulty ${diffClass}`;
                 label.textContent = diffLabel;
-                const title = document.createElement("div");
-                title.style.cssText = "font-weight: 600; color: var(--text-color);";
+                const title = document.createElement("span");
+                title.className = "task-item-title";
                 title.textContent = task.title;
                 if (solved[task.id]) {
                     const mark = document.createElement("span");
@@ -381,9 +502,15 @@
                     mark.title = "Задача решена";
                     title.appendChild(mark);
                 }
-                div.append(label, title);
-                div.onclick = () => selectTask(index);
-                list.appendChild(div);
+                item.append(label, title);
+                item.onclick = () => {
+                    selectTask(index);
+                    // На телефоне описание задачи ниже списка — прокручиваем к нему
+                    if (window.matchMedia("(max-width: 900px)").matches) {
+                        document.getElementById("task-desc").scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
+                };
+                list.appendChild(item);
             });
         }
 
