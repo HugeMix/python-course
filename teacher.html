@@ -257,7 +257,7 @@
         const LESSON_TASKS = {
             2: ['square', 'fahrenheit', 'greet'],
             3: ['sum', 'power', 'last_digit', 'even'],
-            4: ['is_adult', 'sign', 'max', 'min_of_three', 'my_abs'],
+            4: ['sign', 'min_of_three', 'is_leap', 'ticket_price'],
             5: ['count_chars', 'factorial', 'digit_sum', 'table_row'],
             6: ['list_sum', 'count_even', 'only_positive', 'first_last', 'unique', 'flatten'],
             7: ['repeat_word', 'fibonacci', 'is_prime'],
@@ -489,7 +489,7 @@
                     btn.classList.toggle('active', on); btn.setAttribute('aria-pressed', String(on));
                     // Автоматически добавляем 2 подходящие задачи к уроку (если авто-подбор включён)
                     if (autoTasks.checked) {
-                        (LESSON_TASKS[n] || []).slice(0, 2).forEach(id => on ? selectedTasks.add(id) : selectedTasks.delete(id));
+                        (LESSON_TASKS[n] || []).slice(0, n === 4 ? 4 : 2).forEach(id => on ? selectedTasks.add(id) : selectedTasks.delete(id));
                         syncTaskBoxes();
                     }
                     updateCounter();
@@ -553,7 +553,7 @@
                 step(1, 'Кому', 'Начните вводить имя — подскажем учеников из журнала.', datalist, name),
                 step(2, 'Какие уроки', 'Выбранные уроки откроются у ученика сразу. Нажмите на урок, чтобы выбрать.',
                     el('div', { class: 'cab-lessons' }, lessonButtons),
-                    el('label', { class: 'cab-toggle' }, autoTasks, el('span', { text: 'Добавлять по 2 задачи к каждому выбранному уроку' })),
+                    el('label', { class: 'cab-toggle' }, autoTasks, el('span', { text: 'Добавлять домашние задачи к каждому выбранному уроку' })),
                     el('h3', { class: 'hub-subtitle', text: 'Задачи в задании' }), taskInfo, manual),
                 step(3, 'Отправить', null,
                     el('label', { class: 'hub-label', for: 'as-note', text: 'Комментарий (необязательно)' }), note,

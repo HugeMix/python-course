@@ -333,7 +333,7 @@ except Exception as e:
         `
     },
 
-    // ================= СРЕДНИЙ УРОВЕНЬ (15 ЗАДАЧ) =================
+    // ================= СРЕДНИЙ УРОВЕНЬ (16 ЗАДАЧ) =================
     {
         id: "reverse",
         title: "Перевернуть текст",
@@ -663,7 +663,31 @@ except Exception as e:
         `
     },
 
-    // ================= СЛОЖНЫЙ УРОВЕНЬ (15 ЗАДАЧ) =================
+    {
+        id: "is_leap",
+        title: "Високосный год",
+        difficulty: "medium",
+        desc: "<p>Напишите функцию <code>is_leap(year)</code>, которая возвращает <code>True</code>, если год високосный, и <code>False</code>, если нет.</p><p>Правило: год високосный, если делится на 4, <strong>но</strong> годы, которые делятся на 100, високосные только если делятся ещё и на 400.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>is_leap(2024) -> True</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>is_leap(1900) -> False</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>is_leap(2000) -> True</code>",
+        startCode: "def is_leap(year):\n    # Ваш код пишите здесь\n    pass\n",
+        testCode: `
+try:
+    assert is_leap(2024) is True, "2024 делится на 4 — високосный"
+    assert is_leap(2023) is False, "2023 не делится на 4 — не високосный"
+    assert is_leap(1900) is False, "1900 делится на 100, но не на 400 — не високосный"
+    assert is_leap(2000) is True, "2000 делится на 400 — високосный"
+    assert is_leap(2100) is False, "2100 делится на 100, но не на 400 — не високосный"
+    __task_passed__ = True
+    print("✅ Отлично! Вы учли все три правила високосного года.")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция is_leap называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+
+    // ================= СЛОЖНЫЙ УРОВЕНЬ (16 ЗАДАЧ) =================
     {
         id: "safe_divide",
         title: "Безопасное деление",
@@ -1013,6 +1037,34 @@ try:
     print("✅ Стек реализован правильно!")
 except NameError as e:
     print(f"❌ Ошибка: {e}.\\nПроверьте, что класс Stack называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "ticket_price",
+        title: "Цена билета в кино",
+        difficulty: "hard",
+        desc: "<p>Напишите функцию <code>ticket_price(age, weekend)</code>, которая возвращает цену билета в рублях:</p><ul><li>детям до 7 лет — бесплатно (<code>0</code>);</li><li>от 7 до 17 лет включительно — <code>150</code>;</li><li>от 65 лет — <code>100</code>;</li><li>всем остальным — <code>300</code>.</li></ul><p>Если <code>weekend</code> равно <code>True</code> (выходной), к платным билетам добавляется <code>50</code> рублей. Бесплатные остаются бесплатными.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>ticket_price(5, True) -> 0</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>ticket_price(12, False) -> 150</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>ticket_price(30, True) -> 350</code>",
+        startCode: "def ticket_price(age, weekend):\n    # Ваш код пишите здесь\n    pass\n",
+        testCode: `
+try:
+    assert ticket_price(5, False) == 0, "Ребёнку 5 лет — бесплатно"
+    assert ticket_price(5, True) == 0, "В выходной бесплатный билет остаётся бесплатным"
+    assert ticket_price(7, False) == 150, "В 7 лет билет уже стоит 150"
+    assert ticket_price(17, False) == 150, "В 17 лет — ещё детский билет, 150"
+    assert ticket_price(18, False) == 300, "С 18 лет — взрослый билет, 300"
+    assert ticket_price(64, False) == 300, "В 64 года — взрослый билет, 300"
+    assert ticket_price(65, False) == 100, "С 65 лет — льготный билет, 100"
+    assert ticket_price(30, True) == 350, "Взрослый в выходной: 300 + 50 = 350"
+    assert ticket_price(12, True) == 200, "Школьник в выходной: 150 + 50 = 200"
+    assert ticket_price(70, True) == 150, "Пенсионер в выходной: 100 + 50 = 150"
+    __task_passed__ = True
+    print("✅ Блестяще! Все тарифы и надбавка за выходной посчитаны верно.")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция ticket_price называется именно так.")
 except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:
