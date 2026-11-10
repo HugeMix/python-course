@@ -87,6 +87,11 @@
             gap: 10px;
             font-size: 0.95rem;
             color: var(--text-color);
+            text-align: left;
+        }
+
+        .resources-list li > div {
+            flex: 1;
         }
 
         .resources-list li:last-child {
@@ -218,21 +223,19 @@
     <main class="container" style="padding: 40px 20px;">
 
         <div class="congrats-banner">
-            <div style="font-size:3rem; margin-bottom:12px;">🎉</div>
             <h1>Вы прошли базовый курс Python!</h1>
             <p>Это серьёзный шаг. Теперь вы знаете основы языка — самое время решить куда двигаться дальше.</p>
             <div class="congrats-actions">
-                <a href="certificate.html" class="btn-white">🏆 Получить сертификат</a>
-                <a href="python-basic.html" class="btn-outline-white">📚 Вернуться к курсу</a>
+                <a href="certificate.html" class="btn-white">Получить сертификат</a>
+                <a href="python-basic.html" class="btn-outline-white">Вернуться к курсу</a>
             </div>
         </div>
 
-        <h2 style="margin-bottom: 8px;">🗺️ Выберите свой путь</h2>
+        <h2 style="margin-bottom: 8px;">Выберите свой путь</h2>
         <p style="color: var(--text-muted-color, #64748b); margin-bottom: 0;">Куда идти после базового Python — зависит от ваших целей.</p>
 
         <div class="path-grid">
             <div class="path-card path-web">
-                <div class="path-icon">🌐</div>
                 <h3>Веб-разработка</h3>
                 <p>Создавайте сайты и REST API. Python используется в бэкенде огромного количества сервисов.</p>
                 <div class="path-tags">
@@ -244,7 +247,6 @@
             </div>
 
             <div class="path-card path-data">
-                <div class="path-icon">📊</div>
                 <h3>Data Science и ИИ</h3>
                 <p>Анализ данных, машинное обучение, нейросети. Python — язык №1 в этой области.</p>
                 <div class="path-tags">
@@ -256,7 +258,6 @@
             </div>
 
             <div class="path-card path-algo">
-                <div class="path-icon">🧠</div>
                 <h3>Алгоритмы и структуры данных</h3>
                 <p>Необходимы для прохождения технических собеседований в крупные компании (Яндекс, VK, Google).</p>
                 <div class="path-tags">
@@ -268,7 +269,6 @@
             </div>
 
             <div class="path-card path-auto">
-                <div class="path-icon">🤖</div>
                 <h3>Автоматизация и боты</h3>
                 <p>Автоматизируйте рутину: парсинг сайтов, Telegram-боты, скрипты для работы с файлами.</p>
                 <div class="path-tags">
@@ -280,11 +280,10 @@
             </div>
         </div>
 
-        <h2 style="margin-bottom: 20px;">📖 Полезные ресурсы</h2>
+        <h2 style="margin-bottom: 20px;">Полезные ресурсы</h2>
         <div class="card" style="padding: 8px 24px;">
             <ul class="resources-list">
                 <li>
-                    <span>📘</span>
                     <div>
                         <strong>Официальная документация Python</strong><br>
                         <a href="https://docs.python.org/ru/3/" target="_blank" rel="noopener">docs.python.org/ru/3</a>
@@ -292,7 +291,6 @@
                     </div>
                 </li>
                 <li>
-                    <span>🏋️</span>
                     <div>
                         <strong>LeetCode</strong><br>
                         <a href="https://leetcode.com" target="_blank" rel="noopener">leetcode.com</a>
@@ -300,7 +298,6 @@
                     </div>
                 </li>
                 <li>
-                    <span>🎓</span>
                     <div>
                         <strong>Stepik — Python Generation</strong><br>
                         <a href="https://stepik.org/course/58852" target="_blank" rel="noopener">stepik.org</a>
@@ -308,7 +305,6 @@
                     </div>
                 </li>
                 <li>
-                    <span>🐙</span>
                     <div>
                         <strong>GitHub</strong><br>
                         <a href="https://github.com" target="_blank" rel="noopener">github.com</a>
@@ -316,7 +312,6 @@
                     </div>
                 </li>
                 <li>
-                    <span>💬</span>
                     <div>
                         <strong>Сообщество Python на Reddit</strong><br>
                         <a href="https://reddit.com/r/learnpython" target="_blank" rel="noopener">r/learnpython</a>
@@ -324,7 +319,6 @@
                     </div>
                 </li>
                 <li>
-                    <span>📺</span>
                     <div>
                         <strong>Хабр — Python</strong><br>
                         <a href="https://habr.com/ru/hub/python/" target="_blank" rel="noopener">habr.com/ru/hub/python</a>
@@ -332,7 +326,6 @@
                     </div>
                 </li>
                 <li>
-                    <span>📋</span>
                     <div>
                         <strong>Шпаргалка по Python</strong><br>
                         <a href="cheatsheet.html">cheatsheet.html</a>
@@ -340,7 +333,6 @@
                     </div>
                 </li>
                 <li>
-                    <span>📖</span>
                     <div>
                         <strong>Глоссарий терминов</strong><br>
                         <a href="glossary.html">glossary.html</a>

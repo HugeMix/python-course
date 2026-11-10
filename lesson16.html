@@ -46,13 +46,13 @@
 
     <main class="container">
         <section class="lesson-goal">
-            <h2>🎯 Цель урока</h2>
+            <h2>Цель урока</h2>
             <p>Понять что такое API, научиться делать HTTP-запросы и обрабатывать JSON-ответы с помощью библиотеки <code>requests</code>.</p>
         </section>
 
         <section class="lesson-content">
 
-            <h2>🌐 Что такое API?</h2>
+            <h2>Что такое API?</h2>
             <p><strong>API</strong> (Application Programming Interface) — это способ, которым программы разговаривают друг с другом. Представь: ты в ресторане. Ты (программа) говоришь официанту (API) что хочешь, официант передаёт заказ на кухню (сервер) и приносит тебе результат.</p>
             <p>Примеры API которые ты можешь использовать прямо сейчас:</p>
             <ul>
@@ -62,14 +62,14 @@
                 <li><strong>Telegram Bot API:</strong> отправляешь запросы — бот пишет сообщения пользователям</li>
             </ul>
 
-            <h2>📦 Библиотека requests</h2>
+            <h2>Библиотека requests</h2>
             <p>Python не умеет делать HTTP-запросы из коробки (стандартная библиотека <code>urllib</code> слишком сложная). Поэтому все используют <strong>requests</strong> — самую популярную Python-библиотеку в мире.</p>
             <p>Установка:</p>
             <pre><code>pip install requests</code></pre>
             <p>Подключение в коде:</p>
             <pre><code>import requests</code></pre>
 
-            <h2>🚀 Первый GET-запрос</h2>
+            <h2>Первый GET-запрос</h2>
             <p>GET-запрос — это запрос на <strong>получение</strong> данных. Как когда вы открываете сайт в браузере.</p>
             <pre><code>import requests
 
@@ -86,7 +86,7 @@ print(response.text)         # Текст ответа</code></pre>
                 <li><code>response.headers</code> — заголовки ответа</li>
             </ul>
 
-            <h2>📋 Работа с JSON-ответом</h2>
+            <h2>Работа с JSON-ответом</h2>
             <p>Большинство современных API возвращают данные в формате <strong>JSON</strong> — это тот же Python-словарь, только записанный в виде текста. Метод <code>.json()</code> автоматически превращает его в нормальный словарь.</p>
             <pre><code>import requests
 
@@ -99,7 +99,7 @@ if response.status_code == 200:
 else:
     print(f"Ошибка: {response.status_code}")</code></pre>
 
-            <h2>🔍 Параметры запроса</h2>
+            <h2>Параметры запроса</h2>
             <p>Часто API принимает параметры — например название города для погоды. Их передают через аргумент <code>params</code>:</p>
             <pre><code>import requests
 
@@ -119,7 +119,7 @@ if response.status_code == 200:
     print(f"Москва: {temp}°C, {desc}")
 </code></pre>
 
-            <h2>⚠️ Обработка ошибок при запросах</h2>
+            <h2>Обработка ошибок при запросах</h2>
             <p>Интернет ненадёжен. Сервер может быть недоступен, URL неправильным, или сеть пропасть. Всегда оборачивайте запросы в <code>try-except</code>:</p>
             <pre><code>import requests
 
@@ -140,7 +140,7 @@ except Exception as e:
 
             <p>Аргумент <code>timeout=5</code> означает: если сервер не ответил за 5 секунд — выбрасывается исключение. Без таймаута программа может висеть вечно.</p>
 
-            <h2>📬 POST-запросы</h2>
+            <h2>POST-запросы</h2>
             <p>POST используется для <strong>отправки</strong> данных на сервер (создание аккаунта, отправка сообщения, публикация поста):</p>
             <pre><code>import requests
 
@@ -154,7 +154,7 @@ response = requests.post("https://jsonplaceholder.typicode.com/posts", json=data
 print(response.status_code)  # 201 — создано
 print(response.json())       # Созданный объект с id</code></pre>
 
-            <h2>💡 Практический пример: получаем случайный факт</h2>
+            <h2>Практический пример: получаем случайный факт</h2>
             <pre><code>import requests
 
 def get_random_joke():
@@ -175,7 +175,7 @@ def get_random_joke():
 
 get_random_joke()</code></pre>
 
-            <h2>📤 POST-запросы и отправка данных</h2>
+            <h2>POST-запросы и отправка данных</h2>
             <p>POST-запрос используется, когда нужно не просто получить данные, а отправить их на сервер:
                 зарегистрировать пользователя, создать запись, отправить форму. Данные передаются
                 в теле запроса, а не в URL.</p>
@@ -198,7 +198,7 @@ form_data = {"name": "Алекс", "email": "alex@example.com"}
 response = requests.post(url, data=form_data)
 print(response.json()["form"])</code></pre>
 
-            <h2>🔑 Заголовки и API-ключи</h2>
+            <h2>Заголовки и API-ключи</h2>
             <p>Многие коммерческие API требуют ключ для доступа — он передаётся в заголовке
                 <code>Authorization</code>. Заголовки также используются для указания типа контента
                 и идентификации клиента.</p>
@@ -227,7 +227,7 @@ params = {
 # Результат: https://api.example.com/weather?city=Moscow&amp;units=metric&amp;lang=ru
 response = requests.get("https://api.example.com/weather", params=params)</code></pre>
 
-            <h2>🌤️ Практический пример: погодное API</h2>
+            <h2>Практический пример: погодное API</h2>
             <p>Open-Meteo — это бесплатное погодное API, которое не требует регистрации и ключа.
                 Пример ниже сначала получает координаты города через геокодинг, а затем запрашивает
                 по ним текущую погоду.</p>
@@ -279,7 +279,7 @@ except requests.RequestException as e:
         <div id="quiz-container"></div>
 
         <section class="lesson-homework">
-            <h2>📝 Домашнее задание</h2>
+            <h2>Домашнее задание</h2>
             <ul>
                 <li>Установи <code>requests</code> командой <code>pip install requests</code> и запусти пример с случайным фактом.</li>
                 <li>Зарегистрируйся на <a href="https://openweathermap.org/api" target="_blank">openweathermap.org</a> и получи бесплатный ключ API. Напиши скрипт который выводит погоду в твоём городе.</li>
@@ -292,12 +292,12 @@ except requests.RequestException as e:
         </section>
 
         <section class="lesson-content" style="background: linear-gradient(135deg, rgba(79,70,229,0.06), rgba(124,58,237,0.06)); border-left: 4px solid var(--accent-color);">
-            <h2>🎓 Поздравляем — вы прошли весь курс!</h2>
+            <h2>Поздравляем — вы прошли весь курс!</h2>
             <p>Вы освоили основы Python и даже научились работать с внешними API. Это уже уровень Junior-разработчика.</p>
             <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
-                <a href="certificate.html" class="btn">🏆 Получить сертификат</a>
-                <a href="next-steps.html" class="btn" style="background: var(--success-color);">🗺️ Что дальше?</a>
-                <a href="tasks.html" class="btn" style="background: #f59e0b;">🏋️ Решать задачи</a>
+                <a href="certificate.html" class="btn">Получить сертификат</a>
+                <a href="next-steps.html" class="btn" style="background: var(--success-color);">Что дальше?</a>
+                <a href="tasks.html" class="btn" style="background: #f59e0b;">Решать задачи</a>
             </div>
         </section>
 
