@@ -979,6 +979,199 @@ document.addEventListener('DOMContentLoaded', () => {
         document.head.appendChild(script);
     }
 
+    // --- Режим «Урок по созвону» ---
+    // Урок открывается на весь экран слайдами крупным шрифтом:
+    // преподаватель показывает экран на созвоне и листает разделы урока.
+    function initPresentationMode() {
+        if (!lessonsList.includes(currentPath)) return;
+        const titleBox = document.querySelector('.lesson-title .container');
+        if (!titleBox) return;
+
+        const openBtn = document.createElement('button');
+        openBtn.type = 'button';
+        openBtn.className = 'btn-present';
+        openBtn.textContent = 'Провести урок по созвону';
+        openBtn.title = 'Урок слайдами крупным шрифтом — удобно показывать экран на созвоне';
+        titleBox.appendChild(openBtn);
+        openBtn.addEventListener('click', () => openPresentation());
+
+        // Ссылка вида lesson3.html#present сразу открывает урок слайдами
+        if (location.hash === '#present') openPresentation();
+    }
+
+    function readStore(key, fallback) {
+        try { const v = localStorage.getItem(key); return v === null ? fallback : v; } catch (e) { return fallback; }
+    }
+    function writeStore(key, value) {
+        try { localStorage.setItem(key, value); } catch (e) { /* хранилище недоступно — не страшно */ }
+    }
+
+    function buildPresentationSlides() {
+        const slides = [];
+        const newSlide = (extraClass) => {
+            const el = document.createElement('div');
+            el.className = 'present-slide' + (extraClass ? ' ' + extraClass : '');
+            slides.push(el);
+            return el;
+        };
+        const cleanClone = (node) => {
+            const c = node.cloneNode(true);
+            c.style.display = '';
+            c.querySelectorAll('.btn-copy, #quiz-container, #btn-start-quiz, .lesson-locked-banner').forEach(x => x.remove());
+            c.querySelectorAll('[id]').forEach(x => x.removeAttribute('id'));
+            return c;
+        };
+
+        // Титульный слайд
+        const h1 = document.querySelector('.lesson-title h1');
+        const sub = document.querySelector('.lesson-title p');
+        const first = newSlide('present-slide-title');
+        const kicker = document.createElement('span');
+        kicker.className = 'present-kicker';
+        kicker.textContent = 'PythonBasic';
+        first.appendChild(kicker);
+        if (h1) first.appendChild(cleanClone(h1));
+        if (sub) first.appendChild(cleanClone(sub));
+
+        // Каждый раздел урока (начинается с <h2>) — отдельный слайд
+        document.querySelectorAll('main section.lesson-goal, main section.lesson-content, main section.lesson-homework').forEach(section => {
+            let current = null;
+            Array.from(section.children).forEach(child => {
+                if (child.matches('#quiz-container, #btn-start-quiz, .lesson-locked-banner')) return;
+                if (child.tagName === 'H2' || !current) current = newSlide();
+                current.appendChild(cleanClone(child));
+            });
+        });
+
+        // Финальный слайд — переход к практике
+        const last = newSlide('present-slide-title');
+        last.innerHTML = `
+            <span class="present-kicker">Урок разобран</span>
+            <h2>Теперь — практика</h2>
+            <p>Пройдите тест по уроку и решите задачи — так материал закрепится лучше всего.</p>
+            <div class="present-final-actions">
+                <button type="button" class="present-final-btn" data-present="quiz">Перейти к тесту</button>
+                <a class="present-final-btn present-final-btn-ghost" href="tasks.html">Решать задачи</a>
+            </div>`;
+        return slides;
+    }
+
+    function openPresentation() {
+        if (document.querySelector('.present')) return;
+        const slides = buildPresentationSlides();
+        const storeKey = 'present_slide_' + currentPath;
+        // Продолжаем с того слайда, где остановились; если урок досмотрен до конца — начинаем сначала
+        let index = parseInt(readStore(storeKey, '0'), 10) || 0;
+        if (index >= slides.length - 1) index = 0;
+        let scale = parseFloat(readStore('present_scale', '1')) || 1;
+        const lastFocus = document.activeElement;
+
+        const lessonTitle = (document.querySelector('.lesson-title h1') || {}).textContent || '';
+        const root = document.createElement('div');
+        root.className = 'present';
+        root.setAttribute('role', 'dialog');
+        root.setAttribute('aria-modal', 'true');
+        root.setAttribute('aria-label', 'Урок по созвону');
+        root.innerHTML = `
+            <div class="present-top">
+                <span class="present-lesson"></span>
+                <div class="present-tools">
+                    <button type="button" data-present="smaller" title="Уменьшить шрифт">A−</button>
+                    <button type="button" data-present="bigger" title="Увеличить шрифт">A+</button>
+                    <button type="button" data-present="fullscreen" title="Во весь экран (F)">Во весь экран</button>
+                    <button type="button" data-present="close" title="Выйти (Esc)">Выйти</button>
+                </div>
+            </div>
+            <div class="present-stage" tabindex="-1"></div>
+            <div class="present-bottom">
+                <button type="button" class="present-arrow" data-present="prev" aria-label="Предыдущий слайд">←</button>
+                <div class="present-progress"><div class="present-progress-fill"></div></div>
+                <span class="present-counter" aria-live="polite"></span>
+                <button type="button" class="present-arrow" data-present="next" aria-label="Следующий слайд">→</button>
+            </div>`;
+        root.querySelector('.present-lesson').textContent = lessonTitle;
+        const stage = root.querySelector('.present-stage');
+        slides.forEach(sl => stage.appendChild(sl));
+        document.body.appendChild(root);
+        document.body.classList.add('present-open');
+
+        const counter = root.querySelector('.present-counter');
+        const fill = root.querySelector('.present-progress-fill');
+        const prevBtn = root.querySelector('[data-present="prev"]');
+        const nextBtn = root.querySelector('[data-present="next"]');
+
+        const applyScale = () => root.style.setProperty('--present-scale', String(scale));
+        const show = (i) => {
+            index = Math.max(0, Math.min(slides.length - 1, i));
+            slides.forEach((sl, n) => sl.classList.toggle('is-active', n === index));
+            stage.scrollTop = 0;
+            counter.textContent = `${index + 1} / ${slides.length}`;
+            fill.style.width = ((index + 1) / slides.length * 100) + '%';
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === slides.length - 1;
+            writeStore(storeKey, String(index));
+        };
+
+        const close = (goToQuiz) => {
+            document.removeEventListener('keydown', onKey);
+            if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+            root.remove();
+            document.body.classList.remove('present-open');
+            if (location.hash === '#present') history.replaceState(null, '', location.pathname + location.search);
+            if (goToQuiz) {
+                const target = document.getElementById('btn-start-quiz') || document.getElementById('quiz-container');
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (lastFocus && lastFocus.focus) {
+                lastFocus.focus();
+            }
+        };
+
+        const toggleFullscreen = () => {
+            if (!document.fullscreenEnabled) return;
+            if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+            else root.requestFullscreen().catch(() => {});
+        };
+
+        root.addEventListener('click', (e) => {
+            const act = e.target.closest('[data-present]');
+            if (!act) return;
+            const a = act.dataset.present;
+            if (a === 'prev') show(index - 1);
+            else if (a === 'next') show(index + 1);
+            else if (a === 'close') close(false);
+            else if (a === 'quiz') close(true);
+            else if (a === 'fullscreen') toggleFullscreen();
+            else if (a === 'bigger') { scale = Math.min(1.6, +(scale + 0.1).toFixed(2)); applyScale(); writeStore('present_scale', String(scale)); }
+            else if (a === 'smaller') { scale = Math.max(0.7, +(scale - 0.1).toFixed(2)); applyScale(); writeStore('present_scale', String(scale)); }
+        });
+
+        const onKey = (e) => {
+            if (e.target.closest && e.target.closest('input, textarea')) return;
+            if (['ArrowRight', 'PageDown'].includes(e.key) || (e.key === ' ' && !e.shiftKey)) { e.preventDefault(); show(index + 1); }
+            else if (['ArrowLeft', 'PageUp'].includes(e.key) || (e.key === ' ' && e.shiftKey)) { e.preventDefault(); show(index - 1); }
+            else if (e.key === 'Home') { e.preventDefault(); show(0); }
+            else if (e.key === 'End') { e.preventDefault(); show(slides.length - 1); }
+            else if (e.key === 'Escape' && !document.fullscreenElement) close(false);
+            else if (e.key === 'f' || e.key === 'F' || e.key === 'а' || e.key === 'А') toggleFullscreen();
+        };
+        document.addEventListener('keydown', onKey);
+
+        // Свайп влево/вправо на телефоне и планшете
+        let touchX = null, touchY = null;
+        stage.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; touchY = e.touches[0].clientY; }, { passive: true });
+        stage.addEventListener('touchend', (e) => {
+            if (touchX === null) return;
+            const dx = e.changedTouches[0].clientX - touchX;
+            const dy = e.changedTouches[0].clientY - touchY;
+            if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) show(index + (dx < 0 ? 1 : -1));
+            touchX = touchY = null;
+        });
+
+        applyScale();
+        show(index);
+        stage.focus();
+    }
+
     // Run All
     initReadingProgressBar();
     initMobileMenu();
@@ -986,6 +1179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCopyButtons();
     initSyntaxHighlighting();
     initQuiz();
+    initPresentationMode();
     initTheme();
     initResetButton();
     initProgressExportImport();
