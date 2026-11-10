@@ -46,8 +46,11 @@
         }
 
         .task-item {
-            padding: 12px;
-            margin-bottom: 4px;
+            display: flex !important;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 10px;
+            margin-bottom: 2px;
             border-radius: 8px;
             cursor: pointer;
             transition: var(--transition);
@@ -66,32 +69,26 @@
 
         .task-item.active {
             border-color: transparent;
-            transform: translateX(4px);
-            background: rgba(79, 70, 229, 0.15);
+            background: rgba(79, 70, 229, 0.14);
         }
 
+        .task-item.active .task-item-title {
+            color: var(--accent-color);
+        }
+
+        /* Сложность — цветная точка слева от названия */
         .task-difficulty {
-            font-size: 0.75rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-bottom: 5px;
-            display: inline-block;
+            flex-shrink: 0;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            font-size: 0;
+            padding: 0;
         }
 
-        .diff-easy {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success-color);
-        }
-
-        .diff-medium {
-            background: rgba(245, 158, 11, 0.2);
-            color: #f59e0b;
-        }
-
-        .diff-hard {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
-        }
+        .diff-easy { background: #10b981; }
+        .diff-medium { background: #f59e0b; }
+        .diff-hard { background: #ef4444; }
 
         .tasks-main {
             flex-grow: 1;
@@ -192,28 +189,27 @@
         }
 
         .task-item-title {
-            display: block;
-            font-weight: 600;
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            font-weight: 500;
+            font-size: 0.93rem;
+            line-height: 1.35;
             color: var(--text-color);
         }
 
+        .tasks-filter-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .task-item.solved .task-solved-mark {
-            float: right;
             color: var(--success-color);
             font-weight: 700;
         }
 
-        .explanation-block {
-            background: rgba(79, 70, 229, 0.05);
-            border: 1px solid rgba(79, 70, 229, 0.2);
-            border-left: 4px solid var(--accent-color);
-            padding: 20px;
-            margin-bottom: 40px;
-            border-radius: 8px;
-            font-size: 1.05rem;
-            line-height: 1.6;
-            color: var(--text-color);
-        }
 
         @media (max-width: 900px) {
             .tasks-layout {
@@ -253,23 +249,12 @@
 
     <section class="lesson-title" style="padding: 40px 20px;">
         <div class="container">
-            <h1 style="font-size: 2rem;">Практические задачи (Автогрейдер)</h1>
-            <p>Решайте алгоритмические задачи и проверяйте свой код автоматическими скрытыми тестами.</p>
+            <h1>Задачи</h1>
+            <p>Выберите задачу, напишите решение и нажмите «Проверить» — робот проверит его на скрытых тестах.</p>
         </div>
     </section>
 
     <main class="container">
-        <div class="explanation-block">
-            <strong>Для чего нужна эта страница и чем она отличается от "Python Online"?</strong><br><br>
-            В <em>Python Online</em> вы можете выполнять абсолютно любой код - это просто песочница, без конкретной
-            цели.
-            А здесь находится <strong>тренажер программиста</strong>, необходимый для закрепления знаний!<br><br>
-            Вам даётся конкретное задание: написать функцию. Когда вы нажимаете кнопку «Проверить», в работу вступает
-            наш скрытый проверяющий робот. Он подставит в ваш код несколько скрытых наборов данных (в том числе нестандартные
-            числа, отрицательные значения или пустые строки), чтобы убедиться, что ваша логика надёжна и не
-            ломается в трудных ситуациях. Именно так тренируются программисты на настоящих собеседованиях.
-        </div>
-
         <div class="tasks-layout">
             <!-- Sidebar -->
             <aside class="tasks-sidebar" id="tasks-list">
@@ -440,7 +425,8 @@
                 btn.type = "button";
                 btn.className = "tasks-filter-btn" + (currentFilter === key ? " active" : "");
                 btn.setAttribute("aria-pressed", String(currentFilter === key));
-                btn.textContent = `${name} · ${count}`;
+                if (key !== "all") btn.appendChild(Object.assign(document.createElement("span"), { className: "task-difficulty " + DIFF[key][1] }));
+                btn.appendChild(document.createTextNode(`${name} · ${count}`));
                 btn.onclick = () => { currentFilter = key; renderTasks(); };
                 filter.appendChild(btn);
             });
@@ -456,7 +442,8 @@
 
                 const label = document.createElement("span");
                 label.className = `task-difficulty ${diffClass}`;
-                label.textContent = diffLabel;
+                label.title = diffLabel;
+                label.setAttribute("aria-label", diffLabel + " задача");
                 const title = document.createElement("span");
                 title.className = "task-item-title";
                 title.textContent = task.title;

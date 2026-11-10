@@ -345,8 +345,7 @@ body.dark-mode .lesson-card {
 }
 
 .lesson-card.completed h3 {
-    padding-right: 125px;
-    /* Prevent overlap with the completed badge */
+    padding-right: 0;
 }
 
 .lesson-card.completed::before {
@@ -3552,4 +3551,698 @@ body.dark-mode .hub-pill-warn { color: #fcd34d; }
         flex-shrink: 0;
         padding: 9px 14px;
     }
+}
+
+/* ==================================================================
+   КАБИНЕТ ПРЕПОДАВАТЕЛЯ — разделы, ученики, задание в 3 шага
+   ================================================================== */
+.cab-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.cab-seg {
+    display: inline-flex;
+    padding: 5px;
+    gap: 4px;
+    border-radius: 14px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.cab-seg::-webkit-scrollbar { display: none; }
+
+.cab-seg-btn {
+    flex-shrink: 0;
+    padding: 11px 20px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-color);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.cab-seg-btn:hover { background: rgba(79, 70, 229, 0.07); }
+
+.cab-seg-btn.active {
+    background: var(--accent-color);
+    color: #fff;
+    box-shadow: 0 6px 16px -6px rgba(79, 70, 229, 0.6);
+}
+
+.cab-nav-side {
+    display: flex;
+    gap: 8px;
+}
+
+.cab-icon-btn {
+    min-width: 44px;
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+}
+
+.cab-icon-btn:first-child { font-size: 1.15rem; }
+.cab-icon-btn:hover, .cab-icon-btn.active { border-color: var(--accent-color); color: var(--accent-color); }
+
+.hub-btn-lg {
+    padding: 13px 24px;
+    font-size: 1rem;
+    border-radius: 12px;
+}
+
+.cab-empty {
+    text-align: center;
+    padding: 48px 24px;
+}
+
+.cab-empty h2 { margin: 0 0 8px; }
+.cab-empty p { opacity: 0.7; margin: 0 auto 22px; max-width: 420px; }
+
+/* Список учеников */
+.cab-students {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+}
+
+.cab-student {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(128, 128, 128, 0.18);
+    background: var(--bg-color);
+    color: var(--text-color);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cab-student:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 10px 24px -14px rgba(79, 70, 229, 0.6);
+}
+
+.cab-avatar {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+.cab-avatar-lg { width: 60px; height: 60px; font-size: 1.3rem; }
+
+.cab-student-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cab-student-main strong { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cab-student-main small { opacity: 0.6; font-size: 0.8rem; }
+
+.cab-mini-bar {
+    margin-top: 6px;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(128, 128, 128, 0.2);
+    overflow: hidden;
+}
+
+.cab-mini-bar span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #4f46e5, #10b981);
+}
+
+.cab-student-nums {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+}
+
+.cab-student-nums b { font-size: 1.05rem; }
+.cab-grade-empty { opacity: 0.5; }
+.cab-student-nums .hub-grade { width: 32px; height: 28px; font-size: 0.85rem; }
+
+/* Профиль ученика */
+.cab-profile-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.cab-profile-head > div { flex: 1; min-width: 180px; }
+.cab-profile-head h2 { margin: 0 0 2px; font-size: 1.5rem; }
+
+.cab-grade-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.cab-grade-buttons { display: flex; gap: 8px; }
+
+.cab-grade-btn {
+    width: 52px;
+    height: 52px;
+    border: 0;
+    border-radius: 14px;
+    color: #fff;
+    font: inherit;
+    font-size: 1.3rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cab-grade-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.45); }
+
+.cab-grades {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cab-grades li { display: flex; align-items: center; gap: 12px; }
+
+.cab-grade-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+}
+
+.cab-grade-text small { font-weight: 400; opacity: 0.6; font-size: 0.8rem; }
+
+.cab-x {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 0;
+    background: transparent;
+    color: var(--text-color);
+    opacity: 0.45;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.cab-x:hover { opacity: 1; color: var(--error-color); background: var(--error-bg); }
+
+/* Результаты задания — чек-лист */
+.cab-results {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.cab-result {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.14);
+}
+
+.cab-result:last-child { border-bottom: 0; }
+
+.cab-check {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid rgba(128, 128, 128, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.is-done > .cab-check { background: #10b981; border-color: #10b981; }
+
+.cab-result-title {
+    flex: 1 1 220px;
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+}
+
+.cab-result-title small { font-weight: 400; opacity: 0.6; font-size: 0.82rem; }
+
+/* Шаги задания */
+.cab-step-head {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.cab-step-head h2 { margin: 2px 0 2px; font-size: 1.25rem; }
+.cab-step-head .hub-muted { margin: 0; }
+
+.cab-step-num {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #fff;
+    background: var(--accent-color);
+}
+
+.cab-lessons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 8px;
+}
+
+.cab-lesson {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    background: var(--bg-color);
+    color: var(--text-color);
+    font: inherit;
+    font-size: 0.92rem;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.cab-lesson:hover { border-color: var(--accent-color); }
+
+.cab-lesson.active {
+    border-color: var(--accent-color);
+    background: rgba(79, 70, 229, 0.1);
+    font-weight: 600;
+}
+
+.cab-lesson-num {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--accent-color);
+    background: rgba(79, 70, 229, 0.1);
+}
+
+.cab-lesson.active .cab-lesson-num { background: var(--accent-color); color: #fff; }
+
+.cab-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    font-size: 0.92rem;
+    cursor: pointer;
+}
+
+.cab-toggle input { width: 18px; height: 18px; accent-color: var(--accent-color); }
+
+.cab-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.cab-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 6px 6px 12px;
+    border-radius: 999px;
+    background: rgba(16, 185, 129, 0.12);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.cab-tag button {
+    width: 22px;
+    height: 22px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    opacity: 0.55;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.cab-tag button:hover { opacity: 1; background: rgba(0, 0, 0, 0.08); }
+
+.cab-manual { margin-top: 14px; }
+
+.cab-manual summary,
+.cab-more summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.cab-manual .hub-chip-groups { margin-top: 14px; }
+.cab-chip-diff { margin-left: auto; font-weight: 700; opacity: 0.6; }
+
+.cab-submit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.cab-counter { opacity: 0.7; font-size: 0.92rem; }
+
+.cab-result-box {
+    margin-top: 18px;
+    padding: 26px 20px;
+    border-radius: 16px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(79, 70, 229, 0.1));
+}
+
+.cab-result-box h3 { margin: 10px 0 4px; }
+.cab-result-box .hub-muted { margin-bottom: 16px; }
+
+.cab-result-icon {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #fff;
+    background: #10b981;
+}
+
+.cab-center { justify-content: center; }
+
+/* Провести урок */
+.cab-teach {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 12px;
+}
+
+.cab-teach-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(128, 128, 128, 0.18);
+    background: var(--bg-color);
+}
+
+.cab-teach-card strong { flex: 1; }
+.cab-teach-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* Свёрнутые блоки и история */
+.cab-more > summary { list-style: none; }
+.cab-more > summary::-webkit-details-marker { display: none; }
+.cab-more > summary::before { content: '+ '; }
+.cab-more[open] > summary::before { content: '− '; }
+.cab-more[open] > summary { margin-bottom: 14px; }
+
+.cab-history {
+    list-style: none;
+    margin: 0 0 14px;
+    padding: 0;
+}
+
+.cab-history li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.14);
+}
+
+.cab-history li:last-child { border-bottom: 0; }
+
+@media (max-width: 600px) {
+    .cab-nav { flex-direction: column; align-items: stretch; }
+    .cab-seg { display: flex; }
+    .cab-seg-btn { flex: 1; padding: 10px 6px; font-size: 0.88rem; white-space: nowrap; }
+    .cab-nav-side { justify-content: flex-end; }
+    .cab-students { grid-template-columns: 1fr; }
+    .cab-grade-btn { width: 48px; height: 48px; }
+    .cab-submit .hub-btn { width: 100%; }
+}
+
+/* ==================================================================
+   «МОЁ ЗАДАНИЕ» — список дел ученика
+   ================================================================== */
+.task-hero h2 {
+    margin: 0 0 4px;
+    font-size: 1.6rem;
+}
+
+.task-hero-badge {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #059669;
+    background: rgba(16, 185, 129, 0.14);
+}
+
+body.dark-mode .task-hero-badge { color: #6ee7b7; }
+
+.task-progress { margin-top: 18px; }
+
+.task-progress-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 1.05rem;
+}
+
+.task-progress-text span { opacity: 0.7; font-size: 0.92rem; }
+.task-progress .hub-bar { margin-top: 10px; height: 10px; }
+
+.todo-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: todo;
+}
+
+.todo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.14);
+}
+
+.todo:last-child { border-bottom: 0; }
+
+.todo-main {
+    flex: 1 1 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.todo-main small { opacity: 0.65; font-size: 0.85rem; }
+.todo.is-done .todo-main strong { opacity: 0.7; }
+
+.todo-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.send-card h2 { margin: 0 0 6px; font-size: 1.3rem; }
+
+.send-card .hub-input { flex: none; max-width: 420px; }
+
+.send-actions { margin-top: 14px; }
+
+details.cab-more > .send-card {
+    box-shadow: none;
+    border: 0;
+    padding: 0;
+    background: transparent;
+}
+
+@media (max-width: 600px) {
+    .todo-actions { width: 100%; padding-left: 40px; }
+    .todo-actions .hub-btn { flex: 1; }
+    .send-actions .hub-btn { width: 100%; }
+    .send-card .hub-input { max-width: none; }
+}
+
+/* ==================================================================
+   УРОКИ — удобное чтение
+   ================================================================== */
+/* Строки не длиннее ~80 символов — так текст читать легче всего */
+.lesson-main {
+    max-width: 880px;
+}
+
+.lesson-main .lesson-goal::before,
+.lesson-main .lesson-content::before,
+.lesson-main .lesson-homework::before {
+    display: none;
+}
+
+.lesson-main .lesson-content {
+    padding: 40px 48px;
+}
+
+.lesson-main .lesson-content p,
+.lesson-main .lesson-content li {
+    font-size: 1.04rem;
+    line-height: 1.8;
+}
+
+.lesson-main .lesson-content h2 {
+    margin-top: 44px;
+}
+
+.lesson-main .lesson-content > h2:first-child {
+    margin-top: 0;
+}
+
+.lesson-main .lesson-goal {
+    background: rgba(79, 70, 229, 0.06);
+    border: 1px solid rgba(79, 70, 229, 0.16);
+    box-shadow: none;
+}
+
+.lesson-main .lesson-homework {
+    background: rgba(16, 185, 129, 0.06);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    box-shadow: none;
+}
+
+.lesson-kicker {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+    .lesson-main .lesson-content {
+        padding: 26px 20px;
+    }
+}
+
+/* Дополнительные материалы на странице «Уроки» */
+.materials-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.materials-links a {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    background: var(--bg-color);
+    color: var(--text-color);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.materials-links a:hover {
+    border-color: var(--accent-color);
+    color: var(--text-color);
+    box-shadow: 0 10px 22px -14px rgba(79, 70, 229, 0.6);
+}
+
+.materials-links strong { color: var(--accent-color); }
+.materials-links span { font-size: 0.88rem; opacity: 0.7; }
+
+/* Шапка страниц на телефоне — компактнее */
+@media (max-width: 600px) {
+    .lesson-title {
+        padding: 36px 16px 40px;
+        margin-bottom: 24px;
+    }
+
+    .lesson-title h1,
+    .lesson-title h2 {
+        font-size: 1.75rem;
+    }
+
+    .lesson-title p {
+        font-size: 1rem;
+    }
+}
+
+/* Отметка «Пройдено» — над названием урока, а не поверх него */
+.lesson-card .check-mark {
+    position: static;
+    order: -1;
+    align-self: flex-start;
+    margin-bottom: 10px;
 }

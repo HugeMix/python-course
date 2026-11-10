@@ -1061,6 +1061,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const titleBox = document.querySelector('.lesson-title .container');
         if (!titleBox) return;
 
+        // Подпись «Урок N из 16» над названием
+        const kicker = document.createElement('span');
+        kicker.className = 'lesson-kicker';
+        kicker.textContent = `Урок ${lessonsList.indexOf(currentPath) + 1} из ${lessonsList.length}`;
+        titleBox.insertBefore(kicker, titleBox.firstChild);
+
+        // Ссылка вида lesson3.html#present сразу открывает урок слайдами — у всех
+        if (location.hash === '#present') openPresentation();
+
+        // Кнопку видит только преподаватель — ученикам режим слайдов не нужен
+        if (!isTeacherBrowser()) return;
         const openBtn = document.createElement('button');
         openBtn.type = 'button';
         openBtn.className = 'btn-present';
@@ -1068,9 +1079,6 @@ document.addEventListener('DOMContentLoaded', () => {
         openBtn.title = 'Урок слайдами крупным шрифтом — удобно показывать экран на созвоне';
         titleBox.appendChild(openBtn);
         openBtn.addEventListener('click', () => openPresentation());
-
-        // Ссылка вида lesson3.html#present сразу открывает урок слайдами
-        if (location.hash === '#present') openPresentation();
     }
 
     function readStore(key, fallback) {
