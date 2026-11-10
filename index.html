@@ -8,7 +8,7 @@
     <meta name="yandex-verification" content="b602e8cdb7c252de" />
     <meta name="description"
         content="Освойте язык программирования Python с нуля. Главная страница образовательной платформы с интерактивными уроками и практикой.">
-    <title>Python с нуля — Главная | PythonBasic</title>
+    <title>Курс Python с нуля на русском | PythonBasic</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="Python с нуля — Главная | PythonBasic">
     <meta property="og:description" content="Освойте язык программирования Python с нуля. Главная страница образовательной платформы с интерактивными уроками и практикой.">
@@ -64,30 +64,219 @@
         </div>
     </header>
 
-    <main class="container">
-        <section class="hero">
-            <h1>Освой язык программирования <span
-                    style="color:#fbbf24; text-shadow: 0 0 10px rgba(251,191,36,0.3);">Python</span> с нуля</h1>
-            <p>16 бесплатных уроков от нуля до уверенного программиста. Квизы, практика, сертификат.</p>
-            <a href="courses.html" class="btn">Выбрать курс</a>
+    <main>
+        <!-- Первый экран -->
+        <section class="landing-hero">
+            <div class="container landing-hero-inner">
+                <div class="landing-hero-text">
+                    <span class="landing-eyebrow">Курс Python на русском языке</span>
+                    <h1>Python с нуля — до&nbsp;первых собственных программ</h1>
+                    <p class="landing-lead">Понятные уроки, тесты после каждой темы и задачи с автоматической проверкой.
+                        Код пишется и запускается прямо в браузере — ничего устанавливать не нужно.</p>
+                    <div class="landing-actions">
+                        <a href="lesson1.html" class="landing-btn landing-btn-primary" id="hero-start">Начать бесплатно</a>
+                        <a href="#program" class="landing-btn landing-btn-ghost">Программа курса</a>
+                    </div>
+                    <ul class="landing-stats">
+                        <li><strong>16</strong><span>уроков</span></li>
+                        <li><strong>15</strong><span>задач с автопроверкой</span></li>
+                        <li><strong>0 ₽</strong><span>для самостоятельного обучения</span></li>
+                    </ul>
+                </div>
+                <div class="landing-hero-code" aria-hidden="true">
+                    <div class="code-window">
+                        <div class="code-window-bar"><i></i><i></i><i></i><span>main.py</span></div>
+<pre class="code-window-body"><span class="tk-kw">def</span> <span class="tk-fn">greet</span>(name):
+    <span class="tk-kw">return</span> <span class="tk-str">f"Привет, {name}!"</span>
+
+<span class="tk-kw">for</span> student <span class="tk-kw">in</span> [<span class="tk-str">"Аня"</span>, <span class="tk-str">"Игорь"</span>]:
+    <span class="tk-fn">print</span>(greet(student))</pre>
+                        <div class="code-window-out"><span>Привет, Аня!</span><span>Привет, Игорь!</span></div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <section class="info">
-            <div class="card">
-                <h3>🚀 Быстрый старт</h3>
-                <p>Начните изучать материалы и выучите один из популярных языков программирования — Python.</p>
+        <!-- Для кого -->
+        <section class="landing-section container">
+            <h2 class="landing-title">Для кого этот курс</h2>
+            <div class="landing-grid landing-grid-3">
+                <div class="landing-card">
+                    <h3>Никогда не программировали</h3>
+                    <p>Начинаем с самых основ: что такое программа и как написать первую строчку кода. Сложные слова объясняем простым языком.</p>
+                </div>
+                <div class="landing-card">
+                    <h3>Школьникам и студентам</h3>
+                    <p>Python — один из самых популярных языков для учёбы, олимпиад и первых проектов. Курс поможет разобраться в нём системно.</p>
+                </div>
+                <div class="landing-card">
+                    <h3>Тем, кто думает о новой профессии</h3>
+                    <p>Попробуйте программирование без затрат и поймите, нравится ли оно вам, прежде чем идти на большие платные курсы.</p>
+                </div>
             </div>
-            <div class="card">
-                <h3>💡 Лёгкое объяснение</h3>
-                <p>Материалы на сайте написаны понятным, простым и подробным языком, который подходит для всех.</p>
+        </section>
+
+        <!-- Как проходит обучение -->
+        <section class="landing-section landing-section-alt">
+            <div class="container">
+                <h2 class="landing-title">Как проходит обучение</h2>
+                <ol class="landing-steps">
+                    <li>
+                        <span class="landing-step-num">1</span>
+                        <h3>Читаете урок</h3>
+                        <p>Теория с примерами кода, которые можно скопировать и запустить.</p>
+                    </li>
+                    <li>
+                        <span class="landing-step-num">2</span>
+                        <h3>Проходите тест</h3>
+                        <p>После каждого урока — проверочный тест с объяснением каждого ответа.</p>
+                    </li>
+                    <li>
+                        <span class="landing-step-num">3</span>
+                        <h3>Решаете задачи</h3>
+                        <p>Пишете код, а автоматическая проверка сразу говорит, верно ли решение.</p>
+                    </li>
+                    <li>
+                        <span class="landing-step-num">4</span>
+                        <h3>Получаете сертификат</h3>
+                        <p>После прохождения всех уроков можно распечатать сертификат об окончании курса.</p>
+                    </li>
+                </ol>
             </div>
-            <div class="card">
-                <h3>📜 Практика</h3>
-                <p>Каждый урок включает код, который можно сразу попробовать, изучить и выполнить домашнее задание.</p>
+        </section>
+
+        <!-- Программа -->
+        <section class="landing-section container" id="program">
+            <h2 class="landing-title">Программа курса</h2>
+            <p class="landing-subtitle">16 уроков от первой программы до работы с интернетом. Уроки открываются по порядку: следующий — после теста по предыдущему.</p>
+            <div class="program-grid">
+                <div class="program-module">
+                    <div class="program-module-head">
+                        <span class="program-module-tag">Модуль 1</span>
+                        <h3>Основы языка</h3>
+                    </div>
+                    <ol class="program-list">
+                        <li><a href="lesson1.html"><span class="program-num">01</span><span class="program-text"><strong>Введение в Python</strong><small>Что такое Python, установка и первая программа</small></span></a></li>
+                        <li><a href="lesson2.html"><span class="program-num">02</span><span class="program-text"><strong>Переменные и типы данных</strong><small>Числа, строки, логические значения, преобразование типов</small></span></a></li>
+                        <li><a href="lesson3.html"><span class="program-num">03</span><span class="program-text"><strong>Операторы</strong><small>Арифметика, сравнения и логические операции</small></span></a></li>
+                        <li><a href="lesson4.html"><span class="program-num">04</span><span class="program-text"><strong>Условия</strong><small>if, elif, else — программа принимает решения</small></span></a></li>
+                        <li><a href="lesson5.html"><span class="program-num">05</span><span class="program-text"><strong>Циклы</strong><small>for и while, break и continue</small></span></a></li>
+                    </ol>
+                </div>
+                <div class="program-module">
+                    <div class="program-module-head">
+                        <span class="program-module-tag">Модуль 2</span>
+                        <h3>Структуры данных</h3>
+                    </div>
+                    <ol class="program-list">
+                        <li><a href="lesson6.html"><span class="program-num">06</span><span class="program-text"><strong>Списки и кортежи</strong><small>Хранение и обработка наборов данных</small></span></a></li>
+                        <li><a href="lesson7.html"><span class="program-num">07</span><span class="program-text"><strong>Функции</strong><small>Свои функции, аргументы и return</small></span></a></li>
+                        <li><a href="lesson8.html"><span class="program-num">08</span><span class="program-text"><strong>Словари и множества</strong><small>Данные в формате «ключ — значение»</small></span></a></li>
+                        <li><a href="lesson9.html"><span class="program-num">09</span><span class="program-text"><strong>Строки</strong><small>Методы строк, срезы и форматирование</small></span></a></li>
+                    </ol>
+                </div>
+                <div class="program-module">
+                    <div class="program-module-head">
+                        <span class="program-module-tag">Модуль 3</span>
+                        <h3>Программы по-взрослому</h3>
+                    </div>
+                    <ol class="program-list">
+                        <li><a href="lesson10.html"><span class="program-num">10</span><span class="program-text"><strong>Файлы</strong><small>Чтение и запись файлов</small></span></a></li>
+                        <li><a href="lesson11.html"><span class="program-num">11</span><span class="program-text"><strong>Обработка ошибок</strong><small>try, except и собственные исключения</small></span></a></li>
+                        <li><a href="lesson12.html"><span class="program-num">12</span><span class="program-text"><strong>Модули и библиотеки</strong><small>import, стандартная библиотека и pip</small></span></a></li>
+                        <li><a href="lesson13.html"><span class="program-num">13</span><span class="program-text"><strong>Основы ООП</strong><small>Классы, объекты и методы</small></span></a></li>
+                        <li><a href="lesson14.html"><span class="program-num">14</span><span class="program-text"><strong>Дата и время</strong><small>Модуль datetime на практике</small></span></a></li>
+                    </ol>
+                </div>
+                <div class="program-module">
+                    <div class="program-module-head">
+                        <span class="program-module-tag">Модуль 4</span>
+                        <h3>Практика</h3>
+                    </div>
+                    <ol class="program-list">
+                        <li><a href="lesson15.html"><span class="program-num">15</span><span class="program-text"><strong>Итоговый проект</strong><small>Консольный список дел с сохранением в файл</small></span></a></li>
+                        <li><a href="lesson16.html"><span class="program-num">16</span><span class="program-text"><strong>Работа с API <em class="program-badge">бонус</em></strong><small>Библиотека requests и данные из интернета</small></span></a></li>
+                    </ol>
+                </div>
             </div>
-            <div class="card">
-                <h3>🏆 Сертификат</h3>
-                <p>По завершении всех уроков вы получаете сертификат об окончании курса, который можно распечатать.</p>
+        </section>
+
+        <!-- Форматы -->
+        <section class="landing-section landing-section-alt" id="formats">
+            <div class="container">
+                <h2 class="landing-title">Форматы обучения</h2>
+                <div class="landing-grid landing-grid-3">
+                    <div class="plan-card plan-card-featured">
+                        <span class="plan-label">Доступно сейчас</span>
+                        <h3>Самостоятельно</h3>
+                        <p class="plan-price">Бесплатно</p>
+                        <ul class="plan-features">
+                            <li>Все 16 уроков и тесты</li>
+                            <li>Задачи с автоматической проверкой</li>
+                            <li>Онлайн-компилятор, шпаргалка, глоссарий</li>
+                            <li>Сертификат об окончании</li>
+                        </ul>
+                        <a href="lesson1.html" class="landing-btn landing-btn-primary">Начать обучение</a>
+                    </div>
+                    <div class="plan-card">
+                        <span class="plan-label plan-label-muted">Скоро</span>
+                        <h3>С наставником</h3>
+                        <p class="plan-price plan-price-muted">Запись откроется позже</p>
+                        <ul class="plan-features">
+                            <li>Всё из самостоятельного формата</li>
+                            <li>Проверка домашних заданий преподавателем</li>
+                            <li>Ответы на вопросы по ходу курса</li>
+                        </ul>
+                        <span class="landing-btn landing-btn-disabled" aria-disabled="true">Скоро</span>
+                    </div>
+                    <div class="plan-card">
+                        <span class="plan-label plan-label-muted">Скоро</span>
+                        <h3>Индивидуальные занятия</h3>
+                        <p class="plan-price plan-price-muted">Запись откроется позже</p>
+                        <ul class="plan-features">
+                            <li>Живые занятия по видеосвязи</li>
+                            <li>Преподаватель сам объясняет темы</li>
+                            <li>Вы сосредоточены на практике и задачах</li>
+                        </ul>
+                        <span class="landing-btn landing-btn-disabled" aria-disabled="true">Скоро</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Вопросы -->
+        <section class="landing-section container">
+            <h2 class="landing-title">Частые вопросы</h2>
+            <div class="faq">
+                <details>
+                    <summary>Нужно ли что-то устанавливать?</summary>
+                    <p>Нет. Все примеры и задачи запускаются прямо в браузере. Как установить Python на свой компьютер, рассказано в первом уроке — это пригодится для собственных проектов.</p>
+                </details>
+                <details>
+                    <summary>Я никогда не программировал. Справлюсь?</summary>
+                    <p>Да, курс рассчитан именно на новичков. Каждая тема объясняется с нуля, а тест после урока помогает понять, что материал усвоен.</p>
+                </details>
+                <details>
+                    <summary>Сколько времени занимает курс?</summary>
+                    <p>Вы учитесь в своём темпе. Можно проходить по уроку в день или по одному в неделю — прогресс сохраняется в браузере.</p>
+                </details>
+                <details>
+                    <summary>Это правда бесплатно?</summary>
+                    <p>Да, самостоятельное обучение полностью бесплатное. Платными в будущем будут только форматы с преподавателем.</p>
+                </details>
+                <details>
+                    <summary>Что даёт сертификат?</summary>
+                    <p>Сертификат подтверждает, что вы прошли все уроки и тесты курса. Это не государственный документ об образовании, но хороший способ отметить результат.</p>
+                </details>
+            </div>
+        </section>
+
+        <!-- Финальный призыв -->
+        <section class="landing-cta">
+            <div class="container">
+                <h2>Первая программа — уже в первом уроке</h2>
+                <p>Откройте первый урок и напишите свой первый код прямо сейчас.</p>
+                <a href="lesson1.html" class="landing-btn landing-btn-light">Начать первый урок</a>
             </div>
         </section>
     </main>
@@ -100,6 +289,19 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Если ученик уже начал курс — кнопка ведёт к следующему непройденному уроку
+        try {
+            const done = JSON.parse(localStorage.getItem('quiz_results')) || {};
+            let next = 1;
+            while (next <= 16 && done['lesson' + next + '.html']) next++;
+            if (next > 1) {
+                const btn = document.getElementById('hero-start');
+                btn.textContent = next > 16 ? 'Курс пройден — повторить' : 'Продолжить обучение';
+                btn.href = next > 16 ? 'python-basic.html' : 'lesson' + next + '.html';
+            }
+        } catch (e) { /* без прогресса оставляем «Начать бесплатно» */ }
+    </script>
 </body>
 
 </html>

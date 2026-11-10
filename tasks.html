@@ -278,7 +278,7 @@
 
     <main class="container">
         <div class="explanation-block">
-            <strong>🤔 Для чего нужна эта страница и чем она отличается от "Python Online"?</strong><br><br>
+            <strong>Для чего нужна эта страница и чем она отличается от "Python Online"?</strong><br><br>
             В <em>Python Online</em> вы можете выполнять абсолютно любой код - это просто песочница, без конкретной
             цели.
             А здесь находится <strong>тренажер программиста</strong>, необходимый для закрепления знаний!<br><br>
@@ -306,7 +306,7 @@
                     <div class="editor-header">
                         <span>Напишите решение:</span>
                         <div class="editor-buttons">
-                            <button class="btn-stop-tests" id="btn-stop" hidden>⏹ Стоп</button>
+                            <button class="btn-stop-tests" id="btn-stop" hidden>Стоп</button>
                             <button class="btn-run-tests" id="btn-submit" disabled>Загрузка движка...</button>
                         </div>
                     </div>
@@ -365,7 +365,7 @@
             tasks.forEach((task, index) => {
                 const div = document.createElement("div");
                 div.className = "task-item" + (index === currentTaskIndex ? " active" : "") + (solved[task.id] ? " solved" : "");
-                const diffLabel = task.difficulty === "easy" ? "🟢 Обычная" : (task.difficulty === "medium" ? "🟡 Средняя" : "🔴 Сложная");
+                const diffLabel = task.difficulty === "easy" ? "Лёгкая" : (task.difficulty === "medium" ? "Средняя" : "Сложная");
                 const diffClass = task.difficulty === "easy" ? "diff-easy" : (task.difficulty === "medium" ? "diff-medium" : "diff-hard");
 
                 const label = document.createElement("span");
@@ -396,7 +396,7 @@
             document.getElementById("task-title").textContent = task.title;
             document.getElementById("task-text").innerHTML = task.desc;
             editor.setValue(localStorage.getItem(`saved_code_${task.id}`) || task.startCode);
-            setResult(runner.ready ? "Ожидание запуска тестов..." : "⏳ Загружается Python...");
+            setResult(runner.ready ? "Ожидание запуска тестов..." : "Загружается Python...");
         }
 
         function setLoading() {
@@ -424,7 +424,7 @@
 
             btnSubmit.disabled = true;
             btnStop.hidden = false;
-            setResult("🤖 Робот запускает скрытые проверки...");
+            setResult("Проверяем решение скрытыми тестами...");
 
             let output = "";
             const result = await runner.run({
@@ -438,8 +438,8 @@
             if (result.timedOut || result.stopped) {
                 setLoading();
                 const why = result.timedOut
-                    ? "⏱ Код выполнялся дольше 5 секунд и был остановлен.\nСкорее всего, в нём бесконечный цикл (например, while без изменения условия)."
-                    : "⏹ Выполнение остановлено.";
+                    ? "Код выполнялся дольше 5 секунд и был остановлен.\nСкорее всего, в нём бесконечный цикл (например, while без изменения условия)."
+                    : "Выполнение остановлено.";
                 setResult(why + "\n\nPython перезапускается, подождите несколько секунд...", "#f59e0b");
                 return;
             }

@@ -50,13 +50,13 @@
 
     <main class="container">
         <section class="lesson-goal">
-            <h2>🎯 Цель урока</h2>
+            <h2>Цель урока</h2>
             <p>Познакомиться с модулем <code>datetime</code> и научиться получать, форматировать и
                 вычислять разницу между датами.</p>
         </section>
 
         <section class="lesson-content">
-            <h2>📅 Модуль datetime</h2>
+            <h2>Модуль datetime</h2>
             <p>Python предоставляет встроенный модуль <code>datetime</code> для работы с датами и
                 временем. Чтобы использовать его, нужно импортировать класс <code>datetime</code>
                 из одноимённого модуля:</p>
@@ -65,7 +65,7 @@
 now = datetime.now()
 print("Текущая дата и время:", now)</code></pre>
 
-            <h2>⏳ Форматирование даты - метод strftime()</h2>
+            <h2>Форматирование даты - метод strftime()</h2>
             <p>Метод <code>strftime()</code> конвертирует объект даты в строку по заданному шаблону.
                 Название: <strong>str</strong>ing <strong>f</strong>ormat <strong>time</strong>:</p>
             <pre><code>from datetime import datetime
@@ -85,7 +85,7 @@ print("Отформатированная дата:", formatted_date)
                 <li><code>%S</code> - секунды (00–59)</li>
             </ul>
 
-            <h2>📆 Создание своей даты</h2>
+            <h2>Создание своей даты</h2>
             <p>Объект даты можно создать вручную, передав год, месяц, день и (опционально) время:</p>
             <pre><code>from datetime import datetime
 
@@ -93,7 +93,7 @@ custom_date = datetime(2025, 5, 17, 15, 30)
 print("Созданная дата:", custom_date)
 # Выведет: 2025-05-17 15:30:00</code></pre>
 
-            <h2>⏱️ Разница во времени - timedelta</h2>
+            <h2>Разница во времени - timedelta</h2>
             <p>Если вычесть одну дату из другой, получится объект <code>timedelta</code> -
                 он хранит разницу в днях и секундах:</p>
             <pre><code>from datetime import datetime, timedelta
@@ -111,7 +111,7 @@ today = datetime.now()
 next_week = today + timedelta(days=7)
 print("Через неделю будет:", next_week.strftime("%d.%m.%Y"))</code></pre>
 
-            <h2>🔄 Парсинг строки в дату (strptime)</h2>
+            <h2>Парсинг строки в дату (strptime)</h2>
             <p>Метод <code>strptime()</code> делает обратное по отношению к <code>strftime()</code>:
                 он превращает строку в объект <code>datetime</code>. Название:
                 <strong>str</strong>ing <strong>p</strong>arse <strong>time</strong>.</p>
@@ -133,7 +133,7 @@ date_obj = datetime.strptime(input_date, "%Y-%m-%d")
 output_date = date_obj.strftime("%d.%m.%Y")
 print(output_date)  # 25.12.2024</code></pre>
 
-            <h2>⏱️ Практические вычисления с датами</h2>
+            <h2>Практические вычисления с датами</h2>
             <p>Комбинируя <code>strptime</code>, <code>datetime.now()</code> и <code>timedelta</code>,
                 можно решать реальные задачи: считать возраст, вычислять дедлайны и дни до события.</p>
             <pre><code>from datetime import datetime, timedelta
@@ -161,7 +161,7 @@ new_year = datetime(today.year + 1, 1, 1)
 days_left = (new_year - today).days
 print(f"До Нового года осталось {days_left} дней")</code></pre>
 
-            <h2>🌍 Unix timestamp</h2>
+            <h2>Unix timestamp</h2>
             <p>Unix timestamp — это количество секунд, прошедших с 1 января 1970 года (эпохи Unix).
                 Широко используется в логах, базах данных и API-ответах, потому что не зависит
                 от часового пояса.</p>
@@ -189,7 +189,7 @@ print(ts)  # 1704056400.0
 
         <!-- Домашнее задание -->
         <section class="lesson-homework">
-            <h2>📝 Домашнее задание</h2>
+            <h2>Домашнее задание</h2>
             <ul>
                 <li>Выведите текущую дату и время в формате «ДД.ММ.ГГГГ ЧЧ:ММ:СС».</li>
                 <li>Создайте объект даты своего дня рождения и выведите его.</li>

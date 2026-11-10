@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         card.style.position = 'relative'; // Ensure relative for absolute checkmark
                         const mark = document.createElement('div');
                         mark.className = 'check-mark';
-                        mark.textContent = '✅ Пройдено';
+                        mark.textContent = '✓ Пройдено';
                         card.appendChild(mark);
                     }
                 }
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             link.style.color = 'white';
                             link.onclick = (e) => {
                                 e.preventDefault();
-                                showToast('❌ Доступ закрыт! Сначала пройдите предыдущий урок.', 'error');
+                                showToast('Доступ закрыт: сначала пройдите предыдущий урок.', 'error');
                             };
                         }
                     } else {
@@ -305,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const prevBtn = document.createElement('a');
                 prevBtn.href = lessonsList[lessonIndex - 1];
                 prevBtn.className = 'btn-nav prev';
-                prevBtn.textContent = '⬅ Назад';
+                prevBtn.textContent = '← Назад';
                 navContainer.appendChild(prevBtn);
             }
 
@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!startBtn) {
             startBtn = document.createElement('button');
             startBtn.id = 'btn-start-quiz';
-            startBtn.textContent = '🧠 Теория изучена - начать тест!';
+            startBtn.textContent = 'Теория изучена — начать тест';
             startBtn.className = 'btn-complete';
             startBtn.onclick = () => {
                 startBtn.style.display = 'none'; // Hide self
@@ -401,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const title = document.createElement('h2');
             title.id = 'quiz-title';
-            title.textContent = '🚀 Проверочный тест';
+            title.textContent = 'Проверочный тест';
             container.setAttribute('role', 'region');
             container.setAttribute('aria-labelledby', 'quiz-title');
             container.appendChild(title);
@@ -427,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     inputArea.setAttribute('aria-describedby', qId);
 
                     const checkBtn = document.createElement('button');
-                    checkBtn.textContent = '✔️ Проверить';
+                    checkBtn.textContent = 'Проверить';
                     checkBtn.className = 'btn-quiz-opt';
                     checkBtn.setAttribute('aria-label', 'Проверить ответ');
 
@@ -471,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (q.explanation && !qBlock.querySelector('.quiz-explanation')) {
                             const expEl = document.createElement('p');
                             expEl.className = 'quiz-explanation';
-                            expEl.textContent = '💡 ' + q.explanation;
+                            expEl.textContent = q.explanation;
                             qBlock.appendChild(expEl);
                         }
 
@@ -563,7 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (explanation && !qBlock.querySelector('.quiz-explanation')) {
             const expEl = document.createElement('p');
             expEl.className = 'quiz-explanation';
-            expEl.textContent = '💡 ' + explanation;
+            expEl.textContent = explanation;
             feedback.after(expEl);
         }
 
@@ -613,7 +613,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.innerHTML = `
             <div class="quiz-failed-wrapper">
-                <div class="quiz-failed-icon">💥</div>
                 <h3 class="quiz-failed-title">Тест не пройден</h3>
                 <p class="quiz-failed-subtitle">${motivText}</p>
                 <div class="quiz-failed-score-box">
@@ -671,7 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.innerHTML = `
             <div class="quiz-passed-container">
-                <h3>🎉 Урок пройден!</h3>
+                <h3>Урок пройден</h3>
                 <p>Доступ к следующему уроку открыт.</p>
                 <button class="btn-retake" id="btn-retake-finished">Пройти заново для закрепления</button>
             </div>
@@ -699,7 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const nextBtn = document.createElement('a');
             nextBtn.href = nextLink;
             nextBtn.className = 'btn-nav next';
-            nextBtn.textContent = 'Следующий урок ➡';
+            nextBtn.textContent = 'Следующий урок →';
             navContainer.appendChild(nextBtn);
 
             // Auto scroll to nav
@@ -708,7 +707,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (lessonIndex === lessonsList.length - 1) {
             const finishDiv = document.createElement('div');
             finishDiv.className = 'btn-nav finish';
-            finishDiv.textContent = '🏆 Курс завершён!';
+            finishDiv.textContent = 'Курс завершён';
             navContainer.appendChild(finishDiv);
         }
     }
@@ -716,7 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 4. Utilities ---
     function initCopyButtons() {
         document.querySelectorAll('pre').forEach(pre => {
-            if (pre.closest('.CodeMirror') || pre.id === 'terminal-output') return;
+            if (pre.closest('.CodeMirror') || pre.id === 'terminal-output' || pre.classList.contains('code-window-body')) return;
             if (pre.querySelector('.btn-copy')) return;
 
             pre.style.position = 'relative';
@@ -789,7 +788,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!resetBtn) return;
 
         resetBtn.onclick = () => {
-            if (confirm('⚠️ Вы уверены, что хотите сбросить весь прогресс обучения? Все пройденные уроки будут снова заблокированы.')) {
+            if (confirm('Вы уверены, что хотите сбросить весь прогресс обучения? Все пройденные уроки будут снова заблокированы.')) {
                 localStorage.removeItem('quiz_results');
                 location.reload();
             }
@@ -811,7 +810,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 a.download = 'pythonbasic-progress.json';
                 a.click();
                 setTimeout(() => URL.revokeObjectURL(url), 1000);
-                showToast('✅ Прогресс сохранён в файл!', 'success');
+                showToast('Прогресс сохранён в файл', 'success');
             };
         }
 
@@ -829,10 +828,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         lessonsList.forEach(l => { if (data[l] === true) clean[l] = true; });
                         if (Object.keys(clean).length === 0) throw new Error('invalid');
                         localStorage.setItem('quiz_results', JSON.stringify(clean));
-                        showToast('✅ Прогресс загружен!', 'success');
+                        showToast('Прогресс загружен', 'success');
                         setTimeout(() => location.reload(), 1000);
                     } catch {
-                        showToast('❌ Неверный формат файла', 'error');
+                        showToast('Неверный формат файла', 'error');
                     }
                 };
                 reader.readAsText(file);

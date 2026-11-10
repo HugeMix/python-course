@@ -204,7 +204,7 @@
     <main class="container">
         <section class="lesson-title" style="margin-top: 20px;">
             <div class="container">
-                <h1>💻 Python Online IDE</h1>
+                <h1>Python Online IDE</h1>
                 <p>Пишите и мгновенно запускайте Python код прямо в браузере (локально, без ожиданий).</p>
             </div>
         </section>
@@ -217,9 +217,9 @@
 
             <div class="editor-container">
                 <div class="panel-header">
-                    <span>📝 Редактор кода (main.py)</span>
+                    <span>Редактор кода (main.py)</span>
                     <div class="panel-buttons">
-                        <button id="stop-btn" class="btn-stop" hidden>⏹ Стоп</button>
+                        <button id="stop-btn" class="btn-stop" hidden>Стоп</button>
                         <button id="run-btn" class="btn-run" disabled>▶ Запустить</button>
                     </div>
                 </div>
@@ -234,7 +234,7 @@ for i in range(1, 4):
 
             <div class="output-container">
                 <div class="panel-header">
-                    <label for="stdin-input">⌨️ Ввод данных для input()</label>
+                    <label for="stdin-input">Ввод данных для input()</label>
                     <span class="panel-hint">по одной строке на каждый input()</span>
                 </div>
                 <textarea id="stdin-input" placeholder="Например:&#10;Аня&#10;25"></textarea>
@@ -242,7 +242,7 @@ for i in range(1, 4):
 
             <div class="output-container">
                 <div class="panel-header">
-                    <span>📺 Терминал</span>
+                    <span>Терминал</span>
                     <button id="clear-btn"
                         style="background:transparent; color:#bbb; border:none; cursor:pointer;">Очистить</button>
                 </div>
@@ -299,7 +299,7 @@ for i in range(1, 4):
             </div>`;
         }
 
-        const loadTimer = setTimeout(() => showLoadError("⚠️ Загрузка Python занимает слишком долго..."), 30000);
+        const loadTimer = setTimeout(() => showLoadError("Загрузка Python занимает слишком долго..."), 30000);
         let firstLoad = true;
 
         const runner = new PyRunner({
@@ -322,7 +322,7 @@ for i in range(1, 4):
             if (!runner.ready || runner.busy) return;
             terminal.textContent = "";
             runBtn.disabled = true;
-            runBtn.textContent = "⏳ Выполнение...";
+            runBtn.textContent = "Выполнение...";
             stopBtn.hidden = false;
 
             const result = await runner.run({
@@ -336,9 +336,9 @@ for i in range(1, 4):
 
             if (result.timedOut || result.stopped) {
                 printToTerminal(result.timedOut
-                    ? "\n⏱ Программа работала дольше 15 секунд и была остановлена (возможно, бесконечный цикл).\n"
-                    : "\n⏹ Выполнение остановлено.\n");
-                printToTerminal("⏳ Перезапускаем Python...\n");
+                    ? "\nПрограмма работала дольше 15 секунд и была остановлена (возможно, бесконечный цикл).\n"
+                    : "\nВыполнение остановлено.\n");
+                printToTerminal("Перезапускаем Python...\n");
                 return; // кнопка включится, когда Python загрузится заново (onReady)
             }
             if (result.error) printToTerminal("\n[Ошибка]:\n" + result.error + "\n");
