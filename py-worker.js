@@ -10,11 +10,16 @@
 //   { type: 'stdout', id, text }
 //   { type: 'done', id, error, passed }
 
-importScripts('https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js');
-
 let pyodide = null;
+let scriptError = null;
 
-const ready = loadPyodide()
+try {
+    importScripts('https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js');
+} catch (err) {
+    scriptError = err; // CDN недоступен (нет интернета или блокировка)
+}
+
+const ready = (scriptError ? Promise.reject(scriptError) : loadPyodide())
     .then(p => { pyodide = p; postMessage({ type: 'ready' }); })
     .catch(err => postMessage({ type: 'load-error', error: String(err) }));
 

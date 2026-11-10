@@ -1,5 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
+/* Ширина элемента включает padding и border.
+   Без этого блоки с width: 100% и отступами вылезали за экран на телефоне. */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Атрибут hidden должен скрывать элемент, даже если в CSS задан display */
+[hidden] {
+    display: none !important;
+}
+
 /* ==== CSS VARIABLES & THEME ==== */
 :root {
     --bg-color: #f8fafc;
@@ -822,6 +835,7 @@ body.dark-mode footer {
 
 .libraries {
     flex: 1;
+    min-width: 0; /* иначе длинный код в <pre> растягивает колонку шире экрана */
 }
 
 .library {
@@ -845,6 +859,7 @@ body.dark-mode footer {
 @media (max-width: 900px) {
     .libraries-layout {
         flex-direction: column;
+        align-items: stretch;
     }
 
     .libraries-sidebar {
@@ -1366,4 +1381,63 @@ pre:hover .btn-copy {
 /* ==== ЛОГОТИП В ШАПКЕ ==== */
 .logo-link:hover {
     transform: scale(1.05);
+}
+
+/* ==== ЗАКРЫТЫЙ УРОК ==== */
+.lesson-locked-banner {
+    margin: 20px 0;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.lesson-locked-banner a {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.quiz-locked-note {
+    text-align: center;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* ==== ПОЛЕ ВВОДА КОДА В ТЕСТЕ ==== */
+textarea.code-input {
+    border-radius: 6px;
+    padding: 10px;
+    margin: 10px 0;
+    resize: vertical;
+}
+
+.quiz-feedback.is-correct {
+    color: var(--success-color);
+}
+
+.quiz-feedback.is-wrong {
+    color: var(--error-color);
+}
+
+.quiz-feedback code {
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* ==== ЗАПАСНОЙ РЕДАКТОР (если CodeMirror не загрузился) ==== */
+textarea.editor-fallback {
+    display: block;
+    width: 100%;
+    min-height: 300px;
+    padding: 12px 15px;
+    border: none;
+    background: #282a36;
+    color: #f8f8f2;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.5;
+    resize: vertical;
+    tab-size: 4;
 }
