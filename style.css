@@ -1533,6 +1533,28 @@ textarea.editor-fallback {
     transform: translateY(-2px);
 }
 
+.landing-btn-outline {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.landing-btn-outline:hover {
+    background: var(--accent-color);
+    color: #fff;
+}
+
+.landing-cta .landing-btn-ghost {
+    border-color: rgba(255, 255, 255, 0.6);
+    color: #fff;
+}
+
+.landing-cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+
 .landing-btn-disabled {
     background: rgba(128, 128, 128, 0.12);
     color: var(--text-color);
