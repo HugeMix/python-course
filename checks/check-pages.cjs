@@ -117,7 +117,8 @@ async function accessFlow(browser, BASE) {
 async function main() {
     const server = await serve();
     const BASE = `http://127.0.0.1:${server.address().port}/`;
-    const browser = await chromium.launch();
+    // PW_CHANNEL=chrome — взять уже установленный Google Chrome (так делает проверка на GitHub)
+    const browser = await chromium.launch(process.env.PW_CHANNEL ? { channel: process.env.PW_CHANNEL } : {});
     const tasks = vm.runInNewContext(read('tasks_data.js') + ';tasks');
     const quizData = vm.runInNewContext('(' + read('script.js').match(/const quizData = (\{[\s\S]*?\n {4}\});/)[1] + ')');
     let current = '';
