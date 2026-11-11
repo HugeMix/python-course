@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="88 задач по Python с автоматической проверкой: от первой программы до классов и работы с JSON. Решайте прямо в браузере.">
+        content="103 задачи по Python с автоматической проверкой и 3 контрольные: от первой программы до классов и JSON. Решайте прямо в браузере.">
     <title>Задачи по Python с автопроверкой | PythonBasic</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="Задачи по Python с автопроверкой | PythonBasic">
-    <meta property="og:description" content="88 задач по Python с автоматической проверкой: от первой программы до классов и работы с JSON. Решайте прямо в браузере.">
+    <meta property="og:description" content="103 задачи по Python с автоматической проверкой и 3 контрольные: от первой программы до классов и JSON. Решайте прямо в браузере.">
     <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
     <link rel="canonical" href="https://hugemix.github.io/python-course/tasks.html">
     <meta property="og:url" content="https://hugemix.github.io/python-course/tasks.html">
@@ -211,6 +211,8 @@
             font-size: 0.9rem;
         }
 
+        .tasks-group.is-exam { color: var(--accent-color); opacity: 1; }
+
         .tasks-group {
             margin: 14px 4px 4px;
             font-size: 0.75rem;
@@ -301,6 +303,7 @@
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="python-basic.html">Уроки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="exams.html">Контрольные</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
                     <li><a href="cheatsheet.html">Шпаргалка</a></li>
                     <li><a href="glossary.html">Глоссарий</a></li>
@@ -451,7 +454,11 @@
 
         let currentFilter = "all";
         // Урок из адреса tasks.html#lesson=4 или выбранный в списке
-        let currentLesson = Number((location.hash.match(/^#lesson=(\d+)/) || [])[1]) || 0;
+        // Что показывать в списке: "0" — все задачи, "4" — задачи урока 4, "e1" — контрольная 1.
+        // Можно открыть сразу нужное: tasks.html#lesson=4 или tasks.html#exam=1
+        let currentLesson = (location.hash.match(/^#lesson=(\d+)/) || [])[1] || ((location.hash.match(/^#exam=(\d)/) || [])[1] ? "e" + location.hash.match(/^#exam=(\d)/)[1] : "0");
+        const EXAM_LESSONS = { 1: "уроки 1–6", 2: "уроки 7–11", 3: "уроки 12–16" };
+        const groupKey = t => (t.exam ? "e" + t.exam : String(t.lesson));
         const LESSON_NAMES = ["Введение в Python", "Переменные и типы данных", "Операторы", "Условия", "Циклы",
             "Списки и кортежи", "Функции", "Словари и множества", "Строки", "Файлы", "Обработка ошибок",
             "Модули и библиотеки", "Основы ООП", "Дата и время", "Итоговый проект", "Работа с API"];
@@ -486,15 +493,20 @@
             const lessonSelect = document.createElement("select");
             lessonSelect.className = "tasks-lesson-select";
             lessonSelect.setAttribute("aria-label", "Задачи к уроку");
-            lessonSelect.appendChild(new Option(`Все уроки · ${tasks.length} задач`, "0"));
+            const word = n => (n % 10 === 1 && n % 100 !== 11 ? "задача" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? "задачи" : "задач");
+            lessonSelect.appendChild(new Option(`Все уроки · ${tasks.length} ${word(tasks.length)}`, "0"));
             LESSON_NAMES.forEach((name, i) => {
-                const n = tasks.filter(t => t.lesson === i + 1).length;
+                const n = tasks.filter(t => t.lesson === i + 1 && !t.exam).length;
                 if (n) lessonSelect.appendChild(new Option(`Урок ${i + 1}. ${name} · ${n}`, String(i + 1)));
+                // контрольная — сразу после последнего урока блока
+                const exam = tasks.find(t => t.exam && t.lesson === i + 1);
+                if (exam) lessonSelect.appendChild(new Option(`Контрольная ${exam.exam} (${EXAM_LESSONS[exam.exam]}) · ${tasks.filter(t => t.exam === exam.exam).length}`, "e" + exam.exam));
             });
-            lessonSelect.value = String(currentLesson);
-            lessonSelect.onchange = () => { currentLesson = Number(lessonSelect.value); renderTasks(); };
+            lessonSelect.value = currentLesson;
+            if (lessonSelect.value !== currentLesson) { currentLesson = "0"; lessonSelect.value = "0"; }
+            lessonSelect.onchange = () => { currentLesson = lessonSelect.value; renderTasks(); };
             head.appendChild(lessonSelect);
-            const inLesson = t => !currentLesson || t.lesson === currentLesson;
+            const inLesson = t => currentLesson === "0" || groupKey(t) === currentLesson;
 
             // Фильтр по сложности
             const filter = document.createElement("div");
@@ -519,11 +531,12 @@
                 if (!inLesson(task)) return;
                 if (currentFilter !== "all" && task.difficulty !== currentFilter) return;
                 // Заголовок урока перед его задачами
-                if (task.lesson !== lastLesson) {
-                    lastLesson = task.lesson;
+                if (groupKey(task) !== lastLesson) {
+                    lastLesson = groupKey(task);
                     const h = document.createElement("div");
                     h.className = "tasks-group";
-                    h.textContent = `Урок ${task.lesson}. ${LESSON_NAMES[task.lesson - 1]}`;
+                    h.textContent = task.exam ? `Контрольная ${task.exam} · ${EXAM_LESSONS[task.exam]}` : `Урок ${task.lesson}. ${LESSON_NAMES[task.lesson - 1]}`;
+                    if (task.exam) h.classList.add("is-exam");
                     list.appendChild(h);
                 }
                 const item = document.createElement("button");
@@ -566,7 +579,8 @@
             const task = tasks[index];
             document.getElementById("task-title").textContent = task.title;
             const meta = document.getElementById("task-meta");
-            meta.textContent = `Урок ${task.lesson}. ${LESSON_NAMES[task.lesson - 1]}` + (task.hw ? " · домашнее задание" : "") + " · " + DIFF[task.difficulty][0].toLowerCase();
+            meta.textContent = (task.exam ? `Контрольная ${task.exam} · ${EXAM_LESSONS[task.exam]}` : `Урок ${task.lesson}. ${LESSON_NAMES[task.lesson - 1]}` + (task.hw ? " · домашнее задание" : ""))
+                + " · " + DIFF[task.difficulty][0].toLowerCase();
             document.getElementById("task-text").innerHTML = task.desc;
             editor.setValue(localStorage.getItem(`saved_code_${task.id}`) || task.startCode);
             if (runner.ready) {

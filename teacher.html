@@ -26,6 +26,7 @@
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="python-basic.html">Уроки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="exams.html">Контрольные</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
                     <li><a href="cheatsheet.html">Шпаргалка</a></li>
                     <li><a href="glossary.html">Глоссарий</a></li>
@@ -177,7 +178,50 @@
             return j && Array.isArray(j.students) ? j : { students: [], assignments: [] };
         }
         let journal = loadJournal();
-        function saveJournal() { PB.write('pb_journal', journal); }
+        function saveJournal() {
+            PB.write('pb_journal', journal);
+            PB.write('pb_journal_changed_at', new Date().toISOString());
+        }
+
+        // ---------- копия журнала и напоминание о ней ----------
+        // Журнал живёт только в этом браузере, поэтому раз в неделю напоминаем скачать копию.
+        const BACKUP_EVERY_DAYS = 7;
+        const DAY = 24 * 60 * 60 * 1000;
+        function downloadJournal() {
+            const blob = new Blob([JSON.stringify({ app: 'pythonbasic-journal', v: 1, savedAt: new Date().toISOString(), journal }, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = el('a', { href: url, download: 'pythonbasic-journal-' + new Date().toISOString().slice(0, 10) + '.json' });
+            document.body.append(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            PB.write('pb_journal_backup_at', new Date().toISOString());
+            toast('Копия журнала сохранена в «Загрузки»');
+        }
+        function lastBackupText() {
+            const at = PB.read('pb_journal_backup_at', null);
+            if (!at) return 'Копию ещё ни разу не сохраняли.';
+            const days = Math.floor((Date.now() - new Date(at).getTime()) / DAY);
+            return 'Последняя копия: ' + (days <= 0 ? 'сегодня' : days === 1 ? 'вчера' : plural(days, 'день', 'дня', 'дней') + ' назад') + '.';
+        }
+        function backupReminder() {
+            if (!journal.students.length) return null;
+            const now = Date.now();
+            const backupAt = PB.read('pb_journal_backup_at', null);
+            const changedAt = PB.read('pb_journal_changed_at', null);
+            const snoozeUntil = PB.read('pb_journal_remind_after', null);
+            if (snoozeUntil && now < new Date(snoozeUntil).getTime()) return null;
+            if (backupAt && changedAt && new Date(changedAt) <= new Date(backupAt)) return null;   // после копии ничего не менялось
+            if (backupAt && now - new Date(backupAt).getTime() < BACKUP_EVERY_DAYS * DAY) return null;
+            const box = el('div', { class: 'cab-reminder', role: 'status' },
+                el('div', { class: 'cab-reminder-text' },
+                    el('strong', { text: 'Сохраните копию журнала' }),
+                    el('span', { text: 'Журнал учеников и оценок хранится только в этом браузере: если очистить браузер или сменить устройство, он пропадёт. ' + lastBackupText() })),
+                el('div', { class: 'cab-reminder-actions' },
+                    el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: 'Сохранить копию', onclick: () => { downloadJournal(); box.remove(); } }),
+                    el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Напомнить через 3 дня', onclick: () => {
+                        PB.write('pb_journal_remind_after', new Date(Date.now() + 3 * DAY).toISOString()); box.remove();
+                    } })));
+            return box;
+        }
         const norm = s => String(s || '').trim().toLowerCase().replace(/\s+/g, ' ');
 
         function findOrCreateStudent(name) {
@@ -304,6 +348,8 @@
                     el('button', { class: 'cab-icon-btn', type: 'button', text: 'Выйти', onclick: () => { setUnlocked(false); renderGate(); } })));
             root.append(nav);
             if (notice) root.append(el('div', { class: 'hub-alert hub-alert-' + notice.kind, text: notice.text }));
+            const reminder = current !== 'settings' && backupReminder();
+            if (reminder) root.append(reminder);
             const panel = el('div', { class: 'hub-panel' });
             root.append(panel);
             ({ students: renderStudents, assign: renderAssign, teach: renderTeach, settings: renderSettings })[current](panel);
@@ -421,7 +467,7 @@
                     const t = taskById(id); const solved = r.solved.includes(id); const code = r.code[id];
                     items.push(el('li', { class: 'cab-result' + (solved ? ' is-done' : '') },
                         el('span', { class: 'cab-check', 'aria-hidden': 'true', text: solved ? '✓' : '' }),
-                        el('span', { class: 'cab-result-title' }, 'Задача «' + t.title + '»', el('small', { text: DIFF[t.difficulty] + ' · +' + PB.TASK_POINTS[t.difficulty] + ' б.' })),
+                        el('span', { class: 'cab-result-title' }, (t.exam ? 'Контрольная ' + t.exam + ': ' : 'Задача ') + '«' + t.title + '»', el('small', { text: DIFF[t.difficulty] + ' · +' + PB.TASK_POINTS[t.difficulty] + ' б.' })),
                         el('span', { class: 'hub-pill ' + (solved ? 'hub-pill-ok' : 'hub-pill-idle'), text: solved ? 'решена' : 'не решена' }),
                         code ? el('details', { class: 'hub-code' }, el('summary', { text: 'Посмотреть код' }), el('pre', {}, el('code', { class: 'language-python', text: code }))) : null));
                 });
@@ -485,30 +531,50 @@
                 return btn;
             });
 
+            // Контрольные: кнопка добавляет в задание все 5 задач контрольной
+            const EXAM_RANGES = { 1: 'уроки 1–6', 2: 'уроки 7–11', 3: 'уроки 12–16' };
+            const examButtons = [1, 2, 3].map(n => {
+                const ids = tasks.filter(t => t.exam === n).map(t => t.id);
+                const btn = el('button', { class: 'cab-lesson cab-exam', type: 'button', 'aria-pressed': 'false' },
+                    el('span', { class: 'cab-lesson-num', text: 'К' + n }), el('span', { text: 'Контрольная ' + n + ' · ' + EXAM_RANGES[n] }));
+                btn.addEventListener('click', () => {
+                    const on = !ids.every(id => selectedTasks.has(id));
+                    ids.forEach(id => on ? selectedTasks.add(id) : selectedTasks.delete(id));
+                    syncTaskBoxes();
+                    updateCounter();
+                });
+                return { btn, ids };
+            });
+            const syncExamButtons = () => examButtons.forEach(({ btn, ids }) => {
+                const on = ids.length > 0 && ids.every(id => selectedTasks.has(id));
+                btn.classList.toggle('active', on); btn.setAttribute('aria-pressed', String(on));
+            });
+
             const autoTasks = el('input', { type: 'checkbox', checked: true, id: 'cab-auto' });
             const taskBoxes = tasks.map(t => {
                 const cb = el('input', { type: 'checkbox', value: t.id });
-                cb.addEventListener('change', () => { cb.checked ? selectedTasks.add(t.id) : selectedTasks.delete(t.id); updateCounter(); });
+                cb.addEventListener('change', () => { cb.checked ? selectedTasks.add(t.id) : selectedTasks.delete(t.id); syncExamButtons(); updateCounter(); });
                 return { cb, t, node: el('label', { class: 'hub-chip' }, cb, el('span', { text: t.title }), el('small', { class: 'cab-chip-diff cab-diff-' + t.difficulty, text: '+' + PB.TASK_POINTS[t.difficulty] })) };
             });
-            const syncTaskBoxes = () => taskBoxes.forEach(b => { b.cb.checked = selectedTasks.has(b.t.id); });
+            const syncTaskBoxes = () => { taskBoxes.forEach(b => { b.cb.checked = selectedTasks.has(b.t.id); }); syncExamButtons(); };
             function renderTaskInfo() {
                 taskInfo.textContent = '';
                 if (!selectedTasks.size) { taskInfo.append(el('p', { class: 'hub-muted', text: 'Задачи не выбраны.' })); return; }
                 taskInfo.append(el('div', { class: 'cab-tags' }, [...selectedTasks].map(id => {
                     const t = taskById(id);
-                    return el('span', { class: 'cab-tag' }, t.title, el('button', { type: 'button', 'aria-label': 'Убрать задачу', text: '×', onclick: () => { selectedTasks.delete(id); syncTaskBoxes(); updateCounter(); } }));
+                    return el('span', { class: 'cab-tag' }, (t.exam ? 'К' + t.exam + ': ' : '') + t.title, el('button', { type: 'button', 'aria-label': 'Убрать задачу', text: '×', onclick: () => { selectedTasks.delete(id); syncTaskBoxes(); updateCounter(); } }));
                 })));
             }
 
             const manual = el('details', { class: 'cab-manual' },
                 el('summary', { text: 'Выбрать задачи вручную' }),
                 el('p', { class: 'hub-muted', text: 'Задачи сгруппированы по урокам. Цифра справа — сколько баллов даёт задача.' }),
-                el('div', { class: 'hub-chip-groups' }, PB.LESSON_TITLES.map((title, i) => {
-                    const boxes = taskBoxes.filter(b => b.t.lesson === i + 1);
-                    return boxes.length ? el('div', { class: 'hub-chip-group' },
-                        el('h4', { text: 'Урок ' + (i + 1) + '. ' + title }),
-                        el('div', { class: 'hub-chips hub-chips-col' }, boxes.map(b => b.node))) : null;
+                el('div', { class: 'hub-chip-groups' }, PB.LESSON_TITLES.flatMap((title, i) => {
+                    const group = (head, boxes) => boxes.length ? el('div', { class: 'hub-chip-group' },
+                        el('h4', { text: head }), el('div', { class: 'hub-chips hub-chips-col' }, boxes.map(b => b.node))) : null;
+                    const exam = taskBoxes.filter(b => b.t.exam && b.t.lesson === i + 1);
+                    return [group('Урок ' + (i + 1) + '. ' + title, taskBoxes.filter(b => !b.t.exam && b.t.lesson === i + 1)),
+                        exam.length ? group('Контрольная ' + exam[0].t.exam + ' · ' + EXAM_RANGES[exam[0].t.exam], exam) : null];
                 })));
 
             const msg = el('p', { class: 'hub-error', role: 'alert' });
@@ -546,6 +612,9 @@
                 step(2, 'Какие уроки', 'Выбранные уроки откроются у ученика сразу. Нажмите на урок, чтобы выбрать.',
                     el('div', { class: 'cab-lessons' }, lessonButtons),
                     el('label', { class: 'cab-toggle' }, autoTasks, el('span', { text: 'Добавлять домашние задачи к каждому выбранному уроку' })),
+                    el('h3', { class: 'hub-subtitle', text: 'Контрольные' }),
+                    el('p', { class: 'hub-muted cab-exam-hint', text: '5 задач, в которых смешаны темы блока. Нажмите, чтобы добавить контрольную в задание.' }),
+                    el('div', { class: 'cab-lessons cab-exams' }, examButtons.map(x => x.btn)),
                     el('h3', { class: 'hub-subtitle', text: 'Задачи в задании' }), taskInfo, manual),
                 step(3, 'Отправить', null,
                     el('label', { class: 'hub-label', for: 'as-note', text: 'Комментарий (необязательно)' }), note,
@@ -585,15 +654,9 @@
 
         // ---------- настройки ----------
         function renderSettings(panel) {
+            const lastBackup = el('p', { class: 'hub-muted cab-backup-when', text: lastBackupText() });
             const exportBtn = el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: 'Скачать копию журнала' });
-            exportBtn.addEventListener('click', () => {
-                const blob = new Blob([JSON.stringify({ app: 'pythonbasic-journal', v: 1, savedAt: new Date().toISOString(), journal }, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = el('a', { href: url, download: 'pythonbasic-journal-' + new Date().toISOString().slice(0, 10) + '.json' });
-                document.body.append(a); a.click(); a.remove();
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
-                toast('Копия журнала сохранена');
-            });
+            exportBtn.addEventListener('click', () => { downloadJournal(); lastBackup.textContent = lastBackupText(); });
             const file = el('input', { type: 'file', accept: '.json,application/json', hidden: true });
             file.addEventListener('change', () => {
                 const f = file.files[0]; if (!f) return;
@@ -604,7 +667,8 @@
                         if (!data || data.app !== 'pythonbasic-journal' || !data.journal || !Array.isArray(data.journal.students)) throw new Error();
                         if (!confirm('Заменить текущий журнал данными из файла?')) return;
                         journal = { students: data.journal.students, assignments: Array.isArray(data.journal.assignments) ? data.journal.assignments : [] };
-                        saveJournal(); toast('Журнал восстановлен'); go('students');
+                        saveJournal(); PB.write('pb_journal_backup_at', new Date().toISOString());
+                        toast('Журнал восстановлен'); go('students');
                     } catch (e) { toast('Это не копия журнала', 'err'); }
                 };
                 reader.readAsText(f);
@@ -621,7 +685,8 @@
             });
             panel.append(el('section', { class: 'hub-card' },
                 el('div', { class: 'hub-card-head' }, el('h2', { text: 'Копия журнала' })),
-                el('p', { class: 'hub-muted', text: 'Журнал хранится только в этом браузере. Раз в неделю скачивайте копию — из неё журнал можно восстановить на любом устройстве.' }),
+                el('p', { class: 'hub-muted', text: 'Журнал хранится только в этом браузере. Раз в неделю скачивайте копию — из неё журнал можно восстановить на любом устройстве. Если копия устарела, кабинет напомнит об этом.' }),
+                lastBackup,
                 el('div', { class: 'hub-actions' }, exportBtn, el('button', { class: 'hub-btn', type: 'button', text: 'Восстановить из файла', onclick: () => file.click() }), file)));
             panel.append(el('section', { class: 'hub-card' },
                 el('div', { class: 'hub-card-head' }, el('h2', { text: 'PIN-код' })),

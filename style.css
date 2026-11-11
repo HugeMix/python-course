@@ -4919,3 +4919,136 @@ body.dark-mode .qz-card { border-color: rgba(129, 140, 248, 0.22); }
 @media (prefers-reduced-motion: reduce) {
     .qz-ring-value, .qz-option, .qz-btn { transition: none; }
 }
+
+/* ==== Кабинет: напоминание сохранить копию журнала ==== */
+.cab-reminder {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 20px;
+    margin: 0 0 18px;
+    padding: 16px 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.cab-reminder-text { flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.cab-reminder-text strong { font-size: 1.02rem; }
+.cab-reminder-text span { font-size: 0.93rem; line-height: 1.55; opacity: 0.85; }
+.cab-reminder-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.cab-backup-when { margin: 4px 0 12px; font-weight: 600; }
+
+/* ==== Контрольные работы ==== */
+.exam-intro {
+    margin: 0 0 24px;
+    padding: 18px 22px;
+    border-radius: 14px;
+    background: rgba(79, 70, 229, 0.06);
+    border: 1px solid rgba(79, 70, 229, 0.16);
+    font-size: 1.02rem;
+    line-height: 1.7;
+}
+
+.exam-intro p { margin: 0; }
+
+.exam-card {
+    margin: 0 0 24px;
+    padding: 28px 32px;
+    border-radius: var(--radius);
+    background: var(--card-bg);
+    border: 1px solid rgba(79, 70, 229, 0.16);
+    box-shadow: var(--shadow);
+    scroll-margin-top: 90px;
+}
+
+.exam-card.is-passed { border-color: rgba(16, 185, 129, 0.4); }
+
+.exam-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px 24px; }
+.exam-titles { flex: 1 1 320px; min-width: 0; }
+.exam-titles h2 { margin: 8px 0 4px; font-size: 1.5rem; border: 0; padding: 0; }
+.exam-kicker,
+.exam-callout-kicker {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(79, 70, 229, 0.09);
+    color: var(--accent-color);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.exam-topics { margin: 0; opacity: 0.75; }
+.exam-side { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.exam-score { font-size: 0.92rem; font-weight: 600; opacity: 0.8; font-variant-numeric: tabular-nums; }
+
+.exam-pill {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(128, 128, 128, 0.14);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.exam-pill.is-ok { background: var(--success-bg); color: var(--success-color); }
+.exam-pill.is-progress { background: rgba(245, 158, 11, 0.14); color: #b45309; }
+body.dark-mode .exam-pill.is-progress { color: #fbbf24; }
+
+.exam-bar { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; margin: 18px 0 14px; }
+.exam-bar span { height: 6px; border-radius: 999px; background: rgba(128, 128, 128, 0.2); }
+.exam-bar span.is-done { background: var(--success-color); }
+
+.exam-note { margin: 0 0 8px; font-size: 0.95rem; opacity: 0.8; }
+.exam-card .hw-tasks { margin-top: 16px; }
+.exam-actions { margin-top: 16px; }
+
+/* Карточка контрольной на странице «Уроки» */
+.lesson-card.exam-card-mini {
+    border: 1px dashed rgba(79, 70, 229, 0.45);
+    background: rgba(79, 70, 229, 0.04);
+}
+
+.lesson-card.exam-card-mini h3 { margin-top: 10px; }
+.lesson-card.exam-card-mini .exam-kicker { align-self: flex-start; width: auto; }
+
+/* Блок «Контрольная» в конце уроков 6, 11, 16 */
+.exam-callout {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 20px;
+    margin-top: 22px;
+    padding: 18px 22px;
+    border-radius: 14px;
+    border: 1px dashed rgba(79, 70, 229, 0.45);
+    background: var(--card-bg);
+}
+
+.exam-callout-text { flex: 1 1 320px; min-width: 0; }
+.exam-callout-text strong { display: block; margin: 8px 0 4px; font-size: 1.08rem; }
+.exam-callout-text p { margin: 0; font-size: 0.95rem; opacity: 0.85; }
+
+@media (max-width: 640px) {
+    .exam-card { padding: 22px 18px; }
+    .exam-side { align-items: flex-start; }
+}
+
+/* Программа курса на главной: 3 модуля, в конце каждого — контрольная */
+.program-grid.is-three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.program-list .program-exam a { border: 1px dashed rgba(79, 70, 229, 0.4); background: rgba(79, 70, 229, 0.05); }
+.program-list .program-exam .program-num { color: var(--accent-color); }
+
+@media (max-width: 1000px) {
+    .program-grid.is-three { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Кабинет: кнопки контрольных */
+.cab-exams { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cab-exam .cab-lesson-num { width: auto; min-width: 28px; padding: 0 6px; }
+.cab-exam-hint { margin: -4px 0 10px; }
+
+@media (max-width: 700px) {
+    .cab-exams { grid-template-columns: minmax(0, 1fr); }
+}
