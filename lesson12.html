@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Урок 12: Модули и библиотеки Python. Импорт модулей, pip и установка сторонних библиотек.">
+        content="Урок 12 курса Python с нуля: import и from import, модули math, random, statistics, collections, установка библиотек через pip и свой модуль. Примеры можно запускать прямо на странице.">
     <title>Урок 12: Модули и библиотеки | PythonBasic</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="Урок 12: Модули и библиотеки | PythonBasic">
-    <meta property="og:description" content="Урок 12: Модули и библиотеки Python. Импорт модулей, pip и установка сторонних библиотек.">
+    <meta property="og:description" content="Урок 12 курса Python с нуля: import и from import, модули math, random, statistics, collections, установка библиотек через pip и свой модуль. Примеры можно запускать прямо на странице.">
     <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
     <link rel="canonical" href="https://hugemix.github.io/python-course/lesson12.html">
     <meta property="og:url" content="https://hugemix.github.io/python-course/lesson12.html">
@@ -42,8 +42,8 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h1>Урок 12: Модули и библиотеки</h1>
-            <p>Изучим, как подключать модули и использовать готовые библиотеки в Python.</p>
+            <h1>Модули и библиотеки</h1>
+            <p>Подключаем готовый код: математика, случайности и тысячи библиотек.</p>
         </div>
     </section>
 
@@ -51,135 +51,206 @@
         <!-- Цель урока -->
         <section class="lesson-goal">
             <h2>Цель урока</h2>
-            <p>Научиться использовать встроенные модули и сторонние библиотеки, подключать нужные инструменты
-                с помощью <code>import</code> и устанавливать новые пакеты через pip.</p>
+            <p>Научиться подключать модули через <code>import</code> и <code>from … import</code>, пользоваться модулями <code>math</code>, <code>random</code>, <code>statistics</code> и <code>collections</code>, узнать, как устанавливать сторонние библиотеки через pip и как создать свой модуль.</p>
+            <p class="lesson-meta">Время: около 40 минут · 2 упражнения в уроке · тест · 3 задачи на дом</p>
         </section>
 
         <!-- Основной материал -->
         <section class="lesson-content">
-            <h2>Что такое модуль?</h2>
-            <p>Модуль - это файл с готовым кодом Python (.py), который можно подключить в свою программу
-                с помощью ключевого слова <code>import</code>. В Python огромное количество встроенных
-                модулей - они уже установлены и готовы к использованию.</p>
+            <h2>Зачем это нужно</h2>
+            <p>Программисты почти никогда не пишут всё с нуля. Нужно случайное число для игры, квадратный корень, текущая дата, работа с таблицами или сайтами — для всего этого уже есть готовый код, проверенный миллионами людей.</p>
+            <p>Такой готовый код хранится в <strong>модулях</strong>. Модуль — это файл с функциями, который можно подключить к своей программе одной строкой. С Python поставляются сотни модулей (их называют <strong>стандартной библиотекой</strong>), а ещё сотни тысяч можно скачать бесплатно. Умение пользоваться модулями — одно из главных умений программиста.</p>
 
-            <h2>Подключение встроенных модулей</h2>
-            <p>Пример: модуль <code>math</code> содержит математические функции:</p>
-            <pre><code>import math
+            <h2>Подключаем модуль: import</h2>
+            <p>Чтобы использовать модуль, его подключают словом <code>import</code> в начале программы. Потом функции модуля вызывают через точку: <code>модуль.функция()</code>. Начнём с модуля <code>math</code> — математика:</p>
+            <pre data-run><code class="language-python">import math
 
-print(math.sqrt(25))  # Квадратный корень → 5.0
-print(math.pi)        # Константа π → 3.141592653589793
-print(math.ceil(4.1)) # Округление вверх → 5</code></pre>
+print(math.sqrt(16))
+print(math.pi)
+print(math.ceil(4.1))
+print(math.floor(4.9))
+print(math.pow(2, 10))</code></pre>
+            <div class="table-wrap">
+                <table class="lesson-table">
+                    <thead><tr><th>Функция</th><th>Что делает</th><th>Пример → результат</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>math.sqrt(x)</code></td><td>квадратный корень</td><td><code>math.sqrt(25)</code> → <code>5.0</code></td></tr>
+                        <tr><td><code>math.pi</code></td><td>число π</td><td><code>3.141592653589793</code></td></tr>
+                        <tr><td><code>math.ceil(x)</code></td><td>округлить вверх</td><td><code>math.ceil(4.1)</code> → <code>5</code></td></tr>
+                        <tr><td><code>math.floor(x)</code></td><td>округлить вниз</td><td><code>math.floor(4.9)</code> → <code>4</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-            <h2>Импорт конкретных функций - from... import</h2>
-            <p>Можно импортировать только нужные функции из модуля. Тогда не нужно каждый раз писать
-                название модуля через точку:</p>
-            <pre><code>from math import pi, sqrt
+            <div class="try-it" data-id="l12-buses">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Сколько нужно автобусов</h3></div>
+                <p>Программа получает два числа: сколько учеников едет на экскурсию и сколько мест в одном автобусе. Выведите, сколько нужно автобусов. Неполный автобус — тоже автобус.</p>
+                <textarea class="try-code" aria-label="Ваш код">import math
 
-print(sqrt(16))  # Выведет 4.0
-print(pi)        # Выведет 3.141592653589793</code></pre>
+people = int(input())
+seats = int(input())
 
-            <h2>Модуль random - случайные числа</h2>
-            <p>Встроенный модуль <code>random</code> используется для генерации случайных чисел:</p>
-            <pre><code>import random
+# посчитайте и выведите
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "45\n20", "out": "3"}, {"in": "40\n20", "out": "2"}, {"in": "1\n50", "out": "1"}, {"in": "101\n10", "out": "11"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Разделите обычным делением <code>people / seats</code> и округлите вверх: <code>math.ceil(...)</code>.</p></details>
+            </div>
 
-print(random.randint(1, 10))  # Случайное целое число от 1 до 10
-print(random.random())        # Случайное число от 0.0 до 1.0
+            <h2>from … import: только нужное</h2>
+            <p>Если из модуля нужны одна-две функции, их можно подключить напрямую. Тогда имя модуля перед функцией писать не нужно:</p>
+            <pre data-run><code class="language-python">from math import sqrt, pi
 
-fruits = ["яблоко", "банан", "вишня"]
-print(random.choice(fruits))  # Случайный элемент из списка</code></pre>
+print(sqrt(81))
+print(round(pi, 2))</code></pre>
+            <p>А ещё модулю можно дать короткое имя-псевдоним словом <code>as</code>. Так принято делать с длинными названиями — например, библиотеку для таблиц pandas почти все подключают как <code>import pandas as pd</code>:</p>
+            <pre data-run><code class="language-python">import statistics as st
 
-            <h2>Установка сторонних библиотек - pip</h2>
-            <p><strong>pip</strong> (Package Installer for Python) - это официальный менеджер пакетов Python.
-                С его помощью можно в одну команду в терминале загрузить и установить любую стороннюю
-                библиотеку из интернета:</p>
-            <pre><code>pip install requests</code></pre>
+grades = [5, 4, 4, 5, 3, 5]
+print(&quot;Среднее:&quot;, round(st.mean(grades), 2))
+print(&quot;Медиана:&quot;, st.median(grades))
+print(&quot;Чаще всего:&quot;, st.mode(grades))</code></pre>
 
-            <p>После установки библиотеку можно использовать как обычный модуль:</p>
-            <pre><code>import requests
+            <h2>Модуль random: случайности</h2>
+            <p>Модуль <code>random</code> нужен для игр, викторин, жеребьёвок и тестов. Запустите пример несколько раз — результат каждый раз будет разным:</p>
+            <pre data-run><code class="language-python">import random
 
-response = requests.get("https://api.github.com")
-print(response.status_code)  # Выведет 200, если запрос успешен</code></pre>
+print(&quot;Кубик:&quot;, random.randint(1, 6))
+print(&quot;Монетка:&quot;, random.choice([&quot;орёл&quot;, &quot;решка&quot;]))
 
-            <h2>Псевдоним при импорте - as</h2>
-            <p>Длинному имени модуля можно дать короткий псевдоним с помощью ключевого слова <code>as</code>:</p>
-            <pre><code>import math as m
+cards = [&quot;валет&quot;, &quot;дама&quot;, &quot;король&quot;, &quot;туз&quot;]
+random.shuffle(cards)
+print(&quot;Перемешали:&quot;, cards)
 
-print(m.sqrt(9))  # 3.0 - всё так же, но через псевдоним `m`</code></pre>
+print(&quot;Победители:&quot;, random.sample([&quot;Аня&quot;, &quot;Борис&quot;, &quot;Вика&quot;, &quot;Гоша&quot;, &quot;Дима&quot;], 2))</code></pre>
+            <div class="table-wrap">
+                <table class="lesson-table">
+                    <thead><tr><th>Функция</th><th>Что делает</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>random.randint(a, b)</code></td><td>случайное целое от a до b <strong>включительно</strong></td></tr>
+                        <tr><td><code>random.choice(список)</code></td><td>случайный элемент списка</td></tr>
+                        <tr><td><code>random.shuffle(список)</code></td><td>перемешать список (меняет сам список)</td></tr>
+                        <tr><td><code>random.sample(список, k)</code></td><td>k разных случайных элементов</td></tr>
+                        <tr><td><code>random.random()</code></td><td>случайное дробное число от 0 до 1</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-            <h2>Создание своего модуля</h2>
-            <p>Любой файл с расширением <code>.py</code> является модулем в Python. Вы можете разбить проект на несколько файлов и импортировать нужные функции и переменные из одного файла в другой — так код становится организованнее и удобнее для повторного использования:</p>
-            <pre><code># --- Файл mymath.py ---
-PI = 3.14159265
+            <h2>Что ещё есть в стандартной библиотеке</h2>
+            <p>Вот модули, которые пригодятся чаще всего. Все они уже есть в Python — устанавливать ничего не нужно:</p>
+            <div class="table-wrap">
+                <table class="lesson-table">
+                    <thead><tr><th>Модуль</th><th>Для чего</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>math</code></td><td>математика: корни, округление, тригонометрия</td></tr>
+                        <tr><td><code>random</code></td><td>случайные числа и выбор</td></tr>
+                        <tr><td><code>datetime</code></td><td>даты и время — урок 14</td></tr>
+                        <tr><td><code>os</code></td><td>файлы и папки — вы уже встречали его в уроке 10</td></tr>
+                        <tr><td><code>json</code></td><td>данные в формате JSON — урок 16</td></tr>
+                        <tr><td><code>collections</code></td><td>полезные виды списков и словарей, например счётчик <code>Counter</code></td></tr>
+                        <tr><td><code>time</code></td><td>паузы и замер времени</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <pre data-run><code class="language-python">from collections import Counter
 
-def circle_area(radius):
-    """Площадь круга"""
-    return PI * radius ** 2
+words = &quot;кот пёс кот рыба кот пёс&quot;.split()
+counts = Counter(words)
+print(counts)
+print(&quot;Самое частое:&quot;, counts.most_common(1))</code></pre>
+            <p>Помните словарь-счётчик из урока 8? <code>Counter</code> делает то же самое одной строкой.</p>
 
-def circle_perimeter(radius):
-    """Длина окружности"""
-    return 2 * PI * radius
+            <div class="try-it" data-id="l12-distance">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Расстояние между точками</h3></div>
+                <p>Программа получает одну строку с четырьмя числами через пробел: <code>x1 y1 x2 y2</code> — координаты двух точек. Выведите расстояние между ними, округлённое до 2 знаков после точки.</p>
+                <textarea class="try-code" aria-label="Ваш код">import math
 
-# --- Файл main.py ---
-import mymath
+x1, y1, x2, y2 = map(float, input().split())
 
-area = mymath.circle_area(5)
-print(f"Площадь: {area:.2f}")
+# посчитайте расстояние
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "0 0 3 4", "out": "5.0"}, {"in": "1 1 4 5", "out": "5.0"}, {"in": "0 0 1 1", "out": "1.41"}, {"in": "-2 3 4 -1", "out": "7.21"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Расстояние — корень из суммы квадратов разностей: <code>math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)</code>. Не забудьте <code>round(..., 2)</code>. Строка <code>map(float, input().split())</code> уже превратила все четыре числа в дробные.</p></details>
+            </div>
 
-# Или импортируем конкретные имена:
-from mymath import circle_area, PI
-print(f"Площадь: {circle_area(5):.2f}")
-print(f"π = {PI}")</code></pre>
+            <h2>Сторонние библиотеки и pip</h2>
+            <p>Кроме стандартной библиотеки, есть огромный каталог бесплатных библиотек от других программистов — <strong>PyPI</strong> (pypi.org). Их устанавливают программой <strong>pip</strong>, которая идёт вместе с Python. Команду пишут в терминале, а не в программе:</p>
+            <pre data-label="Терминал"><code class="language-bash">pip install requests</code></pre>
+            <p>После установки библиотеку подключают обычным <code>import</code>. Несколько популярных:</p>
+            <ul>
+                <li><strong>requests</strong> — запросы к сайтам и API (урок 16);</li>
+                <li><strong>pygame</strong> — 2D-игры;</li>
+                <li><strong>pandas</strong> и <strong>matplotlib</strong> — таблицы и графики;</li>
+                <li><strong>aiogram</strong> — Telegram-боты;</li>
+                <li><strong>flask</strong> — сайты.</li>
+            </ul>
+            <p>Больше библиотек с описаниями — на странице <a href="libraries.html">«Библиотеки»</a>. Сторонние библиотеки в примерах на этом сайте не работают — их нужно ставить на своём компьютере.</p>
+            <div class="callout callout-soft"><strong>Виртуальное окружение.</strong> Когда у вас появится несколько проектов, для каждого удобно создавать отдельное «окружение» со своим набором библиотек: <code>python -m venv venv</code>. Так библиотеки разных проектов не будут мешать друг другу. Пока вы учитесь, можно обойтись без него.</div>
 
-            <h2>Полезные стандартные модули</h2>
-            <p>Стандартная библиотека Python содержит сотни готовых модулей. Вот наиболее часто используемые в реальных проектах:</p>
-            <pre><code># os — работа с операционной системой
-import os
-print(os.getcwd())                     # Текущая директория
-os.makedirs("new_dir", exist_ok=True)  # Создать папку
+            <h2>Свой модуль</h2>
+            <p>Любой ваш файл <code>.py</code> — тоже модуль. Если программа стала большой, полезные функции выносят в отдельный файл и подключают их через <code>import</code>. Оба файла должны лежать в одной папке:</p>
+            <pre data-label="Файл helpers.py"><code class="language-python">def greet(name):
+    return f&quot;Привет, {name}!&quot;
 
-# sys — системные параметры
-import sys
-print(sys.version)   # Версия Python
-print(sys.platform)  # Платформа (win32, linux, darwin)
+def square(n):
+    return n * n</code></pre>
+            <pre data-label="Файл main.py"><code class="language-python">import helpers
 
-# json — работа с JSON
-import json
-data = {"name": "Алекс", "age": 25}
-json_str = json.dumps(data, ensure_ascii=False)  # Объект → строка JSON
-print(json_str)  # {"name": "Алекс", "age": 25}
+print(helpers.greet(&quot;Аня&quot;))
+print(helpers.square(7))</code></pre>
+            <div class="callout"><strong>Не называйте свои файлы как модули Python.</strong> Если назвать файл <code>random.py</code> или <code>math.py</code>, то <code>import random</code> подключит ваш файл вместо настоящего модуля, и всё сломается.</div>
 
-loaded = json.loads(json_str)  # Строка JSON → объект
-print(loaded["name"])  # Алекс
+            <h2>Частые ошибки новичков</h2>
+            <p>Ошибаться — нормально, так учатся все программисты. Главное — научиться читать сообщение об ошибке: Python подсказывает, что не так и в какой строке.</p>
+            <div class="mistake">
+                <h3>Забыли import</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">print(math.sqrt(16))</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">import math
+print(math.sqrt(16))</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>NameError: name &#x27;math&#x27; is not defined</code></p>
+                <p>Модуль нужно подключить до использования. Добавьте <code>import math</code> в начало программы.</p>
+            </div>
+            <div class="mistake">
+                <h3>Функция без имени модуля</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">import math
+print(sqrt(16))</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">import math
+print(math.sqrt(16))</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>NameError: name &#x27;sqrt&#x27; is not defined</code></p>
+                <p>После <code>import math</code> функции вызываются через точку: <code>math.sqrt</code>. Без имени модуля можно, только если подключить функцию через <code>from math import sqrt</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>Опечатка в названии модуля</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">import maths</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">import math</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>ModuleNotFoundError: No module named &#x27;maths&#x27;</code></p>
+                <p>Модуля с таким именем нет. Проверьте написание. Если это сторонняя библиотека — возможно, её нужно сначала установить через pip.</p>
+            </div>
+            <div class="mistake">
+                <h3>randint с одним числом</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">import random
+print(random.randint(6))</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">import random
+print(random.randint(1, 6))</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: Random.randint() missing 1 required positional argument: &#x27;b&#x27;</code></p>
+                <p><code>randint</code> нужны два числа: начало и конец диапазона.</p>
+            </div>
 
-# re — регулярные выражения
-import re
-text = "Телефон: +7 (999) 123-45-67"
-phone = re.findall(r'\d+', text)
-print(phone)  # ['7', '999', '123', '45', '67']</code></pre>
-
-            <h2>Виртуальное окружение</h2>
-            <p>Виртуальное окружение (virtual environment) — это изолированная копия Python со своим набором установленных пакетов. Это позволяет разным проектам использовать разные версии одной библиотеки, не мешая друг другу и не засоряя системный Python:</p>
-            <pre><code># Создание виртуального окружения
-python -m venv myproject_env
-
-# Активация (Windows)
-myproject_env\Scripts\activate
-
-# Активация (Mac/Linux)
-source myproject_env/bin/activate
-
-# Установка пакетов (только в этом окружении)
-pip install requests
-
-# Сохранение списка зависимостей
-pip freeze > requirements.txt
-
-# Установка из файла зависимостей (для других разработчиков)
-pip install -r requirements.txt
-
-# Деактивация
-deactivate</code></pre>
-            <p>Файл <code>requirements.txt</code> — стандарт Python-проектов. Он перечисляет все необходимые библиотеки с их версиями, чтобы любой разработчик мог воспроизвести окружение одной командой <code>pip install -r requirements.txt</code>. Всегда добавляйте папку виртуального окружения в <code>.gitignore</code>, а <code>requirements.txt</code> — в репозиторий.</p>
+            <h2>Главное за урок</h2>
+            <ul class="lesson-summary">
+                <li>Модуль — файл с готовыми функциями. Подключение: <code>import math</code>, вызов: <code>math.sqrt(16)</code>.</li>
+                <li><code>from math import sqrt</code> подключает функцию напрямую, <code>import statistics as st</code> даёт короткое имя.</li>
+                <li><code>random.randint(a, b)</code>, <code>choice</code>, <code>shuffle</code> — случайности для игр и викторин.</li>
+                <li>Стандартная библиотека уже есть в Python. Сторонние библиотеки ставятся командой <code>pip install имя</code> в терминале.</li>
+                <li>Свой файл <code>.py</code> тоже можно подключить через <code>import</code>. Не называйте файлы именами модулей Python.</li>
+            </ul>
         </section>
 
         <!-- Квиз -->
@@ -188,17 +259,18 @@ deactivate</code></pre>
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>Домашнее задание</h2>
-            <ul>
-                <li>Подключи модуль <code>random</code> и выведи случайное число от 1 до 100.</li>
-                <li>Попробуй импортировать из <code>math</code> только функцию <code>ceil</code> и
-                    использовать её для округления числа 4.3.</li>
-                <li>Установи библиотеку <code>requests</code> через pip и попробуй сделать HTTP-запрос
-                    к любому открытому API.</li>
-                <li>Создай свой модуль <code>converters.py</code> с функциями перевода: километры в мили, килограммы в фунты, градусы Цельсия в Фаренгейт. Импортируй и используй их в основном файле.</li>
-                <li>Используй модуль <code>json</code> для сохранения словаря с информацией о трёх студентах в файл <code>students.json</code>, а затем прочитай и выведи данные обратно.</li>
-                <li>Создай виртуальное окружение для учебного проекта, установи в него библиотеку <code>requests</code> и сохрани список зависимостей в <code>requirements.txt</code>.</li>
-                <li>Используй модуль <code>re</code>, чтобы написать функцию <code>extract_emails(text)</code>, которая находит все email-адреса в переданной строке и возвращает их списком.</li>
+            <p>Задачи проверяются автоматически: откройте задачу, напишите решение и нажмите «Проверить». <span class="hw-counter"></span></p>
+            <div class="callout callout-soft">Решение пишется внутри готовой заготовки функции. Проверка сама вызовет её с разными данными и сравнит результат с правильным.</div>
+            <ul class="hw-tasks">
+                <li data-task="circle_area"><a href="tasks.html#task=circle_area"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Площадь круга</strong><small>лёгкая · +1 балл</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="hypotenuse"><a href="tasks.html#task=hypotenuse"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Гипотенуза</strong><small>лёгкая · +1 балл</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="dice_roll"><a href="tasks.html#task=dice_roll"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Бросок кубиков</strong><small>средняя · +2 балла</small></span><span class="hw-status">Не решена</span></a></li>
             </ul>
+            <div class="hw-star">
+                <h3>Задание со звёздочкой: «Генератор паролей»</h3>
+                <p>Напишите в <a href="python-online.html">Python Online</a> генератор паролей. Пользователь вводит длину пароля и отвечает, нужны ли цифры и спецсимволы. Программа собирает пароль из случайных символов с помощью <code>random.choice</code>. Готовые наборы символов есть в модуле <code>string</code>: <code>string.ascii_letters</code>, <code>string.digits</code>, <code>string.punctuation</code>. Сгенерируйте сразу 5 вариантов на выбор.</p>
+                <p class="hub-muted">Эту задачу проверяет преподаватель: отправьте ему код или покажите на занятии.</p>
+            </div>
         </section>
 
         <!-- Навигация -->

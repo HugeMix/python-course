@@ -41,13 +41,13 @@ class PyRunner {
         cur.resolve(result);
     }
 
-    run({ code, stdin = '', testCode = null, onOutput = () => {} }) {
+    run({ code, stdin = '', testCode = null, quietInput = false, echoInput = false, onOutput = () => {} }) {
         if (this.current) this.stop();
         return new Promise((resolve) => {
             const id = this.nextId++;
             const timer = setTimeout(() => this._kill({ timedOut: true }), this.timeoutMs);
             this.current = { id, resolve, onOutput, timer };
-            this.worker.postMessage({ id, code, stdin, testCode });
+            this.worker.postMessage({ id, code, stdin, testCode, quietInput, echoInput });
         });
     }
 

@@ -561,6 +561,10 @@ body.dark-mode .quiz-question {
 }
 
 .btn-quiz-opt {
+    /* Варианты-«вывод программы» бывают в несколько строк */
+    white-space: pre-line;
+    text-align: left;
+    vertical-align: top;
     background: var(--bg-color);
     border: 2px solid transparent;
     padding: 12px 20px;
@@ -4479,11 +4483,12 @@ details.cab-more > .send-card {
 
 .mistake-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* minmax(0, …): длинная строка кода прокручивается внутри блока, а не растягивает колонку */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 14px;
 }
 
-.mistake-grid pre { margin: 6px 0 0; }
+.mistake-grid pre { margin: 6px 0 0; overflow-x: auto; }
 
 .mistake-label {
     font-size: 0.78rem;
@@ -4624,6 +4629,11 @@ body.dark-mode .mistake-error code { color: #fca5a5; }
 }
 
 @media (max-width: 700px) {
-    .mistake-grid { grid-template-columns: 1fr; }
+    .mistake-grid { grid-template-columns: minmax(0, 1fr); }
     .try-it { padding: 18px 16px; }
+}
+
+/* Подпись над блоком кода, если это не Python (например, «Терминал») */
+pre[data-label]:not(.CodeMirror-line)::before {
+    content: attr(data-label);
 }

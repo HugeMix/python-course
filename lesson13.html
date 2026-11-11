@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Урок 13: Основы ООП в Python. Классы, объекты, атрибуты, методы и принципы инкапсуляции.">
-    <title>Урок 13: Основы ООП (Классы и объекты) | PythonBasic</title>
+        content="Урок 13 курса Python с нуля: ООП, классы и объекты, __init__ и self, атрибуты и методы, __str__, наследование и super(). Примеры можно запускать прямо на странице.">
+    <title>Урок 13: Классы и объекты (ООП) | PythonBasic</title>
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Урок 13: Основы ООП (Классы и объекты) | PythonBasic">
-    <meta property="og:description" content="Урок 13: Основы ООП в Python. Классы, объекты, атрибуты, методы и принципы инкапсуляции.">
+    <meta property="og:title" content="Урок 13: Классы и объекты (ООП) | PythonBasic">
+    <meta property="og:description" content="Урок 13 курса Python с нуля: ООП, классы и объекты, __init__ и self, атрибуты и методы, __str__, наследование и super(). Примеры можно запускать прямо на странице.">
     <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
     <link rel="canonical" href="https://hugemix.github.io/python-course/lesson13.html">
     <meta property="og:url" content="https://hugemix.github.io/python-course/lesson13.html">
@@ -43,8 +43,8 @@
     <!-- Голубая плашка с названием урока -->
     <section class="lesson-title">
         <div class="container">
-            <h1>Урок 13: Основы ООП (Классы и объекты)</h1>
-            <p>Познакомимся с объектно-ориентированным программированием в Python.</p>
+            <h1>Классы и объекты (ООП)</h1>
+            <p>Создаём свои типы данных: персонажей, счета, книги — со своими данными и умениями.</p>
         </div>
     </section>
 
@@ -52,183 +52,256 @@
         <!-- Плашка с целью урока -->
         <section class="lesson-goal">
             <h2>Цель урока</h2>
-            <p>Научиться создавать классы и объекты, работать с атрибутами и методами,
-                понять принцип инкапсуляции.</p>
+            <p>Понять, что такое классы и объекты, научиться создавать классы с атрибутами и методами, разобраться с <code>self</code> и <code>__init__</code>, сделать красивый вывод через <code>__str__</code> и использовать наследование.</p>
+            <p class="lesson-meta">Время: около 50 минут · 2 упражнения в уроке · тест · 4 задачи на дом</p>
         </section>
 
         <!-- Основной материал -->
         <section class="lesson-content">
-            <h2>Что такое ООП?</h2>
-            <p>Объектно-ориентированное программирование (ООП) - это стиль программирования, где код
-                организован в виде <strong>объектов</strong>, которые объединяют данные и действия над ними.
-                ООП помогает структурировать большие программы и делать их удобными для поддержки.</p>
+            <h2>Зачем это нужно</h2>
+            <p>Представьте игру: в ней десятки персонажей. У каждого есть имя, здоровье и уровень, и каждый умеет атаковать, лечиться и повышать уровень. Можно хранить всё это в отдельных переменных и словарях, но скоро в коде будет не разобраться.</p>
+            <p><strong>Объектно-ориентированное программирование</strong> (ООП) предлагает другой подход: описать один раз, что такое «персонаж» — какие у него данные и что он умеет, — а потом создавать сколько угодно персонажей по этому описанию. Так устроены почти все большие программы: игры, сайты, приложения.</p>
 
-            <h2>Класс - чертёж для объектов</h2>
-            <p><strong>Класс</strong> - это шаблон (чертёж), по которому создаются объекты. Давайте
-                создадим класс <code>Car</code>:</p>
-            <pre><code>class Car:
-    def __init__(self, brand, model, year):
-        self.brand = brand  # Атрибут марки
-        self.model = model  # Атрибут модели
-        self.year = year    # Атрибут года выпуска
-
-    def show_info(self):
-        print(f"Автомобиль: {self.brand} {self.model}, {self.year} года выпуска")</code></pre>
-
-            <p>Метод <code>__init__</code> - это <strong>специальный конструктор</strong>, который
-                вызывается автоматически при создании нового объекта. В нём задаются начальные атрибуты.</p>
-
-            <h2>Объект - экземпляр класса</h2>
-            <p><strong>Объект</strong> - это конкретный экземпляр, созданный по шаблону класса.
-                Один класс - много объектов:</p>
-            <pre><code>my_car = Car("Toyota", "Camry", 2020)
-my_car.show_info()
-# Выведет: Автомобиль: Toyota Camry, 2020 года выпуска</code></pre>
-
-            <h2>Методы класса</h2>
-            <p>Методы - это функции, определённые внутри класса. Они описывают <strong>поведение</strong>
-                объекта. Добавим метод <code>start_engine</code>:</p>
-            <pre><code>class Car:
-    def __init__(self, brand, model, year):
-        self.brand = brand
-        self.model = model
-        self.year = year
-
-    def show_info(self):
-        print(f"Автомобиль: {self.brand} {self.model}, {self.year} года выпуска")
-
-    def start_engine(self):
-        print(f"{self.brand} {self.model}: Двигатель запущен!")
-
-my_car = Car("BMW", "X5", 2022)
-my_car.show_info()
-my_car.start_engine()</code></pre>
-
-            <h2>Параметр self</h2>
-            <p>Каждый метод класса <strong>обязательно</strong> принимает первым параметром
-                <code>self</code> - это ссылка на конкретный объект. Благодаря <code>self</code>
-                метод знает, с какими данными работать. Без него Python не сможет обратиться к
-                атрибутам объекта внутри метода.
-            </p>
-
-            <h2>Принцип инкапсуляции</h2>
-            <p><strong>Инкапсуляция</strong> - один из ключевых принципов ООП. Это умение объекта
-                <strong>скрывать свои внутренние данные</strong> от внешнего кода ради безопасности
-                и защиты от случайных изменений.
-            </p>
-            <p>В Python «приватность» обозначают двойным подчёркиванием перед именем атрибута:</p>
-            <pre><code>class BankAccount:
-    def __init__(self, balance):
-        self.__balance = balance  # Приватный атрибут (нельзя изменить снаружи напрямую)
-
-    def get_balance(self):
-        return self.__balance     # Безопасный доступ через метод</code></pre>
-
-            <h2>Наследование</h2>
-            <p>Наследование позволяет создавать новые классы на основе существующих. Дочерний класс
-                получает все атрибуты и методы родительского класса и может добавлять свои.
-                Функция <code>super()</code> обращается к родительскому классу.</p>
-            <pre><code># Базовый класс
-class Animal:
-    def __init__(self, name, sound):
+            <h2>Класс и объект</h2>
+            <p>Два главных слова ООП:</p>
+            <ul>
+                <li><strong>Класс</strong> — чертёж, шаблон. Например, «Собака»: у неё есть кличка и возраст, она умеет лаять.</li>
+                <li><strong>Объект</strong> — конкретная вещь, созданная по чертежу. Шарик, 3 года, и Бобик, 5 лет, — два объекта класса «Собака».</li>
+            </ul>
+            <p>Вы уже пользовались объектами: каждая строка — объект класса <code>str</code>, каждый список — объект класса <code>list</code>. А <code>upper()</code> и <code>append()</code> — их <strong>методы</strong>, то есть то, что они умеют.</p>
+            <pre data-run><code class="language-python">class Dog:
+    def __init__(self, name, age):
         self.name = name
-        self.sound = sound
+        self.age = age
 
-    def speak(self):
-        return f"{self.name} говорит: {self.sound}"
+    def bark(self):
+        print(f&quot;{self.name}: Гав!&quot;)
 
-    def __str__(self):
-        return f"Животное '{self.name}'"
+sharik = Dog(&quot;Шарик&quot;, 3)
+bobik = Dog(&quot;Бобик&quot;, 5)
 
-# Дочерние классы наследуют всё от Animal
-class Dog(Animal):
-    def __init__(self, name):
-        super().__init__(name, "Гав!")  # Вызываем родительский __init__
+sharik.bark()
+bobik.bark()
+print(bobik.name, &quot;—&quot;, bobik.age, &quot;лет&quot;)</code></pre>
 
-    def fetch(self):
-        return f"{self.name} принёс мяч!"
+            <h2>Разбираем по шагам</h2>
+            <ol class="steps">
+                <li><code>class Dog:</code> — создаём класс. Имена классов принято писать с большой буквы.</li>
+                <li><code>def __init__(self, name, age):</code> — особый метод, который Python вызывает при создании объекта. Здесь объект получает свои начальные данные. Вокруг слова init — по два подчёркивания с каждой стороны.</li>
+                <li><code>self.name = name</code> — сохраняем значение в <strong>атрибут</strong> объекта. Атрибуты — это переменные, которые принадлежат объекту.</li>
+                <li><code>def bark(self):</code> — <strong>метод</strong>, то есть функция внутри класса: то, что объект умеет делать.</li>
+                <li><code>Dog("Шарик", 3)</code> — создаём объект. Python вызывает <code>__init__</code> и передаёт ему «Шарик» и 3.</li>
+            </ol>
 
-class Cat(Animal):
-    def __init__(self, name):
-        super().__init__(name, "Мяу!")
+            <h2>Что такое self</h2>
+            <p><code>self</code> — это «я сам», тот объект, с которым сейчас работает метод. Когда вы пишете <code>sharik.bark()</code>, Python сам передаёт <code>sharik</code> в параметр <code>self</code>. Поэтому внутри метода <code>self.name</code> — это кличка именно того пса, которого попросили залаять.</p>
+            <p>Правило простое: <code>self</code> — всегда первый параметр каждого метода, а к атрибутам внутри методов обращаются через <code>self.</code></p>
 
-    def purr(self):
-        return f"{self.name} мурлычет..."
+            <div class="try-it" data-id="l13-cat">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Класс Кот</h3></div>
+                <p>Допишите класс <code>Cat</code>: при создании он получает кличку и возраст, а метод <code>describe()</code> возвращает строку <strong>Кот КЛИЧКА, возраст: N</strong>. Программа читает кличку и возраст, создаёт кота и печатает его описание.</p>
+                <textarea class="try-code" aria-label="Ваш код">class Cat:
+    def __init__(self, name, age):
+        pass  # сохраните name и age в self
 
-# Использование
-dog = Dog("Рекс")
-cat = Cat("Мурка")
-print(dog.speak())   # Рекс говорит: Гав!
-print(cat.speak())   # Мурка говорит: Мяу!
-print(dog.fetch())   # Рекс принёс мяч!
-print(str(dog))      # Животное 'Рекс'</code></pre>
+    def describe(self):
+        pass  # верните строку
 
-            <h2>Магические методы</h2>
-            <p>Магические (дандер) методы — это специальные методы с двойным подчёркиванием в начале и
-                конце имени. Они позволяют настраивать поведение объектов со стандартными операторами
-                Python: <code>+</code>, <code>len()</code>, <code>==</code>, <code>str()</code> и другими.</p>
-            <pre><code>class Vector:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
 
-    def __str__(self):
-        return f"Vector({self.x}, {self.y})"
+cat = Cat(input(), int(input()))
+print(cat.describe())
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "Барсик\n3", "out": "Кот Барсик, возраст: 3"}, {"in": "Мурка\n10", "out": "Кот Мурка, возраст: 10"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>В <code>__init__</code>: <code>self.name = name</code> и <code>self.age = age</code>. В <code>describe</code>: <code>return f"Кот {self.name}, возраст: {self.age}"</code>.</p></details>
+            </div>
 
-    def __repr__(self):
-        return f"Vector(x={self.x}, y={self.y})"
-
-    def __add__(self, other):
-        return Vector(self.x + other.x, self.y + other.y)
-
-    def __len__(self):
-        import math
-        return int(math.sqrt(self.x**2 + self.y**2))
-
-    def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
-
-v1 = Vector(2, 3)
-v2 = Vector(1, 4)
-print(v1 + v2)     # Vector(3, 7) — через __add__
-print(len(v1))     # 3 — через __len__
-print(v1 == v2)    # False — через __eq__
-print(str(v1))     # Vector(2, 3) — через __str__</code></pre>
-
-            <h2>Практический пример: банковский счёт</h2>
-            <p>Объединим инкапсуляцию и методы в полноценном классе <code>BankAccount</code>,
-                который хранит историю операций и защищает баланс от прямого изменения снаружи.</p>
-            <pre><code>class BankAccount:
+            <h2>Методы меняют объект</h2>
+            <p>Методы могут не только что-то показывать, но и менять атрибуты объекта. Именно так объект «живёт»: копит деньги, теряет здоровье, получает уровень.</p>
+            <pre data-run><code class="language-python">class BankAccount:
     def __init__(self, owner, balance=0):
         self.owner = owner
-        self.__balance = balance  # Приватный атрибут
-        self.__history = []
+        self.balance = balance
 
     def deposit(self, amount):
-        if amount &lt;= 0:
-            raise ValueError("Сумма должна быть положительной")
-        self.__balance += amount
-        self.__history.append(f"Пополнение: +{amount} руб.")
+        self.balance += amount
 
     def withdraw(self, amount):
-        if amount &gt; self.__balance:
-            raise ValueError("Недостаточно средств")
-        self.__balance -= amount
-        self.__history.append(f"Снятие: -{amount} руб.")
+        if amount &gt; self.balance:
+            print(&quot;Недостаточно средств&quot;)
+            return False
+        self.balance -= amount
+        return True
 
-    def get_balance(self):
-        return self.__balance
+acc = BankAccount(&quot;Аня&quot;, 100)
+acc.deposit(50)
+acc.withdraw(500)
+acc.withdraw(30)
+print(acc.owner, &quot;— на счёте&quot;, acc.balance)</code></pre>
+            <p>Обратите внимание: проверка «хватает ли денег» спрятана внутри метода. Тот, кто пользуется счётом, просто вызывает <code>withdraw</code> и не может случайно уйти в минус. Скрывать внутреннее устройство и давать пользоваться объектом только через методы называется <strong>инкапсуляцией</strong>. Атрибуты, которые не нужно трогать снаружи, принято начинать с подчёркивания: <code>self._balance</code>.</p>
 
-    def print_history(self):
-        print(f"История счёта {self.owner}:")
-        for record in self.__history:
-            print(f"  {record}")
-        print(f"  Баланс: {self.__balance} руб.")
+            <div class="try-it" data-id="l13-counter">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Счётчик</h3></div>
+                <p>Допишите класс <code>Counter</code>: атрибут <code>value</code> сначала равен 0, метод <code>plus()</code> увеличивает его на 1, метод <code>minus()</code> уменьшает на 1, но не ниже нуля. Программа читает строку из плюсов и минусов, например <code>++-+</code>, нажимает соответствующие кнопки и печатает итоговое значение.</p>
+                <textarea class="try-code" aria-label="Ваш код">class Counter:
+    def __init__(self):
+        self.value = 0
 
-account = BankAccount("Алекс", 1000)
-account.deposit(500)
-account.withdraw(200)
-account.print_history()</code></pre>
+    def plus(self):
+        pass
+
+    def minus(self):
+        pass
+
+
+c = Counter()
+for ch in input():
+    if ch == &quot;+&quot;:
+        c.plus()
+    else:
+        c.minus()
+print(c.value)
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "++-+", "out": "2"}, {"in": "---+", "out": "1"}, {"in": "+++", "out": "3"}, {"in": "-", "out": "0"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>В <code>plus</code>: <code>self.value += 1</code>. В <code>minus</code>: уменьшайте, только если <code>self.value &gt; 0</code>.</p></details>
+            </div>
+
+            <h2>Красивый вывод: __str__</h2>
+            <p>Если напечатать объект, Python покажет что-то вроде <code>&lt;__main__.Book object at 0x…&gt;</code>. Чтобы <code>print</code> выводил понятный текст, добавьте метод <code>__str__</code> — он должен вернуть строку:</p>
+            <pre data-run><code class="language-python">class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+
+    def __str__(self):
+        return f&quot;«{self.title}» — {self.author}&quot;
+
+book = Book(&quot;Незнайка на Луне&quot;, &quot;Николай Носов&quot;)
+print(book)</code></pre>
+            <p>Методы с двумя подчёркиваниями с обеих сторон называют <strong>магическими</strong>: Python вызывает их сам в особых ситуациях. <code>__init__</code> — при создании, <code>__str__</code> — при выводе. Есть и другие, например <code>__len__</code> — для <code>len(объект)</code>.</p>
+
+            <h2>Наследование</h2>
+            <p>Класс можно создать на основе другого. Новый класс получает все атрибуты и методы родителя и может добавить свои или изменить старые. Так не нужно копировать общий код:</p>
+            <pre data-run><code class="language-python">class Animal:
+    def __init__(self, name):
+        self.name = name
+
+    def speak(self):
+        return &quot;...&quot;
+
+    def introduce(self):
+        print(f&quot;Я {self.name}. {self.speak()}&quot;)
+
+class Dog(Animal):
+    def speak(self):
+        return &quot;Гав!&quot;
+
+class Cat(Animal):
+    def speak(self):
+        return &quot;Мяу!&quot;
+
+for pet in [Dog(&quot;Шарик&quot;), Cat(&quot;Мурка&quot;), Animal(&quot;Ёжик&quot;)]:
+    pet.introduce()</code></pre>
+            <p><code>class Dog(Animal):</code> значит «Dog — это разновидность Animal». У <code>Dog</code> нет своего <code>__init__</code> и <code>introduce</code> — они взяты у родителя. А метод <code>speak</code> переопределён: у каждого животного свой голос.</p>
+            <p>Если дочернему классу нужен свой <code>__init__</code>, родительский вызывают через <code>super()</code>:</p>
+            <pre data-run><code class="language-python">class Animal:
+    def __init__(self, name):
+        self.name = name
+
+class Bird(Animal):
+    def __init__(self, name, can_fly):
+        super().__init__(name)
+        self.can_fly = can_fly
+
+penguin = Bird(&quot;Пингвин&quot;, False)
+print(penguin.name, &quot;умеет летать:&quot;, penguin.can_fly)</code></pre>
+
+            <h2>Частые ошибки новичков</h2>
+            <p>Ошибаться — нормально, так учатся все программисты. Главное — научиться читать сообщение об ошибке: Python подсказывает, что не так и в какой строке.</p>
+            <div class="mistake">
+                <h3>Забыли self в методе</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">class Dog:
+    def bark():
+        print(&quot;Гав&quot;)
+
+Dog().bark()</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">class Dog:
+    def bark(self):
+        print(&quot;Гав&quot;)
+
+Dog().bark()</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: Dog.bark() takes 0 positional arguments but 1 was given</code></p>
+                <p>Python всегда передаёт в метод сам объект первым аргументом. Если параметра <code>self</code> нет, принять его некуда.</p>
+            </div>
+            <div class="mistake">
+                <h3>Забыли self. перед атрибутом</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">class Dog:
+    def __init__(self, name):
+        self.name = name
+
+    def hello(self):
+        print(&quot;Я&quot;, name)
+
+Dog(&quot;Рекс&quot;).hello()</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">class Dog:
+    def __init__(self, name):
+        self.name = name
+
+    def hello(self):
+        print(&quot;Я&quot;, self.name)
+
+Dog(&quot;Рекс&quot;).hello()</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>NameError: name &#x27;name&#x27; is not defined</code></p>
+                <p>Внутри метода <code>name</code> — это обычная переменная, а она здесь не создана. Атрибут объекта — <code>self.name</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>Одно подчёркивание вместо двух</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">class Dog:
+    def _init_(self, name):
+        self.name = name
+
+rex = Dog(&quot;Рекс&quot;)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">class Dog:
+    def __init__(self, name):
+        self.name = name
+
+rex = Dog(&quot;Рекс&quot;)
+print(rex.name)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: Dog() takes no arguments</code></p>
+                <p>Python ищет метод именно <code>__init__</code> — по два подчёркивания с каждой стороны. Метод <code>_init_</code> для него обычный, и создать объект с аргументом не получается.</p>
+            </div>
+            <div class="mistake">
+                <h3>Не передали данные при создании</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">class Dog:
+    def __init__(self, name):
+        self.name = name
+
+rex = Dog()</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">class Dog:
+    def __init__(self, name=&quot;Безымянный&quot;):
+        self.name = name
+
+rex = Dog()
+print(rex.name)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: Dog.__init__() missing 1 required positional argument: &#x27;name&#x27;</code></p>
+                <p><code>__init__</code> ждёт кличку, а объект создали с пустыми скобками. Передайте значение или задайте параметру значение по умолчанию.</p>
+            </div>
+
+            <h2>Главное за урок</h2>
+            <ul class="lesson-summary">
+                <li>Класс — чертёж (<code>class Dog:</code>), объект — вещь, созданная по нему (<code>Dog("Шарик", 3)</code>). Объектов одного класса может быть сколько угодно.</li>
+                <li><code>__init__</code> вызывается при создании объекта и задаёт начальные атрибуты: <code>self.name = name</code>.</li>
+                <li>Методы — функции внутри класса. Первый параметр всегда <code>self</code>, к атрибутам обращаются через <code>self.</code></li>
+                <li>Методы могут менять атрибуты — так объект «живёт». <code>__str__</code> задаёт, как объект выглядит в <code>print</code>.</li>
+                <li>Наследование: <code>class Dog(Animal):</code> получает всё от родителя, может добавить своё или переопределить. Родительский <code>__init__</code> — через <code>super()</code>.</li>
+            </ul>
         </section>
 
         <!-- Квиз -->
@@ -237,15 +310,19 @@ account.print_history()</code></pre>
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>Домашнее задание</h2>
-            <ul>
-                <li>Создай класс <code>Person</code> с атрибутами <code>name</code> и <code>age</code>.</li>
-                <li>Добавь метод <code>greet</code>, который выводит приветствие с именем и возрастом.</li>
-                <li>Создай два объекта этого класса с разными данными и вызови метод <code>greet</code>.</li>
-                <li>Попробуй добавить приватный атрибут и метод для его получения.</li>
-                <li>Создай класс <code>Rectangle</code> с атрибутами <code>width</code> и <code>height</code>. Добавь методы <code>area()</code> и <code>perimeter()</code>, возвращающие площадь и периметр.</li>
-                <li>Реализуй наследование: создай базовый класс <code>Shape</code> с методом <code>describe()</code> и дочерние классы <code>Circle</code> и <code>Square</code>, переопределяющие этот метод.</li>
-                <li>Добавь к классу <code>BankAccount</code> из урока магические методы <code>__str__</code> (красивый вывод информации о счёте) и <code>__eq__</code> (сравнение двух счетов по балансу).</li>
+            <p>Задачи проверяются автоматически: откройте задачу, напишите решение и нажмите «Проверить». <span class="hw-counter"></span></p>
+            <div class="callout callout-soft">Решение пишется внутри готовой заготовки функции. Проверка сама вызовет её с разными данными и сравнит результат с правильным.</div>
+            <ul class="hw-tasks">
+                <li data-task="dog_class"><a href="tasks.html#task=dog_class"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Класс Собака</strong><small>лёгкая · +1 балл</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="oop_rectangle"><a href="tasks.html#task=oop_rectangle"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Основы ООП (Прямоугольник)</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="bank_account"><a href="tasks.html#task=bank_account"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Банковский счёт (ООП)</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="stack"><a href="tasks.html#task=stack"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Стек (ООП)</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
             </ul>
+            <div class="hw-star">
+                <h3>Задание со звёздочкой: «Тамагочи»</h3>
+                <p>Напишите в <a href="python-online.html">Python Online</a> класс <code>Pet</code> — виртуального питомца. У него есть имя, сытость и настроение (числа от 0 до 10). Методы: <code>feed()</code> — покормить, <code>play()</code> — поиграть (настроение растёт, сытость падает), <code>status()</code> — показать состояние. Сделайте меню, в котором пользователь ухаживает за питомцем. Если сытость упала до нуля — игра окончена.</p>
+                <p class="hub-muted">Эту задачу проверяет преподаватель: отправьте ему код или покажите на занятии.</p>
+            </div>
         </section>
 
         <!-- Навигация -->
