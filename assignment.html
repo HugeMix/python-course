@@ -26,6 +26,7 @@
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="python-basic.html">Уроки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
+                    <li><a href="exams.html">Контрольные</a></li>
                     <li><a href="python-online.html">Python Online</a></li>
                     <li><a href="cheatsheet.html">Шпаргалка</a></li>
                     <li><a href="glossary.html">Глоссарий</a></li>
@@ -168,7 +169,7 @@
             return el('li', { class: 'todo' + (done ? ' is-done' : '') },
                 el('span', { class: 'cab-check', 'aria-hidden': 'true', text: done ? '✓' : '' }),
                 el('span', { class: 'todo-main' },
-                    el('strong', { text: `Задача «${t.title}»` }),
+                    el('strong', { text: (t.exam ? `Контрольная ${t.exam}: ` : 'Задача ') + `«${t.title}»` }),
                     el('small', { text: done ? `Решена · +${PB.TASK_POINTS[t.difficulty]} б.` : `${diff} · +${PB.TASK_POINTS[t.difficulty]} б.` })),
                 el('span', { class: 'todo-actions' },
                     el('a', { class: 'hub-btn' + (done ? '' : ' hub-btn-primary'), href: 'tasks.html#task=' + encodeURIComponent(id), text: done ? 'Открыть' : 'Решить' })));

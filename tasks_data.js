@@ -255,6 +255,66 @@ const tasks = [
         cases: [{"in": "5\n1\n2\n3\n4\n5", "out": "4\n5"}, {"in": "3\n7\n7\n7", "out": "Нет"}, {"in": "4\n10\n1\n1\n1", "out": "10"}]
     },
     {
+        id: "ex1_even_odd",
+        title: "Чётные и нечётные",
+        difficulty: "easy",
+        lesson: 6,
+        hw: false,
+        exam: 1,
+        desc: "<p>Программа получает число N, а потом N целых чисел — каждое на своей строке. Выведите три строки: <code>Чётных: A</code>, <code>Нечётных: B</code> и <code>Сумма чётных: S</code>. Ноль — чётное число.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">5\n1\n2\n3\n4\n6</code></div><div><span>Вывод</span><code class=\"io-box\">Чётных: 3\nНечётных: 2\nСумма чётных: 12</code></div></div>",
+        startCode: "n = int(input())\n\n# напишите решение здесь\n",
+        kind: "io",
+        cases: [{"in": "5\n1\n2\n3\n4\n6", "out": "Чётных: 3\nНечётных: 2\nСумма чётных: 12"}, {"in": "3\n7\n9\n11", "out": "Чётных: 0\nНечётных: 3\nСумма чётных: 0"}, {"in": "4\n0\n-2\n5\n10", "out": "Чётных: 3\nНечётных: 1\nСумма чётных: 8"}]
+    },
+    {
+        id: "ex1_stairs",
+        title: "Лесенка",
+        difficulty: "easy",
+        lesson: 6,
+        hw: false,
+        exam: 1,
+        desc: "<p>Программа получает число N. Нарисуйте лесенку из N ступенек: в первой строке одна решётка <code>#</code>, во второй — две, и так далее до N.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">3</code></div><div><span>Вывод</span><code class=\"io-box\">#\n##\n###</code></div></div>",
+        startCode: "n = int(input())\n\n# напишите решение здесь\n",
+        kind: "io",
+        cases: [{"in": "3", "out": "#\n##\n###"}, {"in": "1", "out": "#"}, {"in": "5", "out": "#\n##\n###\n####\n#####"}]
+    },
+    {
+        id: "ex1_receipt",
+        title: "Чек в магазине",
+        difficulty: "medium",
+        lesson: 6,
+        hw: false,
+        exam: 1,
+        desc: "<p>Программа получает число N, а потом N строк вида <code>название цена количество</code> через пробел (название — одно слово, цена и количество — целые числа). Для каждой покупки выведите строку <code>название: сумма</code>, а в конце — <code>Итого: S</code>.</p><p>Подсказка: <code>input().split()</code> разрежет строку на три части.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">2\nхлеб 45 2\nмолоко 89 1</code></div><div><span>Вывод</span><code class=\"io-box\">хлеб: 90\nмолоко: 89\nИтого: 179</code></div></div>",
+        startCode: "n = int(input())\ntotal = 0\n\n# напишите решение здесь\n",
+        kind: "io",
+        cases: [{"in": "2\nхлеб 45 2\nмолоко 89 1", "out": "хлеб: 90\nмолоко: 89\nИтого: 179"}, {"in": "1\nсыр 320 3", "out": "сыр: 960\nИтого: 960"}, {"in": "3\nчай 120 1\nсахар 80 2\nлимон 30 4", "out": "чай: 120\nсахар: 160\nлимон: 120\nИтого: 400"}]
+    },
+    {
+        id: "ex1_grades",
+        title: "Итоги четверти",
+        difficulty: "medium",
+        lesson: 6,
+        hw: false,
+        exam: 1,
+        desc: "<p>Программа получает оценки одной строкой через пробел, например <code>5 4 4 3 5</code>. Выведите три строки:</p><ul><li><code>Средний балл: X</code> — среднее, округлённое до 2 знаков: <code>round(x, 2)</code>;</li><li><code>Пятёрок: N</code>;</li><li><code>Итог: Y</code> — оценка за четверть: средний балл от 4.5 — 5, от 3.5 — 4, от 2.5 — 3, ниже — 2.</li></ul><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">5 4 4 3 5</code></div><div><span>Вывод</span><code class=\"io-box\">Средний балл: 4.2\nПятёрок: 2\nИтог: 4</code></div></div>",
+        startCode: "grades = input().split()\n\n# напишите решение здесь\n",
+        kind: "io",
+        cases: [{"in": "5 4 4 3 5", "out": "Средний балл: 4.2\nПятёрок: 2\nИтог: 4"}, {"in": "5 5 4", "out": "Средний балл: 4.67\nПятёрок: 2\nИтог: 5"}, {"in": "5 4", "out": "Средний балл: 4.5\nПятёрок: 1\nИтог: 5"}, {"in": "3 2 3", "out": "Средний балл: 2.67\nПятёрок: 0\nИтог: 3"}, {"in": "2 2 3 2", "out": "Средний балл: 2.25\nПятёрок: 0\nИтог: 2"}]
+    },
+    {
+        id: "ex1_guess",
+        title: "Журнал игры «Угадай число»",
+        difficulty: "hard",
+        lesson: 6,
+        hw: false,
+        exam: 1,
+        desc: "<p>Первая строка — загаданное число. Дальше идут попытки игрока, по одной на строке, пока он не угадает. На каждую неверную попытку выведите <code>больше</code>, если загаданное число больше попытки, или <code>меньше</code>, если меньше. Когда число угадано, выведите <code>Угадано! Попыток: K</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">42\n50\n25\n42</code></div><div><span>Вывод</span><code class=\"io-box\">меньше\nбольше\nУгадано! Попыток: 3</code></div></div>",
+        startCode: "secret = int(input())\n\n# напишите решение здесь\n",
+        kind: "io",
+        cases: [{"in": "42\n50\n25\n42", "out": "меньше\nбольше\nУгадано! Попыток: 3"}, {"in": "7\n7", "out": "Угадано! Попыток: 1"}, {"in": "10\n1\n2\n20\n10", "out": "больше\nбольше\nменьше\nУгадано! Попыток: 4"}]
+    },
+    {
         id: "square",
         title: "Квадрат числа",
         difficulty: "easy",
@@ -1440,6 +1500,136 @@ except Exception as e:
         `
     },
     {
+        id: "ex2_word_lengths",
+        title: "Длины слов",
+        difficulty: "easy",
+        lesson: 11,
+        hw: false,
+        exam: 2,
+        desc: "<p>Напишите функцию <code>word_lengths(text)</code>, которая возвращает словарь: ключ — слово из текста, значение — длина этого слова. Слова разделены пробелами; если слово повторяется, в словаре оно одно.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">word_lengths(&quot;кот ест рыбу&quot;)\nword_lengths(&quot;да да нет&quot;)</code></div><div><span>Результат</span><code class=\"io-box\">{&#x27;кот&#x27;: 3, &#x27;ест&#x27;: 3, &#x27;рыбу&#x27;: 4}\n{&#x27;да&#x27;: 2, &#x27;нет&#x27;: 3}</code></div></div>",
+        startCode: "def word_lengths(text):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert word_lengths("кот ест рыбу") == {"кот": 3, "ест": 3, "рыбу": 4}, "Для «кот ест рыбу» ожидалось {'кот': 3, 'ест': 3, 'рыбу': 4}"
+    assert word_lengths("") == {}, "Для пустой строки — пустой словарь"
+    assert word_lengths("да да нет") == {"да": 2, "нет": 3}, "Повторяющееся слово встречается в словаре один раз"
+    __task_passed__ = True
+    print("✅ Словарь собран правильно!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция word_lengths называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "ex2_best_students",
+        title: "Отличники",
+        difficulty: "medium",
+        lesson: 11,
+        hw: false,
+        exam: 2,
+        desc: "<p>Напишите функцию <code>best_students(grades)</code>. Она получает словарь «имя → список оценок» и возвращает список имён тех, у кого средний балл <strong>не ниже 4.5</strong>, по алфавиту. Ученики без оценок в список не попадают.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">best_students({&quot;Аня&quot;: [5, 5, 4], &quot;Борис&quot;: [4, 4, 3], &quot;Вика&quot;: [5, 4]})</code></div><div><span>Результат</span><code class=\"io-box\">[&#x27;Аня&#x27;, &#x27;Вика&#x27;]</code></div></div>",
+        startCode: "def best_students(grades):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert best_students({"Аня": [5, 5, 4], "Борис": [4, 4, 3], "Вика": [5, 4]}) == ["Аня", "Вика"], "Ожидалось ['Аня', 'Вика']: у Вики ровно 4.5 — это тоже подходит"
+    assert best_students({}) == [], "Для пустого словаря — пустой список"
+    assert best_students({"Гоша": []}) == [], "Ученик без оценок в список не попадает"
+    assert best_students({"Яна": [5], "Ада": [5, 5]}) == ["Ада", "Яна"], "Имена должны идти по алфавиту"
+    __task_passed__ = True
+    print("✅ Отличники найдены верно!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция best_students называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "ex2_parse_prices",
+        title: "Прайс-лист",
+        difficulty: "medium",
+        lesson: 11,
+        hw: false,
+        exam: 2,
+        desc: "<p>Напишите функцию <code>parse_prices(lines)</code>. Она получает список строк вида <code>товар: цена</code> и возвращает словарь «товар → цена» с ценой-целым числом. Пробелы по краям названия и цены убирайте. Строки без двоеточия и строки, где цена — не число, пропускайте. Если товар встретился дважды, остаётся последняя цена.</p><p>Подсказка: <code>split(&quot;:&quot;)</code>, <code>strip()</code> и <code>try-except</code> для неправильной цены.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">parse_prices([&quot;хлеб: 45&quot;, &quot; молоко :89&quot;, &quot;сыр 320&quot;, &quot;чай: дорого&quot;])</code></div><div><span>Результат</span><code class=\"io-box\">{&#x27;хлеб&#x27;: 45, &#x27;молоко&#x27;: 89}</code></div></div>",
+        startCode: "def parse_prices(lines):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert parse_prices(["хлеб: 45", " молоко :89", "сыр 320", "чай: дорого"]) == {"хлеб": 45, "молоко": 89}, "Ожидалось {'хлеб': 45, 'молоко': 89}: строки без двоеточия и с ценой-словом пропускаются"
+    assert parse_prices([]) == {}, "Для пустого списка — пустой словарь"
+    assert parse_prices(["вода: 30", "вода: 35"]) == {"вода": 35}, "Если товар встретился дважды, остаётся последняя цена"
+    __task_passed__ = True
+    print("✅ Прайс-лист разобран без ошибок!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция parse_prices называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "ex2_save_scores",
+        title: "Таблица рекордов в файл",
+        difficulty: "hard",
+        lesson: 11,
+        hw: false,
+        exam: 2,
+        desc: "<p>Напишите функцию <code>save_scores(filename, scores)</code>. <code>scores</code> — словарь «игрок → очки». Запишите в файл <code>filename</code> строки <code>игрок: очки</code> — по убыванию очков, а при равных очках по алфавиту. Затем прочитайте файл и верните его содержимое одной строкой.</p><p>Подсказка: <code>sorted(scores.items(), key=lambda p: (-p[1], p[0]))</code> — сортировка сначала по очкам (минус — значит по убыванию), потом по имени.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">save_scores(&quot;top.txt&quot;, {&quot;Вика&quot;: 120, &quot;Борис&quot;: 340, &quot;Аня&quot;: 120})</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;Борис: 340\\nАня: 120\\nВика: 120\\n&#x27;</code></div></div>",
+        startCode: "def save_scores(filename, scores):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert save_scores("s1.txt", {"Вика": 120, "Борис": 340, "Аня": 120}) == "Борис: 340\\nАня: 120\\nВика: 120\\n", "Ожидалось «Борис: 340», «Аня: 120», «Вика: 120» — каждая строка с переносом"
+    with open("s1.txt", encoding="utf-8") as f:
+        assert f.read() == "Борис: 340\\nАня: 120\\nВика: 120\\n", "В самом файле должны быть те же строки"
+    assert save_scores("s2.txt", {}) == "", "Для пустого словаря файл пустой"
+    assert save_scores("s1.txt", {"Ян": 5}) == "Ян: 5\\n", "Повторная запись в тот же файл должна заменить старое содержимое"
+    __task_passed__ = True
+    print("✅ Таблица рекордов сохранена правильно!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция save_scores называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "ex2_phone",
+        title: "Номер телефона",
+        difficulty: "hard",
+        lesson: 11,
+        hw: false,
+        exam: 2,
+        desc: "<p>Напишите функцию <code>format_phone(text)</code>. Оставьте в строке только цифры. Если цифр ровно 11 и первая из них <code>7</code> или <code>8</code>, верните номер в виде <code>+7 (XXX) XXX-XX-XX</code>. В любом другом случае выбросите ошибку <code>ValueError(&quot;Неверный номер&quot;)</code>.</p><p>Подсказка: <code>ch.isdigit()</code> проверяет, цифра ли символ.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">format_phone(&quot;8 (912) 345-67-89&quot;)\nformat_phone(&quot;+7 912 345 67 89&quot;)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;+7 (912) 345-67-89&#x27;\n&#x27;+7 (912) 345-67-89&#x27;</code></div></div>",
+        startCode: "def format_phone(text):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert format_phone("8 (912) 345-67-89") == "+7 (912) 345-67-89", "Номер с восьмёркой и скобками"
+    assert format_phone("+7 912 345 67 89") == "+7 (912) 345-67-89", "Номер с +7 и пробелами"
+    assert format_phone("79123456789") == "+7 (912) 345-67-89", "Номер одними цифрами"
+    for bad in ["12345", "9123456789", "5 912 345 67 89"]:
+        try:
+            format_phone(bad)
+        except ValueError as e:
+            assert str(e) == "Неверный номер", "Текст ошибки должен быть «Неверный номер»"
+        else:
+            raise AssertionError(f"Для «{bad}» нужна ошибка ValueError")
+    __task_passed__ = True
+    print("✅ Номера приводятся к одному виду, а неверные — отсеиваются!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция format_phone называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
         id: "circle_area",
         title: "Площадь круга",
         difficulty: "easy",
@@ -1854,6 +2044,151 @@ try:
     print("✅ Разбор ответа API — на отлично!")
 except NameError as e:
     print(f"❌ Ошибка: {e}.\\nПроверьте, что функция top_player называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "ex3_orders_total",
+        title: "Сумма заказов из JSON",
+        difficulty: "medium",
+        lesson: 16,
+        hw: false,
+        exam: 3,
+        desc: "<p>Напишите функцию <code>orders_total(json_text)</code>. Она получает JSON-список заказов вида <code>[{&quot;item&quot;: &quot;чай&quot;, &quot;price&quot;: 120, &quot;qty&quot;: 2}, ...]</code> и возвращает общую сумму: цена × количество по всем заказам. Для пустого списка — 0.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">orders_total(&#x27;[{&quot;item&quot;: &quot;чай&quot;, &quot;price&quot;: 120, &quot;qty&quot;: 2}, {&quot;item&quot;: &quot;торт&quot;, &quot;price&quot;: 450, &quot;qty&quot;: 1}]&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">690</code></div></div>",
+        startCode: "import json\n\ndef orders_total(json_text):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert orders_total('[{"item": "чай", "price": 120, "qty": 2}, {"item": "торт", "price": 450, "qty": 1}]') == 690, "120 × 2 + 450 × 1 = 690"
+    assert orders_total("[]") == 0, "Для пустого списка — 0"
+    assert orders_total('[{"item": "ручка", "price": 35, "qty": 10}]') == 350, "35 × 10 = 350"
+    __task_passed__ = True
+    print("✅ Сумма заказов посчитана верно!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция orders_total называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "ex3_library",
+        title: "Класс «Библиотека»",
+        difficulty: "medium",
+        lesson: 16,
+        hw: false,
+        exam: 3,
+        desc: "<p>Напишите класс <code>Library</code>. Методы: <code>add_book(title)</code> — добавить экземпляр книги (одной книги может быть несколько экземпляров); <code>take(title)</code> — выдать книгу: вернуть <code>True</code>, если экземпляр есть, иначе <code>False</code>; <code>return_book(title)</code> — вернуть экземпляр; <code>available()</code> — список названий, которые сейчас есть, по алфавиту и без повторов.</p><p class=\"io-title\">Пример:</p><code class=\"io-box\">lib = Library()\nlib.add_book(&quot;Незнайка&quot;)\nlib.add_book(&quot;Буратино&quot;)\nlib.take(&quot;Незнайка&quot;)  # True\nlib.take(&quot;Незнайка&quot;)  # False\nlib.available()  # [&#x27;Буратино&#x27;]</code>",
+        startCode: "class Library:\n    def __init__(self):\n        pass\n\n    def add_book(self, title):\n        pass\n\n    def take(self, title):\n        pass\n\n    def return_book(self, title):\n        pass\n\n    def available(self):\n        pass\n",
+        testCode: `
+try:
+    lib = Library()
+    lib.add_book("Незнайка")
+    lib.add_book("Незнайка")
+    lib.add_book("Буратино")
+    assert lib.available() == ["Буратино", "Незнайка"], "available() должен вернуть названия по алфавиту без повторов"
+    assert lib.take("Незнайка") is True and lib.take("Незнайка") is True, "Два экземпляра «Незнайки» можно выдать дважды"
+    assert lib.take("Незнайка") is False, "Третий раз выдать нельзя — экземпляры закончились"
+    assert lib.available() == ["Буратино"], "Выданных книг нет в списке доступных"
+    lib.return_book("Незнайка")
+    assert lib.available() == ["Буратино", "Незнайка"], "Возвращённая книга снова доступна"
+    assert lib.take("Карлсон") is False, "Книги, которой нет, выдать нельзя"
+    assert Library().available() == [], "У новой библиотеки нет книг — у каждой библиотеки свои книги"
+    __task_passed__ = True
+    print("✅ Библиотека работает как настоящая!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что класс Library называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "ex3_student",
+        title: "Класс «Ученик»",
+        difficulty: "hard",
+        lesson: 16,
+        hw: false,
+        exam: 3,
+        desc: "<p>Напишите класс <code>Student</code>. При создании он получает имя: <code>Student(&quot;Аня&quot;)</code>. Методы: <code>add_grade(g)</code> — добавить оценку; если она не от 1 до 5, выбросить <code>ValueError(&quot;Оценка должна быть от 1 до 5&quot;)</code> и ничего не добавлять; <code>average()</code> — средний балл, округлённый до 2 знаков, или <code>0</code>, если оценок нет. А <code>print(student)</code> должен выводить <code>Аня: 4.67</code> — имя и средний балл.</p><p class=\"io-title\">Пример:</p><code class=\"io-box\">s = Student(&quot;Аня&quot;)\ns.add_grade(5)\ns.add_grade(5)\ns.add_grade(4)\ns.average()  # 4.67\nstr(s)  # &#x27;Аня: 4.67&#x27;</code>",
+        startCode: "class Student:\n    def __init__(self, name):\n        pass\n\n    def add_grade(self, g):\n        pass\n\n    def average(self):\n        pass\n\n    def __str__(self):\n        pass\n",
+        testCode: `
+try:
+    s = Student("Аня")
+    assert s.average() == 0, "Без оценок средний балл — 0"
+    s.add_grade(5)
+    s.add_grade(5)
+    s.add_grade(4)
+    assert s.average() == 4.67, "Средний балл 5, 5, 4 — это 4.67"
+    assert str(s) == "Аня: 4.67", "print(s) должен выводить «Аня: 4.67»"
+    for bad in [6, 0]:
+        try:
+            s.add_grade(bad)
+        except ValueError as e:
+            assert str(e) == "Оценка должна быть от 1 до 5", "Текст ошибки должен быть «Оценка должна быть от 1 до 5»"
+        else:
+            raise AssertionError(f"Для оценки {bad} нужна ошибка ValueError")
+    assert s.average() == 4.67, "Неправильные оценки не должны добавляться"
+    assert Student("Боря").average() == 0, "У каждого ученика свои оценки"
+    __task_passed__ = True
+    print("✅ Класс ученика работает безупречно!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что класс Student называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "ex3_birthday",
+        title: "Дней до дня рождения",
+        difficulty: "hard",
+        lesson: 16,
+        hw: false,
+        exam: 3,
+        desc: "<p>Напишите функцию <code>days_to_birthday(today, birth)</code>. Обе даты приходят строками в формате ГГГГ-ММ-ДД: <code>today</code> — сегодняшний день, <code>birth</code> — дата рождения. Верните, сколько дней осталось до ближайшего дня рождения; если он сегодня — <code>0</code>. Дней рождения 29 февраля в проверке не будет.</p><p>Подсказка: превратите строки в даты — <code>datetime.strptime(birth, &quot;%Y-%m-%d&quot;).date()</code>, потом поставьте дате рождения текущий год: <code>b.replace(year=t.year)</code>. Если этот день уже прошёл, возьмите следующий год.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">days_to_birthday(&quot;2026-11-11&quot;, &quot;2012-11-20&quot;)\ndays_to_birthday(&quot;2026-12-31&quot;, &quot;2000-01-01&quot;)</code></div><div><span>Результат</span><code class=\"io-box\">9\n1</code></div></div>",
+        startCode: "from datetime import datetime\n\ndef days_to_birthday(today, birth):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert days_to_birthday("2026-11-11", "2012-11-20") == 9, "С 11 по 20 ноября — 9 дней"
+    assert days_to_birthday("2026-11-11", "2012-11-11") == 0, "День рождения сегодня — 0"
+    assert days_to_birthday("2026-11-11", "2010-05-17") == 187, "До 17 мая 2027 года — 187 дней"
+    assert days_to_birthday("2026-12-31", "2000-01-01") == 1, "С 31 декабря до 1 января — 1 день"
+    assert days_to_birthday("2027-03-01", "2001-02-28") == 364, "2028 год високосный: до 28 февраля 2028 — 364 дня"
+    __task_passed__ = True
+    print("✅ Счётчик дней до дня рождения работает!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция days_to_birthday называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "ex3_overdue",
+        title: "Просроченные дела",
+        difficulty: "hard",
+        lesson: 16,
+        hw: false,
+        exam: 3,
+        desc: "<p>Напишите функцию <code>overdue(json_text, today)</code>. <code>json_text</code> — JSON-список дел вида <code>{&quot;title&quot;: &quot;...&quot;, &quot;due&quot;: &quot;2026-11-01&quot;, &quot;done&quot;: false}</code>, <code>today</code> — сегодняшняя дата строкой ГГГГ-ММ-ДД. Верните список названий невыполненных дел, срок которых раньше сегодняшнего дня, — сначала самые старые. Если срок одинаковый, сохраните порядок из списка.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">overdue(&#x27;[{&quot;title&quot;: &quot;Сдать проект&quot;, &quot;due&quot;: &quot;2026-11-05&quot;, &quot;done&quot;: false}, {&quot;title&quot;: &quot;Купить хлеб&quot;, &quot;due&quot;: &quot;2026-11-20&quot;, &quot;done&quot;: false}]&#x27;, &quot;2026-11-11&quot;)</code></div><div><span>Результат</span><code class=\"io-box\">[&#x27;Сдать проект&#x27;]</code></div></div>",
+        startCode: "import json\n\ndef overdue(json_text, today):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    data = '[{"title": "Сдать проект", "due": "2026-11-05", "done": false}, {"title": "Купить хлеб", "due": "2026-11-12", "done": false}, {"title": "Позвонить бабушке", "due": "2026-11-01", "done": false}, {"title": "Убрать комнату", "due": "2026-10-30", "done": true}, {"title": "Выучить стих", "due": "2026-11-05", "done": false}]'
+    assert overdue(data, "2026-11-11") == ["Позвонить бабушке", "Сдать проект", "Выучить стих"], "Ожидалось ['Позвонить бабушке', 'Сдать проект', 'Выучить стих']: выполненные и будущие дела не просрочены"
+    assert overdue(data, "2026-11-01") == [], "Срок «сегодня» — ещё не просрочено"
+    assert overdue("[]", "2026-11-11") == [], "Для пустого списка — пустой список"
+    __task_passed__ = True
+    print("✅ Просроченные дела найдены и отсортированы!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция overdue называется именно так.")
 except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:

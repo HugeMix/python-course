@@ -1,0 +1,14 @@
+{
+  "name": "pythonbasic-checks",
+  "private": true,
+  "description": "Автоматическая проверка сайта: код уроков, тесты, задачи и страницы в браузере",
+  "scripts": {
+    "content": "node check-content.cjs",
+    "pages": "node check-pages.cjs",
+    "all": "node check-content.cjs && node check-pages.cjs"
+  },
+  "dependencies": {
+    "playwright": "1.63.0",
+    "pyodide": "0.24.1"
+  }
+}
