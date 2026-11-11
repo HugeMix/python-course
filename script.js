@@ -118,14 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
         ],
         'lesson5.html': [
             { question: "Сколько раз выведется «Привет»?", code: "for i in range(5):\n    print(\"Привет\")", options: ["4", "5", "6", "0"], correct: 1, explanation: "range(5) даёт пять чисел: 0, 1, 2, 3, 4." },
-            { question: "Что выведет программа?", code: "for i in range(3):\n    print(i)", options: ["0 1 2", "1 2 3", "0 1 2 3", "1 2"], correct: 0, explanation: "range(3) — это 0, 1, 2: начинается с нуля и не включает 3." },
-            { question: "Что выведет программа?", code: "for i in range(1, 6):\n    print(i)", options: ["1 2 3 4 5", "2 3 4 5", "1 2 3 4", "2 3 4"], correct: 0, explanation: "range(1, 6) — от 1 до 6, не включая 6." },
-            { question: "Что выведет программа?", code: "for i in range(0, 10, 2):\n    print(i)", options: ["0 2 4 6 8", "0 2 4 6 8 10", "2 4 6 8 10", "0 1 2 3 4"], correct: 0, explanation: "Третье число в range — шаг. От 0 до 10 (не включая) с шагом 2." },
+            { question: "Что выведет программа?", code: "for i in range(3):\n    print(i)", options: ["0\n1\n2", "1\n2\n3", "0\n1\n2\n3", "1\n2"], correct: 0, explanation: "range(3) — это 0, 1, 2: начинается с нуля и не включает 3." },
+            { question: "Что выведет программа?", code: "for i in range(1, 6):\n    print(i)", options: ["1\n2\n3\n4\n5", "2\n3\n4\n5", "1\n2\n3\n4", "2\n3\n4"], correct: 0, explanation: "range(1, 6) — от 1 до 6, не включая 6." },
+            { question: "Что выведет программа?", code: "for i in range(0, 10, 2):\n    print(i)", options: ["0\n2\n4\n6\n8", "0\n2\n4\n6\n8\n10", "2\n4\n6\n8\n10", "0\n1\n2\n3\n4"], correct: 0, explanation: "Третье число в range — шаг. От 0 до 10 (не включая) с шагом 2." },
             { question: "Что выведет программа?", code: "total = 0\nfor i in range(1, 6):\n    total += i\nprint(total)", options: ["10", "15", "5", "0"], correct: 1, explanation: "Копилка total собирает сумму: 1 + 2 + 3 + 4 + 5 = 15." },
-            { question: "Что выведет программа?", code: "n = 3\nwhile n > 0:\n    print(n)\n    n -= 1", options: ["3 2 1", "1 2 3", "3 2 1 0", "Ничего"], correct: 0, explanation: "Пока n > 0, выводим n и уменьшаем на 1. Когда n станет 0, условие ложно и цикл заканчивается." },
-            { question: "Что выведет программа?", code: "for i in range(1, 6):\n    if i == 3:\n        break\n    print(i)", options: ["1 2", "1 2 3", "1 2 4", "3"], correct: 0, explanation: "Когда i становится 3, break сразу завершает цикл — 3 уже не выводится." },
-            { question: "Что выведет программа?", code: "for i in range(1, 6):\n    if i == 3:\n        continue\n    print(i)", options: ["1 2 4 5", "1 2", "3", "1 2 3 4 5"], correct: 0, explanation: "continue пропускает остаток повтора: число 3 не выводится, но цикл продолжается." },
-            { question: "Что выведет программа?", code: "for ch in \"кот\":\n    print(ch)", options: ["к о т", "кот", "3", "Ошибка"], correct: 0, explanation: "Цикл for перебирает строку по буквам — каждая выводится на своей строке." },
+            { question: "Что выведет программа?", code: "n = 3\nwhile n > 0:\n    print(n)\n    n -= 1", options: ["3\n2\n1", "1\n2\n3", "3\n2\n1\n0", "Ничего"], correct: 0, explanation: "Пока n > 0, выводим n и уменьшаем на 1. Когда n станет 0, условие ложно и цикл заканчивается." },
+            { question: "Что выведет программа?", code: "for i in range(1, 6):\n    if i == 3:\n        break\n    print(i)", options: ["1\n2", "1\n2\n3", "1\n2\n4", "3"], correct: 0, explanation: "Когда i становится 3, break сразу завершает цикл — 3 уже не выводится." },
+            { question: "Что выведет программа?", code: "for i in range(1, 6):\n    if i == 3:\n        continue\n    print(i)", options: ["1\n2\n4\n5", "1\n2", "3", "1\n2\n3\n4\n5"], correct: 0, explanation: "continue пропускает остаток повтора: число 3 не выводится, но цикл продолжается." },
+            { question: "Что выведет программа?", code: "for ch in \"кот\":\n    print(ch)", options: ["к\nо\nт", "кот", "3", "Ошибка"], correct: 0, explanation: "Цикл for перебирает строку по буквам — каждая выводится на своей строке." },
             { question: "Чем опасна эта программа?", code: "x = 0\nwhile x < 10:\n    print(x)", options: ["Цикл никогда не закончится: x не меняется", "Нельзя сравнивать x с 10", "Она выведет 10 раз ноль и закончится", "Ничем"], correct: 0, explanation: "x всегда равен 0, условие x < 10 всегда верно — получится бесконечный цикл. Внутри нужно увеличивать x." },
             { question: "Найдите ошибку в программе", code: "for i in range(3)\n    print(i)", options: ["Нет двоеточия после range(3)", "Нужно писать range[3]", "Переменная i не создана", "Ошибки нет"], correct: 0, explanation: "После строки с for нужно двоеточие: for i in range(3):" },
             { question: "Какой цикл лучше подходит, если неизвестно, сколько будет повторов (например, «пока не введут верный пароль»)?", options: ["for", "while", "Никакой", "Любой, разницы нет"], correct: 1, explanation: "while повторяет, пока условие верно, — количество повторов заранее знать не нужно." },
@@ -1583,18 +1583,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 try { runner = await readyRunner(); } catch (e) { friendlyLoadError(out); check.disabled = false; return; }
                 out.textContent = '';
                 let passed = 0;
-                for (const c of cases) {
+                // Многострочные данные показываем столбиком, как в настоящей программе
+                const block = (label, text) => {
+                    consoleLine(out, label + '\n', 'muted');
+                    consoleLine(out, (String(text).replace(/\s+$/, '') || '(ничего)') + '\n');
+                };
+                for (const [i, c] of cases.entries()) {
                     let printed = '';
                     const r = await runner.run({ code: area.value, stdin: c.in || '', quietInput: true, onOutput: (t) => { printed += t; } });
-                    const shownIn = (c.in || '').split('\n').join(', ');
-                    if (r.timedOut) { consoleLine(out, '⏱ Код работал слишком долго и был остановлен.\n', 'warn'); break; }
+                    const num = cases.length > 1 ? ` ${i + 1}` : '';
+                    if (r.timedOut) { consoleLine(out, '⏱ Код работал слишком долго и был остановлен — похоже на бесконечный цикл.\n', 'warn'); break; }
                     if (r.error) {
-                        consoleLine(out, `❌ Ввод «${shownIn}»: ошибка в коде\n${r.error}\n`, 'err');
+                        consoleLine(out, `❌ Проверка${num}: ошибка в коде\n`, 'err');
+                        if (c.in) block('Ввод:', c.in);
+                        consoleLine(out, r.error + '\n', 'err');
                         break;
                     }
-                    const ok = normalizeOutput(printed) === normalizeOutput(c.out);
-                    if (ok) { passed++; consoleLine(out, `✅ Ввод «${shownIn}» → ${printed.trim()}\n`, 'ok'); }
-                    else consoleLine(out, `❌ Ввод «${shownIn}»: ожидалось «${c.out}», а программа вывела «${printed.trim() || 'ничего'}»\n`, 'err');
+                    if (normalizeOutput(printed) === normalizeOutput(c.out)) {
+                        passed++;
+                        const shortIn = c.in ? 'ввод ' + c.in.split('\n').join(', ') + ' → ' : '';
+                        const shortOut = printed.trim().includes('\n') ? 'верно' : printed.trim();
+                        consoleLine(out, `✅ Проверка${num}: ${shortIn}${shortOut}\n`, 'ok');
+                    } else {
+                        consoleLine(out, `❌ Проверка${num} не пройдена\n`, 'err');
+                        if (c.in) block('Ввод:', c.in);
+                        block('Ожидалось:', c.out);
+                        block('Ваша программа вывела:', printed);
+                        break;
+                    }
                 }
                 if (passed === cases.length) {
                     consoleLine(out, '\nОтлично, всё верно!\n', 'ok');

@@ -614,16 +614,24 @@
                 // Задача «ввод → вывод»: запускаем программу на каждом наборе данных и сравниваем вывод
                 const norm = s => String(s).replace(/\r/g, "").split("\n")
                     .map(l => l.trim().replace(/\s+/g, " ").toLowerCase().replace(/ё/g, "е")).join("\n").trim();
-                const show = s => s.trim().split("\n").join(" ⏎ ") || "(пусто)";
+                // Многострочные данные показываем столбиком, как в настоящей программе
+                const block = (label, text) => `${label}\n${String(text).replace(/\s+$/, "") || "(ничего)"}\n`;
                 let passed = 0;
                 result = { passed: false };
-                for (const c of task.cases) {
+                for (const [i, c] of task.cases.entries()) {
                     let printed = "";
                     const r = await runner.run({ code: editor.getValue(), stdin: c.in, quietInput: true, onOutput: t => { printed += t; } });
                     if (r.timedOut || r.stopped) { result = r; break; }
-                    if (r.error) { result = { error: r.error }; output += `❌ Ввод: ${show(c.in)}\n`; break; }
-                    if (norm(printed) === norm(c.out)) { passed++; output += `✅ Ввод: ${show(c.in)} → ${show(printed)}\n`; }
-                    else { output += `❌ Ввод: ${show(c.in)}\n   ожидалось: ${show(c.out)}\n   получилось: ${show(printed)}\n`; break; }
+                    if (r.error) { result = { error: r.error }; output += `❌ Проверка ${i + 1}: ошибка в коде\n` + (c.in ? block("Ввод:", c.in) : ""); break; }
+                    if (norm(printed) === norm(c.out)) {
+                        passed++;
+                        const shortIn = c.in ? "ввод " + c.in.split("\n").join(", ") + " → " : "";
+                        output += `✅ Проверка ${i + 1}: ${shortIn}${printed.trim().includes("\n") ? "верно" : printed.trim()}\n`;
+                    } else {
+                        output += `❌ Проверка ${i + 1} не пройдена\n` + (c.in ? block("Ввод:", c.in) : "") +
+                            block("Ожидалось:", c.out) + block("Ваша программа вывела:", printed);
+                        break;
+                    }
                 }
                 if (!result.error && !result.timedOut && !result.stopped && passed === task.cases.length) {
                     result = { passed: true };
