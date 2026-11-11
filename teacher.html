@@ -247,8 +247,14 @@
                     tasks: (Array.isArray(r.assigned.tasks) ? r.assigned.tasks : []).filter(id => known.has(id))
                 };
             }
+            // вопросы теста, где ученик ошибся (номера вопросов в тесте урока)
+            const mk = {};
+            Object.entries(r.mk && typeof r.mk === 'object' ? r.mk : {}).forEach(([k, v]) => {
+                const n = PB.clampInt(k, 0, 99);
+                if (n >= 1 && n <= PB.LESSON_COUNT && Array.isArray(v)) mk[n] = v.map(i => PB.clampInt(i, 0, 99)).slice(0, 30);
+            });
             const at = isNaN(new Date(r.at)) ? new Date().toISOString() : new Date(r.at).toISOString();
-            return { name, at, sid: PB.cleanText(r.sid || '', 20), aid: PB.cleanText(r.aid, 20), lessons, solved, code, assigned, received: new Date().toISOString() };
+            return { mk, name, at, sid: PB.cleanText(r.sid || '', 20), aid: PB.cleanText(r.aid, 20), lessons, solved, code, assigned, received: new Date().toISOString() };
         }
 
         async function importPendingReport() {
@@ -299,7 +305,7 @@
                 current = 'students';
                 if (res && res.ok) {
                     openStudentId = res.student.id;
-                    notice = { kind: 'ok', text: res.duplicate ? `Этот результат от «${res.student.name}» уже был в журнале.` : `Пришёл результат от «${res.student.name}». Проверьте его ниже и ответьте ученику.` };
+                    notice = { kind: 'ok', text: res.duplicate ? `Этот результат от «${res.student.name}» уже был в журнале.` : `Пришёл результат от «${res.student.name}». Оценки сайт посчитал сам — посмотрите ниже.` };
                 } else if (res && !res.ok) {
                     notice = { kind: 'err', text: 'Не удалось прочитать результат: ' + res.error + '. Попросите ученика отправить его ещё раз.' };
                 }
@@ -335,12 +341,13 @@
         };
         const nowIso = () => new Date().toISOString();
 
-        // ---------- ученик: оплаты, доступ, ответы ----------
+        // ---------- ученик: оплата, доступ, результаты ----------
         // Поля ученика в журнале:
         //   payments — [{at, count, note}]: сколько уроков оплачено (урок 1 бесплатный);
-        //   opened — уроки, которые вы открыли; exams — выданные контрольные; tasks — отдельные задачи;
-        //   replies — {урок: {s: 'ok' | 'redo', c: комментарий, at}}: ваши ответы по урокам;
-        //   msg — сообщение, которое ученик видит на странице «Мои уроки»;
+        //   opened — уроки, открытые вручную (обычно не нужно: оплаченные уроки открываются сами по мере освоения);
+        //   exams — контрольные, выданные вручную; tasks — отдельные задачи;
+        //   replies — {урок: {s: 'ok' | 'note', c: комментарий, at}}: «засчитан вручную» или просто комментарий;
+        //   msg — сообщение на странице «Мои уроки»; seenAt — до какого результата вы уже посмотрели;
         //   changedAt / sentAt — когда меняли доступ и когда последний раз отправили ссылку ученику.
         function ensureStudent(st) {
             st.payments = Array.isArray(st.payments) ? st.payments : [];
@@ -358,7 +365,7 @@
         // Журнал из прошлой версии кабинета: уроки и задачи из выданных заданий становятся «открытыми»
         function migrateJournal() {
             journal.students.forEach(ensureStudent);
-            if (journal.v === 2) return;
+            if (journal.v >= 2) return;
             (journal.assignments || []).forEach(a => {
                 const st = journal.students.find(s => norm(s.name) === norm(a.name));
                 if (!st) return;
@@ -371,38 +378,40 @@
         }
 
         const paidCount = st => st.payments.reduce((s, p) => s + p.count, 0);
-        const usedCount = st => st.opened.filter(n => !PB.FREE_LESSONS.includes(n)).length;
-        const leftCount = st => paidCount(st) - usedCount(st);
         const lastReport = st => st.reports[st.reports.length - 1] || null;
-        const nextClosed = st => { for (let n = 1; n <= PB.LESSON_COUNT; n++) if (!st.opened.includes(n)) return n; return null; };
         const touch = st => { st.changedAt = nowIso(); saveJournal(); };
         const needsSend = st => (st.changedAt || '') > (st.sentAt || '');
+        const hasNewResult = st => { const r = lastReport(st); return !!r && r.at > (st.seenAt || ''); };
+        const accessOf = st => ({ paid: paidCount(st), lessons: st.opened, exams: st.exams, tasks: st.tasks, replies: st.replies });
+        const progOf = r => r ? { lessons: r.lessons, solved: r.solved } : { lessons: {}, solved: [] };
+        // Что открыто ученику и как у него дела — по тем же правилам, что у него на сайте, по последнему результату
+        const stateOf = st => PB.computeAccess(accessOf(st), progOf(lastReport(st)));
 
-        function lessonInfo(st, n) {
-            const r = lastReport(st);
-            const quiz = r && r.lessons[n];
-            const hw = LESSON_TASKS[n] || [];
-            const solved = r ? hw.filter(id => r.solved.includes(id)).length : 0;
-            const reply = st.replies[n];
-            const opened = st.opened.includes(n);
-            const fresh = r && (quiz || solved) && (!reply || r.at > reply.at);   // пришло после вашего последнего ответа
+        function lessonInfo(st, n, state) {
+            const r = state.results[n];
+            const open = state.open.has(n);
             let kind, label;
-            if (!opened) [kind, label] = ['off', 'Не открыт'];
-            else if (reply && reply.s === 'ok' && !fresh) [kind, label] = ['ok', 'Зачтён'];
-            else if (fresh && !(reply && reply.s === 'ok')) [kind, label] = ['wait', 'Ждёт проверки'];
-            else if (reply && reply.s === 'redo') [kind, label] = ['redo', 'На доработке'];
-            else if (reply && reply.s === 'ok') [kind, label] = ['ok', 'Зачтён'];
-            else [kind, label] = ['open', 'Открыт'];
-            return { n, opened, quiz, hw, solved, reply, kind, label, report: r };
+            if (!open) {
+                kind = 'off';
+                label = state.why[n] === 'pay' ? 'Не оплачен' : state.why[n] === 'exam' ? `После контрольной ${state.gate[n]}` : `После урока ${n - 1}`;
+            } else if (r.mastered) { kind = r.grade === 'excellent' ? 'excellent' : 'ok'; label = r.byTeacher && !(r.quizOk && r.hwOk) ? 'Засчитан вручную' : PB.GRADE_TEXT[r.grade]; }
+            else if (r.started) { kind = 'work'; label = 'В процессе'; }
+            else { kind = 'open'; label = 'Открыт'; }
+            return { n, open, r, kind, label, reply: st.replies[n] };
         }
 
         function studentStatus(st) {
-            const infos = PB.LESSON_TITLES.map((_, i) => lessonInfo(st, i + 1));
-            const waiting = infos.filter(x => x.kind === 'wait');
-            if (waiting.length) return { kind: 'wait', text: 'Ждёт вашего ответа', infos, waiting };
-            if (needsSend(st)) return { kind: 'send', text: 'Ссылка не отправлена', infos, waiting };
-            if (leftCount(st) <= 0 && nextClosed(st)) return { kind: 'pay', text: 'Нужна оплата', infos, waiting };
-            return { kind: 'ok', text: 'Учится', infos, waiting };
+            const state = stateOf(st);
+            const infos = PB.LESSON_TITLES.map((_, i) => lessonInfo(st, i + 1, state));
+            const mastered = infos.filter(x => x.r.mastered).length;
+            const base = { state, infos, mastered };
+            if (hasNewResult(st)) return { ...base, kind: 'wait', text: 'Новый результат' };
+            const firstClosed = infos.find(x => !x.open);
+            if (!state.current && firstClosed && state.why[firstClosed.n] === 'pay') return { ...base, kind: 'pay', text: 'Нужна оплата' };
+            if (needsSend(st)) return { ...base, kind: 'send', text: 'Ссылка не отправлена' };
+            if (!state.current && !firstClosed) return { ...base, kind: 'ok', text: 'Курс пройден' };
+            if (!state.current && firstClosed && state.why[firstClosed.n] === 'exam') return { ...base, kind: 'ok', text: `Контрольная ${state.gate[firstClosed.n]}` };
+            return { ...base, kind: 'ok', text: state.current ? `Учится · урок ${state.current}` : 'Учится' };
         }
 
         function findOrCreateStudent(name, id) {
@@ -414,10 +423,10 @@
             return ensureStudent(st);
         }
 
-        // Ссылка для ученика: в ней всё его состояние — открытые уроки, контрольные, задачи и ваши ответы
+        // Ссылка для ученика: в ней сколько уроков оплачено, ручные открытия, ваши комментарии и сообщение
         async function studentLink(st) {
-            const access = { v: 2, t: 'access', sid: st.id, name: st.name, note: st.msg || '', lessons: st.opened.slice(), tasks: st.tasks.slice(),
-                exams: st.exams.slice(), replies: st.replies, at: nowIso() };
+            const access = { v: 3, t: 'access', sid: st.id, name: st.name, note: st.msg || '', paid: paidCount(st), lessons: st.opened.slice(),
+                tasks: st.tasks.slice(), exams: st.exams.slice(), replies: st.replies, at: nowIso() };
             return PB.pageUrl('python-basic.html') + '#a=' + await PB.encode(access);
         }
 
@@ -444,14 +453,14 @@
             if (!journal.students.length) {
                 panel.append(el('section', { class: 'hub-card cab-empty' },
                     el('h2', { text: 'Учеников пока нет' }),
-                    el('p', { text: 'Добавьте первого ученика: кабинет подготовит для него ссылку. Ученик откроет её — и увидит свои уроки. Урок 1 открыт всем бесплатно.' }),
+                    el('p', { text: 'Добавьте первого ученика и отметьте оплату — кабинет подготовит ссылку. Ученик откроет её, и уроки будут открываться ему сами по мере освоения. Урок 1 бесплатный.' }),
                     el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Как это работает', onclick: () => go('guide') })));
                 panel.append(form);
                 return;
             }
             const search = el('input', { class: 'hub-input', type: 'search', placeholder: 'Найти ученика', 'aria-label': 'Найти ученика' });
             const grid = el('div', { class: 'cab-students' });
-            const order = { wait: 0, send: 1, pay: 2, ok: 3 };
+            const order = { wait: 0, pay: 1, send: 2, ok: 3 };
             const lastActivity = st => { const r = lastReport(st); return [r ? r.at : '', st.changedAt || '', st.created || ''].sort().pop(); };
             const draw = () => {
                 grid.textContent = '';
@@ -461,17 +470,17 @@
                     .sort((a, b) => order[a.status.kind] - order[b.status.kind] || lastActivity(b.st).localeCompare(lastActivity(a.st)));
                 if (!list.length) { grid.append(el('p', { class: 'hub-muted', text: 'Никого не нашли.' })); return; }
                 list.forEach(({ st, status }) => {
-                    const okCount = status.infos.filter(x => x.kind === 'ok').length;
-                    const left = leftCount(st);
+                    const left = status.state.paidTo - Math.max(...status.state.open);
+                    const r = lastReport(st);
                     grid.append(el('button', { class: 'cab-student', type: 'button', onclick: () => go('students', { student: st.id }) },
                         el('span', { class: 'cab-avatar', text: initials(st.name) }),
                         el('span', { class: 'cab-student-main' },
                             el('strong', { text: st.name }),
                             el('span', { class: 'cab-status cab-status-' + status.kind, text: status.text }),
-                            el('span', { class: 'cab-mini-bar', title: `Зачтено уроков: ${okCount} из ${PB.LESSON_COUNT}` }, el('span', { style: `width:${Math.round(okCount / PB.LESSON_COUNT * 100)}%` }))),
+                            el('span', { class: 'cab-mini-bar', title: `Освоено уроков: ${status.mastered} из ${PB.LESSON_COUNT}` }, el('span', { style: `width:${Math.round(status.mastered / PB.LESSON_COUNT * 100)}%` })),
+                            el('small', { class: 'cab-left', text: [r ? 'результат ' + PB.formatDate(r.at).split(',')[0] : 'результатов пока нет', left > 0 ? `оплачено ещё ${plural(left, 'урок', 'урока', 'уроков')}` : ''].filter(Boolean).join(' · ') })),
                         el('span', { class: 'cab-student-nums' },
-                            el('span', {}, el('b', { text: `${okCount}/${PB.LESSON_COUNT}` }), ' зачтено'),
-                            el('span', { class: left > 0 ? 'cab-left' : 'cab-left is-empty', text: left > 0 ? `оплачено ещё ${plural(left, 'урок', 'урока', 'уроков')}` : 'оплата закончилась' }))));
+                            el('b', { text: `${status.mastered}/${PB.LESSON_COUNT}` }), el('span', { text: 'освоено' }))));
                 });
             };
             search.addEventListener('input', draw);
@@ -491,7 +500,7 @@
                 el('h3', { text: 'Новый ученик' }),
                 el('label', { class: 'hub-label', for: 'new-name', text: 'Имя' }), name,
                 el('label', { class: 'hub-label', for: 'new-paid', text: 'Сколько уроков уже оплачено (урок 1 — бесплатно)' }), paid,
-                el('p', { class: 'hub-muted', text: 'Если оплата уже есть, сразу откроется урок 2. Потом кабинет подготовит ссылку — отправьте её ученику.' }),
+                el('p', { class: 'hub-muted', text: 'Оплаченные уроки будут открываться ученику по очереди: освоил урок — открылся следующий. После добавления отправьте ученику ссылку.' }),
                 el('div', { class: 'hub-actions' }, el('button', { class: 'hub-btn hub-btn-primary', type: 'submit', text: 'Добавить ученика' })), msg);
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -500,7 +509,7 @@
                 if (journal.students.some(s => norm(s.name) === norm(n))) { msg.textContent = 'Такой ученик уже есть в журнале.'; return; }
                 const st = findOrCreateStudent(n);
                 const count = PB.clampInt(paid.value, 0, 99);
-                if (count) { st.payments.push({ at: nowIso(), count, note: '' }); if (!st.opened.includes(2)) st.opened.push(2); }
+                if (count) st.payments.push({ at: nowIso(), count, note: '' });
                 touch(st);
                 go('students', { student: st.id, notice: { kind: 'ok', text: `«${st.name}» добавлен(а). Отправьте ссылку — по ней ученик увидит свои уроки.` } });
             });
@@ -509,83 +518,55 @@
 
         function pill(kind, text) { return el('span', { class: 'cab-status cab-status-' + kind, text }); }
 
-        function openLesson(st, n) {
-            if (st.opened.includes(n)) return true;
-            if (leftCount(st) <= 0 && !confirm(`Оплаченные уроки у «${st.name}» закончились. Всё равно открыть урок ${n}?`)) return false;
-            st.opened.push(n); st.opened.sort((a, b) => a - b);
-            return true;
-        }
-
         function renderStudent(panel, st) {
             const status = studentStatus(st);
+            const state = status.state;
             const refresh = () => go('students', { student: st.id });
             panel.append(el('div', { class: 'hub-actions' },
                 el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: '← Все ученики', onclick: () => go('students') })));
 
-            // Шапка: имя, статус, ссылка ученика, урок по созвону
-            const live = status.infos.find(x => x.opened && x.kind !== 'ok') || status.infos.find(x => !x.opened) || status.infos[status.infos.length - 1];
+            // Шапка: имя, статус, урок по созвону
+            const live = state.current || Math.min(PB.LESSON_COUNT, Math.max(...state.open));
             panel.append(el('section', { class: 'hub-card cab-profile' },
                 el('div', { class: 'cab-profile-head' },
                     el('span', { class: 'cab-avatar cab-avatar-lg', text: initials(st.name) }),
                     el('div', { class: 'cab-profile-title' }, el('h2', { text: st.name }), pill(status.kind, status.text)),
-                    el('a', { class: 'hub-btn', href: PB.lessonFile(live.n) + '#present', target: '_blank', rel: 'noopener', text: `Провести урок ${live.n} по созвону` }))));
+                    el('a', { class: 'hub-btn', href: PB.lessonFile(live) + '#present', target: '_blank', rel: 'noopener', text: `Провести урок ${live} по созвону` }))));
 
             // Ссылка ученику, если что-то поменялось
             if (needsSend(st)) {
                 panel.append(el('section', { class: 'hub-card cab-sendbox' },
                     el('div', { class: 'cab-sendbox-text' },
                         el('strong', { text: 'Отправьте ученику новую ссылку' }),
-                        el('span', { text: 'Вы открыли урок или ответили по уроку. Ученик увидит это, когда откроет новую ссылку. Нажмите «Отправить в Telegram» и выберите чат с учеником.' })),
+                        el('span', { text: 'Вы отметили оплату, открыли урок или написали комментарий. Ученик увидит это, когда откроет новую ссылку. Нажмите «Отправить в Telegram» и выберите чат с учеником.' })),
                     el('div', { class: 'hub-actions' }, ...sendButtons(st, refresh))));
             }
 
-            // Результаты, которые ждут вашего ответа
-            status.waiting.forEach(info => panel.append(reviewCard(st, info, refresh)));
+            // Новый результат: оценки считаются сами, вам — только посмотреть
+            if (hasNewResult(st)) panel.append(resultCard(st, state, refresh));
 
             // Оплата
-            panel.append(paymentsCard(st, refresh));
+            panel.append(paymentsCard(st, state, refresh));
 
-            // Уроки и контрольные
-            const rows = status.infos.map(info => {
-                const meta = info.opened ? [info.quiz ? `тест ${info.quiz.b}%` : 'тест не пройден', info.hw.length ? `домашка ${info.solved} из ${info.hw.length}` : ''].filter(Boolean).join(' · ') : '';
-                return el('li', { class: 'cab-lrow' + (info.opened ? '' : ' is-off') },
-                    el('span', { class: 'cab-lesson-num', text: String(info.n) }),
-                    el('span', { class: 'cab-lrow-main' }, el('strong', { text: PB.LESSON_TITLES[info.n - 1] }), meta ? el('small', { text: meta }) : null,
-                        info.reply && info.reply.c ? el('small', { class: 'cab-lrow-reply', text: (info.reply.s === 'ok' ? 'Ваш ответ: ' : 'Попросили повторить: ') + info.reply.c }) : null),
-                    pill(info.kind, info.label),
-                    info.opened
-                        ? el('a', { class: 'hub-btn hub-btn-ghost', href: PB.lessonFile(info.n) + '#present', target: '_blank', rel: 'noopener', text: 'Слайды' })
-                        : el('button', { class: 'hub-btn', type: 'button', text: 'Открыть', onclick: () => { if (openLesson(st, info.n)) { touch(st); refresh(); } } }));
-            });
-            const exams = [1, 2, 3].map(k => {
-                const on = st.exams.includes(k);
-                const r = lastReport(st);
-                const ids = tasks.filter(t => t.exam === k).map(t => t.id);
-                const done = r ? ids.filter(id => r.solved.includes(id)).length : 0;
-                return el('li', { class: 'cab-lrow cab-lrow-exam' + (on ? '' : ' is-off') },
-                    el('span', { class: 'cab-lesson-num', text: 'К' + k }),
-                    el('span', { class: 'cab-lrow-main' }, el('strong', { text: `Контрольная ${k} · ${EXAM_RANGES[k]}` }), on ? el('small', { text: `решено ${done} из 5, зачёт — 4` }) : el('small', { text: 'не выдана' })),
-                    pill(!on ? 'off' : done >= 4 ? 'ok' : 'open', !on ? 'Не выдана' : done >= 4 ? 'Зачтена' : 'Выдана'),
-                    el('button', { class: 'hub-btn' + (on ? ' hub-btn-ghost' : ''), type: 'button', text: on ? 'Забрать' : 'Выдать', onclick: () => {
-                        if (on) st.exams = st.exams.filter(x => x !== k); else st.exams.push(k);
-                        touch(st); refresh();
-                    } }));
-            });
-            // Открытые уроки и следующий закрытый — сразу, остальные закрытые — под кнопкой
-            const firstClosed = nextClosed(st);
-            const shown = rows.filter((_, i) => st.opened.includes(i + 1) || i + 1 === firstClosed);
-            const hidden = rows.filter((_, i) => !st.opened.includes(i + 1) && i + 1 !== firstClosed);
+            // Уроки: открытые и следующий — сразу, остальные — под кнопкой
+            const rows = status.infos.map(info => lessonRow(st, info, state, refresh));
+            const firstClosed = status.infos.find(x => !x.open);
+            const shown = rows.filter((_, i) => status.infos[i].open || status.infos[i] === firstClosed);
+            const hidden = rows.filter((_, i) => !status.infos[i].open && status.infos[i] !== firstClosed);
+            const exams = [1, 2, 3].map(k => examRow(st, k, state, refresh));
             panel.append(el('section', { class: 'hub-card' },
-                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Уроки' }), el('span', { class: 'hub-muted', text: 'урок 1 — бесплатный' })),
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Уроки' }), el('span', { class: 'hub-muted', text: `освоено ${status.mastered} из ${PB.LESSON_COUNT}` })),
+                el('p', { class: 'hub-muted cab-rule', text: 'Урок освоен, когда тест сдан на 70% и больше и решена домашка (можно без одной задачи). «Отлично» — тест от 90% и вся домашка. Следующий оплаченный урок открывается сам.' }),
                 el('ul', { class: 'cab-lrows' }, shown),
                 hidden.length ? el('details', { class: 'cab-more cab-lrows-more' },
                     el('summary', { text: 'Остальные уроки (' + hidden.length + ')' }),
                     el('ul', { class: 'cab-lrows' }, hidden)) : null,
                 el('h3', { class: 'cab-sub', text: 'Контрольные' }),
+                el('p', { class: 'hub-muted cab-rule', text: 'Открываются сами после уроков 6, 11 и 16. Без сданной контрольной (4 задачи из 5) следующий модуль не откроется.' }),
                 el('ul', { class: 'cab-lrows' }, exams)));
 
             // Сообщение для ученика на странице «Мои уроки»
-            const msg = el('textarea', { class: 'hub-input hub-textarea', rows: '2', maxlength: '300', placeholder: 'Например: «Следующее занятие в четверг в 18:00. Решите домашку до среды.»' });
+            const msg = el('textarea', { class: 'hub-input hub-textarea', rows: '2', maxlength: '300', placeholder: 'Например: «Следующее занятие в четверг в 18:00.»' });
             msg.value = st.msg || '';
             msg.addEventListener('change', () => { st.msg = msg.value.trim(); touch(st); refresh(); });
             panel.append(el('section', { class: 'hub-card' },
@@ -604,15 +585,14 @@
                 cb.addEventListener('change', () => { cb.checked ? chosen.add(t.id) : chosen.delete(t.id); st.tasks = [...chosen]; touch(st); });
                 return { t, node: el('label', { class: 'hub-chip' }, cb, el('span', { text: t.title }), el('small', { class: 'cab-chip-diff cab-diff-' + t.difficulty, text: '+' + PB.TASK_POINTS[t.difficulty] })) };
             });
-            const extra = el('details', { class: 'hub-card cab-more' },
-                el('summary', { text: `Отдельные задачи${st.tasks.length ? ' · выдано ' + st.tasks.length : ''}` }),
-                el('p', { class: 'hub-muted', text: 'Домашние задачи открываются вместе с уроком сами. Здесь можно выдать задачу из другого урока — например, для повторения. После выбора отправьте ученику новую ссылку.' }),
+            panel.append(el('details', { class: 'hub-card cab-more' },
+                el('summary', { text: `Дополнительные задачи${st.tasks.length ? ' · выдано ' + st.tasks.length : ''}` }),
+                el('p', { class: 'hub-muted', text: 'Домашка открывается вместе с уроком сама. Здесь можно дать задачу из другого урока — например, для повторения. После выбора отправьте ученику новую ссылку.' }),
                 el('div', { class: 'hub-chip-groups' }, PB.LESSON_TITLES.map((title, i) => {
                     const b = boxes.filter(x => x.t.lesson === i + 1);
                     return b.length ? el('div', { class: 'hub-chip-group' }, el('h4', { text: 'Урок ' + (i + 1) + '. ' + title }), el('div', { class: 'hub-chips hub-chips-col' }, b.map(x => x.node))) : null;
                 })),
-                el('button', { class: 'hub-btn', type: 'button', text: 'Готово', onclick: refresh }));
-            panel.append(extra);
+                el('button', { class: 'hub-btn', type: 'button', text: 'Готово', onclick: refresh })));
 
             // Заметки только для вас
             const note = el('textarea', { class: 'hub-input hub-textarea', rows: '3', maxlength: '2000', placeholder: 'Только для вас: цели, договорённости, над чем поработать…' });
@@ -624,9 +604,13 @@
             // История и удаление — внизу, свёрнуто
             panel.append(el('details', { class: 'hub-card cab-more' },
                 el('summary', { text: 'Ещё: история результатов и удаление' }),
-                st.reports.length ? el('ul', { class: 'cab-history' }, st.reports.slice().reverse().map(r => el('li', {},
-                    el('span', { text: PB.formatDate(r.at) }),
-                    el('span', { class: 'hub-muted', text: `${plural(Object.values(r.lessons).filter(l => l.p).length, 'тест сдан', 'теста сдано', 'тестов сдано')} · ${plural(r.solved.length, 'задача', 'задачи', 'задач')}` })))) : el('p', { class: 'hub-muted', text: 'Результатов пока не присылали.' }),
+                st.reports.length ? el('ul', { class: 'cab-history' }, st.reports.slice().reverse().map(r => {
+                    const s = PB.computeAccess(accessOf(st), progOf(r));
+                    const m = Object.values(s.results).filter(x => x.mastered).length;
+                    return el('li', {},
+                        el('span', { text: PB.formatDate(r.at) }),
+                        el('span', { class: 'hub-muted', text: `освоено ${plural(m, 'урок', 'урока', 'уроков')} · ${plural(r.solved.length, 'задача решена', 'задачи решены', 'задач решено')}` }));
+                })) : el('p', { class: 'hub-muted', text: 'Результатов пока не присылали.' }),
                 el('button', { class: 'hub-btn hub-btn-danger', type: 'button', text: 'Удалить ученика', onclick: () => {
                     if (!confirm(`Удалить «${st.name}» вместе с результатами и оплатами?`)) return;
                     journal.students = journal.students.filter(x => x.id !== st.id); saveJournal(); go('students');
@@ -634,61 +618,119 @@
             if (window.hljs) panel.querySelectorAll('.hub-code code').forEach(c => window.hljs.highlightElement(c));
         }
 
-        // Проверка результата урока: тест, домашка с кодом, ответ «зачесть» или «повторить»
-        function reviewCard(st, info, refresh) {
-            const r = info.report;
-            const n = info.n;
-            const items = [];
-            items.push(el('li', { class: 'cab-result' + (info.quiz && info.quiz.p ? ' is-done' : '') },
-                el('span', { class: 'cab-check', 'aria-hidden': 'true', text: info.quiz && info.quiz.p ? '✓' : '' }),
-                el('span', { class: 'cab-result-title' }, 'Тест урока', el('small', { text: info.quiz ? `лучший результат ${info.quiz.b}% · попыток: ${info.quiz.a}` : 'не пройден' })),
-                info.quiz ? el('span', { class: 'hub-pill ' + (info.quiz.p ? 'hub-pill-ok' : 'hub-pill-warn'), text: info.quiz.b + '%' }) : el('span', { class: 'hub-pill hub-pill-idle', text: '—' })));
-            info.hw.forEach(id => {
-                const t = taskById(id); const solved = r.solved.includes(id); const code = r.code[id];
-                items.push(el('li', { class: 'cab-result' + (solved ? ' is-done' : '') },
-                    el('span', { class: 'cab-check', 'aria-hidden': 'true', text: solved ? '✓' : '' }),
-                    el('span', { class: 'cab-result-title' }, 'Задача «' + t.title + '»', el('small', { text: DIFF[t.difficulty] })),
-                    el('span', { class: 'hub-pill ' + (solved ? 'hub-pill-ok' : 'hub-pill-idle'), text: solved ? 'решена' : 'не решена' }),
-                    code ? el('details', { class: 'hub-code' }, el('summary', { text: 'Код ученика' }), el('pre', {}, el('code', { class: 'language-python', text: code }))) : null));
-            });
-            const next = n < PB.LESSON_COUNT && !st.opened.includes(n + 1) ? n + 1 : null;
-            const comment = el('textarea', { class: 'hub-input hub-textarea', rows: '2', maxlength: '300', placeholder: 'Комментарий ученику (необязательно для «Зачесть»): что получилось, что повторить' });
-            const openNext = next ? el('input', { type: 'checkbox', id: 'open-next-' + n, checked: leftCount(st) > 0 }) : null;
-            const ok = el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: 'Зачесть урок', onclick: () => {
-                st.replies[n] = { s: 'ok', c: comment.value.trim(), at: nowIso() };
-                if (openNext && openNext.checked && !openLesson(st, next)) return;
-                touch(st); refresh();
-            } });
-            const redo = el('button', { class: 'hub-btn', type: 'button', text: 'Попросить повторить', onclick: () => {
-                const c = comment.value.trim();
-                if (!c) { comment.focus(); comment.placeholder = 'Напишите, что повторить: например, «Перерешайте задачу 3 — цикл должен начинаться с 1»'; return; }
-                st.replies[n] = { s: 'redo', c, at: nowIso() };
-                touch(st); refresh();
-            } });
-            return el('section', { class: 'hub-card cab-review' },
-                el('div', { class: 'hub-card-head' }, el('h2', { text: `Проверьте урок ${n}. ${PB.LESSON_TITLES[n - 1]}` }), el('span', { class: 'hub-muted', text: 'результат от ' + PB.formatDate(r.at) })),
-                el('ul', { class: 'cab-results' }, items),
-                el('label', { class: 'hub-label', text: 'Ваш ответ' }), comment,
-                next ? el('label', { class: 'cab-toggle' }, openNext, el('span', { text: `Сразу открыть урок ${next}` + (leftCount(st) > 0 ? ` (оплачено ещё ${plural(leftCount(st), 'урок', 'урока', 'уроков')})` : ' — оплаченные уроки закончились') })) : null,
-                el('div', { class: 'hub-actions' }, ok, redo));
+        function lessonRow(st, info, state, refresh) {
+            const r = info.r;
+            const meta = info.open ? [r.quiz ? `тест ${r.best}%` : 'тест не сдан', r.hw.length ? `домашка ${r.solved} из ${r.hw.length}` : ''].filter(Boolean).join(' · ') : '';
+            let action;
+            if (!info.open) {
+                action = el('button', { class: 'hub-btn', type: 'button', text: 'Открыть', title: 'Открыть урок вручную — например, чтобы провести его по созвону', onclick: () => {
+                    if (info.n > state.paidTo && !confirm(`Урок ${info.n} не оплачен. Всё равно открыть?`)) return;
+                    st.opened.push(info.n); st.opened.sort((a, b) => a - b); touch(st); refresh();
+                } });
+            } else if (!r.mastered) {
+                action = el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Засчитать', title: 'Засчитать урок вручную — например, после занятия по созвону', onclick: () => {
+                    if (!confirm(`Засчитать урок ${info.n} вручную? Следующий оплаченный урок откроется ученику.`)) return;
+                    st.replies[info.n] = { s: 'ok', c: (st.replies[info.n] && st.replies[info.n].c) || '', at: nowIso() }; touch(st); refresh();
+                } });
+            } else {
+                action = el('a', { class: 'hub-btn hub-btn-ghost', href: PB.lessonFile(info.n) + '#present', target: '_blank', rel: 'noopener', text: 'Слайды' });
+            }
+            return el('li', { class: 'cab-lrow' + (info.open ? '' : ' is-off') },
+                el('span', { class: 'cab-lesson-num', text: String(info.n) }),
+                el('span', { class: 'cab-lrow-main' }, el('strong', { text: PB.LESSON_TITLES[info.n - 1] }), meta ? el('small', { text: meta }) : null,
+                    info.kind === 'work' ? el('small', { class: 'cab-lrow-todo', text: 'Осталось: ' + r.todo.join(', ') }) : null,
+                    info.reply && info.reply.c ? el('small', { class: 'cab-lrow-reply', text: 'Ваш комментарий: ' + info.reply.c }) : null),
+                pill(info.kind, info.label), action);
         }
 
-        function paymentsCard(st, refresh) {
-            const paid = paidCount(st), used = usedCount(st), left = paid - used;
+        function examRow(st, k, state, refresh) {
+            const ex = state.exams[k];
+            const last = PB.EXAM_LESSONS[k][1];
+            return el('li', { class: 'cab-lrow cab-lrow-exam' + (ex.open ? '' : ' is-off') },
+                el('span', { class: 'cab-lesson-num', text: 'К' + k }),
+                el('span', { class: 'cab-lrow-main' }, el('strong', { text: `Контрольная ${k} · ${EXAM_RANGES[k]}` }),
+                    el('small', { text: ex.open ? `решено ${ex.done} из ${ex.total}, зачёт — ${PB.EXAM_PASS}` : `откроется после урока ${last}` })),
+                pill(!ex.open ? 'off' : ex.passed ? 'ok' : ex.done ? 'work' : 'open', !ex.open ? 'Не открыта' : ex.passed ? 'Зачтена' : ex.done ? 'В процессе' : 'Открыта'),
+                ex.open ? el('a', { class: 'hub-btn hub-btn-ghost', href: 'tasks.html#exam=' + k, target: '_blank', rel: 'noopener', text: 'Задачи' })
+                    : el('button', { class: 'hub-btn', type: 'button', text: 'Выдать', onclick: () => { st.exams.push(k); touch(st); refresh(); } }));
+        }
+
+        // Новый результат: по каждому уроку, где что-то изменилось, — оценка или что осталось, ошибки в тесте и код задач
+        function resultCard(st, state, refresh) {
+            const r = lastReport(st);
+            const prev = st.reports[st.reports.length - 2] || null;
+            const prevState = prev ? PB.computeAccess(accessOf(st), progOf(prev)) : null;
+            const changed = [];
+            for (let n = 1; n <= PB.LESSON_COUNT; n++) {
+                const now = state.results[n];
+                if (!now.started) continue;
+                const before = prevState && prevState.results[n];
+                if (!before || before.best !== now.best || before.solved !== now.solved || (r.lessons[n] && prev.lessons[n] && r.lessons[n].a !== prev.lessons[n].a)) changed.push(n);
+            }
+            const list = (changed.length ? changed : [state.current || 1]).slice(-4);
+            const blocks = list.map(n => {
+                const res = state.results[n];
+                const quizData = window.PB_QUIZ ? window.PB_QUIZ[PB.lessonFile(n)] || [] : [];
+                const mistakes = ((r.mk || {})[n] || []).map(i => quizData[i]).filter(Boolean);
+                const items = [];
+                items.push(el('li', { class: 'cab-result' + (res.quizOk ? ' is-done' : '') },
+                    el('span', { class: 'cab-check', 'aria-hidden': 'true', text: res.quizOk ? '✓' : '' }),
+                    el('span', { class: 'cab-result-title' }, 'Тест урока', el('small', { text: res.quiz ? `лучший результат ${res.best}% · попыток: ${res.quiz.a}` : 'не сдан' })),
+                    res.quiz ? el('span', { class: 'hub-pill ' + (res.quizOk ? 'hub-pill-ok' : 'hub-pill-warn'), text: res.best + '%' }) : el('span', { class: 'hub-pill hub-pill-idle', text: '—' })));
+                res.hw.forEach(id => {
+                    const t = taskById(id); const solved = r.solved.includes(id); const code = r.code[id];
+                    items.push(el('li', { class: 'cab-result' + (solved ? ' is-done' : '') },
+                        el('span', { class: 'cab-check', 'aria-hidden': 'true', text: solved ? '✓' : '' }),
+                        el('span', { class: 'cab-result-title' }, 'Задача «' + t.title + '»', el('small', { text: DIFF[t.difficulty] })),
+                        el('span', { class: 'hub-pill ' + (solved ? 'hub-pill-ok' : 'hub-pill-idle'), text: solved ? 'решена' : 'не решена' }),
+                        code ? el('details', { class: 'hub-code' }, el('summary', { text: 'Код ученика' }), el('pre', {}, el('code', { class: 'language-python', text: code }))) : null));
+                });
+                return el('div', { class: 'cab-result-lesson' },
+                    el('div', { class: 'cab-result-head' },
+                        el('h3', { text: `Урок ${n}. ${PB.LESSON_TITLES[n - 1]}` }),
+                        res.mastered ? pill(res.grade === 'excellent' ? 'excellent' : 'ok', 'Освоен · ' + PB.GRADE_TEXT[res.grade]) : pill('work', 'Не освоен')),
+                    res.mastered ? null : el('p', { class: 'cab-result-todo', text: 'Осталось: ' + res.todo.join(', ') + '. Ученик видит это у себя на сайте.' }),
+                    el('ul', { class: 'cab-results' }, items),
+                    mistakes.length ? el('details', { class: 'cab-mistakes' },
+                        el('summary', { text: `Ошибки в тесте (${mistakes.length}) — попадут ученику в разминку` }),
+                        el('ul', { class: 'hub-list' }, mistakes.map(q => el('li', { text: q.question + (q.code ? ' · ' + q.code.split('\n')[0] : '') })))) : null);
+            });
+            const comment = el('textarea', { class: 'hub-input hub-textarea', rows: '2', maxlength: '300', placeholder: 'Комментарий ученику — по желанию. Например: «Хорошо! В задаче про ёлочку подумайте, как обойтись одним циклом».' });
+            const lastN = list[list.length - 1];
+            const done = el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: 'Посмотрел(а)', onclick: () => {
+                st.seenAt = r.at;
+                const c = comment.value.trim();
+                if (c) { st.replies[lastN] = { s: (st.replies[lastN] && st.replies[lastN].s === 'ok') ? 'ok' : 'note', c, at: nowIso() }; touch(st); }
+                else saveJournal();
+                refresh();
+            } });
+            return el('section', { class: 'hub-card cab-review' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Новый результат' }), el('span', { class: 'hub-muted', text: 'от ' + PB.formatDate(r.at) })),
+                el('p', { class: 'hub-muted', text: 'Оценки и «что осталось» сайт посчитал сам — ученик видит то же самое. Делать ничего не обязательно: можно посмотреть код и написать комментарий.' }),
+                blocks,
+                el('label', { class: 'hub-label', text: `Комментарий к уроку ${lastN} (по желанию)` }), comment,
+                el('div', { class: 'hub-actions' }, done));
+        }
+
+        function paymentsCard(st, state, refresh) {
+            const paid = paidCount(st);
+            const reached = Math.max(...state.open);
+            const left = Math.max(0, state.paidTo - reached);
             const custom = el('input', { class: 'hub-input cab-num', type: 'number', min: '1', max: '99', placeholder: 'другое', 'aria-label': 'Сколько уроков оплачено' });
             const noteIn = el('input', { class: 'hub-input', type: 'text', maxlength: '60', placeholder: 'Сумма или заметка (необязательно)' });
             const add = (count) => {
                 count = PB.clampInt(count, 0, 99);
                 if (!count) { custom.focus(); return; }
                 st.payments.push({ at: nowIso(), count, note: noteIn.value.trim() });
-                saveJournal(); toast(`Оплата отмечена: +${plural(count, 'урок', 'урока', 'уроков')}`); refresh();
+                touch(st); toast(`Оплата отмечена: +${plural(count, 'урок', 'урока', 'уроков')}. Отправьте ученику новую ссылку.`); refresh();
             };
+            const needPay = !state.current && state.why[reached + 1] === 'pay';
             return el('section', { class: 'hub-card' },
-                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Оплата' }), el('span', { class: 'hub-muted', text: 'каждый открытый урок, кроме первого, списывает один оплаченный' })),
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Оплата' }), el('span', { class: 'hub-muted', text: 'урок 1 бесплатный; оплаченные уроки открываются по очереди сами' })),
                 el('div', { class: 'hub-stats' },
-                    el('div', { class: 'hub-stat' }, el('strong', { text: String(paid) }), el('span', { text: 'оплачено уроков' })),
-                    el('div', { class: 'hub-stat' }, el('strong', { text: String(used) }), el('span', { text: 'открыто платных' })),
-                    el('div', { class: 'hub-stat' + (left <= 0 ? ' is-warn' : '') }, el('strong', { text: String(left) }), el('span', { text: left < 0 ? 'в долг' : 'осталось' }))),
+                    el('div', { class: 'hub-stat' }, el('strong', { text: String(paid) }), el('span', { text: paid ? `оплачено (уроки 2–${state.paidTo})` : 'оплачено уроков' })),
+                    el('div', { class: 'hub-stat' }, el('strong', { text: String(reached) }), el('span', { text: 'открыто уроков сейчас' })),
+                    el('div', { class: 'hub-stat' + (needPay ? ' is-warn' : '') }, el('strong', { text: String(left) }), el('span', { text: needPay ? 'нужна оплата' : 'ещё оплачено' }))),
                 el('div', { class: 'cab-pay-row' },
                     el('span', { class: 'hub-muted', text: 'Пришла оплата:' }),
                     el('button', { class: 'hub-btn', type: 'button', text: '+1 урок', onclick: () => add(1) }),
@@ -701,7 +743,7 @@
                     el('span', { class: 'hub-muted', text: PB.formatDate(p.at) }),
                     el('button', { class: 'cab-x', type: 'button', title: 'Удалить запись', 'aria-label': 'Удалить запись об оплате', text: '×', onclick: () => {
                         if (!confirm('Удалить эту запись об оплате?')) return;
-                        st.payments.splice(st.payments.length - 1 - i, 1); saveJournal(); refresh();
+                        st.payments.splice(st.payments.length - 1 - i, 1); touch(st); refresh();
                     } })))) : null);
         }
 
@@ -726,33 +768,32 @@
             const steps = (items) => el('ol', { class: 'cab-guide-steps' }, items.map(([b, t]) => el('li', {}, el('strong', { text: b }), t ? ' ' + t : '')));
             panel.append(el('section', { class: 'hub-card cab-guide' },
                 el('h2', { text: 'Как работать с учеником' }),
-                el('p', { class: 'hub-muted', text: 'Урок 1 открыт всем бесплатно. Остальные уроки видит только ученик, которому вы их открыли.' }),
+                el('p', { class: 'hub-muted', text: 'Главное: оценки и «что повторить» сайт считает сам, а оплаченные уроки открываются ученику сами по мере освоения. Вам остаётся отмечать оплату и смотреть результаты.' }),
                 el('h3', { text: 'Первый раз' }),
                 steps([
-                    ['Ученик пишет вам в Telegram.', 'Можно предложить пройти бесплатный урок 1.'],
-                    ['Ученик платит переводом.', 'За один урок или сразу пакетом.'],
-                    ['«Ученики» → «+ Новый ученик».', 'Впишите имя и сколько уроков оплачено — откроется урок 2.'],
+                    ['Ученик пишет вам в Telegram.', 'Предложите пройти бесплатный урок 1.'],
+                    ['Ученик платит переводом', '— за один урок или пакетом.'],
+                    ['«Ученики» → «+ Новый ученик».', 'Впишите имя и сколько уроков оплачено.'],
                     ['Нажмите «Отправить в Telegram»', 'и выберите чат с учеником. По ссылке он увидит свои уроки на странице «Мои уроки».']
                 ]),
-                el('h3', { text: 'Если ученик проходит урок сам' }),
+                el('h3', { text: 'Дальше всё идёт само' }),
                 steps([
-                    ['Ученик проходит урок:', 'читает теорию, решает упражнения, сдаёт тест и домашку.'],
-                    ['Нажимает «Отправить результат».', 'Вам в Telegram приходит ссылка — нажмите на неё, результат сам сохранится в кабинете.'],
-                    ['В карточке ученика появится «Проверьте урок».', 'Там тест, домашка и код решений.'],
-                    ['Ответьте:', '«Зачесть урок» (и сразу открыть следующий) или «Попросить повторить» с комментарием.'],
-                    ['Отправьте новую ссылку.', 'Ученик увидит ваш ответ и новый урок.']
+                    ['Ученик проходит урок:', 'теория, упражнения, тест и домашка с автопроверкой. В начале урока — разминка с вопросами из прошлых уроков.'],
+                    ['Урок освоен, когда тест сдан на 70% и больше и решена домашка', '(можно без одной задачи). Оценка ставится сама: «Отлично» — тест от 90% и вся домашка, иначе «Хорошо».'],
+                    ['Освоил — следующий оплаченный урок открывается сам.', 'Не освоил — сайт сам пишет ученику, что осталось: пересдать тест или решить задачу.'],
+                    ['После уроков 6 и 11 — контрольная.', 'Пока она не сдана (4 задачи из 5), следующий модуль не откроется.'],
+                    ['Ученик нажимает «Отправить результат»', '— вам в Telegram приходит ссылка. Нажмите на неё: в кабинете появится «Новый результат» с оценками, ошибками в тесте и кодом задач.']
                 ]),
-                el('h3', { text: 'Если урок по созвону' }),
+                el('h3', { text: 'Когда нужно ваше участие' }),
                 steps([
-                    ['Созвонитесь и нажмите «Провести урок по созвону»', 'в карточке ученика (или в разделе «Провести урок»). Покажите экран.'],
-                    ['После звонка урок должен быть открыт у ученика', '— если нет, нажмите «Открыть» и отправьте ссылку.'],
-                    ['Ученик делает домашку и отправляет результат.', 'Дальше — как в схеме выше.']
+                    ['«Нужна оплата»', '— ученик освоил все оплаченные уроки. Получите оплату, нажмите «+1 урок» или «+4 урока» и отправьте новую ссылку.'],
+                    ['Урок по созвону', '— нажмите «Провести урок по созвону» и покажите экран. Если нужно провести урок, который ещё не открыт, нажмите у него «Открыть» и отправьте ссылку.'],
+                    ['Засчитать вручную', '— если вы проверили ученика на созвоне, нажмите у урока «Засчитать»: следующий урок откроется.'],
+                    ['Комментарий', '— по желанию, в карточке «Новый результат». Ученик увидит его после новой ссылки.']
                 ]),
-                el('h3', { text: 'Оплата' }),
-                el('p', { text: 'Когда приходит перевод — в карточке ученика нажмите «+1 урок», «+4 урока» или впишите своё число. Каждый открытый урок, кроме первого, списывает один оплаченный. Когда оплаченные закончатся, кабинет предупредит и пометит ученика «Нужна оплата».' }),
                 el('h3', { text: 'Частые вопросы' }),
                 el('ul', { class: 'hub-list' },
-                    el('li', { text: 'Ученик сменил телефон или потерял ссылку — в его карточке есть «Ссылка ученика», отправьте её ещё раз.' }),
+                    el('li', { text: 'Ученик сменил телефон или потерял ссылку — в его карточке есть «Ссылка ученика», отправьте её ещё раз. Результаты тестов хранятся в браузере ученика, поэтому лучше заниматься на одном устройстве.' }),
                     el('li', { text: 'Журнал хранится только в этом браузере. Раз в неделю сохраняйте копию (⚙ Настройки) — кабинет напомнит.' }),
                     el('li', { text: 'Закрытые уроки защищены «мягко»: обычный ученик их не увидит, но человек, который разбирается в сайтах, может найти текст.' }))));
         }
@@ -807,7 +848,8 @@
         }
 
 
-        if (isUnlocked()) start(); else renderGate();
+        // Ждём script.js: он даёт вопросы тестов (чтобы показать ошибки ученика)
+        document.addEventListener('DOMContentLoaded', () => { if (isUnlocked()) start(); else renderGate(); });
     </script>
 
 </body>

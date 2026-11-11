@@ -93,6 +93,8 @@ const PB = (() => {
 
     // --- Прогресс ученика в этом браузере ---
     function lessonFile(n) { return 'lesson' + n + '.html'; }
+    const LESSON_FILES_INDEX = {};
+    for (let n = 1; n <= LESSON_COUNT; n++) LESSON_FILES_INDEX['lesson' + n + '.html'] = n;
 
     function collectProgress() {
         const passed = read('quiz_results', {});
@@ -110,7 +112,13 @@ const PB = (() => {
             }
         }
         const solved = Object.keys(read('solved_tasks', {})).filter(id => /^[\w-]{1,40}$/.test(id));
-        return { lessons, solved };
+        // вопросы теста, на которые ученик ответил неверно и ещё не исправился (номера в тесте урока)
+        const mistakes = {};
+        Object.entries(read('quiz_mistakes', {}) || {}).forEach(([f, list]) => {
+            const n = LESSON_FILES_INDEX[f];
+            if (n && Array.isArray(list) && list.length) mistakes[n] = list.map(i => clampInt(i, 0, 99)).slice(0, 30);
+        });
+        return { lessons, solved, mistakes };
     }
 
     function clampInt(v, min, max) {
@@ -190,12 +198,66 @@ const PB = (() => {
         return toBase64Url(a);
     }
 
+    function plural(n, one, few, many) {
+        const m10 = n % 10, m100 = n % 100;
+        return n + ' ' + (m10 === 1 && m100 !== 11 ? one : m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20) ? few : many);
+    }
+
+    // --- Результат урока: освоен или нет, оценка, что осталось сделать ---
+    // Урок освоен, когда тест сдан (70% и больше) и решена вся домашка, кроме, может быть, одной задачи.
+    // Оценка ставится сама: «Отлично» — тест на 90% и выше и решена вся домашка; «Хорошо» — урок освоен.
+    // Преподаватель может засчитать урок вручную (например, после занятия по созвону).
+    // Одни и те же правила работают у ученика (по его прогрессу) и в кабинете (по присланному результату).
+    const EXCELLENT_PERCENT = 90;
+    const EXAM_PASS = 4;                    // контрольная зачтена: решено 4 задачи из 5
+    const GRADE_TEXT = { excellent: 'Отлично', good: 'Хорошо' };
+
+    function allTasks() { return typeof tasks !== 'undefined' ? tasks : []; }
+    function hwTasks(n) { return allTasks().filter(t => t.hw && t.lesson === n).map(t => t.id); }
+    function examTasks(k) { return allTasks().filter(t => t.exam === k).map(t => t.id); }
+    const solvedCache = new WeakMap();   // чтобы не пересобирать множество решённых задач на каждый урок
+    function solvedSetOf(prog) {
+        let set = solvedCache.get(prog);
+        if (!set) { set = new Set(prog.solved || []); solvedCache.set(prog, set); }
+        return set;
+    }
+
+    // prog — {lessons: {n: {p, b, a}}, solved: [id…]}; reply — ответ преподавателя по уроку
+    function lessonResult(n, prog, reply) {
+        const q = (prog.lessons || {})[n] || null;
+        const best = q ? clampInt(q.b, 0, 100) : 0;
+        const solvedSet = solvedSetOf(prog);
+        const hw = hwTasks(n);
+        const solved = hw.filter(id => solvedSet.has(id)).length;
+        const needHw = Math.max(0, hw.length - 1);
+        const quizOk = !!q && (!!q.p || best >= PASS_PERCENT);
+        const hwOk = solved >= needHw;
+        const byTeacher = !!(reply && reply.s === 'ok');
+        const mastered = (quizOk && hwOk) || byTeacher;
+        const grade = !mastered ? null : (quizOk && best >= EXCELLENT_PERCENT && solved === hw.length ? 'excellent' : 'good');
+        const todo = [];
+        if (!mastered) {
+            if (!quizOk) todo.push(q ? `пересдать тест — сейчас ${best}%, нужно ${PASS_PERCENT}%` : 'сдать тест урока');
+            if (!hwOk) todo.push(`решить ещё ${plural(needHw - solved, 'задачу', 'задачи', 'задач')} из домашки`);
+        }
+        return { n, quiz: q, best, hw, solved, needHw, quizOk, hwOk, mastered, byTeacher, grade, todo, started: !!q || solved > 0 };
+    }
+
+    function examResult(k, prog) {
+        const ids = examTasks(k);
+        const solvedSet = solvedSetOf(prog);
+        const done = ids.filter(id => solvedSet.has(id)).length;
+        return { k, ids, done, total: ids.length, passed: done >= EXAM_PASS };
+    }
+
     // --- Доступ ученика ---
-    // Урок 1 открыт всем. Остальные уроки открывает преподаватель своей ссылкой
-    // (python-basic.html#a=...). В ссылке — всё состояние ученика: какие уроки открыты,
-    // какие контрольные и задачи выданы и что преподаватель ответил по каждому уроку.
+    // Урок 1 открыт всем. Дальше ученик идёт сам: следующий урок открывается, когда предыдущий освоен, —
+    // пока не закончатся оплаченные уроки. Перед уроками 7 и 12 нужно сдать контрольную (4 задачи из 5).
+    // Ссылка преподавателя (python-basic.html#a=...) сообщает, сколько уроков оплачено, ответы по урокам
+    // и сообщение ученику; ещё в ней можно открыть урок или выдать контрольную вручную.
     const FREE_LESSONS = [1];
     const EXAM_LESSONS = { 1: [1, 6], 2: [7, 11], 3: [12, 16] };
+    const GATE_EXAM = { 7: 1, 12: 2 };      // перед уроком 7 — контрольная 1, перед уроком 12 — контрольная 2
 
     function isTeacherBrowser() { return !!read('pb_teacher_pin', null); }
 
@@ -210,15 +272,16 @@ const PB = (() => {
         const replies = {};
         Object.entries(obj.replies && typeof obj.replies === 'object' ? obj.replies : {}).forEach(([k, v]) => {
             const n = clampInt(k, 0, 99);
-            if (n >= 1 && n <= LESSON_COUNT && v && (v.s === 'ok' || v.s === 'redo')) {
+            if (n >= 1 && n <= LESSON_COUNT && v && ['ok', 'redo', 'note'].includes(v.s)) {
                 replies[n] = { s: v.s, c: cleanText(v.c, 800), at: cleanText(v.at, 40) };
             }
         });
         return {
-            v: 2,
+            v: 3,
             sid: cleanText(obj.sid || obj.id, 20),
             name: cleanText(obj.name, 60),
             note: cleanText(obj.note, 600),
+            paid: clampInt(obj.paid, 0, 99),
             lessons: lessonList([...FREE_LESSONS, ...(obj.lessons || [])]),
             tasks: (Array.isArray(obj.tasks) ? obj.tasks : []).filter(id => typeof id === 'string' && (!known || known.has(id))).slice(0, 200),
             exams: [...new Set((Array.isArray(obj.exams) ? obj.exams : []).map(n => clampInt(n, 0, 9)).filter(n => n >= 1 && n <= 3))],
@@ -229,14 +292,13 @@ const PB = (() => {
 
     function readAccess() {
         const a = read('pb_access', null);
-        if (a && a.v === 2) return a;
+        if (a && (a.v === 3 || a.v === 2)) return { paid: 0, ...a };
         const old = read('pb_assignment', null); // ссылка-задание старого образца
         return old ? cleanAccess({ ...old, t: 'assign' }) : null;
     }
 
     function saveAccess(a) {
         write('pb_access', a);
-        write('unlocked_lessons', a.lessons.map(lessonFile)); // по этому списку уроки открываются на страницах уроков
         if (a.name) write('pb_student_name', a.name);
     }
 
@@ -257,16 +319,46 @@ const PB = (() => {
         }
     }
 
-    function isLessonOpen(n) {
-        if (FREE_LESSONS.includes(n) || isTeacherBrowser()) return true;
-        const a = readAccess();
-        return !!(a && a.lessons.includes(n));
+    // Что открыто ученику: уроки, контрольные, и почему закрыт урок.
+    // why[n]: 'prev' — сначала освоить предыдущий урок, 'exam' — сначала сдать контрольную,
+    //         'pay' — урок не оплачен (без ссылки преподавателя — «откроет преподаватель»).
+    function computeAccess(access, prog) {
+        const paidTo = Math.min(LESSON_COUNT, FREE_LESSONS.length + (access ? clampInt(access.paid, 0, 99) : 0));
+        const replies = (access && access.replies) || {};
+        const results = {};
+        for (let n = 1; n <= LESSON_COUNT; n++) results[n] = lessonResult(n, prog, replies[n]);
+        const exams = {};
+        [1, 2, 3].forEach(k => { exams[k] = examResult(k, prog); });
+        const open = new Set([...FREE_LESSONS, ...((access && access.lessons) || [])]);
+        const why = {};
+        for (let n = 2; n <= LESSON_COUNT; n++) {
+            if (open.has(n)) continue;
+            const gate = GATE_EXAM[n];
+            if (n > paidTo) why[n] = 'pay';
+            else if (!open.has(n - 1) || !results[n - 1].mastered) why[n] = 'prev';
+            else if (gate && !exams[gate].passed) why[n] = 'exam';
+            else open.add(n);
+        }
+        [1, 2, 3].forEach(k => {
+            const last = EXAM_LESSONS[k][1];
+            exams[k].open = !!(access && access.exams.includes(k)) || (open.has(last) && results[last].mastered);
+        });
+        // урок, которым ученик занимается сейчас: первый открытый и ещё не освоенный
+        let current = null;
+        for (let n = 1; n <= LESSON_COUNT; n++) if (open.has(n) && !results[n].mastered) { current = n; break; }
+        return { paidTo, paid: paidTo - FREE_LESSONS.length, open, why, results, exams, current, gate: GATE_EXAM };
     }
 
-    function isExamOpen(n) {
+    function myState() { return computeAccess(readAccess(), collectProgress()); }
+
+    function isLessonOpen(n) {
+        if (FREE_LESSONS.includes(n) || isTeacherBrowser()) return true;
+        return myState().open.has(n);
+    }
+
+    function isExamOpen(k) {
         if (isTeacherBrowser()) return true;
-        const a = readAccess();
-        return !!(a && a.exams.includes(n));
+        return myState().exams[k].open;
     }
 
     function isTaskOpen(t) {
@@ -278,13 +370,23 @@ const PB = (() => {
         return isLessonOpen(t.lesson);
     }
 
+    // Почему урок закрыт — простыми словами (для страницы урока и «Моих уроков»)
+    function lockText(n, state) {
+        const st = state || myState();
+        const why = st.why[n];
+        if (why === 'prev') return { kind: 'prev', title: `Урок откроется после урока ${n - 1}`, text: `Освойте урок ${n - 1}: сдайте тест и решите домашку — этот урок откроется сам.` };
+        if (why === 'exam') return { kind: 'exam', title: `Сначала — контрольная ${st.gate[n]}`, text: `Чтобы перейти к следующему модулю, сдайте контрольную ${st.gate[n]}: решите 4 задачи из 5. После этого урок откроется сам.` };
+        if (readAccess()) return { kind: 'pay', title: 'Оплаченные уроки закончились', text: 'Чтобы продолжить, напишите преподавателю в Telegram — после оплаты урок откроется.' };
+        return { kind: 'pay', title: 'Этот урок откроет преподаватель', text: 'Урок 1 бесплатный — его можно пройти прямо сейчас. Остальные уроки открываются после записи на занятия: преподаватель пришлёт ссылку, и уроки появятся в разделе «Мои уроки».' };
+    }
+
     // Ссылка-отчёт для преподавателя: тесты, решённые задачи и код решений открытых уроков
     const MAX_REPORT_LINK = 3500;
     async function buildReportLink(name, focus) {
         const a = readAccess();
         const prog = collectProgress();
         const report = { v: 2, t: 'report', sid: a ? a.sid : '', name: cleanText(name, 60), at: new Date().toISOString(),
-            focus: focus ? clampInt(focus, 1, LESSON_COUNT) : 0, lessons: prog.lessons, solved: prog.solved, code: {} };
+            focus: focus ? clampInt(focus, 1, LESSON_COUNT) : 0, lessons: prog.lessons, solved: prog.solved, mk: prog.mistakes, code: {} };
         const list = typeof tasks !== 'undefined' ? tasks : [];
         const ids = list.filter(t => isTaskOpen(t)).map(t => t.id);
         // код: сначала до 1500 символов на задачу; если ссылка не помещается в сообщение — короче
@@ -306,6 +408,8 @@ const PB = (() => {
         collectProgress, computePoints, maxPoints, taskDifficulty, clampInt,
         copy, telegramShare, formatDate, el, cleanText, randomId,
         isTeacherBrowser, cleanAccess, readAccess, saveAccess, receiveAccess,
-        isLessonOpen, isExamOpen, isTaskOpen, buildReportLink
+        isLessonOpen, isExamOpen, isTaskOpen, buildReportLink,
+        plural, lessonResult, examResult, computeAccess, myState, lockText, hwTasks, examTasks,
+        EXAM_PASS, GRADE_TEXT, GATE_EXAM, EXCELLENT_PERCENT
     };
 })();
