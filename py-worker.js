@@ -55,7 +55,7 @@ onmessage = async ({ data }) => {
     await ready;
     if (!pyodide) return;
 
-    const { id, code, stdin = '', testCode } = data;
+    const { id, code, stdin = '', testCode, quietInput, echoInput } = data;
 
     const decoder = new TextDecoder();
     const write = (buf) => {
@@ -73,6 +73,13 @@ onmessage = async ({ data }) => {
     // функции из прошлых запусков не «доживают» до следующего.
     const globals = pyodide.globals.get('dict')();
     globals.set('__name__', '__main__');
+    // При автопроверке текст-подсказка в input("Введите число: ") не должен попадать в вывод
+    if (quietInput) {
+        pyodide.runPython("def input(prompt=''):\n    return __import__('builtins').input()", { globals });
+    } else if (echoInput) {
+        // В примерах урока показываем введённые данные, как в настоящем терминале: «Пароль: python»
+        pyodide.runPython("def input(prompt=''):\n    print(prompt, end='')\n    s = __import__('builtins').input()\n    print(s)\n    return s", { globals });
+    }
 
     let error = null;
     let passed = false;

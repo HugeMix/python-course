@@ -253,21 +253,9 @@
         }
 
         // ---------- каркас кабинета ----------
-        // Задачи, которые подходят к каждому уроку (для автоподбора в задании)
-        const LESSON_TASKS = {
-            2: ['square', 'fahrenheit', 'greet'],
-            3: ['sum', 'power', 'last_digit', 'even'],
-            4: ['sign', 'min_of_three', 'is_leap', 'ticket_price'],
-            5: ['count_chars', 'factorial', 'digit_sum', 'table_row'],
-            6: ['list_sum', 'count_even', 'only_positive', 'first_last', 'unique', 'flatten'],
-            7: ['repeat_word', 'fibonacci', 'is_prime'],
-            8: ['unique_dict', 'count_words', 'invert_dict', 'most_common_word'],
-            9: ['reverse', 'count_vowels', 'palindrome', 'title_case', 'longest_word', 'count_letter', 'caesar', 'anagram'],
-            10: ['file_lines'],
-            11: ['safe_divide', 'parse_numbers'],
-            13: ['oop_rectangle', 'bank_account', 'stack'],
-            14: ['datetime_days', 'weekday_name']
-        };
+        // Домашние задачи каждого урока (в tasks_data.js у них hw: true и номер урока)
+        const LESSON_TASKS = {};
+        tasks.forEach(t => { if (t.hw) (LESSON_TASKS[t.lesson] = LESSON_TASKS[t.lesson] || []).push(t.id); });
 
         const SECTIONS = [
             ['students', 'Ученики'],
@@ -487,9 +475,9 @@
                     const on = !selectedLessons.has(n);
                     on ? selectedLessons.add(n) : selectedLessons.delete(n);
                     btn.classList.toggle('active', on); btn.setAttribute('aria-pressed', String(on));
-                    // Автоматически добавляем 2 подходящие задачи к уроку (если авто-подбор включён)
+                    // Автоматически добавляем домашние задачи урока (если авто-подбор включён)
                     if (autoTasks.checked) {
-                        (LESSON_TASKS[n] || []).slice(0, n === 4 ? 4 : 2).forEach(id => on ? selectedTasks.add(id) : selectedTasks.delete(id));
+                        (LESSON_TASKS[n] || []).forEach(id => on ? selectedTasks.add(id) : selectedTasks.delete(id));
                         syncTaskBoxes();
                     }
                     updateCounter();
@@ -515,9 +503,13 @@
 
             const manual = el('details', { class: 'cab-manual' },
                 el('summary', { text: 'Выбрать задачи вручную' }),
-                el('div', { class: 'hub-chip-groups' }, ['easy', 'medium', 'hard'].map(d => el('div', { class: 'hub-chip-group' },
-                    el('h4', { text: { easy: 'Лёгкие · +1', medium: 'Средние · +2', hard: 'Сложные · +3' }[d] }),
-                    el('div', { class: 'hub-chips hub-chips-col' }, taskBoxes.filter(b => b.t.difficulty === d).map(b => b.node))))));
+                el('p', { class: 'hub-muted', text: 'Задачи сгруппированы по урокам. Цифра справа — сколько баллов даёт задача.' }),
+                el('div', { class: 'hub-chip-groups' }, PB.LESSON_TITLES.map((title, i) => {
+                    const boxes = taskBoxes.filter(b => b.t.lesson === i + 1);
+                    return boxes.length ? el('div', { class: 'hub-chip-group' },
+                        el('h4', { text: 'Урок ' + (i + 1) + '. ' + title }),
+                        el('div', { class: 'hub-chips hub-chips-col' }, boxes.map(b => b.node))) : null;
+                })));
 
             const msg = el('p', { class: 'hub-error', role: 'alert' });
             const out = el('div', { class: 'cab-result-box', hidden: true });

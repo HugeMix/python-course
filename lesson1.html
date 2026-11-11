@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Урок 1: Введение в Python. Узнайте что такое Python, как его установить и написать первую программу Hello World.">
-    <title>Урок 1: Введение в Python | PythonBasic</title>
+        content="Урок 1 курса Python с нуля: что такое программа, команда print, текст и числа, комментарии. Примеры можно запускать прямо на странице.">
+    <title>Урок 1: Введение в Python: первая программа | PythonBasic</title>
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Урок 1: Введение в Python | PythonBasic">
-    <meta property="og:description" content="Урок 1: Введение в Python. Узнайте что такое Python, как его установить и написать первую программу Hello World.">
+    <meta property="og:title" content="Урок 1: Введение в Python: первая программа | PythonBasic">
+    <meta property="og:description" content="Урок 1 курса Python с нуля: что такое программа, команда print, текст и числа, комментарии. Примеры можно запускать прямо на странице.">
     <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
     <link rel="canonical" href="https://hugemix.github.io/python-course/lesson1.html">
     <meta property="og:url" content="https://hugemix.github.io/python-course/lesson1.html">
@@ -43,8 +43,8 @@
     <!-- Голубая плашка с названием урока -->
     <section class="lesson-title">
         <div class="container">
-            <h1>Урок 1: Введение в Python</h1>
-            <p>Познакомимся с языком Python, установим среду и напишем первую программу.</p>
+            <h1>Введение в Python: первая программа</h1>
+            <p>Узнаем, что такое программа, и напишем первую строку кода.</p>
         </div>
     </section>
 
@@ -52,91 +52,145 @@
         <!-- Плашка с целью урока -->
         <section class="lesson-goal">
             <h2>Цель урока</h2>
-            <p>Познакомиться с языком Python, установить среду для программирования и написать первую программу.</p>
+            <p>Понять, что такое программа и Python, научиться выводить текст и числа командой <code>print()</code>, писать комментарии и узнать, где запускать свой код.</p>
+            <p class="lesson-meta">Время: около 30 минут · 2 упражнения в уроке · тест · 3 задачи на дом</p>
         </section>
 
         <!-- Основной материал -->
         <section class="lesson-content">
-            <h2>Что такое Python?</h2>
-            <p>Python - это простой и понятный язык программирования, который используется для создания сайтов, игр,
-                ботов, анализа данных, искусственного интеллекта и многого другого. Язык был создан программистом
-                <strong>Гвидо ван Россумом</strong>, а первый релиз состоялся в <strong>1991 году</strong>.
-            </p>
-            <p>Главные плюсы Python: читаемый синтаксис, похожий на обычный English-текст, огромное сообщество и
-                миллионы готовых библиотек.</p>
+            <h2>Зачем это нужно</h2>
+            <p>Программа — это список команд для компьютера. Компьютер очень быстрый и никогда не устаёт, но сам ничего не придумывает: он делает ровно то, что написано в программе, и в том порядке, в каком написано.</p>
+            <p>Python (читается «пайтон») — один из самых популярных языков программирования в мире. Его выбирают для первого знакомства с программированием, потому что код на Python похож на обычные английские фразы. При этом на нём работают настоящие большие проекты:</p>
+            <ul>
+                <li><strong>сайты и приложения</strong> — часть YouTube, Instagram и Dropbox написана на Python;</li>
+                <li><strong>чат-боты</strong> для Telegram и других мессенджеров;</li>
+                <li><strong>искусственный интеллект</strong> и нейросети;</li>
+                <li><strong>анализ данных</strong> — таблицы, графики, отчёты;</li>
+                <li><strong>автоматизация</strong> — программы, которые сами переименовывают файлы, отправляют письма, собирают данные с сайтов;</li>
+                <li><strong>игры</strong> — простые 2D-игры делают на библиотеке pygame.</li>
+            </ul>
+            <p>Python придумал нидерландский программист Гвидо ван Россум, первая версия вышла в 1991 году. Сейчас используется Python 3 — именно его вы и будете изучать.</p>
 
-            <h2>Установка Python</h2>
-            <p>Чтобы начать программировать, нужно установить Python:</p>
-            <ol>
-                <li>Перейди на официальный сайт: <a href="https://www.python.org/downloads/"
-                        target="_blank">python.org</a>.</li>
-                <li>Скачай последнюю версию для своей операционной системы.</li>
-                <li>Установи, поставив галочку <strong>"Add Python to PATH"</strong> - это позволит запускать Python
-                    из командной строки.</li>
+            <h2>Первая программа</h2>
+            <p>По традиции первая программа на любом языке выводит на экран фразу «Привет, мир!». На Python это одна строка. Нажмите «Запустить» под примером:</p>
+            <pre data-run><code class="language-python">print(&quot;Привет, мир!&quot;)</code></pre>
+            <p>Поздравляем — это ваша первая программа! Её можно менять прямо здесь: замените текст в кавычках на свой и снова нажмите «Запустить».</p>
+            <p>Разберём, из чего состоит эта строка:</p>
+            <ol class="steps">
+                <li><code>print</code> — команда «напечатай», то есть «выведи на экран». По-английски print значит «печатать».</li>
+                <li><code>( )</code> — круглые скобки. В них пишут то, что нужно вывести.</li>
+                <li><code>"Привет, мир!"</code> — текст в кавычках. Кавычки показывают Python, где текст начинается и где заканчивается. Можно писать двойные <code>"…"</code> или одинарные <code>'…'</code> — главное, одинаковые с двух сторон.</li>
             </ol>
 
-            <h2>Проверка установки</h2>
-            <p>Открой <strong>командную строку</strong> (Windows) или <strong>терминал</strong> (Mac/Linux) и напиши:
-            </p>
-            <pre><code>python --version</code></pre>
-            <p>Если появится версия Python (например, <code>Python 3.12.0</code>), значит всё установлено правильно.</p>
+            <h2>Программа выполняется сверху вниз</h2>
+            <p>Обычно в программе много строк. Python выполняет их по очереди: сначала первую, потом вторую и так до конца. Каждый <code>print</code> выводит новую строку.</p>
+            <pre data-run><code class="language-python">print(&quot;Раз&quot;)
+print(&quot;Два&quot;)
+print(&quot;Три&quot;)
+print(&quot;Программа закончилась&quot;)</code></pre>
+            <p>Поменяйте строки местами и запустите снова — вывод тоже поменяется местами.</p>
 
-            <h2>Первая программа - Hello World</h2>
-            <p>Открой <strong>Python IDLE</strong> (устанавливается вместе с Python) или любой текстовый редактор,
-                например <strong>VS Code</strong>, и напиши:</p>
-            <pre><code>print("Привет, мир!")</code></pre>
-            <p>Запусти код - если на экране появилось <strong>Привет, мир!</strong>, значит всё работает!</p>
+            <div class="try-it" data-id="l1-hello">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Приветствие из двух строк</h3></div>
+                <p>Напишите программу, которая выводит две строки: сначала <strong>Привет!</strong>, а потом <strong>Я учу Python</strong>.</p>
+                <textarea class="try-code" aria-label="Ваш код"># напишите код ниже
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "", "out": "Привет!\nЯ учу Python"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Нужны две команды <code>print</code>, каждая на своей строке. Текст пишется в кавычках: <code>print("Привет!")</code>.</p></details>
+            </div>
 
-            <h2>О функции print()</h2>
-            <ul>
-                <li>Она выполняет одну роль: <strong>выводит переданные данные в консоль</strong> (на экран).</li>
-                <li>Python <strong>регистрозависим</strong>! Это значит, что <code>print</code> и
-                    <code>PRiNT</code> - это совершенно разные вещи. Команды нужно писать строго маленькими буквами.
-                </li>
-                <li>Текст внутри <code>print()</code> нужно помещать в кавычки - одинарные <code>'текст'</code> или
-                    двойные <code>"текст"</code>.</li>
+            <h2>Текст и числа</h2>
+            <p>В <code>print</code> можно передавать не только текст, но и числа. Числа пишут <strong>без кавычек</strong> — тогда Python понимает, что с ними можно считать:</p>
+            <pre data-run><code class="language-python">print(7)
+print(2 + 3)
+print(&quot;2 + 3&quot;)
+print(10 * 60)</code></pre>
+            <p>Посмотрите на вторую и третью строки вывода. <code>2 + 3</code> без кавычек — это пример, Python его посчитал и вывел <code>5</code>. А <code>"2 + 3"</code> в кавычках — это просто текст, Python вывел его как есть.</p>
+            <p>Для вычислений есть знаки: <code>+</code> сложить, <code>-</code> вычесть, <code>*</code> умножить, <code>/</code> разделить. Подробно о них — в уроке 3.</p>
+
+            <h2>Несколько значений в одном print</h2>
+            <p>Если нужно вывести текст и число вместе, перечислите их через запятую. Python сам поставит между ними пробел:</p>
+            <pre data-run><code class="language-python">print(&quot;Мне&quot;, 12, &quot;лет&quot;)
+print(&quot;В сутках&quot;, 24 * 60, &quot;минут&quot;)
+print()
+print(&quot;Пустой print() выше вывел пустую строку&quot;)</code></pre>
+            <p>Пустой <code>print()</code> без ничего в скобках выводит пустую строку — так удобно отделять части вывода друг от друга.</p>
+
+            <div class="try-it" data-id="l1-hours">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Часы в году</h3></div>
+                <p>Выведите две строки: <strong>Часов в сутках: 24</strong> и <strong>Часов в году: 8760</strong>. Число 8760 не пишите вручную — пусть Python сам посчитает <code>365 * 24</code>.</p>
+                <textarea class="try-code" aria-label="Ваш код">print(&quot;Часов в сутках:&quot;, 24)
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "", "out": "Часов в сутках: 24\nЧасов в году: 8760"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Во втором <code>print</code> через запятую напишите текст и вычисление: <code>print("Часов в году:", 365 * 24)</code>.</p></details>
+            </div>
+
+            <h2>Комментарии</h2>
+            <p>Всё, что написано после знака <code>#</code>, Python пропускает. Такие строки называются <strong>комментариями</strong>. Их пишут для людей: чтобы объяснить, что делает код, или временно «выключить» строку, не удаляя её.</p>
+            <pre data-run><code class="language-python"># Эта программа здоровается
+print(&quot;Привет!&quot;)  # комментарий можно писать и в конце строки
+# print(&quot;Эта строка не выполнится&quot;)</code></pre>
+
+            <h2>Где писать код</h2>
+            <p>Все примеры в этом курсе можно запускать прямо на странице. Для своих программ есть <a href="python-online.html">Python Online</a> — редактор в браузере, ничего устанавливать не нужно. Этого хватит, чтобы пройти весь курс.</p>
+            <p>Когда захотите писать программы на своём компьютере:</p>
+            <ol class="steps">
+                <li>Скачайте Python с официального сайта <strong>python.org</strong> (раздел Downloads).</li>
+                <li>При установке на Windows обязательно поставьте галочку <strong>Add python.exe to PATH</strong> — без неё компьютер не найдёт Python.</li>
+                <li>Установите редактор кода. Для начала подойдёт <strong>Thonny</strong> (очень простой, сделан для новичков) или <strong>VS Code</strong> (им пользуются профессионалы).</li>
+                <li>Создайте файл с расширением <code>.py</code>, например <code>hello.py</code>, напишите в нём код и запустите кнопкой Run в редакторе.</li>
+            </ol>
+            <p>Проверить, что Python установлен, можно в терминале (на Windows — «Командная строка»):</p>
+            <pre data-label="Терминал"><code class="language-bash">python --version</code></pre>
+            <p>Если в ответ появилась строка вроде <code>Python 3.12.4</code> — всё готово. На macOS и Linux команда может называться <code>python3</code>.</p>
+
+            <h2>Частые ошибки новичков</h2>
+            <p>Ошибаться — нормально, так учатся все программисты. Главное — научиться читать сообщение об ошибке: Python подсказывает, что не так и в какой строке.</p>
+            <div class="mistake">
+                <h3>Команда с большой буквы</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">Print(&quot;Привет&quot;)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">print(&quot;Привет&quot;)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>NameError: name &#x27;Print&#x27; is not defined</code></p>
+                <p>Python различает большие и маленькие буквы: <code>print</code> и <code>Print</code> для него — разные слова. Все команды Python пишутся маленькими буквами.</p>
+            </div>
+            <div class="mistake">
+                <h3>Текст без кавычек</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">print(Привет)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">print(&quot;Привет&quot;)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>NameError: name &#x27;Привет&#x27; is not defined</code></p>
+                <p>Без кавычек Python думает, что <code>Привет</code> — это имя чего-то, что вы создали раньше, и не находит его. Текст всегда пишется в кавычках.</p>
+            </div>
+            <div class="mistake">
+                <h3>Забыли закрыть кавычку</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">print(&quot;Привет)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">print(&quot;Привет&quot;)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>SyntaxError: unterminated string literal (detected at line 1)</code></p>
+                <p>Кавычка открылась, но не закрылась — Python не понимает, где кончается текст. Кавычки всегда парные.</p>
+            </div>
+            <div class="mistake">
+                <h3>Забыли закрыть скобку</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">print(&quot;Привет&quot;</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">print(&quot;Привет&quot;)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>SyntaxError: &#x27;(&#x27; was never closed</code></p>
+                <p>Каждой открывающей скобке нужна закрывающая. Python прямо пишет: скобка «(» так и не закрылась.</p>
+            </div>
+
+            <h2>Главное за урок</h2>
+            <ul class="lesson-summary">
+                <li>Программа — это команды для компьютера. Python выполняет их по очереди, сверху вниз.</li>
+                <li><code>print(...)</code> выводит на экран то, что написано в скобках. Каждый <code>print</code> — новая строка.</li>
+                <li>Текст пишется в кавычках: <code>"Привет"</code>. Числа — без кавычек, с ними можно считать: <code>print(2 + 3)</code>.</li>
+                <li>Несколько значений в одном <code>print</code> перечисляют через запятую — между ними появится пробел.</li>
+                <li>Всё после <code>#</code> — комментарий, Python его пропускает. Команды пишутся маленькими буквами: <code>print</code>, а не <code>Print</code>.</li>
             </ul>
-
-            <h2>Файлы Python</h2>
-            <p>Все файлы с кодом на Python имеют расширение <strong>.py</strong>. Например:
-                <code>my_program.py</code>. Чтобы запустить файл, напишите в терминале:
-            </p>
-            <pre><code>python my_program.py</code></pre>
-
-            <h2>Редакторы кода</h2>
-            <p>Для написания программ удобно использовать специальные редакторы:</p>
-            <ul>
-                <li><strong>Python IDLE</strong> - встроенный редактор, идеален для новичков.</li>
-                <li><strong>VS Code</strong> - мощный бесплатный редактор с подсветкой синтаксиса.</li>
-                <li><strong>PyCharm</strong> - профессиональная среда разработки.</li>
-            </ul>
-
-            <h2>Где используется Python?</h2>
-            <p>Python — один из самых универсальных языков в мире. Вот пять главных областей, где он применяется:</p>
-            <ul>
-                <li><strong>Веб-разработка</strong> — такие гиганты как <strong>Instagram</strong>, <strong>YouTube</strong> и <strong>Pinterest</strong> используют Python в своей серверной части. Популярные фреймворки: Django и Flask.</li>
-                <li><strong>Анализ данных</strong> — библиотеки <strong>pandas</strong> и <strong>NumPy</strong> делают Python стандартом в науке о данных. Компании Netflix и Spotify используют его для анализа поведения пользователей.</li>
-                <li><strong>Искусственный интеллект и машинное обучение</strong> — библиотеки <strong>TensorFlow</strong> и <strong>PyTorch</strong> (от Google и Meta) написаны с поддержкой Python. ChatGPT от OpenAI тоже разрабатывается с его помощью.</li>
-                <li><strong>Автоматизация</strong> — скрипты для автоматической обработки файлов, отправки писем, парсинга сайтов. NASA использует Python для автоматизации научных расчётов.</li>
-                <li><strong>Кибербезопасность</strong> — инструменты для тестирования безопасности, анализа сети и поиска уязвимостей. Kali Linux поставляется со множеством Python-инструментов для специалистов по безопасности.</li>
-            </ul>
-
-            <h2>Интерактивный режим Python</h2>
-            <p>Python можно использовать как умный калькулятор прямо в терминале! Открой командную строку и просто напиши <code>python</code> (или <code>python3</code> на Mac/Linux) — ты попадёшь в интерактивный режим, где каждая команда выполняется мгновенно:</p>
-            <pre><code>&gt;&gt;&gt; 2 + 2
-4
-&gt;&gt;&gt; print("Привет!")
-Привет!
-&gt;&gt;&gt; 10 * 5
-50</code></pre>
-            <p>Значок <code>&gt;&gt;&gt;</code> — это приглашение ввода. Чтобы выйти из интерактивного режима, введи <code>exit()</code> или нажми <strong>Ctrl+Z</strong> (Windows) / <strong>Ctrl+D</strong> (Mac/Linux). Интерактивный режим отлично подходит для быстрой проверки идей и экспериментов с кодом.</p>
-
-            <h2>Первая настоящая программа</h2>
-            <p>Давай напишем программу, которая приветствует пользователя по имени. Функция <code>input()</code> позволяет получить текст, введённый пользователем с клавиатуры:</p>
-            <pre><code>name = input("Как тебя зовут? ")
-print("Привет, " + name + "! Добро пожаловать в мир Python!")
-print("Сегодня начинается твой путь в программировании!")</code></pre>
-            <p>Запусти программу — она спросит твоё имя и выведет персональное приветствие. Это уже настоящая интерактивная программа! Программа ждёт ввода, читает его и реагирует — именно так работают все программы в мире.</p>
         </section>
 
         <!-- Квиз -->
@@ -145,15 +199,22 @@ print("Сегодня начинается твой путь в программ
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>Домашнее задание</h2>
-            <ul>
-                <li>Установи Python и проверь его версию командой <code>python --version</code>.</li>
-                <li>Напиши и запусти программу, которая выводит <code>Привет, мир!</code>.</li>
-                <li>Попробуй изменить текст так, чтобы программа выводила твоё имя.</li>
-                <li>Попробуй написать <code>Print("тест")</code> и посмотри, какую ошибку выдаст Python — это наглядно покажет что значит «регистрозависимый».</li>
-                <li>Запусти Python в интерактивном режиме и используй его как калькулятор: вычисли <code>17 * 24</code>, <code>100 / 7</code> и <code>2 ** 10</code>.</li>
-                <li>Напиши программу, которая спрашивает имя и возраст пользователя и выводит сообщение вида: «Привет, Анна! Тебе 20 лет.»</li>
-                <li>Найди в интернете одно известное приложение или сервис, написанный на Python, и узнай, зачем разработчики выбрали именно этот язык.</li>
+            <p>Задачи проверяются автоматически: откройте задачу, напишите решение и нажмите «Проверить». <span class="hw-counter"></span></p>
+            <div class="callout callout-soft">В этих задачах программа получает данные через <code>input()</code> и печатает ответ через <code>print()</code> — так же, как в упражнениях урока. Проверка сама подставит разные данные и сравнит ваш вывод с правильным.</div>
+            <ul class="hw-tasks">
+                <li data-task="io_hello"><a href="tasks.html#task=io_hello"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Привет, мир!</strong><small>лёгкая · +1 балл</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="io_card"><a href="tasks.html#task=io_card"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Визитка</strong><small>лёгкая · +1 балл</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="io_tree"><a href="tasks.html#task=io_tree"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Ёлочка</strong><small>средняя · +2 балла</small></span><span class="hw-status">Не решена</span></a></li>
             </ul>
+            <div class="hw-star">
+                <h3>Задание со звёздочкой: «Открытка»</h3>
+                <p>Нарисуйте в <a href="python-online.html">Python Online</a> открытку для друга из символов: рамку из звёздочек <code>*</code>, внутри — поздравление и подпись. Например, так:</p>
+                <pre data-label="Пример вывода"><code class="language-plaintext">**********************
+*  С днём рождения!  *
+*     от Маши        *
+**********************</code></pre>
+                <p class="hub-muted">Эту задачу проверяет преподаватель: отправьте ему код или покажите на занятии.</p>
+            </div>
         </section>
         <!-- Навигация -->
         <div class="lesson-navigation"></div>

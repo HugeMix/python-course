@@ -199,6 +199,68 @@
             color: var(--text-color);
         }
 
+        .tasks-lesson-select {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 9px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(128, 128, 128, 0.3);
+            background: var(--bg-color);
+            color: var(--text-color);
+            font: inherit;
+            font-size: 0.9rem;
+        }
+
+        .tasks-group {
+            margin: 14px 4px 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            opacity: 0.55;
+        }
+
+        .task-meta {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.82rem;
+            opacity: 0.65;
+        }
+
+        .io-title {
+            margin: 14px 0 6px;
+            font-weight: 700;
+        }
+
+        .io-example {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .io-example span {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.6;
+            margin-bottom: 4px;
+        }
+
+        code.io-box {
+            display: block;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: var(--code-bg);
+            color: var(--code-text);
+            white-space: pre;
+            overflow-x: auto;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
         .tasks-filter-btn {
             display: inline-flex;
             align-items: center;
@@ -264,6 +326,7 @@
             <!-- Main Task Area -->
             <div class="tasks-main">
                 <div class="task-description" id="task-desc">
+                    <span class="task-meta" id="task-meta"></span>
                     <h3 style="margin-top:0; color: var(--accent-color);" id="task-title">Выберите задачу</h3>
                     <div id="task-text" style="color: var(--text-color); line-height: 1.6;">Текст задачи появится
                         здесь...</div>
@@ -387,6 +450,11 @@
         });
 
         let currentFilter = "all";
+        // Урок из адреса tasks.html#lesson=4 или выбранный в списке
+        let currentLesson = Number((location.hash.match(/^#lesson=(\d+)/) || [])[1]) || 0;
+        const LESSON_NAMES = ["Введение в Python", "Переменные и типы данных", "Операторы", "Условия", "Циклы",
+            "Списки и кортежи", "Функции", "Словари и множества", "Строки", "Файлы", "Обработка ошибок",
+            "Модули и библиотеки", "Основы ООП", "Дата и время", "Итоговый проект", "Работа с API"];
         const FILTERS = [["all", "Все"], ["easy", "Лёгкие"], ["medium", "Средние"], ["hard", "Сложные"]];
         const DIFF = {
             easy: ["Лёгкая", "diff-easy"],
@@ -414,13 +482,27 @@
             progress.querySelector(".tasks-progress-fill").style.width = (solvedCount / tasks.length * 100) + "%";
             head.appendChild(progress);
 
+            // Выбор урока
+            const lessonSelect = document.createElement("select");
+            lessonSelect.className = "tasks-lesson-select";
+            lessonSelect.setAttribute("aria-label", "Задачи к уроку");
+            lessonSelect.appendChild(new Option(`Все уроки · ${tasks.length} задач`, "0"));
+            LESSON_NAMES.forEach((name, i) => {
+                const n = tasks.filter(t => t.lesson === i + 1).length;
+                if (n) lessonSelect.appendChild(new Option(`Урок ${i + 1}. ${name} · ${n}`, String(i + 1)));
+            });
+            lessonSelect.value = String(currentLesson);
+            lessonSelect.onchange = () => { currentLesson = Number(lessonSelect.value); renderTasks(); };
+            head.appendChild(lessonSelect);
+            const inLesson = t => !currentLesson || t.lesson === currentLesson;
+
             // Фильтр по сложности
             const filter = document.createElement("div");
             filter.className = "tasks-filter";
             filter.setAttribute("role", "group");
             filter.setAttribute("aria-label", "Фильтр по сложности");
             FILTERS.forEach(([key, name]) => {
-                const count = key === "all" ? tasks.length : tasks.filter(t => t.difficulty === key).length;
+                const count = tasks.filter(t => inLesson(t) && (key === "all" || t.difficulty === key)).length;
                 const btn = document.createElement("button");
                 btn.type = "button";
                 btn.className = "tasks-filter-btn" + (currentFilter === key ? " active" : "");
@@ -432,8 +514,18 @@
             });
             head.appendChild(filter);
 
+            let lastLesson = null;
             tasks.forEach((task, index) => {
+                if (!inLesson(task)) return;
                 if (currentFilter !== "all" && task.difficulty !== currentFilter) return;
+                // Заголовок урока перед его задачами
+                if (task.lesson !== lastLesson) {
+                    lastLesson = task.lesson;
+                    const h = document.createElement("div");
+                    h.className = "tasks-group";
+                    h.textContent = `Урок ${task.lesson}. ${LESSON_NAMES[task.lesson - 1]}`;
+                    list.appendChild(h);
+                }
                 const item = document.createElement("button");
                 item.type = "button";
                 item.className = "task-item" + (index === currentTaskIndex ? " active" : "") + (solved[task.id] ? " solved" : "");
@@ -473,6 +565,8 @@
 
             const task = tasks[index];
             document.getElementById("task-title").textContent = task.title;
+            const meta = document.getElementById("task-meta");
+            meta.textContent = `Урок ${task.lesson}. ${LESSON_NAMES[task.lesson - 1]}` + (task.hw ? " · домашнее задание" : "") + " · " + DIFF[task.difficulty][0].toLowerCase();
             document.getElementById("task-text").innerHTML = task.desc;
             editor.setValue(localStorage.getItem(`saved_code_${task.id}`) || task.startCode);
             if (runner.ready) {
@@ -515,11 +609,33 @@
             setStatus("running");
 
             let output = "";
-            const result = await runner.run({
-                code: editor.getValue(),
-                testCode: task.testCode,
-                onOutput: (text) => { output += text; }
-            });
+            let result;
+            if (task.kind === "io") {
+                // Задача «ввод → вывод»: запускаем программу на каждом наборе данных и сравниваем вывод
+                const norm = s => String(s).replace(/\r/g, "").split("\n")
+                    .map(l => l.trim().replace(/\s+/g, " ").toLowerCase().replace(/ё/g, "е")).join("\n").trim();
+                const show = s => s.trim().split("\n").join(" ⏎ ") || "(пусто)";
+                let passed = 0;
+                result = { passed: false };
+                for (const c of task.cases) {
+                    let printed = "";
+                    const r = await runner.run({ code: editor.getValue(), stdin: c.in, quietInput: true, onOutput: t => { printed += t; } });
+                    if (r.timedOut || r.stopped) { result = r; break; }
+                    if (r.error) { result = { error: r.error }; output += `❌ Ввод: ${show(c.in)}\n`; break; }
+                    if (norm(printed) === norm(c.out)) { passed++; output += `✅ Ввод: ${show(c.in)} → ${show(printed)}\n`; }
+                    else { output += `❌ Ввод: ${show(c.in)}\n   ожидалось: ${show(c.out)}\n   получилось: ${show(printed)}\n`; break; }
+                }
+                if (!result.error && !result.timedOut && !result.stopped && passed === task.cases.length) {
+                    result = { passed: true };
+                    output += "\n✅ Все проверки пройдены! Задача решена.";
+                }
+            } else {
+                result = await runner.run({
+                    code: editor.getValue(),
+                    testCode: task.testCode,
+                    onOutput: (text) => { output += text; }
+                });
+            }
 
             btnStop.hidden = true;
 
