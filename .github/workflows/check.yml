@@ -38,8 +38,17 @@ jobs:
       - name: Проверить код уроков, тесты и задачи
         run: node check-content.cjs
 
+      # На машинах GitHub обычно уже установлен Google Chrome — берём его, ничего не скачивая
+      # (скачивание браузера и системных пакетов иногда надолго зависает из-за сбоев сети у GitHub).
+      # Если Chrome нет — скачиваем Chromium для Playwright.
       - name: Установить браузер
-        run: npx playwright install --with-deps chromium
+        run: |
+          if command -v google-chrome >/dev/null 2>&1; then
+            echo "Используем уже установленный Chrome: $(google-chrome --version)"
+            echo "PW_CHANNEL=chrome" >> "$GITHUB_ENV"
+          else
+            npx playwright install --with-deps chromium || npx playwright install chromium
+          fi
 
       - name: Проверить страницы в браузере
         run: node check-pages.cjs

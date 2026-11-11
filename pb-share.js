@@ -1,4 +1,4 @@
-// Общие функции для страниц «Кабинет преподавателя» и «Моё задание».
+// Общие функции для страниц «Кабинет преподавателя», «Мои уроки» и «Задачи».
 //
 // Сервера у сайта нет, поэтому задание и отчёт передаются ссылкой:
 // данные упаковываются (JSON → сжатие → base64url) и кладутся в адрес после «#».
@@ -190,10 +190,122 @@ const PB = (() => {
         return toBase64Url(a);
     }
 
+    // --- Доступ ученика ---
+    // Урок 1 открыт всем. Остальные уроки открывает преподаватель своей ссылкой
+    // (python-basic.html#a=...). В ссылке — всё состояние ученика: какие уроки открыты,
+    // какие контрольные и задачи выданы и что преподаватель ответил по каждому уроку.
+    const FREE_LESSONS = [1];
+    const EXAM_LESSONS = { 1: [1, 6], 2: [7, 11], 3: [12, 16] };
+
+    function isTeacherBrowser() { return !!read('pb_teacher_pin', null); }
+
+    function lessonList(arr) {
+        return [...new Set((Array.isArray(arr) ? arr : []).map(n => clampInt(n, 0, 99)).filter(n => n >= 1 && n <= LESSON_COUNT))].sort((a, b) => a - b);
+    }
+
+    // Проверяем и чистим данные из ссылки преподавателя (старый формат «задание» тоже понимаем)
+    function cleanAccess(obj) {
+        if (!obj || (obj.t !== 'access' && obj.t !== 'assign')) return null;
+        const known = typeof tasks !== 'undefined' ? new Set(tasks.map(t => t.id)) : null;
+        const replies = {};
+        Object.entries(obj.replies && typeof obj.replies === 'object' ? obj.replies : {}).forEach(([k, v]) => {
+            const n = clampInt(k, 0, 99);
+            if (n >= 1 && n <= LESSON_COUNT && v && (v.s === 'ok' || v.s === 'redo')) {
+                replies[n] = { s: v.s, c: cleanText(v.c, 800), at: cleanText(v.at, 40) };
+            }
+        });
+        return {
+            v: 2,
+            sid: cleanText(obj.sid || obj.id, 20),
+            name: cleanText(obj.name, 60),
+            note: cleanText(obj.note, 600),
+            lessons: lessonList([...FREE_LESSONS, ...(obj.lessons || [])]),
+            tasks: (Array.isArray(obj.tasks) ? obj.tasks : []).filter(id => typeof id === 'string' && (!known || known.has(id))).slice(0, 200),
+            exams: [...new Set((Array.isArray(obj.exams) ? obj.exams : []).map(n => clampInt(n, 0, 9)).filter(n => n >= 1 && n <= 3))],
+            replies,
+            at: cleanText(obj.at, 40) || new Date().toISOString()
+        };
+    }
+
+    function readAccess() {
+        const a = read('pb_access', null);
+        if (a && a.v === 2) return a;
+        const old = read('pb_assignment', null); // ссылка-задание старого образца
+        return old ? cleanAccess({ ...old, t: 'assign' }) : null;
+    }
+
+    function saveAccess(a) {
+        write('pb_access', a);
+        write('unlocked_lessons', a.lessons.map(lessonFile)); // по этому списку уроки открываются на страницах уроков
+        if (a.name) write('pb_student_name', a.name);
+    }
+
+    // Ссылка преподавателя открыта: сохраняем доступ (если он не старее уже сохранённого)
+    async function receiveAccess() {
+        const packed = fromHash('a');
+        if (!packed) return null;
+        history.replaceState(null, '', location.pathname); // данные не остаются в адресе
+        try {
+            const a = cleanAccess(await decode(packed));
+            if (!a) throw new Error('это не ссылка преподавателя');
+            const prev = readAccess();
+            if (prev && prev.sid === a.sid && prev.at && a.at && a.at < prev.at) return { ok: true, access: prev, stale: true };
+            saveAccess(a);
+            return { ok: true, access: a, prev };
+        } catch (e) {
+            return { ok: false, error: e.message };
+        }
+    }
+
+    function isLessonOpen(n) {
+        if (FREE_LESSONS.includes(n) || isTeacherBrowser()) return true;
+        const a = readAccess();
+        return !!(a && a.lessons.includes(n));
+    }
+
+    function isExamOpen(n) {
+        if (isTeacherBrowser()) return true;
+        const a = readAccess();
+        return !!(a && a.exams.includes(n));
+    }
+
+    function isTaskOpen(t) {
+        if (!t) return false;
+        if (isTeacherBrowser()) return true;
+        const a = readAccess();
+        if (a && a.tasks.includes(t.id)) return true;
+        if (t.exam) return isExamOpen(t.exam);
+        return isLessonOpen(t.lesson);
+    }
+
+    // Ссылка-отчёт для преподавателя: тесты, решённые задачи и код решений открытых уроков
+    const MAX_REPORT_LINK = 3500;
+    async function buildReportLink(name, focus) {
+        const a = readAccess();
+        const prog = collectProgress();
+        const report = { v: 2, t: 'report', sid: a ? a.sid : '', name: cleanText(name, 60), at: new Date().toISOString(),
+            focus: focus ? clampInt(focus, 1, LESSON_COUNT) : 0, lessons: prog.lessons, solved: prog.solved, code: {} };
+        const list = typeof tasks !== 'undefined' ? tasks : [];
+        const ids = list.filter(t => isTaskOpen(t)).map(t => t.id);
+        // код: сначала до 1500 символов на задачу; если ссылка не помещается в сообщение — короче
+        for (const limit of [1500, 600, 250, 0]) {
+            report.code = {};
+            if (limit) ids.forEach(id => {
+                let code = '';
+                try { code = localStorage.getItem('saved_code_' + id) || ''; } catch (e) { /* нет кода */ }
+                if (code.trim()) report.code[id] = code.slice(0, limit);
+            });
+            const link = pageUrl('teacher.html') + '#r=' + await encode(report);
+            if (link.length <= MAX_REPORT_LINK || !limit) return link;
+        }
+    }
+
     return {
-        LESSON_TITLES, LESSON_COUNT, TASK_POINTS, PASS_PERCENT, TEACHER_TG,
+        LESSON_TITLES, LESSON_COUNT, TASK_POINTS, PASS_PERCENT, TEACHER_TG, FREE_LESSONS, EXAM_LESSONS,
         read, write, encode, decode, fromHash, pageUrl, lessonFile,
         collectProgress, computePoints, maxPoints, taskDifficulty, clampInt,
-        copy, telegramShare, formatDate, el, cleanText, randomId
+        copy, telegramShare, formatDate, el, cleanText, randomId,
+        isTeacherBrowser, cleanAccess, readAccess, saveAccess, receiveAccess,
+        isLessonOpen, isExamOpen, isTaskOpen, buildReportLink
     };
 })();

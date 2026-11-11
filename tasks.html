@@ -269,6 +269,11 @@
             gap: 6px;
         }
 
+        .task-item.is-locked { opacity: 0.55; }
+        .task-lock-mark { margin-left: auto; font-size: 0.72rem; font-weight: 600; opacity: 0.8; }
+        .task-locked p { margin: 0 0 10px; }
+        .task-locked .hub-btn { margin: 4px 6px 0 0; }
+
         .task-item.solved .task-solved-mark {
             color: var(--success-color);
             font-weight: 700;
@@ -301,12 +306,9 @@
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
                     <li><a href="index.html">Главная</a></li>
-                    <li><a href="python-basic.html">Уроки</a></li>
-                    <li><a href="tasks.html">Задачи</a></li>
-                    <li><a href="exams.html">Контрольные</a></li>
-                    <li><a href="python-online.html">Python Online</a></li>
-                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
-                    <li><a href="glossary.html">Глоссарий</a></li>
+                    <li><a href="python-basic.html">Мои уроки</a></li>
+                    <li><a href="tasks.html">Практика</a></li>
+                    <li><a href="cheatsheet.html">Справочник</a></li>
                 </ul>
             </nav>
         </div>
@@ -316,6 +318,7 @@
         <div class="container">
             <h1>Задачи</h1>
             <p>Выберите задачу, напишите решение и нажмите «Проверить» — сайт сразу проверит его на разных данных.</p>
+            <nav class="subtabs" aria-label="Разделы практики"><a href="tasks.html" class="active" aria-current="page">Задачи</a><a href="python-online.html">Редактор кода</a></nav>
         </div>
     </section>
 
@@ -374,11 +377,10 @@
             <div class="footer-col" role="navigation" aria-label="Обучение">
                 <h4>Обучение</h4>
                 <ul>
-                    <li><a href="python-basic.html">Уроки</a></li>
+                    <li><a href="python-basic.html">Мои уроки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
-                    <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="python-online.html">Редактор кода</a></li>
                     <li><a href="certificate.html">Сертификат</a></li>
-                    <li><a href="assignment.html">Моё задание</a></li>
                 </ul>
             </div>
             <div class="footer-col" role="navigation" aria-label="Справочник">
@@ -397,6 +399,7 @@
     <!-- Скрипты -->
     <script src="script.js"></script>
     <script src="tasks_data.js"></script>
+    <script src="pb-share.js"></script>
     <script src="py-runner.js"></script>
     <script>
         let currentTaskIndex = 0;
@@ -541,7 +544,8 @@
                 }
                 const item = document.createElement("button");
                 item.type = "button";
-                item.className = "task-item" + (index === currentTaskIndex ? " active" : "") + (solved[task.id] ? " solved" : "");
+                const locked = !PB.isTaskOpen(task);
+                item.className = "task-item" + (index === currentTaskIndex ? " active" : "") + (solved[task.id] ? " solved" : "") + (locked ? " is-locked" : "");
                 if (index === currentTaskIndex) item.setAttribute("aria-current", "true");
                 const [diffLabel, diffClass] = DIFF[task.difficulty];
 
@@ -560,6 +564,12 @@
                     title.appendChild(mark);
                 }
                 item.append(label, title);
+                if (locked) {
+                    const lock = document.createElement("span");
+                    lock.className = "task-lock-mark";
+                    lock.textContent = "закрыта";
+                    item.appendChild(lock);
+                }
                 item.onclick = () => {
                     selectTask(index);
                     // На телефоне описание задачи ниже списка — прокручиваем к нему
@@ -569,6 +579,16 @@
                 };
                 list.appendChild(item);
             });
+        }
+
+        // Задачи открываются вместе со своим уроком (урок 1 — бесплатно, остальные открывает преподаватель)
+        let taskLocked = false;
+        function lockedText(task) {
+            const what = task.exam ? `вместе с контрольной ${task.exam}` : `вместе с уроком ${task.lesson}`;
+            return `<div class="task-locked"><p><strong>Задача откроется ${what}.</strong></p>
+                <p>Урок 1 и его задачи — бесплатно. Остальные уроки открывает преподаватель после записи на занятия: пришлите ему сообщение в Telegram.</p>
+                <p><a class="hub-btn hub-btn-primary" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Записаться в Telegram</a>
+                <a class="hub-btn" href="tasks.html#lesson=1">Задачи урока 1</a></p></div>`;
         }
 
         function selectTask(index) {
@@ -581,9 +601,15 @@
             const meta = document.getElementById("task-meta");
             meta.textContent = (task.exam ? `Контрольная ${task.exam} · ${EXAM_LESSONS[task.exam]}` : `Урок ${task.lesson}. ${LESSON_NAMES[task.lesson - 1]}` + (task.hw ? " · домашнее задание" : ""))
                 + " · " + DIFF[task.difficulty][0].toLowerCase();
-            document.getElementById("task-text").innerHTML = task.desc;
-            editor.setValue(localStorage.getItem(`saved_code_${task.id}`) || task.startCode);
-            if (runner.ready) {
+            const locked = !PB.isTaskOpen(task);
+            document.getElementById("task-text").innerHTML = locked ? lockedText(task) : task.desc;
+            editor.setValue(locked ? "# Задача откроется вместе с уроком\n" : (localStorage.getItem(`saved_code_${task.id}`) || task.startCode));
+            taskLocked = locked;
+            btnSubmit.disabled = locked || !runner.ready;
+            if (locked) {
+                setResult("Эта задача пока закрыта.", "muted");
+                setStatus("idle");
+            } else if (runner.ready) {
                 setResult("Напишите решение и нажмите «Проверить» (или Ctrl + Enter).", "muted");
                 setStatus("idle");
             } else {
@@ -600,7 +626,7 @@
         const runner = new PyRunner({
             timeoutMs: 5000,
             onReady: () => {
-                btnSubmit.disabled = false;
+                btnSubmit.disabled = taskLocked;
                 btnLabel.textContent = "Проверить";
                 if (!runner.busy && /Загружается Python|перезапускается/.test(resultsDiv.textContent)) {
                     setResult("Python готов. Напишите решение и нажмите «Проверить» (или Ctrl + Enter).", "muted");
@@ -614,7 +640,7 @@
         });
 
         btnSubmit.addEventListener("click", async () => {
-            if (!runner.ready || runner.busy) return;
+            if (!runner.ready || runner.busy || taskLocked) return;
             const task = tasks[currentTaskIndex];
 
             btnSubmit.disabled = true;
