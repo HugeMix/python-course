@@ -38,8 +38,10 @@ jobs:
       - name: Проверить код уроков, тесты и задачи
         run: node check-content.cjs
 
+      # Системные пакеты для браузера скачиваются с серверов Ubuntu. Если они временно недоступны
+      # (так бывает у GitHub), ставим браузер без них: на машинах GitHub почти всё нужное уже есть.
       - name: Установить браузер
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium || npx playwright install chromium
 
       - name: Проверить страницы в браузере
         run: node check-pages.cjs
