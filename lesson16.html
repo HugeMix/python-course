@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Урок 16 (бонусный): Работа с API и библиотека requests в Python. Научитесь делать HTTP-запросы и получать данные из интернета.">
+    <meta name="description" content="Урок 16 курса Python с нуля: что такое API, коды ответа, формат JSON и модуль json, запросы requests.get и post, параметры, ошибки и ключи API.">
     <title>Урок 16: Работа с API | PythonBasic</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="Урок 16: Работа с API | PythonBasic">
-    <meta property="og:description" content="Бонусный урок: библиотека requests, HTTP-запросы, работа с JSON из API.">
+    <meta property="og:description" content="Урок 16 курса Python с нуля: что такое API, коды ответа, формат JSON и модуль json, запросы requests.get и post, параметры, ошибки и ключи API.">
     <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
     <link rel="canonical" href="https://hugemix.github.io/python-course/lesson16.html">
     <meta property="og:url" content="https://hugemix.github.io/python-course/lesson16.html">
@@ -38,261 +38,255 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h1>Урок 16: Работа с API <span style="font-size:0.6em; background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px; vertical-align:middle;">Бонус</span></h1>
-            <p>Научимся получать данные из интернета с помощью библиотеки requests.</p>
+            <h1>Работа с API <span style="font-size:0.6em; background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px; vertical-align:middle;">Бонус</span></h1>
+            <p>Получаем данные из интернета: запросы, ответы и формат JSON.</p>
         </div>
     </section>
 
     <main class="container lesson-main">
         <section class="lesson-goal">
             <h2>Цель урока</h2>
-            <p>Понять что такое API, научиться делать HTTP-запросы и обрабатывать JSON-ответы с помощью библиотеки <code>requests</code>.</p>
+            <p>Понять, как программы обмениваются данными через интернет, научиться разбирать ответы в формате JSON, узнать, как отправлять запросы библиотекой <code>requests</code>, передавать параметры, обрабатывать ошибки и бережно обращаться с ключами API.</p>
+            <p class="lesson-meta">Время: около 50 минут · 2 упражнения в уроке · тест · 3 задачи на дом</p>
         </section>
 
         <section class="lesson-content">
+            <h2>Зачем это нужно</h2>
+            <p>Прогноз погоды в телефоне, курс валют в банковском приложении, карта в такси, кнопка «Войти через Google» — всё это данные, которые одна программа получает от другой через интернет. Способ, которым программы общаются между собой, называется <strong>API</strong> (application programming interface — «интерфейс для программ»).</p>
+            <p>API похож на официанта в кафе. Вы не идёте на кухню сами: вы делаете заказ официанту, он передаёт его на кухню и приносит готовое блюдо. Так и ваша программа отправляет <strong>запрос</strong> на сервер и получает <strong>ответ</strong> с данными. В этом уроке вы узнаете, как это устроено и как сделать это на Python.</p>
+            <div class="callout callout-soft"><strong>Где запускать код этого урока.</strong> Запросы в интернет делает библиотека <code>requests</code>, а она не работает в примерах на этой странице. Поэтому примеры с <code>requests</code> показаны без кнопки «Запустить» — их нужно запускать на своём компьютере. А вот разбирать полученные данные можно прямо здесь: этому посвящена большая часть урока.</div>
 
-            <h2>Что такое API?</h2>
-            <p><strong>API</strong> (Application Programming Interface) — это способ, которым программы разговаривают друг с другом. Представь: ты в ресторане. Ты (программа) говоришь официанту (API) что хочешь, официант передаёт заказ на кухню (сервер) и приносит тебе результат.</p>
-            <p>Примеры API которые ты можешь использовать прямо сейчас:</p>
+            <h2>Запрос и ответ</h2>
+            <p>Запрос отправляется по адресу — <strong>URL</strong>, такому же, как адрес сайта. Сервер присылает ответ, в котором есть:</p>
             <ul>
-                <li><strong>Погода:</strong> OpenWeatherMap — запросил название города, получил температуру</li>
-                <li><strong>Случайный факт:</strong> запросил URL, получил интересный факт о числе</li>
-                <li><strong>Курс валют:</strong> запросил API Центробанка, получил актуальный курс</li>
-                <li><strong>Telegram Bot API:</strong> отправляешь запросы — бот пишет сообщения пользователям</li>
+                <li><strong>код статуса</strong> — число, которое коротко говорит, всё ли хорошо;</li>
+                <li><strong>данные</strong> — обычно в формате JSON.</li>
             </ul>
+            <div class="table-wrap">
+                <table class="lesson-table">
+                    <thead><tr><th>Код</th><th>Что значит</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>200</code></td><td>всё хорошо, данные в ответе</td></tr>
+                        <tr><td><code>201</code></td><td>создано (например, после отправки формы)</td></tr>
+                        <tr><td><code>400</code></td><td>ошибка в запросе — что-то не так с параметрами</td></tr>
+                        <tr><td><code>401</code> / <code>403</code></td><td>нет доступа: нужен ключ или нет прав</td></tr>
+                        <tr><td><code>404</code></td><td>не найдено — неверный адрес</td></tr>
+                        <tr><td><code>429</code></td><td>слишком много запросов, нужно подождать</td></tr>
+                        <tr><td><code>500</code></td><td>ошибка на стороне сервера</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Запомнить просто: коды на 2 — успех, на 4 — ошибка с вашей стороны, на 5 — проблема у сервера.</p>
 
-            <h2>Библиотека requests</h2>
-            <p>Python не умеет делать HTTP-запросы из коробки (стандартная библиотека <code>urllib</code> слишком сложная). Поэтому все используют <strong>requests</strong> — самую популярную Python-библиотеку в мире.</p>
-            <p>Установка:</p>
-            <pre><code>pip install requests</code></pre>
-            <p>Подключение в коде:</p>
-            <pre><code>import requests</code></pre>
+            <h2>Формат JSON</h2>
+            <p>Почти все API присылают данные в формате <strong>JSON</strong>. Он очень похож на словари и списки Python: фигурные скобки, ключи в кавычках, значения через двоеточие. Отличия небольшие: строки только в <strong>двойных</strong> кавычках, а вместо <code>True</code>, <code>False</code>, <code>None</code> пишут <code>true</code>, <code>false</code>, <code>null</code>.</p>
+            <p>В Python для JSON есть модуль <code>json</code>. <code>json.loads()</code> превращает текст в формате JSON в словари и списки, а <code>json.dumps()</code> — обратно в текст:</p>
+            <pre data-run><code class="language-python">import json
 
-            <h2>Первый GET-запрос</h2>
-            <p>GET-запрос — это запрос на <strong>получение</strong> данных. Как когда вы открываете сайт в браузере.</p>
-            <pre><code>import requests
+answer = &#x27;{&quot;city&quot;: &quot;Москва&quot;, &quot;temp&quot;: -3, &quot;sunny&quot;: false, &quot;days&quot;: [1, 2, 3]}&#x27;
 
-response = requests.get("https://numbersapi.com/42/math")
+data = json.loads(answer)
+print(type(data))
+print(data[&quot;city&quot;], data[&quot;temp&quot;])
+print(&quot;Солнечно:&quot;, data[&quot;sunny&quot;])
 
-print(response.status_code)  # 200 — значит успешно
-print(response.text)         # Текст ответа</code></pre>
+back = json.dumps({&quot;name&quot;: &quot;Аня&quot;, &quot;score&quot;: 120}, ensure_ascii=False)
+print(back)</code></pre>
+            <p>После <code>json.loads</code> с данными работают как с обычным словарём. <code>ensure_ascii=False</code> нужен, чтобы русские буквы в тексте JSON остались буквами, а не превратились в коды вида <code>\u0410</code>.</p>
 
-            <p>Объект <code>response</code> содержит всё что вернул сервер:</p>
-            <ul>
-                <li><code>response.status_code</code> — код статуса (200 = OK, 404 = не найдено, 500 = ошибка сервера)</li>
-                <li><code>response.text</code> — ответ в виде строки</li>
-                <li><code>response.json()</code> — ответ в виде Python-словаря (если сервер вернул JSON)</li>
-                <li><code>response.headers</code> — заголовки ответа</li>
-            </ul>
+            <div class="try-it" data-id="l16-weather">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Разбор ответа о погоде</h3></div>
+                <p>Программа получает одну строку — ответ сервиса погоды в формате JSON, например <code>{"city": "Казань", "temp": 12}</code>. Выведите <strong>Казань: 12°C</strong>.</p>
+                <textarea class="try-code" aria-label="Ваш код">import json
 
-            <h2>Работа с JSON-ответом</h2>
-            <p>Большинство современных API возвращают данные в формате <strong>JSON</strong> — это тот же Python-словарь, только записанный в виде текста. Метод <code>.json()</code> автоматически превращает его в нормальный словарь.</p>
-            <pre><code>import requests
+text = input()
 
-response = requests.get("https://api.coindesk.com/v1/bpi/currentprice.json")
+# разберите JSON и выведите город и температуру
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "{\"city\": \"Казань\", \"temp\": 12}", "out": "Казань: 12°C"}, {"in": "{\"temp\": -7, \"city\": \"Мурманск\"}", "out": "Мурманск: -7°C"}, {"in": "{\"city\": \"Сочи\", \"temp\": 25, \"wind\": 3}", "out": "Сочи: 25°C"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p><code>data = json.loads(text)</code>, потом <code>print(f"{data['city']}: {data['temp']}°C")</code>.</p></details>
+            </div>
 
-if response.status_code == 200:
-    data = response.json()
-    price = data["bpi"]["USD"]["rate"]
-    print(f"Цена Bitcoin: {price} USD")
-else:
-    print(f"Ошибка: {response.status_code}")</code></pre>
+            <h2>Первый запрос: requests.get</h2>
+            <p>Библиотеку <code>requests</code> сначала устанавливают (урок 12):</p>
+            <pre data-label="Терминал"><code class="language-bash">pip install requests</code></pre>
+            <p>Вот полноценный запрос к бесплатному API с тестовыми данными, которое не требует регистрации:</p>
+            <pre><code class="language-python">import requests
+
+response = requests.get(&quot;https://jsonplaceholder.typicode.com/todos/1&quot;, timeout=10)
+
+print(response.status_code)   # 200
+data = response.json()        # сразу превращает JSON в словарь
+print(data[&quot;title&quot;])
+print(&quot;Выполнено:&quot;, data[&quot;completed&quot;])</code></pre>
+            <ol class="steps">
+                <li><code>requests.get(адрес)</code> отправляет запрос GET — «дай мне данные».</li>
+                <li><code>timeout=10</code> — ждать ответа не дольше 10 секунд. Без него программа может зависнуть, если сервер не отвечает.</li>
+                <li><code>response.status_code</code> — код статуса.</li>
+                <li><code>response.json()</code> — то же, что <code>json.loads(response.text)</code>: данные ответа в виде словаря или списка.</li>
+            </ol>
 
             <h2>Параметры запроса</h2>
-            <p>Часто API принимает параметры — например название города для погоды. Их передают через аргумент <code>params</code>:</p>
-            <pre><code>import requests
+            <p>Часто в запросе нужно уточнить, что именно нужно: какой город, сколько записей, на каком языке. Для этого к адресу добавляют <strong>параметры</strong>: после знака <code>?</code> пары <code>ключ=значение</code>, разделённые <code>&amp;</code>. Например: <code>…/forecast?latitude=55.75&amp;longitude=37.62</code>.</p>
+            <p>Собирать такой адрес вручную не нужно — <code>requests</code> сделает это сам, если передать словарь в <code>params</code>. Как получается адрес, можно посмотреть прямо здесь с помощью стандартного модуля <code>urllib</code>:</p>
+            <pre data-run><code class="language-python">from urllib.parse import urlencode
 
-params = {
-    "q": "Moscow",
-    "appid": "ВАШ_КЛЮЧ_API",
-    "units": "metric",
-    "lang": "ru"
+params = {&quot;latitude&quot;: 55.75, &quot;longitude&quot;: 37.62, &quot;current_weather&quot;: &quot;true&quot;}
+url = &quot;https://api.open-meteo.com/v1/forecast?&quot; + urlencode(params)
+print(url)
+
+print(urlencode({&quot;q&quot;: &quot;котики&quot;, &quot;page&quot;: 2}))</code></pre>
+            <p>Русские буквы и пробелы в адресе кодируются специальными символами — <code>urlencode</code> и <code>requests</code> делают это автоматически. Тот же запрос через <code>requests</code>:</p>
+            <pre><code class="language-python">import requests
+
+params = {&quot;latitude&quot;: 55.75, &quot;longitude&quot;: 37.62, &quot;current_weather&quot;: &quot;true&quot;}
+response = requests.get(&quot;https://api.open-meteo.com/v1/forecast&quot;, params=params, timeout=10)
+weather = response.json()[&quot;current_weather&quot;]
+print(&quot;Температура в Москве:&quot;, weather[&quot;temperature&quot;], &quot;°C&quot;)</code></pre>
+
+            <h2>Разбираем настоящий ответ</h2>
+            <p>Ответы API обычно вложенные: словари внутри списков внутри словарей. Главное умение — найти в них нужное. Вот пример ответа сервиса погоды на несколько дней; разберём его так же, как сделали бы с настоящим ответом:</p>
+            <pre data-run><code class="language-python">import json
+
+answer = &quot;&quot;&quot;
+{
+  &quot;city&quot;: &quot;Санкт-Петербург&quot;,
+  &quot;days&quot;: [
+    {&quot;date&quot;: &quot;2026-11-11&quot;, &quot;temp&quot;: 4, &quot;rain&quot;: true},
+    {&quot;date&quot;: &quot;2026-11-12&quot;, &quot;temp&quot;: 2, &quot;rain&quot;: false},
+    {&quot;date&quot;: &quot;2026-11-13&quot;, &quot;temp&quot;: -1, &quot;rain&quot;: false}
+  ]
 }
+&quot;&quot;&quot;
 
-response = requests.get("https://api.openweathermap.org/data/2.5/weather", params=params)
-data = response.json()
+data = json.loads(answer)
+print(&quot;Город:&quot;, data[&quot;city&quot;])
 
-if response.status_code == 200:
-    temp = data["main"]["temp"]
-    desc = data["weather"][0]["description"]
-    print(f"Москва: {temp}°C, {desc}")
-</code></pre>
+for day in data[&quot;days&quot;]:
+    umbrella = &quot;возьмите зонт&quot; if day[&quot;rain&quot;] else &quot;без осадков&quot;
+    print(f&quot;{day[&#x27;date&#x27;]}: {day[&#x27;temp&#x27;]}°C, {umbrella}&quot;)
 
-            <h2>Обработка ошибок при запросах</h2>
-            <p>Интернет ненадёжен. Сервер может быть недоступен, URL неправильным, или сеть пропасть. Всегда оборачивайте запросы в <code>try-except</code>:</p>
-            <pre><code>import requests
+temps = [d[&quot;temp&quot;] for d in data[&quot;days&quot;]]
+print(&quot;Средняя температура:&quot;, round(sum(temps) / len(temps), 1))</code></pre>
+
+            <div class="try-it" data-id="l16-todos">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Сколько дел выполнено</h3></div>
+                <p>Программа получает одну строку — JSON-список дел, как его возвращает API: <code>[{"title": "...", "completed": true}, ...]</code>. Выведите <strong>Выполнено: X из N</strong>.</p>
+                <textarea class="try-code" aria-label="Ваш код">import json
+
+todos = json.loads(input())
+
+# посчитайте выполненные
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "[{\"title\": \"a\", \"completed\": true}, {\"title\": \"b\", \"completed\": false}, {\"title\": \"c\", \"completed\": true}]", "out": "Выполнено: 2 из 3"}, {"in": "[{\"title\": \"x\", \"completed\": false}]", "out": "Выполнено: 0 из 1"}, {"in": "[]", "out": "Выполнено: 0 из 0"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Пройдите циклом по списку и считайте элементы, у которых <code>todo["completed"]</code> истинно. Всего дел — <code>len(todos)</code>.</p></details>
+            </div>
+
+            <h2>Ошибки при запросах</h2>
+            <p>С интернетом всегда что-то может пойти не так: нет связи, сервер не отвечает, адрес неверный. Надёжная программа проверяет код ответа и перехватывает ошибки — вспомните урок 11:</p>
+            <pre><code class="language-python">import requests
 
 try:
-    response = requests.get("https://api.example.com/data", timeout=5)
-    response.raise_for_status()  # Вызывает ошибку если status_code >= 400
+    response = requests.get(&quot;https://jsonplaceholder.typicode.com/todos/1&quot;, timeout=10)
+    response.raise_for_status()      # если код 4xx или 5xx — выбросит ошибку
     data = response.json()
-    print(data)
-
-except requests.exceptions.ConnectionError:
-    print("Нет интернет-соединения")
+    print(data[&quot;title&quot;])
 except requests.exceptions.Timeout:
-    print("Сервер не ответил вовремя")
-except requests.exceptions.HTTPError as e:
-    print(f"Ошибка HTTP: {e}")
-except Exception as e:
-    print(f"Неожиданная ошибка: {e}")</code></pre>
+    print(&quot;Сервер не ответил вовремя&quot;)
+except requests.exceptions.RequestException as e:
+    print(&quot;Не удалось получить данные:&quot;, e)</code></pre>
 
-            <p>Аргумент <code>timeout=5</code> означает: если сервер не ответил за 5 секунд — выбрасывается исключение. Без таймаута программа может висеть вечно.</p>
+            <h2>Отправка данных: POST</h2>
+            <p>GET — «дай данные», а <strong>POST</strong> — «прими данные»: так отправляют формы, сообщения, новые записи. Данные передают в <code>json=</code>, и <code>requests</code> сам превратит словарь в JSON:</p>
+            <pre><code class="language-python">import requests
 
-            <h2>POST-запросы</h2>
-            <p>POST используется для <strong>отправки</strong> данных на сервер (создание аккаунта, отправка сообщения, публикация поста):</p>
-            <pre><code>import requests
+new_post = {&quot;title&quot;: &quot;Мой первый пост&quot;, &quot;body&quot;: &quot;Привет из Python!&quot;, &quot;userId&quot;: 1}
+response = requests.post(&quot;https://jsonplaceholder.typicode.com/posts&quot;, json=new_post, timeout=10)
 
-data = {
-    "title": "Мой первый пост",
-    "body": "Привет, мир!",
-    "userId": 1
-}
+print(response.status_code)   # 201 — создано
+print(response.json())</code></pre>
 
-response = requests.post("https://jsonplaceholder.typicode.com/posts", json=data)
-print(response.status_code)  # 201 — создано
-print(response.json())       # Созданный объект с id</code></pre>
+            <h2>Ключи API</h2>
+            <p>Многие сервисы выдают <strong>ключ API</strong> — секретную строку, по которой сервер узнаёт, кто к нему обращается. Её передают в параметрах или в <strong>заголовках</strong> запроса:</p>
+            <pre><code class="language-python">import os
+import requests
 
-            <h2>Практический пример: получаем случайный факт</h2>
-            <pre><code>import requests
+api_key = os.environ.get(&quot;WEATHER_API_KEY&quot;)   # ключ хранится вне кода
+headers = {&quot;Authorization&quot;: f&quot;Bearer {api_key}&quot;}
+response = requests.get(&quot;https://api.example.com/data&quot;, headers=headers, timeout=10)</code></pre>
+            <div class="callout"><strong>Ключ — как пароль.</strong> Никогда не публикуйте его: не вставляйте в код, который выкладываете на GitHub, и не отправляйте в чаты. Храните ключ отдельно — например, в переменной окружения, как в примере выше.</div>
 
-def get_random_joke():
-    """Получает случайный анекдот из бесплатного API"""
-    try:
-        response = requests.get(
-            "https://official-joke-api.appspot.com/random_joke",
-            timeout=5
-        )
-        if response.status_code == 200:
-            joke = response.json()
-            print(f"Setup: {joke['setup']}")
-            print(f"Punchline: {joke['punchline']}")
-        else:
-            print("Не удалось получить анекдот")
-    except requests.exceptions.RequestException as e:
-        print(f"Ошибка сети: {e}")
+            <h2>Частые ошибки новичков</h2>
+            <p>Ошибаться — нормально, так учатся все программисты. Главное — научиться читать сообщение об ошибке: Python подсказывает, что не так и в какой строке.</p>
+            <div class="mistake">
+                <h3>Одинарные кавычки в JSON</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">import json
+data = json.loads(&quot;{&#x27;city&#x27;: &#x27;Казань&#x27;}&quot;)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">import json
+data = json.loads(&#x27;{&quot;city&quot;: &quot;Казань&quot;}&#x27;)
+print(data[&quot;city&quot;])</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)</code></p>
+                <p>В JSON строки и ключи пишутся только в двойных кавычках. Одинарные — это синтаксис Python, а не JSON.</p>
+            </div>
+            <div class="mistake">
+                <h3>Забыли разобрать JSON</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">text = &#x27;{&quot;temp&quot;: 5}&#x27;
+print(text[&quot;temp&quot;])</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">import json
+text = &#x27;{&quot;temp&quot;: 5}&#x27;
+print(json.loads(text)[&quot;temp&quot;])</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: string indices must be integers, not &#x27;str&#x27;</code></p>
+                <p>Пока JSON не разобран, это просто строка, а у строки нет ключей. Сначала <code>json.loads(text)</code> или <code>response.json()</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>В ответе нет такого ключа</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">import json
+data = json.loads(&#x27;{&quot;temp&quot;: 5}&#x27;)
+print(data[&quot;temperature&quot;])</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">import json
+data = json.loads(&#x27;{&quot;temp&quot;: 5}&#x27;)
+print(data.get(&quot;temperature&quot;, &quot;нет данных&quot;))</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>KeyError: &#x27;temperature&#x27;</code></p>
+                <p>Названия ключей нужно брать из документации API или из настоящего ответа. Если ключа может не быть, используйте <code>data.get("temperature")</code>.</p>
+            </div>
 
-get_random_joke()</code></pre>
-
-            <h2>POST-запросы и отправка данных</h2>
-            <p>POST-запрос используется, когда нужно не просто получить данные, а отправить их на сервер:
-                зарегистрировать пользователя, создать запись, отправить форму. Данные передаются
-                в теле запроса, а не в URL.</p>
-            <pre><code>import requests
-
-# POST — отправка данных на сервер
-url = "https://httpbin.org/post"
-
-# Отправка JSON
-data = {
-    "username": "alex",
-    "password": "secret123"
-}
-response = requests.post(url, json=data)
-print(response.status_code)  # 200
-print(response.json())
-
-# Отправка формы
-form_data = {"name": "Алекс", "email": "alex@example.com"}
-response = requests.post(url, data=form_data)
-print(response.json()["form"])</code></pre>
-
-            <h2>Заголовки и API-ключи</h2>
-            <p>Многие коммерческие API требуют ключ для доступа — он передаётся в заголовке
-                <code>Authorization</code>. Заголовки также используются для указания типа контента
-                и идентификации клиента.</p>
-            <pre><code>import requests
-
-# Многие API требуют ключ для доступа
-API_KEY = "твой_ключ_здесь"
-
-headers = {
-    "Authorization": f"Bearer {API_KEY}",
-    "Content-Type": "application/json",
-    "User-Agent": "MyPythonApp/1.0"
-}
-
-response = requests.get(
-    "https://api.example.com/data",
-    headers=headers
-)
-
-# Параметры запроса (query string)
-params = {
-    "city": "Moscow",
-    "units": "metric",
-    "lang": "ru"
-}
-# Результат: https://api.example.com/weather?city=Moscow&amp;units=metric&amp;lang=ru
-response = requests.get("https://api.example.com/weather", params=params)</code></pre>
-
-            <h2>Практический пример: погодное API</h2>
-            <p>Open-Meteo — это бесплатное погодное API, которое не требует регистрации и ключа.
-                Пример ниже сначала получает координаты города через геокодинг, а затем запрашивает
-                по ним текущую погоду.</p>
-            <pre><code>import requests
-
-def get_weather(city):
-    """
-    Получить погоду через Open-Meteo API (бесплатно, без ключа)
-    Сначала получаем координаты, потом погоду
-    """
-    # Шаг 1: Геокодинг — название города → координаты
-    geo_url = "https://geocoding-api.open-meteo.com/v1/search"
-    geo_params = {"name": city, "count": 1, "language": "ru"}
-
-    geo_resp = requests.get(geo_url, params=geo_params, timeout=5)
-    geo_resp.raise_for_status()
-    geo_data = geo_resp.json()
-
-    if not geo_data.get("results"):
-        return f"Город '{city}' не найден"
-
-    result = geo_data["results"][0]
-    lat, lon = result["latitude"], result["longitude"]
-
-    # Шаг 2: Получить погоду по координатам
-    weather_url = "https://api.open-meteo.com/v1/forecast"
-    weather_params = {
-        "latitude": lat,
-        "longitude": lon,
-        "current_weather": True
-    }
-
-    w_resp = requests.get(weather_url, params=weather_params, timeout=5)
-    w_resp.raise_for_status()
-    w_data = w_resp.json()["current_weather"]
-
-    return (f"Погода в {result['name']}:\n"
-            f"  Температура: {w_data['temperature']}°C\n"
-            f"  Скорость ветра: {w_data['windspeed']} км/ч")
-
-try:
-    print(get_weather("Москва"))
-    print(get_weather("Санкт-Петербург"))
-except requests.RequestException as e:
-    print(f"Ошибка запроса: {e}")</code></pre>
-
+            <h2>Главное за урок</h2>
+            <ul class="lesson-summary">
+                <li>API — способ, которым программы обмениваются данными: запрос по адресу (URL) → ответ с кодом статуса и данными.</li>
+                <li>Коды: 2xx — успех, 4xx — ошибка в запросе, 5xx — ошибка сервера. 200 — всё хорошо, 404 — не найдено.</li>
+                <li>Данные обычно в JSON. <code>json.loads(текст)</code> превращает JSON в словари и списки, <code>json.dumps</code> — обратно.</li>
+                <li><code>requests.get(url, params=..., timeout=10)</code> — получить данные, <code>requests.post(url, json=...)</code> — отправить. Устанавливается через pip.</li>
+                <li>Проверяйте ответ (<code>raise_for_status</code>, <code>try/except</code>) и храните ключи API в секрете.</li>
+            </ul>
         </section>
 
         <div id="quiz-container"></div>
 
         <section class="lesson-homework">
             <h2>Домашнее задание</h2>
-            <ul>
-                <li>Установи <code>requests</code> командой <code>pip install requests</code> и запусти пример с случайным фактом.</li>
-                <li>Зарегистрируйся на <a href="https://openweathermap.org/api" target="_blank">openweathermap.org</a> и получи бесплатный ключ API. Напиши скрипт который выводит погоду в твоём городе.</li>
-                <li>Попробуй API <a href="https://api.agify.io/?name=Иван" target="_blank">agify.io</a> — он предсказывает возраст по имени. Сделай функцию которая принимает имя и возвращает предсказанный возраст.</li>
-                <li>Напиши функцию которая получает данные с <code>https://jsonplaceholder.typicode.com/users</code> и выводит имена всех пользователей.</li>
-                <li>Используй функцию <code>get_weather</code> из урока: запроси погоду в трёх разных городах и выведи результаты в виде таблицы (выравнивание через f-строки).</li>
-                <li>Напиши скрипт, который делает POST-запрос на <code>https://httpbin.org/post</code> с твоими данными (имя, email, возраст) в формате JSON и красиво выводит ответ сервера.</li>
-                <li>Напиши функцию <code>safe_get(url, params=None)</code>, которая делает GET-запрос с таймаутом 5 секунд, обрабатывает все типы ошибок через <code>try-except</code> и возвращает либо словарь с данными, либо <code>None</code> при ошибке.</li>
+            <p>Задачи проверяются автоматически: откройте задачу, напишите решение и нажмите «Проверить». <span class="hw-counter"></span></p>
+            <div class="callout callout-soft">Решение пишется внутри готовой заготовки функции. Проверка сама вызовет её с разными данными и сравнит результат с правильным.</div>
+            <ul class="hw-tasks">
+                <li data-task="build_query"><a href="tasks.html#task=build_query"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Адрес запроса с параметрами</strong><small>средняя · +2 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="json_avg_temp"><a href="tasks.html#task=json_avg_temp"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Средняя температура из JSON</strong><small>средняя · +2 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="json_top_scorer"><a href="tasks.html#task=json_top_scorer"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Лучший игрок</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
             </ul>
+            <div class="hw-star">
+                <h3>Задание со звёздочкой: «Погода в вашем городе»</h3>
+                <p>Напишите на своём компьютере программу, которая спрашивает город, а потом выводит текущую температуру и скорость ветра. Используйте бесплатное API Open-Meteo, оно работает без ключа: сначала найдите координаты города через <code>https://geocoding-api.open-meteo.com/v1/search?name=Казань</code>, потом запросите погоду по координатам через <code>https://api.open-meteo.com/v1/forecast</code> с параметром <code>current_weather=true</code>. Не забудьте про <code>timeout</code> и обработку ошибок.</p>
+                <p class="hub-muted">Эту задачу проверяет преподаватель: отправьте ему код или покажите на занятии.</p>
+            </div>
         </section>
 
         <section class="lesson-content" style="background: linear-gradient(135deg, rgba(79,70,229,0.06), rgba(124,58,237,0.06)); border-left: 4px solid var(--accent-color);">
             <h2>Поздравляем — вы прошли весь курс!</h2>
-            <p>Вы освоили основы Python и даже научились работать с внешними API. Это уже уровень Junior-разработчика.</p>
+            <p>Вы прошли путь от первой строчки <code>print</code> до программ, которые сохраняют данные в файлы и получают их из интернета. Теперь у вас есть прочная база, чтобы двигаться дальше: игры, боты, сайты, анализ данных.</p>
             <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
                 <a href="certificate.html" class="btn">Получить сертификат</a>
                 <a href="next-steps.html" class="btn" style="background: var(--success-color);">Что дальше?</a>

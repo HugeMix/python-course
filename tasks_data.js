@@ -355,7 +355,7 @@ except Exception as e:
     },
     {
         id: "sum",
-        title: "Сумма двух чисел",
+        title: "Функция: сумма двух чисел",
         difficulty: "easy",
         lesson: 7,
         hw: false,
@@ -594,7 +594,7 @@ except Exception as e:
     },
     {
         id: "sign",
-        title: "Знак числа",
+        title: "Функция: знак числа",
         difficulty: "easy",
         lesson: 7,
         hw: false,
@@ -815,7 +815,7 @@ except Exception as e:
     },
     {
         id: "is_leap",
-        title: "Високосный год",
+        title: "Функция: високосный год",
         difficulty: "medium",
         lesson: 7,
         hw: false,
@@ -890,7 +890,7 @@ except Exception as e:
     },
     {
         id: "ticket_price",
-        title: "Цена билета в кино",
+        title: "Функция: цена билета",
         difficulty: "hard",
         lesson: 7,
         hw: false,

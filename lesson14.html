@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Урок 14: Работа с датой и временем в Python. Модуль datetime, strftime, strptime и timedelta.">
-    <title>Урок 14: Работа с датой и временем | PythonBasic</title>
+        content="Урок 14 курса Python с нуля: модуль datetime, date и datetime, strftime и strptime, timedelta, возраст и дни недели, модуль time. Примеры можно запускать прямо на странице.">
+    <title>Урок 14: Дата и время | PythonBasic</title>
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Урок 14: Работа с датой и временем | PythonBasic">
-    <meta property="og:description" content="Урок 14: Работа с датой и временем в Python. Модуль datetime, strftime, strptime и timedelta.">
+    <meta property="og:title" content="Урок 14: Дата и время | PythonBasic">
+    <meta property="og:description" content="Урок 14 курса Python с нуля: модуль datetime, date и datetime, strftime и strptime, timedelta, возраст и дни недели, модуль time. Примеры можно запускать прямо на странице.">
     <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
     <link rel="canonical" href="https://hugemix.github.io/python-course/lesson14.html">
     <meta property="og:url" content="https://hugemix.github.io/python-course/lesson14.html">
@@ -42,145 +42,213 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h1>Урок 14: Работа с датой и временем</h1>
-            <p>Изучаем модуль datetime и способы форматирования даты и времени.</p>
+            <h1>Дата и время</h1>
+            <p>Считаем дни до каникул, возраст и дни недели с модулем datetime.</p>
         </div>
     </section>
 
     <main class="container lesson-main">
         <section class="lesson-goal">
             <h2>Цель урока</h2>
-            <p>Познакомиться с модулем <code>datetime</code> и научиться получать, форматировать и
-                вычислять разницу между датами.</p>
+            <p>Научиться работать с датами и временем: получать текущую дату, создавать свои даты, выводить их в нужном формате и читать из строки, прибавлять дни и находить разницу между датами, считать полные годы.</p>
+            <p class="lesson-meta">Время: около 45 минут · 2 упражнения в уроке · тест · 4 задачи на дом</p>
         </section>
 
         <section class="lesson-content">
-            <h2>Модуль datetime</h2>
-            <p>Python предоставляет встроенный модуль <code>datetime</code> для работы с датами и
-                временем. Чтобы использовать его, нужно импортировать класс <code>datetime</code>
-                из одноимённого модуля:</p>
-            <pre><code>from datetime import datetime
+            <h2>Зачем это нужно</h2>
+            <p>Даты и время нужны почти везде: сколько дней осталось до каникул или отпуска, когда истекает подписка, во сколько напомнить о встрече, сколько полных лет человеку, какой день недели будет 1 сентября. Считать это вручную неудобно: в месяцах разное число дней, бывают високосные годы.</p>
+            <p>В Python для этого есть модуль <code>datetime</code>. Он сам знает календарь и умеет складывать, вычитать и сравнивать даты.</p>
 
+            <h2>Сегодняшняя дата и текущее время</h2>
+            <p>Из модуля <code>datetime</code> чаще всего подключают два класса: <code>date</code> — только дата и <code>datetime</code> — дата вместе со временем.</p>
+            <pre data-run><code class="language-python">from datetime import date, datetime
+
+today = date.today()
 now = datetime.now()
-print("Текущая дата и время:", now)</code></pre>
 
-            <h2>Форматирование даты - метод strftime()</h2>
-            <p>Метод <code>strftime()</code> конвертирует объект даты в строку по заданному шаблону.
-                Название: <strong>str</strong>ing <strong>f</strong>ormat <strong>time</strong>:</p>
-            <pre><code>from datetime import datetime
+print(&quot;Сегодня:&quot;, today)
+print(&quot;Сейчас:&quot;, now)
+print(&quot;Год:&quot;, today.year, &quot;месяц:&quot;, today.month, &quot;день:&quot;, today.day)
+print(&quot;Время:&quot;, now.hour, &quot;ч&quot;, now.minute, &quot;мин&quot;)</code></pre>
+            <p>У даты есть атрибуты <code>year</code>, <code>month</code>, <code>day</code>, а у даты со временем ещё <code>hour</code>, <code>minute</code>, <code>second</code>. По умолчанию дата выводится в формате <strong>ГГГГ-ММ-ДД</strong> — это международный стандарт.</p>
 
-now = datetime.now()
-formatted_date = now.strftime("%d.%m.%Y %H:%M:%S")
-print("Отформатированная дата:", formatted_date)
-# Пример вывода: 02.03.2025 19:21:14</code></pre>
+            <h2>Своя дата</h2>
+            <p>Конкретную дату создают, передавая год, месяц и день:</p>
+            <pre data-run><code class="language-python">from datetime import date
 
-            <p>Основные символы форматирования:</p>
-            <ul>
-                <li><code>%Y</code> - год (четыре цифры, например 2025)</li>
-                <li><code>%m</code> - месяц (01–12)</li>
-                <li><code>%d</code> - день (01–31)</li>
-                <li><code>%H</code> - час (00–23)</li>
-                <li><code>%M</code> - минуты (00–59)</li>
-                <li><code>%S</code> - секунды (00–59)</li>
-            </ul>
+new_year = date(2027, 1, 1)
+birthday = date(2012, 5, 17)
 
-            <h2>Создание своей даты</h2>
-            <p>Объект даты можно создать вручную, передав год, месяц, день и (опционально) время:</p>
-            <pre><code>from datetime import datetime
+print(new_year)
+print(&quot;Номер дня недели:&quot;, new_year.weekday())
 
-custom_date = datetime(2025, 5, 17, 15, 30)
-print("Созданная дата:", custom_date)
-# Выведет: 2025-05-17 15:30:00</code></pre>
+days = [&quot;понедельник&quot;, &quot;вторник&quot;, &quot;среда&quot;, &quot;четверг&quot;, &quot;пятница&quot;, &quot;суббота&quot;, &quot;воскресенье&quot;]
+print(&quot;1 января 2027 —&quot;, days[new_year.weekday()])</code></pre>
+            <p>Метод <code>weekday()</code> возвращает номер дня недели: 0 — понедельник, 6 — воскресенье. Чтобы получить название по-русски, удобно взять его из списка по этому номеру.</p>
 
-            <h2>Разница во времени - timedelta</h2>
-            <p>Если вычесть одну дату из другой, получится объект <code>timedelta</code> -
-                он хранит разницу в днях и секундах:</p>
-            <pre><code>from datetime import datetime, timedelta
+            <h2>Красивый формат: strftime</h2>
+            <p>Чтобы вывести дату в привычном виде, используют метод <code>strftime</code> (string format time). В строке-шаблоне специальные коды заменяются частями даты:</p>
+            <div class="table-wrap">
+                <table class="lesson-table">
+                    <thead><tr><th>Код</th><th>Что подставится</th><th>Пример</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>%d</code></td><td>день, две цифры</td><td><code>05</code></td></tr>
+                        <tr><td><code>%m</code></td><td>месяц, две цифры</td><td><code>09</code></td></tr>
+                        <tr><td><code>%Y</code></td><td>год, четыре цифры</td><td><code>2026</code></td></tr>
+                        <tr><td><code>%H</code></td><td>часы (00–23)</td><td><code>14</code></td></tr>
+                        <tr><td><code>%M</code></td><td>минуты</td><td><code>07</code></td></tr>
+                        <tr><td><code>%S</code></td><td>секунды</td><td><code>30</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <pre data-run><code class="language-python">from datetime import datetime
 
-now = datetime.now()
-deadline = datetime(2025, 12, 31)
-delta = deadline - now
-print("До конца года осталось:", delta.days, "дней")</code></pre>
+moment = datetime(2026, 9, 1, 8, 30)
 
-            <p>С помощью <code>timedelta</code> можно также <strong>прибавлять или вычитать дни</strong>
-                из даты:</p>
-            <pre><code>from datetime import datetime, timedelta
+print(moment.strftime(&quot;%d.%m.%Y&quot;))
+print(moment.strftime(&quot;%H:%M&quot;))
+print(moment.strftime(&quot;Дата: %d.%m.%Y, время: %H:%M&quot;))</code></pre>
+            <p>Названия месяцев <code>strftime</code> выдаёт по-английски, поэтому для русских удобнее свой список: <code>months[d.month - 1]</code>.</p>
 
-today = datetime.now()
-next_week = today + timedelta(days=7)
-print("Через неделю будет:", next_week.strftime("%d.%m.%Y"))</code></pre>
+            <h2>Из строки в дату: strptime</h2>
+            <p>Обратная задача: пользователь ввёл дату текстом, а программе нужна настоящая дата, чтобы с ней считать. Для этого есть <code>datetime.strptime</code> (string parse time) — ему передают строку и шаблон, по которому её читать:</p>
+            <pre data-run><code class="language-python">from datetime import datetime
 
-            <h2>Парсинг строки в дату (strptime)</h2>
-            <p>Метод <code>strptime()</code> делает обратное по отношению к <code>strftime()</code>:
-                он превращает строку в объект <code>datetime</code>. Название:
-                <strong>str</strong>ing <strong>p</strong>arse <strong>time</strong>.</p>
-            <pre><code>from datetime import datetime
+text = &quot;17.05.2012&quot;
+d = datetime.strptime(text, &quot;%d.%m.%Y&quot;).date()
 
-# strptime — строка → объект datetime
-date_str = "25.12.2024"
-date = datetime.strptime(date_str, "%d.%m.%Y")
-print(date)             # 2024-12-25 00:00:00
-print(type(date))       # &lt;class 'datetime.datetime'&gt;
+print(d)
+print(&quot;Год рождения:&quot;, d.year)</code></pre>
+            <p><code>strptime</code> возвращает дату со временем, а <code>.date()</code> оставляет только дату. Шаблон должен точно совпадать с текстом: точки, дефисы и порядок чисел.</p>
 
-# Различные форматы
-date1 = datetime.strptime("2024-03-15", "%Y-%m-%d")
-date3 = datetime.strptime("25/12/2024 14:30", "%d/%m/%Y %H:%M")
+            <h2>Арифметика дат: timedelta</h2>
+            <p><code>timedelta</code> — это промежуток времени: столько-то дней, часов, минут. Его можно прибавлять к датам и вычитать. А если вычесть одну дату из другой, получится как раз <code>timedelta</code> — у него есть атрибут <code>days</code>:</p>
+            <pre data-run><code class="language-python">from datetime import date, timedelta
 
-# Удобный паттерн: конвертация между форматами
-input_date = "2024-12-25"
-date_obj = datetime.strptime(input_date, "%Y-%m-%d")
-output_date = date_obj.strftime("%d.%m.%Y")
-print(output_date)  # 25.12.2024</code></pre>
+start = date(2026, 11, 11)
 
-            <h2>Практические вычисления с датами</h2>
-            <p>Комбинируя <code>strptime</code>, <code>datetime.now()</code> и <code>timedelta</code>,
-                можно решать реальные задачи: считать возраст, вычислять дедлайны и дни до события.</p>
-            <pre><code>from datetime import datetime, timedelta
+print(&quot;Через неделю:&quot;, start + timedelta(days=7))
+print(&quot;Через 100 дней:&quot;, start + timedelta(days=100))
+print(&quot;Вчера:&quot;, start - timedelta(days=1))
 
-# Калькулятор возраста
-def calculate_age(birth_date_str):
-    birth = datetime.strptime(birth_date_str, "%d.%m.%Y")
-    today = datetime.now()
-    age = today.year - birth.year
-    # Проверяем был ли день рождения в этом году
+summer = date(2027, 6, 1)
+left = summer - start
+print(&quot;До лета дней:&quot;, left.days)</code></pre>
+            <p>Python сам учитывает, сколько дней в каждом месяце и високосные годы. Даты можно и сравнивать: <code>date(2027, 1, 1) &gt; date(2026, 12, 31)</code> — это <code>True</code>.</p>
+
+            <div class="try-it" data-id="l14-after">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Через N дней</h3></div>
+                <p>Программа получает дату в формате <code>ГГГГ-ММ-ДД</code> и число N. Выведите, какая дата будет через N дней, в формате <strong>ДД.ММ.ГГГГ</strong>.</p>
+                <textarea class="try-code" aria-label="Ваш код">from datetime import datetime, timedelta
+
+start = datetime.strptime(input(), &quot;%Y-%m-%d&quot;)
+n = int(input())
+
+# прибавьте n дней и выведите
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "2026-11-11\n7", "out": "18.11.2026"}, {"in": "2026-12-25\n10", "out": "04.01.2027"}, {"in": "2028-02-28\n1", "out": "29.02.2028"}, {"in": "2027-03-01\n0", "out": "01.03.2027"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p><code>result = start + timedelta(days=n)</code>, а потом <code>print(result.strftime("%d.%m.%Y"))</code>.</p></details>
+            </div>
+
+            <h2>Сколько полных лет</h2>
+            <p>Частая задача — посчитать возраст. Просто вычесть годы мало: если день рождения в этом году ещё не наступил, нужно отнять единицу. Сравнить «наступил ли день рождения» удобно кортежами (месяц, день) — они сравниваются по порядку, как слова в словаре:</p>
+            <pre data-run><code class="language-python">from datetime import date
+
+def full_years(birth, today):
+    years = today.year - birth.year
     if (today.month, today.day) &lt; (birth.month, birth.day):
-        age -= 1
-    return age
+        years -= 1
+    return years
 
-age = calculate_age("15.08.1995")
-print(f"Возраст: {age} лет")
+birth = date(2012, 5, 17)
+print(full_years(birth, date(2026, 5, 16)))
+print(full_years(birth, date(2026, 5, 17)))</code></pre>
 
-# Дедлайн через N дней
-deadline = datetime.now() + timedelta(days=30)
-print(f"Дедлайн: {deadline.strftime('%d.%m.%Y')}")
+            <div class="try-it" data-id="l14-event">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Дней до события</h3></div>
+                <p>Программа получает две даты в формате <code>ДД.ММ.ГГГГ</code>: сегодняшнюю и дату события. Выведите <strong>Осталось дней: N</strong>. Если событие сегодня — <strong>Это сегодня!</strong>, а если уже прошло — <strong>Событие уже прошло</strong>.</p>
+                <textarea class="try-code" aria-label="Ваш код">from datetime import datetime
 
-# Сколько дней до Нового года
-today = datetime.now()
-new_year = datetime(today.year + 1, 1, 1)
-days_left = (new_year - today).days
-print(f"До Нового года осталось {days_left} дней")</code></pre>
+today = datetime.strptime(input(), &quot;%d.%m.%Y&quot;)
+event = datetime.strptime(input(), &quot;%d.%m.%Y&quot;)
 
-            <h2>Unix timestamp</h2>
-            <p>Unix timestamp — это количество секунд, прошедших с 1 января 1970 года (эпохи Unix).
-                Широко используется в логах, базах данных и API-ответах, потому что не зависит
-                от часового пояса.</p>
-            <pre><code>from datetime import datetime
+# посчитайте разницу
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "11.11.2026\n31.12.2026", "out": "Осталось дней: 50"}, {"in": "11.11.2026\n11.11.2026", "out": "Это сегодня!"}, {"in": "11.11.2026\n01.09.2026", "out": "Событие уже прошло"}, {"in": "28.02.2028\n01.03.2028", "out": "Осталось дней: 2"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p><code>days = (event - today).days</code>. Дальше — условие: больше нуля, равно нулю или меньше.</p></details>
+            </div>
 
-# Unix timestamp — количество секунд с 1 января 1970 года
-import time
-timestamp = time.time()
-print(f"Timestamp: {timestamp}")  # Например: 1703500800.123
+            <h2>Время в секундах и паузы: модуль time</h2>
+            <p>Модуль <code>time</code> пригодится, чтобы замерить, сколько работает код, или сделать паузу. <code>time.time()</code> возвращает количество секунд, прошедших с 1 января 1970 года — так компьютеры хранят моменты времени. Разница двух таких чисел — сколько секунд прошло:</p>
+            <pre data-run><code class="language-python">import time
 
-# Преобразование timestamp в datetime
-dt = datetime.fromtimestamp(timestamp)
-print(dt.strftime("%d.%m.%Y %H:%M:%S"))
+start = time.time()
+total = 0
+for i in range(1_000_000):
+    total += i
+finish = time.time()
 
-# Datetime → timestamp
-dt = datetime(2024, 1, 1, 0, 0, 0)
-ts = dt.timestamp()
-print(ts)  # 1704056400.0
+print(&quot;Сумма:&quot;, total)
+print(&quot;Заняло секунд:&quot;, round(finish - start, 3))</code></pre>
+            <p><code>time.sleep(2)</code> останавливает программу на 2 секунды — так делают, например, обратный отсчёт в играх. Подчёркивания в <code>1_000_000</code> — просто для удобства чтения, Python их не замечает.</p>
 
-# Полезно для сравнения дат, логов, API-ответов</code></pre>
+            <h2>Частые ошибки новичков</h2>
+            <p>Ошибаться — нормально, так учатся все программисты. Главное — научиться читать сообщение об ошибке: Python подсказывает, что не так и в какой строке.</p>
+            <div class="mistake">
+                <h3>Перепутали модуль и класс</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">import datetime
+print(datetime.now())</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">from datetime import datetime
+print(datetime.now())</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>AttributeError: module &#x27;datetime&#x27; has no attribute &#x27;now&#x27;</code></p>
+                <p>Модуль и класс внутри него называются одинаково — <code>datetime</code>. После <code>import datetime</code> нужно писать <code>datetime.datetime.now()</code>. Проще подключать класс напрямую.</p>
+            </div>
+            <div class="mistake">
+                <h3>Шаблон не совпадает с текстом</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">from datetime import datetime
+d = datetime.strptime(&quot;11.11.2026&quot;, &quot;%Y-%m-%d&quot;)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">from datetime import datetime
+d = datetime.strptime(&quot;11.11.2026&quot;, &quot;%d.%m.%Y&quot;)
+print(d.date())</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>ValueError: time data &#x27;11.11.2026&#x27; does not match format &#x27;%Y-%m-%d&#x27;</code></p>
+                <p>Шаблон ждал год через дефисы, а пришла дата через точки. Шаблон должен повторять текст символ в символ.</p>
+            </div>
+            <div class="mistake">
+                <h3>Несуществующая дата</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">from datetime import date
+d = date(2026, 2, 30)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">from datetime import date
+d = date(2026, 2, 28)
+print(d)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>ValueError: day is out of range for month</code></p>
+                <p>30 февраля не бывает. Python проверяет каждую дату по календарю.</p>
+            </div>
+            <div class="mistake">
+                <h3>Прибавили к дате число</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">from datetime import date
+print(date(2026, 1, 1) + 1)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">from datetime import date, timedelta
+print(date(2026, 1, 1) + timedelta(days=1))</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: unsupported operand type(s) for +: &#x27;datetime.date&#x27; and &#x27;int&#x27;</code></p>
+                <p>Непонятно, чего добавить — дней, часов или лет. Промежуток задаётся через <code>timedelta</code>.</p>
+            </div>
+
+            <h2>Главное за урок</h2>
+            <ul class="lesson-summary">
+                <li><code>from datetime import date, datetime, timedelta</code> — всё нужное для дат. <code>date.today()</code> — сегодня, <code>datetime.now()</code> — сейчас.</li>
+                <li><code>date(2027, 1, 1)</code> создаёт дату; у неё есть <code>year</code>, <code>month</code>, <code>day</code> и <code>weekday()</code> (0 — понедельник).</li>
+                <li><code>strftime("%d.%m.%Y")</code> — дата в строку, <code>datetime.strptime(текст, шаблон)</code> — строка в дату.</li>
+                <li><code>timedelta(days=7)</code> прибавляют и вычитают. Разность дат — промежуток, количество дней — <code>.days</code>.</li>
+                <li><code>time.time()</code> — секунды с 1970 года, удобно замерять время работы. <code>time.sleep(n)</code> — пауза.</li>
+            </ul>
         </section>
 
         <!-- Квиз -->
@@ -189,15 +257,19 @@ print(ts)  # 1704056400.0
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>Домашнее задание</h2>
-            <ul>
-                <li>Выведите текущую дату и время в формате «ДД.ММ.ГГГГ ЧЧ:ММ:СС».</li>
-                <li>Создайте объект даты своего дня рождения и выведите его.</li>
-                <li>Вычислите, сколько дней прошло с вашего дня рождения (используйте <code>timedelta</code>).</li>
-                <li>Вычислите, какой будет дата через 100 дней с сегодня.</li>
-                <li>Напишите функцию <code>days_until(date_str)</code>, которая принимает дату в формате <code>"ДД.ММ.ГГГГ"</code> и возвращает количество дней до этой даты (или 0, если дата уже прошла).</li>
-                <li>Используйте <code>strptime</code>, чтобы принять от пользователя дату в формате <code>"ГГГГ-ММ-ДД"</code> и вывести её в формате <code>"ДД месяц ГГГГ"</code> (например, «25 декабря 2024»).</li>
-                <li>Напишите скрипт, который выводит Unix timestamp для начала текущего дня (00:00:00) и конца текущего дня (23:59:59).</li>
+            <p>Задачи проверяются автоматически: откройте задачу, напишите решение и нажмите «Проверить». <span class="hw-counter"></span></p>
+            <div class="callout callout-soft">Решение пишется внутри готовой заготовки функции. Проверка сама вызовет её с разными данными и сравнит результат с правильным.</div>
+            <ul class="hw-tasks">
+                <li data-task="format_date"><a href="tasks.html#task=format_date"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Дата по-русски</strong><small>средняя · +2 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="datetime_days"><a href="tasks.html#task=datetime_days"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Разница в днях (datetime)</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="weekday_name"><a href="tasks.html#task=weekday_name"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>День недели по дате</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="age_on"><a href="tasks.html#task=age_on"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Сколько полных лет</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
             </ul>
+            <div class="hw-star">
+                <h3>Задание со звёздочкой: «Сколько дней до дня рождения»</h3>
+                <p>Напишите в <a href="python-online.html">Python Online</a> программу: пользователь вводит дату рождения (ДД.ММ.ГГГГ), а программа отвечает, сколько ему полных лет, в какой день недели он родился, сколько дней прожил и сколько дней осталось до следующего дня рождения. Если день рождения сегодня — поздравьте!</p>
+                <p class="hub-muted">Эту задачу проверяет преподаватель: отправьте ему код или покажите на занятии.</p>
+            </div>
         </section>
 
         <!-- Навигация -->

@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Урок 15: Итоговый проект - создание консольного To-Do списка на Python с сохранением в файл. PEP8, Git, GitHub.">
-    <title>Урок 15: Итоговый проект — To-Do List | PythonBasic</title>
+        content="Урок 15 курса Python с нуля: итоговый проект — консольный список дел с меню, функциями, сохранением в файл и обработкой ошибок. PEP 8 и Git.">
+    <title>Урок 15: Итоговый проект: список дел | PythonBasic</title>
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Урок 15: Итоговый проект - To-Do List | PythonBasic">
-    <meta property="og:description" content="Урок 15: Итоговый проект - создание консольного To-Do списка на Python с сохранением в файл. PEP8, Git, GitHub.">
+    <meta property="og:title" content="Урок 15: Итоговый проект: список дел | PythonBasic">
+    <meta property="og:description" content="Урок 15 курса Python с нуля: итоговый проект — консольный список дел с меню, функциями, сохранением в файл и обработкой ошибок. PEP 8 и Git.">
     <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
     <link rel="canonical" href="https://hugemix.github.io/python-course/lesson15.html">
     <meta property="og:url" content="https://hugemix.github.io/python-course/lesson15.html">
@@ -42,249 +42,300 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h1>Урок 15: Итоговый проект - To-Do List</h1>
-            <p>Примените все полученные знания и создайте своё первое полноценное приложение.</p>
+            <h1>Итоговый проект: список дел</h1>
+            <p>Собираем всё изученное в одно настоящее приложение.</p>
         </div>
     </section>
 
     <main class="container lesson-main">
         <section class="lesson-goal">
-            <h2>Задача</h2>
-            <p>Создайте консольное приложение на Python, которое поможет пользователю вести список дел
-                (To-Do List) с сохранением данных в файл.</p>
+            <h2>Цель урока</h2>
+            <p>Собрать из всего изученного полноценную программу — список дел с меню, сохранением в файл и защитой от ошибок; научиться планировать проект, делить его на функции и узнать, как пишут аккуратный код.</p>
+            <p class="lesson-meta">Время: около 60 минут · 2 упражнения в уроке · тест · 3 задачи на дом</p>
         </section>
 
         <section class="lesson-content">
-            <h2>Описание проекта</h2>
-            <p>Программа должна позволять:</p>
-            <ul>
-                <li>Добавлять задачи</li>
-                <li>Просматривать список задач</li>
-                <li>Удалять выполненные задачи</li>
-                <li>Сохранять список в файл и загружать его при следующем запуске</li>
-            </ul>
+            <h2>Зачем это нужно</h2>
+            <p>Вы прошли переменные, условия, циклы, списки, функции, словари, файлы, обработку ошибок и классы. По отдельности это кирпичики. Настоящая программа получается, когда их складывают вместе.</p>
+            <p>В этом уроке вы шаг за шагом соберёте полноценное приложение — <strong>список дел</strong> (to-do list). Оно умеет добавлять дела, показывать их, отмечать выполненные, удалять и — главное — сохраняет всё в файл, так что дела не пропадают после закрытия программы. Именно так и работают профессиональные программисты: сначала план, потом маленькие шаги, и каждый шаг сразу проверяется.</p>
 
-            <h2>Пример кода</h2>
-            <pre><code>import json
+            <h2>План проекта</h2>
+            <ol class="steps">
+                <li>Решить, <strong>как хранить</strong> дела в программе.</li>
+                <li>Написать <strong>функции</strong> для каждого действия: добавить, показать, отметить.</li>
+                <li>Сделать <strong>меню</strong>, в котором пользователь выбирает действие.</li>
+                <li>Научить программу <strong>сохранять</strong> дела в файл и загружать их при запуске.</li>
+                <li><strong>Защитить</strong> программу от неправильного ввода.</li>
+            </ol>
+            <div class="table-wrap">
+                <table class="lesson-table">
+                    <thead><tr><th>Что из курса пригодится</th><th>Где в проекте</th></tr></thead>
+                    <tbody>
+                        <tr><td>Списки и словари (уроки 6, 8)</td><td>хранение дел</td></tr>
+                        <tr><td>Функции (урок 7)</td><td>каждое действие — отдельная функция</td></tr>
+                        <tr><td>Циклы и условия (уроки 4, 5)</td><td>меню, которое работает, пока не выберут выход</td></tr>
+                        <tr><td>Строки и f-строки (урок 9)</td><td>красивый вывод списка</td></tr>
+                        <tr><td>Файлы (урок 10)</td><td>сохранение и загрузка</td></tr>
+                        <tr><td>Обработка ошибок (урок 11)</td><td>защита от неправильного ввода и отсутствующего файла</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Шаг 1. Как хранить дела</h2>
+            <p>У каждого дела есть название и отметка «выполнено или нет». Удобно хранить дело как словарь, а все дела — как список словарей:</p>
+            <pre data-run><code class="language-python">tasks = [
+    {&quot;title&quot;: &quot;Купить хлеб&quot;, &quot;done&quot;: False},
+    {&quot;title&quot;: &quot;Сделать уроки&quot;, &quot;done&quot;: True},
+]
+
+tasks.append({&quot;title&quot;: &quot;Позвонить бабушке&quot;, &quot;done&quot;: False})
+
+print(&quot;Всего дел:&quot;, len(tasks))
+print(&quot;Первое дело:&quot;, tasks[0][&quot;title&quot;])
+print(&quot;Выполнено ли второе:&quot;, tasks[1][&quot;done&quot;])</code></pre>
+
+            <h2>Шаг 2. Функции</h2>
+            <p>Каждое действие — отдельная функция с понятным именем. Так код легко читать и исправлять. Для нумерованного вывода пригодится <code>enumerate</code>: он выдаёт в цикле сразу номер и элемент. <code>start=1</code> — чтобы нумерация начиналась с единицы, как привычно людям:</p>
+            <pre data-run><code class="language-python">def add_task(tasks, title):
+    tasks.append({&quot;title&quot;: title, &quot;done&quot;: False})
+
+def show_tasks(tasks):
+    for i, t in enumerate(tasks, start=1):
+        mark = &quot;✓&quot; if t[&quot;done&quot;] else &quot; &quot;
+        print(f&quot;{i}. [{mark}] {t[&#x27;title&#x27;]}&quot;)
+
+def mark_done(tasks, number):
+    tasks[number - 1][&quot;done&quot;] = True
+
+my_tasks = []
+add_task(my_tasks, &quot;Купить хлеб&quot;)
+add_task(my_tasks, &quot;Сделать уроки&quot;)
+add_task(my_tasks, &quot;Погулять с собакой&quot;)
+mark_done(my_tasks, 2)
+show_tasks(my_tasks)</code></pre>
+            <p>Строка <code>mark = "✓" if t["done"] else " "</code> — это короткое условие в одну строку: «галочка, если дело выполнено, иначе пробел». А в <code>mark_done</code> вычитается единица, потому что пользователь считает дела с 1, а индексы списка — с 0.</p>
+
+            <div class="try-it" data-id="l15-search">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Поиск по делам</h3></div>
+                <p>В программе уже есть список дел. Программа получает слово для поиска. Выведите названия всех дел, в которых встречается это слово, без учёта регистра — каждое на своей строке. Если ничего не нашлось — <strong>Ничего не найдено</strong>.</p>
+                <textarea class="try-code" aria-label="Ваш код">tasks = [
+    {&quot;title&quot;: &quot;Купить хлеб&quot;, &quot;done&quot;: False},
+    {&quot;title&quot;: &quot;Сделать уроки&quot;, &quot;done&quot;: True},
+    {&quot;title&quot;: &quot;Купить подарок маме&quot;, &quot;done&quot;: False},
+    {&quot;title&quot;: &quot;Убрать комнату&quot;, &quot;done&quot;: False},
+]
+
+word = input()
+# найдите подходящие дела
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "купить", "out": "Купить хлеб\nКупить подарок маме"}, {"in": "УРОКИ", "out": "Сделать уроки"}, {"in": "пицца", "out": "Ничего не найдено"}, {"in": "ат", "out": "Сделать уроки\nУбрать комнату"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Сравнивайте в нижнем регистре: <code>word.lower() in t["title"].lower()</code>. Заведите флаг <code>found = False</code> и поставьте <code>True</code>, когда что-то нашлось.</p></details>
+            </div>
+
+            <h2>Шаг 3. Меню</h2>
+            <p>Программа должна работать, пока пользователь не решит выйти. Это знакомый приём <code>while True</code> + <code>break</code> из урока 5. В каждом повторе показываем пункты меню, читаем выбор и вызываем нужную функцию.</p>
+            <pre><code class="language-python">while True:
+    print(&quot;1 — добавить, 2 — показать, 0 — выход&quot;)
+    choice = input(&quot;Выберите: &quot;)
+    if choice == &quot;1&quot;:
+        add_task(tasks, input(&quot;Что нужно сделать? &quot;))
+    elif choice == &quot;2&quot;:
+        show_tasks(tasks)
+    elif choice == &quot;0&quot;:
+        break
+    else:
+        print(&quot;Нет такого пункта&quot;)</code></pre>
+
+            <h2>Шаг 4. Сохранение в файл</h2>
+            <p>Каждое дело записываем в файл отдельной строкой: сначала <code>1</code> или <code>0</code> (выполнено или нет), потом черта <code>|</code> и название. При запуске программа читает файл и восстанавливает список. Если файла ещё нет (первый запуск), ловим <code>FileNotFoundError</code> и начинаем с пустого списка.</p>
+            <pre><code class="language-python">def save_tasks(tasks):
+    with open(&quot;todo.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+        for t in tasks:
+            f.write((&quot;1&quot; if t[&quot;done&quot;] else &quot;0&quot;) + &quot;|&quot; + t[&quot;title&quot;] + &quot;\n&quot;)</code></pre>
+            <p><code>split("|", 1)</code> при чтении разрезает строку только по первой черте — на случай, если черта встретится в названии дела.</p>
+
+            <h2>Шаг 5. Вся программа</h2>
+            <p>Соединяем всё вместе и добавляем защиту: номер дела может оказаться не числом или числом вне списка — функция <code>ask_number</code> проверяет и то и другое. Запустите программу: ввод уже подставлен — добавим два дела, посмотрим список, отметим первое и попробуем удалить дело по неправильному номеру.</p>
+            <pre data-run data-stdin="1
+Купить хлеб
+1
+Сделать уроки
+2
+3
+1
+2
+4
+пять
+0"><code class="language-python">FILE = &quot;todo.txt&quot;
+
 
 def load_tasks():
+    &quot;&quot;&quot;Читает дела из файла. Если файла ещё нет — пустой список.&quot;&quot;&quot;
+    tasks = []
     try:
-        with open("tasks.json", "r", encoding="utf-8") as file:
-            return json.load(file)
+        with open(FILE, encoding=&quot;utf-8&quot;) as f:
+            for line in f:
+                done, title = line.rstrip(&quot;\n&quot;).split(&quot;|&quot;, 1)
+                tasks.append({&quot;title&quot;: title, &quot;done&quot;: done == &quot;1&quot;})
     except FileNotFoundError:
-        return []
+        pass
+    return tasks
+
 
 def save_tasks(tasks):
-    with open("tasks.json", "w", encoding="utf-8") as file:
-        json.dump(tasks, file, ensure_ascii=False, indent=4)
+    with open(FILE, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+        for t in tasks:
+            f.write((&quot;1&quot; if t[&quot;done&quot;] else &quot;0&quot;) + &quot;|&quot; + t[&quot;title&quot;] + &quot;\n&quot;)
+
+
+def show_tasks(tasks):
+    if not tasks:
+        print(&quot;Список пуст&quot;)
+        return
+    for i, t in enumerate(tasks, start=1):
+        mark = &quot;✓&quot; if t[&quot;done&quot;] else &quot; &quot;
+        print(f&quot;{i}. [{mark}] {t[&#x27;title&#x27;]}&quot;)
+
+
+def ask_number(tasks):
+    &quot;&quot;&quot;Спрашивает номер дела. Возвращает индекс в списке или None.&quot;&quot;&quot;
+    try:
+        n = int(input(&quot;Номер дела: &quot;))
+    except ValueError:
+        print(&quot;Нужно ввести число&quot;)
+        return None
+    if 1 &lt;= n &lt;= len(tasks):
+        return n - 1
+    print(&quot;Нет дела с таким номером&quot;)
+    return None
+
 
 def main():
     tasks = load_tasks()
     while True:
-        print("\n1. Добавить задачу")
-        print("2. Показать список задач")
-        print("3. Удалить задачу")
-        print("4. Выйти")
-        choice = input("Выберите действие: ")
-
-        if choice == "1":
-            task = input("Введите новую задачу: ")
-            tasks.append(task)
-            save_tasks(tasks)
-        elif choice == "2":
-            print("\nВаш список дел:")
-            for i, task in enumerate(tasks, 1):
-                print(f"{i}. {task}")
-        elif choice == "3":
-            num = int(input("Введите номер задачи для удаления: ")) - 1
-            if 0 <= num < len(tasks):
-                tasks.pop(num)
+        print(&quot;\n1 — добавить, 2 — показать, 3 — выполнено, 4 — удалить, 0 — выход&quot;)
+        choice = input(&quot;Выберите: &quot;)
+        if choice == &quot;1&quot;:
+            title = input(&quot;Что нужно сделать? &quot;).strip()
+            if title:
+                tasks.append({&quot;title&quot;: title, &quot;done&quot;: False})
                 save_tasks(tasks)
-            else:
-                print("Некорректный номер!")
-        elif choice == "4":
+        elif choice == &quot;2&quot;:
+            show_tasks(tasks)
+        elif choice == &quot;3&quot;:
+            i = ask_number(tasks)
+            if i is not None:
+                tasks[i][&quot;done&quot;] = True
+                save_tasks(tasks)
+        elif choice == &quot;4&quot;:
+            i = ask_number(tasks)
+            if i is not None:
+                removed = tasks.pop(i)
+                save_tasks(tasks)
+                print(&quot;Удалено:&quot;, removed[&quot;title&quot;])
+        elif choice == &quot;0&quot;:
+            print(&quot;До встречи!&quot;)
             break
         else:
-            print("Неверный ввод, попробуйте снова.")
+            print(&quot;Нет такого пункта&quot;)
 
-if __name__ == "__main__":
+
+if __name__ == &quot;__main__&quot;:
     main()</code></pre>
+            <p>Запустите пример ещё раз: дела из прошлого запуска загрузятся из файла, и список станет длиннее. Чтобы поиграть с программой по-настоящему, скопируйте её в <a href="python-online.html">Python Online</a> или запустите на компьютере.</p>
+            <p>Последние строки <code>if __name__ == "__main__": main()</code> — принятое в Python оформление: «если этот файл запустили как программу — вызвать <code>main()</code>». Если же файл подключат как модуль через <code>import</code>, меню не запустится само, а функции можно будет использовать в другой программе.</p>
 
-            <h2>Какие знания курса задействованы?</h2>
+            <div class="try-it" data-id="l15-stats">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Статистика дел</h3></div>
+                <p>Программа получает число N, а потом N строк. Каждая строка — дело: в начале <code>+</code>, если оно выполнено, или <code>-</code>, если нет, потом пробел и название. Выведите <strong>Выполнено: X из N</strong>. Если выполнены все — выведите второй строкой <strong>Все дела сделаны!</strong></p>
+                <textarea class="try-code" aria-label="Ваш код">n = int(input())
+
+# посчитайте выполненные дела
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "3\n+ Купить хлеб\n- Сделать уроки\n+ Погулять", "out": "Выполнено: 2 из 3"}, {"in": "2\n+ Убрать\n+ Помыть посуду", "out": "Выполнено: 2 из 2\nВсе дела сделаны!"}, {"in": "1\n- Выучить Python", "out": "Выполнено: 0 из 1"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Заведите счётчик <code>done = 0</code>. В цикле читайте строку и проверяйте <code>line.startswith("+")</code>. После цикла — вывод и условие <code>if done == n:</code>.</p></details>
+            </div>
+
+            <h2>Как писать хороший код</h2>
+            <p>Код читают гораздо чаще, чем пишут, — и другие люди, и вы сами через месяц. У Python есть общепринятые правила оформления — <strong>PEP 8</strong>. Главное из них:</p>
             <ul>
-                <li><strong>Функции</strong> (<code>def</code>) - <code>load_tasks()</code>,
-                    <code>save_tasks()</code>, <code>main()</code>
-                </li>
-                <li><strong>Списки</strong> - <code>tasks.append()</code>, <code>tasks.pop()</code>,
-                    перебор с <code>enumerate()</code></li>
-                <li><strong>Файлы</strong> - <code>with open()</code>, чтение и запись JSON</li>
-                <li><strong>Обработка ошибок</strong> - <code>try-except FileNotFoundError</code></li>
-                <li><strong>Циклы</strong> - бесконечный <code>while True</code> с выходом через <code>break</code></li>
-                <li><strong>Условия</strong> - <code>if-elif-else</code></li>
-                <li><strong>Строки</strong> - f-строки для форматирования вывода</li>
+                <li>отступ — 4 пробела;</li>
+                <li>имена переменных и функций — маленькими буквами через подчёркивание (<code>show_tasks</code>), классов — с большой буквы (<code>TodoList</code>);</li>
+                <li>пробелы вокруг <code>=</code> и знаков действий: <code>total = price * count</code>;</li>
+                <li>понятные имена: <code>tasks</code>, а не <code>t1</code>; <code>is_done</code>, а не <code>flag</code>;</li>
+                <li>одна функция — одно дело; если функция не помещается на экран, её стоит разделить;</li>
+                <li>комментарии объясняют, <strong>зачем</strong> код, а не пересказывают, что он делает.</li>
             </ul>
 
-            <h2>Стандарт хорошего кода - PEP8</h2>
-            <p>Для стандарта написания красивого и читаемого кода в Python существует свод правил -
-                <strong>PEP8</strong>. Он описывает правила именования переменных, отступов, пробелов и
-                многого другого. Следование PEP8 делает ваш код понятным для других разработчиков.
-            </p>
+            <h2>Git: история версий</h2>
+            <p>Когда проект растёт, страшно что-то сломать. <strong>Git</strong> — программа, которая сохраняет «снимки» проекта, и к любому из них можно вернуться. А сайт <strong>GitHub</strong> хранит проекты в интернете и показывает их другим людям — это ваше портфолио. Основные команды (пишутся в терминале в папке проекта):</p>
+            <pre data-label="Терминал"><code class="language-bash">git init                         # начать следить за папкой
+git add .                        # отметить все изменения
+git commit -m &quot;Добавил удаление дел&quot;   # сохранить снимок с описанием
+git log                          # посмотреть историю снимков</code></pre>
 
-            <h2>Система контроля версий - Git</h2>
-            <p><strong>Git</strong> - это система контроля версий. Она позволяет:</p>
+            <h2>Частые ошибки новичков</h2>
+            <p>Ошибаться — нормально, так учатся все программисты. Главное — научиться читать сообщение об ошибке: Python подсказывает, что не так и в какой строке.</p>
+            <div class="mistake">
+                <h3>Номер дела вне списка</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">tasks = [&quot;Купить хлеб&quot;, &quot;Сделать уроки&quot;]
+number = 3
+print(tasks[number - 1])</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">tasks = [&quot;Купить хлеб&quot;, &quot;Сделать уроки&quot;]
+number = 3
+if 1 &lt;= number &lt;= len(tasks):
+    print(tasks[number - 1])
+else:
+    print(&quot;Нет дела с таким номером&quot;)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>IndexError: list index out of range</code></p>
+                <p>Пользователь может ввести любой номер. Перед обращением проверьте, что он от 1 до <code>len(tasks)</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>Ввели не число</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">number = int(input(&quot;Номер дела: &quot;))</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">try:
+    number = int(input(&quot;Номер дела: &quot;))
+except ValueError:
+    print(&quot;Нужно ввести число&quot;)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>ValueError: invalid literal for int() with base 10: &#x27;пять&#x27;</code></p>
+                <p>Вместо цифр пользователь написал слово. Оберните <code>int(input())</code> в <code>try/except ValueError</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>Опечатка в ключе словаря</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">task = {&quot;title&quot;: &quot;Купить хлеб&quot;, &quot;done&quot;: False}
+print(task[&quot;titel&quot;])</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">task = {&quot;title&quot;: &quot;Купить хлеб&quot;, &quot;done&quot;: False}
+print(task[&quot;title&quot;])</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>KeyError: &#x27;titel&#x27;</code></p>
+                <p>Ключи словаря нужно писать точно так же, как при создании. Опечатки в ключах — одна из самых частых ошибок в проектах.</p>
+            </div>
+
+            <h2>Что можно добавить</h2>
+            <p>Проект готов, но его можно развивать бесконечно — это отличная тренировка:</p>
             <ul>
-                <li>Сохранять историю всех изменений в коде</li>
-                <li>Откатываться к любой предыдущей версии</li>
-                <li>Работать в команде - несколько человек над одним проектом</li>
+                <li><strong>приоритеты</strong>: важные дела показывать первыми (сортировка через <code>sort(key=...)</code>);</li>
+                <li><strong>сроки</strong>: дата для каждого дела и пометка «просрочено» (урок 14);</li>
+                <li><strong>категории</strong>: «учёба», «дом», «покупки» и фильтр по ним;</li>
+                <li><strong>класс</strong> <code>TodoList</code> вместо отдельных функций (урок 13) — это задача из домашнего задания;</li>
+                <li><strong>окно с кнопками</strong> вместо текстового меню — библиотека <code>tkinter</code> уже есть в Python;</li>
+                <li><strong>Telegram-бот</strong>, который хранит ваши дела, — библиотека aiogram.</li>
             </ul>
-            <p>Проекты хранят в облаке через сервис <strong>GitHub</strong> - это позволяет работать
-                в команде и создать профессиональное портфолио.</p>
+            <p>Идеи для следующих шагов после курса — на странице <a href="next-steps.html">«Что дальше?»</a>.</p>
 
-            <h2>Встроенная библиотека для GUI - Tkinter</h2>
-            <p>Python поставляется «из коробки» с библиотекой <strong>Tkinter</strong> - она позволяет
-                создавать настольные приложения с графическим интерфейсом (окнами, кнопками, полями ввода)
-                без установки дополнительных пакетов.</p>
-
-            <h2>Что дальше?</h2>
-            <p>Вы прошли базовый курс Python! Теперь вы умеете:</p>
-            <ul>
-                <li>Работать с переменными, типами данных и операторами</li>
-                <li>Использовать условия, циклы, функции</li>
-                <li>Работать с коллекциями (списки, словари, множества)</li>
-                <li>Читать и писать файлы</li>
-                <li>Обрабатывать ошибки</li>
-                <li>Использовать модули и библиотеки</li>
-                <li>Понимать основы ООП</li>
+            <h2>Главное за урок</h2>
+            <ul class="lesson-summary">
+                <li>Большую программу делают по плану и маленькими шагами, проверяя каждый шаг.</li>
+                <li>Данные проекта удобно хранить списком словарей: <code>[{"title": ..., "done": False}]</code>.</li>
+                <li>Каждое действие — отдельная функция с понятным именем. <code>enumerate(список, start=1)</code> даёт номер и элемент.</li>
+                <li>Меню — это <code>while True</code> с <code>if/elif</code> и <code>break</code>. Данные сохраняются в файл и загружаются при запуске.</li>
+                <li>Любой ввод пользователя проверяйте: <code>try/except</code> для чисел, проверка диапазона для номеров. Оформляйте код по PEP 8.</li>
             </ul>
-            <p>Следующий шаг - практика! Решайте задачи в разделе <a href="tasks.html">Задачи</a> и
-                изучайте популярные <a href="libraries.html">библиотеки Python</a>.
-            </p>
-
-            <h2>Паттерн while True + break - бесконечное меню</h2>
-            <p>В итоговом проекте главное меню реализовано через конструкцию <code>while True</code>. Цикл выполняется
-                бесконечно, пока пользователь не выберет «Выйти» - тогда срабатывает <code>break</code> и цикл
-                останавливается:</p>
-            <pre><code>while True:
-    choice = input("Введите 1, 2 или 3: ")
-    if choice == "3":
-        break  # Выход из бесконечного цикла
-    print("Продолжаем...")</code></pre>
-            <p>Это стандартный паттерн для консольных меню в Python.</p>
-
-            <h2>Функция enumerate() - нумерованный перебор</h2>
-            <p>Функция <code>enumerate(список)</code> позволяет одновременно получать <strong>индекс и значение</strong>
-                каждого элемента при переборе - очень удобна для вывода нумерованных списков:</p>
-            <pre><code>tasks = ["Купить молоко", "Позвонить маме", "Сделать зарядку"]
-for i, task in enumerate(tasks, 1):  # start=1 начинает нумерацию с 1
-    print(f"{i}. {task}")
-# Выведет:
-# 1. Купить молоко
-# 2. Позвонить маме
-# 3. Сделать зарядку</code></pre>
-            <p>Именно так в проекте выводится пронумерованный список задач:
-                <code>for i, task in enumerate(tasks, 1)</code>.</p>
-
-            <h2>Расширение проекта: фильтрация и поиск</h2>
-            <p>Улучшим базовый менеджер задач: добавим приоритеты, дату создания, статус выполнения
-                и возможность фильтровать задачи. Каждая задача теперь хранится как словарь.</p>
-            <pre><code>import json
-import datetime
-
-TASKS_FILE = "tasks.json"
-
-def load_tasks():
-    try:
-        with open(TASKS_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return []
-
-def save_tasks(tasks):
-    with open(TASKS_FILE, "w", encoding="utf-8") as f:
-        json.dump(tasks, f, ensure_ascii=False, indent=2)
-
-def add_task(title, priority="средний"):
-    tasks = load_tasks()
-    task = {
-        "id": len(tasks) + 1,
-        "title": title,
-        "priority": priority,
-        "done": False,
-        "created": datetime.datetime.now().strftime("%d.%m.%Y")
-    }
-    tasks.append(task)
-    save_tasks(tasks)
-    print(f"Добавлено: {title} [{priority}]")
-
-def show_tasks(filter_done=None, priority=None):
-    tasks = load_tasks()
-    for task in tasks:
-        if filter_done is not None and task["done"] != filter_done:
-            continue
-        if priority and task["priority"] != priority:
-            continue
-        status = "+" if task["done"] else "o"
-        print(f"{status} [{task['id']}] {task['title']} — {task['priority']}")
-
-def complete_task(task_id):
-    tasks = load_tasks()
-    for task in tasks:
-        if task["id"] == task_id:
-            task["done"] = True
-            save_tasks(tasks)
-            print(f"Задача '{task['title']}' выполнена!")
-            return
-    print("Задача не найдена")</code></pre>
-
-            <h2>Структура профессионального проекта</h2>
-            <p>Когда проект вырастает за пределы одного файла, важно правильно организовать структуру
-                папок. Вот стандартная структура Python-проекта:</p>
-            <pre><code>my_project/
-│
-├── main.py           # Точка входа
-├── requirements.txt  # Зависимости (pip freeze &gt; requirements.txt)
-├── README.md         # Описание проекта
-│
-├── src/              # Исходный код
-│   ├── __init__.py
-│   ├── tasks.py      # Логика задач
-│   └── utils.py      # Вспомогательные функции
-│
-├── data/             # Данные
-│   └── tasks.json
-│
-└── tests/            # Тесты
-    └── test_tasks.py</code></pre>
-            <p>Назначение папок: <code>src/</code> содержит весь бизнес-код, разбитый по модулям;
-                <code>data/</code> хранит файлы данных отдельно от кода; <code>tests/</code> содержит
-                автоматические тесты; <code>requirements.txt</code> позволяет любому разработчику
-                установить все зависимости одной командой <code>pip install -r requirements.txt</code>.</p>
-
-            <h2>Git: контроль версий</h2>
-            <p>Git — это система контроля версий, которая отслеживает каждое изменение в вашем коде.
-                Она незаменима при работе в команде и позволяет безопасно экспериментировать:
-                если что-то сломалось, всегда можно вернуться к рабочей версии.</p>
-            <pre><code># Инициализация нового репозитория
-git init
-
-# Добавить все файлы в отслеживание
-git add .
-
-# Создать коммит (снимок версии)
-git commit -m "Первая версия менеджера задач"
-
-# Просмотр истории
-git log --oneline
-
-# Создать ветку для новой функции
-git checkout -b feature/search
-
-# Вернуться на главную ветку
-git checkout main
-
-# Загрузить на GitHub (после создания репозитория на github.com)
-git remote add origin https://github.com/username/my_project.git
-git push -u origin main</code></pre>
         </section>
 
 
@@ -294,15 +345,18 @@ git push -u origin main</code></pre>
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>Домашнее задание</h2>
-            <ul>
-                <li>Запустите код и добавьте несколько задач.</li>
-                <li>Попробуйте изменить код, добавив возможность редактирования задач.</li>
-                <li>Попробуйте создать простой графический интерфейс с помощью библиотеки <strong>Tkinter</strong>.</li>
-                <li>Создайте аккаунт на GitHub и загрузите туда ваш проект!</li>
-                <li>Реализуйте функцию <code>search_tasks(keyword)</code>, которая ищет задачи по ключевому слову в названии и выводит только совпадения.</li>
-                <li>Добавьте в менеджер задач поле <code>deadline</code> (срок выполнения). Реализуйте предупреждение при выводе задач, если дедлайн наступит менее чем через 2 дня.</li>
-                <li>Организуйте проект по стандартной структуре папок: перенесите логику в <code>src/tasks.py</code>, а точку входа оставьте в <code>main.py</code>. Создайте <code>requirements.txt</code>.</li>
+            <p>Задачи проверяются автоматически: откройте задачу, напишите решение и нажмите «Проверить». <span class="hw-counter"></span></p>
+            <div class="callout callout-soft">Решение пишется внутри готовой заготовки функции. Проверка сама вызовет её с разными данными и сравнит результат с правильным.</div>
+            <ul class="hw-tasks">
+                <li data-task="most_common_word"><a href="tasks.html#task=most_common_word"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Самое частое слово</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="todo_list"><a href="tasks.html#task=todo_list"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Список дел (класс)</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="todo_save_load"><a href="tasks.html#task=todo_save_load"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Сохранить дела в файл</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
             </ul>
+            <div class="hw-star">
+                <h3>Задание со звёздочкой: «Список дел 2.0»</h3>
+                <p>Доработайте программу из урока в <a href="python-online.html">Python Online</a> или на компьютере. Добавьте хотя бы две новые возможности: приоритет дела (высокий, средний, низкий) с сортировкой по нему, срок выполнения с пометкой «просрочено», поиск по названию, статистику «выполнено X из N». Всё, что вы добавили, должно сохраняться в файл.</p>
+                <p class="hub-muted">Эту задачу проверяет преподаватель: отправьте ему код или покажите на занятии.</p>
+            </div>
         </section>
 
         <!-- Навигация -->
