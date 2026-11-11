@@ -1,6 +1,10 @@
-# Автоматическая проверка сайта: запускается при каждом изменении в main и в каждом pull request.
-# Если что-то сломано, на GitHub у изменения появится красный крестик, а в журнале — что именно не так.
-name: Проверка сайта
+# Проверка и публикация сайта.
+# При каждом изменении в main: сначала проверка (уроки, тесты, задачи, страницы в браузере),
+# и только если она прошла — публикация на GitHub Pages. Если проверка нашла ошибку,
+# на сайте остаётся прежняя рабочая версия, а у изменения появляется красный крестик.
+# В pull request выполняется только проверка, без публикации.
+# Важно: в настройках репозитория Settings → Pages → Source должно стоять «GitHub Actions».
+name: Проверка и публикация сайта
 
 on:
   push:
@@ -13,7 +17,7 @@ permissions:
 
 jobs:
   check:
-    name: Уроки, тесты, задачи и страницы
+    name: Проверка
     runs-on: ubuntu-latest
     timeout-minutes: 20
     defaults:
@@ -39,3 +43,36 @@ jobs:
 
       - name: Проверить страницы в браузере
         run: node check-pages.cjs
+
+  deploy:
+    name: Публикация
+    needs: check
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Собрать файлы сайта (без папок проверки)
+        run: |
+          mkdir _site
+          rsync -a --exclude '.git' --exclude '.github' --exclude 'checks' --exclude '_site' ./ _site/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Опубликовать
+        id: deployment
+        uses: actions/deploy-pages@v4
