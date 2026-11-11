@@ -62,7 +62,7 @@
 
             <h2>Как выглядит ошибка</h2>
             <p>Ошибки в Python называются <strong>исключениями</strong>. У каждой есть тип и описание. Запустите пример — программа упадёт на второй строке, и третья уже не выполнится:</p>
-            <pre data-run><code class="language-python">age = int(&quot;двадцать&quot;)
+            <pre data-run data-expect-error="ValueError"><code class="language-python">age = int(&quot;двадцать&quot;)
 print(&quot;Эта строка не выполнится&quot;)</code></pre>
             <p>Последняя строка сообщения — самая важная: <code>ValueError</code> — тип ошибки, после двоеточия — объяснение. Вот типы, которые встречаются чаще всего:</p>
             <div class="table-wrap">

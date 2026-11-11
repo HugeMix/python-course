@@ -1,0 +1,41 @@
+# Автоматическая проверка сайта: запускается при каждом изменении в main и в каждом pull request.
+# Если что-то сломано, на GitHub у изменения появится красный крестик, а в журнале — что именно не так.
+name: Проверка сайта
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Уроки, тесты, задачи и страницы
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: checks
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: checks/package-lock.json
+
+      - name: Установить инструменты проверки
+        run: npm ci --no-audit --no-fund
+
+      - name: Проверить код уроков, тесты и задачи
+        run: node check-content.cjs
+
+      - name: Установить браузер
+        run: npx playwright install --with-deps chromium
+
+      - name: Проверить страницы в браузере
+        run: node check-pages.cjs
