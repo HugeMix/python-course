@@ -581,14 +581,24 @@
             });
         }
 
-        // Задачи открываются вместе со своим уроком (урок 1 — бесплатно, остальные открывает преподаватель)
+        // Задачи открываются вместе со своим уроком (урок 1 — бесплатно; дальше — по мере освоения оплаченных уроков)
         let taskLocked = false;
         function lockedText(task) {
-            const what = task.exam ? `вместе с контрольной ${task.exam}` : `вместе с уроком ${task.lesson}`;
-            return `<div class="task-locked"><p><strong>Задача откроется ${what}.</strong></p>
-                <p>Урок 1 и его задачи — бесплатно. Остальные уроки открывает преподаватель после записи на занятия: пришлите ему сообщение в Telegram.</p>
-                <p><a class="hub-btn hub-btn-primary" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Записаться в Telegram</a>
-                <a class="hub-btn" href="tasks.html#lesson=1">Задачи урока 1</a></p></div>`;
+            const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+            if (task.exam) {
+                const last = PB.EXAM_LESSONS[task.exam][1];
+                return `<div class="task-locked"><p><strong>Задача откроется вместе с контрольной ${task.exam}.</strong></p>
+                    <p>Контрольная открывается, когда освоен урок ${last}: тест сдан и решена домашка.</p>
+                    <p><a class="hub-btn hub-btn-primary" href="python-basic.html">Мои уроки</a></p></div>`;
+            }
+            const info = PB.lockText(task.lesson);
+            const access = !!PB.readAccess();
+            const buttons = info.kind === 'prev' ? `<a class="hub-btn hub-btn-primary" href="tasks.html#lesson=${task.lesson - 1}">Задачи урока ${task.lesson - 1}</a><a class="hub-btn" href="python-basic.html">Мои уроки</a>`
+                : info.kind === 'exam' ? `<a class="hub-btn hub-btn-primary" href="tasks.html#exam=${PB.GATE_EXAM[task.lesson]}">К контрольной</a>`
+                : access ? `<a class="hub-btn hub-btn-primary" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Написать преподавателю</a>`
+                : `<a class="hub-btn hub-btn-primary" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Записаться в Telegram</a><a class="hub-btn" href="tasks.html#lesson=1">Задачи урока 1</a>`;
+            return `<div class="task-locked"><p><strong>Задача откроется вместе с уроком ${task.lesson}.</strong></p>
+                <p>${esc(info.text)}</p><p>${buttons}</p></div>`;
         }
 
         function selectTask(index) {
@@ -703,9 +713,21 @@
                 setResult((output ? output + "\n" : "") + "❌ Ошибка в коде:\n" + result.error);
                 setStatus("fail", "Ошибка в коде");
             } else if (result.passed) {
+                const before = PB.myState();
                 const solved = getSolved();
                 solved[task.id] = true;
                 localStorage.setItem("solved_tasks", JSON.stringify(solved));
+                // урок освоен, открылся следующий урок или контрольная зачтена — говорим об этом сразу
+                const after = PB.myState();
+                const r = after.results[task.lesson];
+                if (!task.exam && !before.results[task.lesson].mastered && r.mastered) {
+                    output += `\n\n🎉 Урок ${task.lesson} освоен — оценка «${PB.GRADE_TEXT[r.grade]}».`;
+                } else if (!task.exam && !r.mastered && r.quizOk === false && r.hwOk) {
+                    output += `\n\nДомашка урока ${task.lesson} готова. Осталось сдать тест урока — и урок будет освоен.`;
+                }
+                const opened = [...after.open].filter(n => !before.open.has(n));
+                if (opened.length) output += `\n🔓 Открыт урок ${opened.join(', ')}!`;
+                [1, 2, 3].forEach(k => { if (!before.exams[k].passed && after.exams[k].passed) output += `\n🏆 Контрольная ${k} зачтена!`; });
                 renderTasks();
                 setResult(output);
                 setStatus("ok");

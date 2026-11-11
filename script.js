@@ -13,15 +13,19 @@ document.addEventListener('DOMContentLoaded', () => {
         catch (e) { return []; }
     }
 
-    // Урок 1 бесплатный и открыт всем. Остальные уроки открывает преподаватель своей ссылкой
-    // (список хранится в unlocked_lessons). В браузере преподавателя открыты все уроки.
+    // Урок 1 бесплатный и открыт всем. Дальше уроки открываются по правилам из pb-share.js:
+    // следующий — когда предыдущий освоен, пока не закончатся оплаченные уроки.
+    // В браузере преподавателя открыты все уроки.
+    const hasPB = typeof PB !== 'undefined';
     function isLessonOpen(lessonFile) {
         const i = lessonsList.indexOf(lessonFile);
         if (i <= 0) return true;
+        if (hasPB) return PB.isLessonOpen(i + 1);
         return isTeacherBrowser() || getUnlockedLessons().includes(lessonFile);
     }
 
     function hasTeacherAccess() {
+        if (hasPB) return !!PB.readAccess();
         try { return !!localStorage.getItem('pb_access') || !!localStorage.getItem('pb_assignment'); } catch (e) { return false; }
     }
 
@@ -336,6 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Напишите строку, которая делает GET-запрос по адресу из переменной url и сохраняет ответ в response", type: "code", correct: ["response = requests.get(url)", "response = requests.get(url, timeout=10)"], explanation: "response = requests.get(url) — а в реальной программе ещё timeout=10." }
         ]
     };
+    window.PB_QUIZ = quizData; // вопросы тестов нужны кабинету (показать ошибки ученика)
 
     // --- 2. Locking System & Navigation ---
     let lessonLocked = false;
@@ -420,20 +425,31 @@ document.addEventListener('DOMContentLoaded', () => {
         if (lessonIndex > 0 && !isLessonOpen(currentPath)) {
             lessonLocked = true;
             document.body.classList.add('lesson-is-locked');
+            const info = hasPB ? PB.lockText(lessonIndex + 1) : { kind: 'pay', title: 'Этот урок откроет преподаватель', text: 'Урок 1 бесплатный — его можно пройти прямо сейчас.' };
+            const access = hasTeacherAccess();
+            let actions;
+            if (info.kind === 'prev') {
+                actions = `<a class="hub-btn hub-btn-primary" href="${lessonsList[lessonIndex - 1]}">К уроку ${lessonIndex}</a><a class="hub-btn" href="python-basic.html">Мои уроки</a>`;
+            } else if (info.kind === 'exam') {
+                actions = `<a class="hub-btn hub-btn-primary" href="tasks.html#exam=${PB.GATE_EXAM[lessonIndex + 1]}">К контрольной</a><a class="hub-btn" href="python-basic.html">Мои уроки</a>`;
+            } else if (access) {
+                actions = `<a class="hub-btn hub-btn-primary" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Написать преподавателю</a><a class="hub-btn" href="python-basic.html">Мои уроки</a>`;
+            } else {
+                actions = `<a class="hub-btn hub-btn-primary" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Записаться в Telegram</a><a class="hub-btn" href="lesson1.html">Пройти урок 1 бесплатно</a>`;
+            }
             const card = document.createElement('section');
             card.className = 'lesson-lock';
             card.setAttribute('role', 'note');
             card.innerHTML = `
                 <span class="lesson-lock-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
                 <div class="lesson-lock-body">
-                    <h2>Этот урок откроет преподаватель</h2>
-                    <p>Урок 1 бесплатный — его можно пройти прямо сейчас. Остальные уроки открываются после записи на занятия: преподаватель пришлёт ссылку, и урок появится в разделе «Мои уроки».</p>
-                    <div class="lesson-lock-actions">
-                        <a class="hub-btn hub-btn-primary" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Записаться в Telegram</a>
-                        <a class="hub-btn" href="lesson1.html">Пройти урок 1 бесплатно</a>
-                    </div>
-                    <p class="lesson-lock-note">Уже занимаетесь? Откройте ссылку от преподавателя ещё раз — уроки откроются.</p>
+                    <h2></h2>
+                    <p class="lesson-lock-text"></p>
+                    <div class="lesson-lock-actions">${actions}</div>
+                    ${access || info.kind !== 'pay' ? '' : '<p class="lesson-lock-note">Уже занимаетесь? Откройте ссылку от преподавателя ещё раз — уроки откроются.</p>'}
                 </div>`;
+            card.querySelector('h2').textContent = info.title;
+            card.querySelector('.lesson-lock-text').textContent = info.text;
             const goal = document.querySelector('main .lesson-goal');
             const main = document.querySelector('main');
             if (goal) goal.after(card); else if (main) main.insertBefore(card, main.firstChild);
@@ -456,23 +472,81 @@ document.addEventListener('DOMContentLoaded', () => {
             // Next Button is handled by showNextLessonButton after quiz
         }
 
-        // D. В конце открытого урока — «Отправить результат преподавателю»
+        // D. В конце открытого урока — статус: освоен ли урок, что осталось, открылся ли следующий
         if (lessonIndex >= 0 && !lessonLocked && navContainer && !isTeacherBrowser()) {
             const box = document.createElement('section');
             box.className = 'lesson-send';
-            if (hasTeacherAccess()) {
-                box.innerHTML = `<div class="lesson-send-text"><strong>Прошли урок?</strong><span>Отправьте результат преподавателю: он проверит тест и домашку и откроет следующий урок.</span></div>
-                    <a class="hub-btn hub-btn-primary" href="python-basic.html#send">Отправить результат</a>`;
-            } else {
-                box.innerHTML = `<div class="lesson-send-text"><strong>Хотите продолжить?</strong><span>Запишитесь на занятия: преподаватель откроет следующие уроки, будет проверять домашку и отвечать на вопросы.</span></div>
-                    <a class="hub-btn hub-btn-primary" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Записаться в Telegram</a>`;
-            }
+            box.id = 'lesson-status';
             navContainer.parentNode.insertBefore(box, navContainer);
+            renderLessonStatus();
+            // задачу решили в другой вкладке — обновляем статус, когда ученик вернётся
+            window.addEventListener('focus', () => { renderLessonStatus(); showNextLessonButton(); });
         }
     }
 
+    // Статус урока внизу страницы: «Урок освоен — Отлично, урок 5 открыт» или «Осталось: решить ещё 1 задачу»
+    function renderLessonStatus() {
+        const box = document.getElementById('lesson-status');
+        if (!box) return;
+        const n = lessonsList.indexOf(currentPath) + 1;
+        box.textContent = '';
+        const text = document.createElement('div');
+        text.className = 'lesson-send-text';
+        const title = document.createElement('strong');
+        const sub = document.createElement('span');
+        text.append(title, sub);
+        const actions = document.createElement('div');
+        actions.className = 'lesson-send-actions';
+        const link = (label, href, primary) => {
+            const a = document.createElement('a');
+            a.className = 'hub-btn' + (primary ? ' hub-btn-primary' : '');
+            a.href = href;
+            a.textContent = label;
+            if (href.startsWith('https://')) { a.target = '_blank'; a.rel = 'noopener'; }
+            actions.append(a);
+        };
+        if (!hasPB || !hasTeacherAccess()) {
+            const r = hasPB ? PB.myState().results[n] : null;
+            title.textContent = r && r.mastered ? `Урок освоен! Хотите продолжить?` : 'Хотите продолжить?';
+            sub.textContent = 'Запишитесь на занятия: следующие уроки будут открываться сами, когда вы освоите предыдущий, а преподаватель будет видеть ваши результаты и отвечать на вопросы.';
+            link('Записаться в Telegram', 'https://t.me/HugeMixProfile', true);
+            box.classList.toggle('is-done', !!(r && r.mastered));
+            box.append(text, actions);
+            return;
+        }
+        const state = PB.myState();
+        const r = state.results[n];
+        box.classList.toggle('is-done', r.mastered);
+        if (r.mastered) {
+            title.textContent = `Урок освоен — «${PB.GRADE_TEXT[r.grade]}»`;
+            const nextN = n + 1;
+            if (n === lessonsList.length) {
+                sub.textContent = 'Это последний урок курса. Отправьте результат преподавателю.';
+                link('Отправить результат', 'python-basic.html#send', true);
+            } else if (state.open.has(nextN)) {
+                sub.textContent = `Урок ${nextN} открыт. Отправьте результат преподавателю — он увидит вашу оценку и код решений.`;
+                link(`Перейти к уроку ${nextN} →`, lessonsList[n], true);
+                link('Отправить результат', 'python-basic.html#send', false);
+            } else {
+                const info = PB.lockText(nextN, state);
+                sub.textContent = info.text;
+                if (info.kind === 'exam') link('К контрольной', `tasks.html#exam=${PB.GATE_EXAM[nextN]}`, true);
+                else link('Написать преподавателю', 'https://t.me/HugeMixProfile', true);
+                link('Отправить результат', 'python-basic.html#send', false);
+            }
+        } else {
+            title.textContent = 'Чтобы освоить урок и открыть следующий:';
+            const todo = r.todo.join('; ') + '.';
+            sub.textContent = todo[0].toUpperCase() + todo.slice(1);
+            if (!r.quizOk) link('К тесту', '#quiz-container', true);
+            else link('К домашке', '#homework', true);
+            link('Отправить результат', 'python-basic.html#send', false);
+        }
+        box.append(text, actions);
+    }
+
     function toggleLessonVisibility(show) {
-        document.querySelectorAll('.lesson-title, .lesson-goal, .lesson-content, .lesson-homework').forEach(el => {
+        document.querySelectorAll('.lesson-title, .lesson-goal, .warmup, .lesson-content, .lesson-homework, .lesson-send').forEach(el => {
             // Check if quiz container or start btn is inside this element
             const hasQuizInfo = el.querySelector('#quiz-container') || el.querySelector('#btn-start-quiz');
             if (hasQuizInfo) {
@@ -540,27 +614,41 @@ document.addEventListener('DOMContentLoaded', () => {
         return i >= 0 && i < lessonsList.length - 1 ? lessonsList[i + 1] : null;
     }
 
-    // Кнопка после теста: следующий урок, если он уже открыт; иначе — отправить результат преподавателю
-    function nextLessonLink(primary) {
+    // Кнопка после теста: следующий урок, если он уже открыт; иначе — что сделать, чтобы он открылся
+    function nextStepAfterQuiz() {
         const next = nextLessonFile();
-        let text, href;
-        if (!next) { text = 'Получить сертификат →'; href = 'certificate.html'; }
-        else if (isLessonOpen(next) && !isTeacherBrowser()) { text = `Перейти к уроку ${lessonsList.indexOf(next) + 1} →`; href = next; }
-        else if (isTeacherBrowser()) { text = `Урок ${lessonsList.indexOf(next) + 1} →`; href = next; }
-        else if (hasTeacherAccess()) { text = 'Отправить результат преподавателю'; href = 'python-basic.html#send'; }
-        else { text = 'Записаться на занятия'; href = 'https://t.me/HugeMixProfile'; }
-        const a = qel('a', 'qz-btn ' + (primary ? 'qz-btn-primary' : ''), text);
-        a.href = href;
-        if (href.startsWith('https://')) { a.target = '_blank'; a.rel = 'noopener'; }
+        if (!next) return { text: 'Получить сертификат →', href: 'certificate.html', say: 'Это был последний урок курса.' };
+        const nextN = lessonsList.indexOf(next) + 1;
+        if (isTeacherBrowser()) return { text: `Урок ${nextN} →`, href: next, say: '' };
+        if (isLessonOpen(next)) return { text: `Перейти к уроку ${nextN} →`, href: next, say: `Урок ${nextN} открыт.` };
+        if (!hasPB || !hasTeacherAccess()) return { text: 'Записаться на занятия', href: 'https://t.me/HugeMixProfile', say: 'Чтобы продолжить, запишитесь на занятия — следующие уроки откроет преподаватель.' };
+        const info = PB.lockText(nextN);
+        if (info.kind === 'prev') return { text: 'Решить домашку', href: '#homework', say: `Решите домашку — и урок ${nextN} откроется сам.` };
+        if (info.kind === 'exam') return { text: 'К контрольной', href: `tasks.html#exam=${PB.GATE_EXAM[nextN]}`, say: info.text };
+        return { text: 'Написать преподавателю', href: 'https://t.me/HugeMixProfile', say: info.text };
+    }
+
+    function nextLessonLink(primary) {
+        const step = nextStepAfterQuiz();
+        const a = qel('a', 'qz-btn ' + (primary ? 'qz-btn-primary' : ''), step.text);
+        a.href = step.href;
+        if (step.href.startsWith('https://')) { a.target = '_blank'; a.rel = 'noopener'; }
+        if (step.href === '#homework') a.addEventListener('click', (e) => {
+            const box = document.getElementById('quiz-container');
+            if (box && box._quiz === null) toggleLessonVisibility(true);
+            const hw = document.getElementById('homework');
+            if (hw) { e.preventDefault(); leaveQuizIfOpen(); hw.scrollIntoView({ behavior: 'smooth' }); }
+        });
         return a;
     }
 
+    function leaveQuizIfOpen() {
+        const box = document.getElementById('quiz-container');
+        if (box && document.querySelector('.lesson-content') && document.querySelector('.lesson-content').style.display === 'none') leaveQuiz(box);
+    }
+
     function afterPassText() {
-        const next = nextLessonFile();
-        if (!next) return 'Это был последний урок курса.';
-        if (isLessonOpen(next) && !isTeacherBrowser()) return 'Следующий урок уже открыт.';
-        if (hasTeacherAccess()) return 'Отправьте результат преподавателю — он проверит и откроет следующий урок.';
-        return 'Чтобы продолжить, запишитесь на занятия — преподаватель откроет следующий урок.';
+        return nextStepAfterQuiz().say;
     }
 
     function initQuiz() {
@@ -790,6 +878,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const total = st.questions.length;
         const correct = st.answers.filter(a => a.correct).length;
         saveQuizScore(correct, total);
+        // ошибки запоминаем: они попадут в разминку следующих уроков и в результат для преподавателя
+        const all = quizData[currentPath] || [];
+        st.answers.forEach((a, i) => markMistake(currentPath, all.indexOf(st.questions[i]), !a.correct));
         const passed = correct / total >= QUIZ_PASS;
         if (passed) {
             const progress = safeGetProgress();
@@ -804,7 +895,115 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         box._quiz = null;
         renderQuizResult(box, st, correct, total, passed);
+        renderLessonStatus();
         scrollToQuiz(box);
+    }
+
+    // --- Ошибки в тестах и «Разминка» ---
+    // quiz_mistakes: {'lesson3.html': [номера вопросов]} — вопросы, где ученик ошибся и ещё не исправился.
+    function readMistakes() {
+        try { return JSON.parse(localStorage.getItem('quiz_mistakes')) || {}; } catch (e) { return {}; }
+    }
+    function markMistake(file, index, wrong) {
+        if (index < 0) return;
+        const m = readMistakes();
+        const list = new Set(m[file] || []);
+        if (wrong) list.add(index); else list.delete(index);
+        if (list.size) m[file] = [...list].sort((a, b) => a - b); else delete m[file];
+        try { localStorage.setItem('quiz_mistakes', JSON.stringify(m)); } catch (e) { /* не страшно */ }
+    }
+
+    // В начале урока — 3 вопроса из прошлых уроков: сначала те, где ученик ошибался, потом случайные
+    // (чаще из прошлого урока, реже — из более ранних). Так пройденное не забывается.
+    const WARMUP_SIZE = 3;
+    function pickWarmup(lessonIndex) {
+        const mistakes = readMistakes();
+        const picked = [];
+        const seen = new Set();
+        const add = (file, i, fromMistake) => {
+            const q = (quizData[file] || [])[i];
+            const key = file + ':' + i;
+            if (!q || q.type === 'code' || seen.has(key) || picked.length >= WARMUP_SIZE) return;
+            seen.add(key);
+            picked.push({ file, i, q, fromMistake });
+        };
+        for (let k = lessonIndex - 1; k >= 0; k--) shuffleArray(mistakes[lessonsList[k]] || []).forEach(i => add(lessonsList[k], i, true));
+        for (let guard = 0; picked.length < WARMUP_SIZE && guard < 60; guard++) {
+            const back = Math.random() < 0.5 ? 1 : 1 + Math.floor(Math.random() * Math.min(lessonIndex, 4));
+            const file = lessonsList[Math.max(0, lessonIndex - back)];
+            add(file, Math.floor(Math.random() * (quizData[file] || []).length), false);
+        }
+        return picked;
+    }
+
+    function initWarmup() {
+        const lessonIndex = lessonsList.indexOf(currentPath);
+        const goal = document.querySelector('main .lesson-goal');
+        if (lessonIndex < 1 || lessonLocked || !goal || window.location.hash === '#present') return;
+        const box = qel('section', 'warmup');
+        box.setAttribute('aria-label', 'Разминка: повторение прошлых уроков');
+        goal.after(box);
+        renderWarmupIntro(box, lessonIndex);
+    }
+
+    function renderWarmupIntro(box, lessonIndex) {
+        const fromMistakes = lessonsList.slice(0, lessonIndex).reduce((s, f) => s + (readMistakes()[f] || []).length, 0);
+        box.textContent = '';
+        const head = qel('div', 'warmup-head');
+        head.append(qel('span', 'warmup-badge', 'Разминка'), qel('h2', 'warmup-title', 'Вспомним прошлые уроки'));
+        const p = qel('p', 'warmup-lead', `${WARMUP_SIZE} коротких вопроса — около минуты. ` +
+            (fromMistakes ? 'Сначала — вопросы, в которых вы раньше ошиблись: ответите верно — они уйдут из списка ошибок.' : 'Так пройденное не забудется.'));
+        const actions = qel('div', 'qz-actions');
+        actions.append(qbtn('Начать разминку', 'qz-btn-primary', () => runWarmup(box, lessonIndex, pickWarmup(lessonIndex), 0, 0)));
+        box.append(head, p, actions);
+    }
+
+    function runWarmup(box, lessonIndex, items, k, right) {
+        box.textContent = '';
+        if (k >= items.length) {
+            const head = qel('div', 'warmup-head');
+            head.append(qel('span', 'warmup-badge', 'Разминка'), qel('h2', 'warmup-title', `Верно: ${right} из ${items.length}`));
+            const p = qel('p', 'warmup-lead', right === items.length ? 'Отлично, пройденное вы помните. Переходите к уроку.' :
+                'Вопросы с ошибками вернутся в следующей разминке. Если тема забылась — загляните в прошлый урок.');
+            const actions = qel('div', 'qz-actions');
+            actions.append(qbtn('Ещё 3 вопроса', 'qz-btn-ghost', () => runWarmup(box, lessonIndex, pickWarmup(lessonIndex), 0, 0)));
+            box.append(head, p, actions);
+            return;
+        }
+        const { file, i, q, fromMistake } = items[k];
+        const head = qel('div', 'warmup-head');
+        head.append(qel('span', 'warmup-badge', `Разминка · ${k + 1} из ${items.length}`));
+        const from = qel('a', 'warmup-from', `из урока ${lessonsList.indexOf(file) + 1}` + (fromMistake ? ' · вы здесь ошиблись' : ''));
+        from.href = file;
+        head.append(from);
+        box.append(head, qel('h3', 'warmup-q', q.question));
+        if (q.code) box.append(quizCodeBlock(q.code));
+        const list = qel('div', 'qz-options');
+        const mono = !!q.code && /выведет/i.test(q.question);
+        shuffleArray(q.options.map((text, idx) => ({ text, idx }))).forEach((o, n) => {
+            const b = qel('button', 'qz-option' + (mono ? ' is-mono' : ''));
+            b.type = 'button';
+            b.append(qel('span', 'qz-letter', OPTION_LETTERS[n]), qel('span', 'qz-option-text', o.text), qel('span', 'qz-mark'));
+            b.addEventListener('click', () => {
+                if (list.dataset.done) return;
+                list.dataset.done = '1';
+                const ok = o.idx === q.correct;
+                markMistake(file, i, !ok);
+                list.querySelectorAll('.qz-option').forEach((x, xi) => { x.disabled = true; });
+                [...list.children].forEach(x => { if (x.dataset.idx === String(q.correct)) x.classList.add('is-correct'); });
+                b.classList.add('is-picked');
+                if (!ok) b.classList.add('is-wrong');
+                const fb = qel('div', 'qz-feedback ' + (ok ? 'is-ok' : 'is-bad'));
+                fb.append(qel('strong', 'qz-feedback-title', ok ? 'Верно' : 'Неверно'));
+                if (q.explanation) fb.append(qel('p', 'qz-feedback-text', q.explanation));
+                const actions = qel('div', 'qz-actions');
+                actions.append(qbtn(k + 1 < items.length ? 'Дальше →' : 'Готово', 'qz-btn-primary', () => runWarmup(box, lessonIndex, items, k + 1, right + (ok ? 1 : 0))));
+                box.append(fb, actions);
+            });
+            b.dataset.idx = String(o.idx);
+            list.append(b);
+        });
+        box.append(list);
     }
 
     function scoreRing(percent, passed) {
@@ -1698,6 +1897,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initSyntaxHighlighting();
     initLessonInteractive();
     initQuiz();
+    initWarmup();
+    const hwSection = document.querySelector('.lesson-homework');
+    if (hwSection && !hwSection.id) hwSection.id = 'homework';
     initPresentationMode();
     initDirectQuizLink();
     initTeacherExtras();

@@ -37,10 +37,12 @@ async function newContext(browser, options = {}, openAll = true) {
         if (!fs.existsSync(f)) return route.abort();
         route.fulfill({ body: fs.readFileSync(f), contentType: TYPES[path.extname(f)] || 'application/octet-stream', headers: { 'access-control-allow-origin': '*' } });
     });
+    // Для проверки уроков открываем всё: как будто преподаватель открыл ученику все уроки и контрольные
     if (openAll) await ctx.addInitScript(() => {
         try {
-            if (!localStorage.getItem('unlocked_lessons')) {
-                localStorage.setItem('unlocked_lessons', JSON.stringify(Array.from({ length: 16 }, (_, i) => 'lesson' + (i + 1) + '.html')));
+            if (!localStorage.getItem('pb_access')) {
+                localStorage.setItem('pb_access', JSON.stringify({ v: 3, sid: 'check', name: 'Проверка', note: '', paid: 15,
+                    lessons: Array.from({ length: 16 }, (_, i) => i + 1), tasks: [], exams: [1, 2, 3], replies: {}, at: new Date().toISOString() }));
             }
         } catch (e) { /* about:blank */ }
     });
@@ -51,19 +53,36 @@ function watchErrors(page, where) {
     page.on('pageerror', (e) => fail(where(), 'ошибка JavaScript: ' + e.message));
 }
 
-// Ученик и преподаватель — в разных браузерах (как в жизни), ссылки передаются между ними
+// Ученик и преподаватель — в разных браузерах (как в жизни), ссылки передаются между ними.
+// Проверяем всю схему: оплата → ссылка → урок освоен → следующий открылся сам → результат в кабинете
+// с оценкой → «Нужна оплата» → оплата → следующий урок.
 async function accessFlow(browser, BASE) {
     const T = await (await newContext(browser, {}, false)).newPage();
     const S = await (await newContext(browser, {}, false)).newPage();
     for (const [p, who] of [[T, 'кабинет'], [S, 'ученик']]) { watchErrors(p, () => 'доступ к урокам (' + who + ')'); p.on('dialog', d => d.accept()); }
     const must = (ok, what) => { if (!ok) throw new Error(what); };
+    const goto = async (p, url) => { await p.goto('about:blank'); await p.goto(url); };
+    const isOpen = (n) => S.evaluate((k) => PB.isLessonOpen(k), n);
+    // ученик «прошёл» тест урока и решил его домашку (все задачи или все, кроме одной)
+    const master = (n, percent, skip) => S.evaluate(([k, pct, skipOne]) => {
+        const f = 'lesson' + k + '.html';
+        const q = JSON.parse(localStorage.getItem('quiz_results') || '{}'); q[f] = true;
+        const sc = JSON.parse(localStorage.getItem('quiz_scores') || '{}'); sc[f] = { best: pct, last: pct, attempts: 1 };
+        const solved = JSON.parse(localStorage.getItem('solved_tasks') || '{}');
+        const hw = tasks.filter(t => t.hw && t.lesson === k).map(t => t.id);
+        hw.slice(0, skipOne ? hw.length - 1 : hw.length).forEach(id => { solved[id] = true; });
+        localStorage.setItem('quiz_results', JSON.stringify(q));
+        localStorage.setItem('quiz_scores', JSON.stringify(sc));
+        localStorage.setItem('solved_tasks', JSON.stringify(solved));
+    }, [n, percent, skip]);
 
     await S.goto(BASE + 'lesson1.html');
     must(!(await S.locator('.lesson-lock').count()), 'урок 1 должен быть открыт всем');
+    must(!(await S.locator('.warmup').count()), 'в уроке 1 не должно быть разминки');
     await S.goto(BASE + 'lesson3.html');
     must(await S.locator('.lesson-lock').count() === 1, 'урок 3 без ссылки преподавателя должен быть закрыт');
 
-    // кабинет: PIN, новый ученик с двумя оплаченными уроками → открывается урок 2
+    // кабинет: PIN, новый ученик с двумя оплаченными уроками
     await T.goto(BASE + 'teacher.html');
     await T.fill('#pin', '1234');
     await T.fill('.hub-gate-form input:nth-of-type(2)', '1234');
@@ -75,41 +94,53 @@ async function accessFlow(browser, BASE) {
     await T.waitForSelector('.cab-sendbox a[data-link]');
     const link1 = await T.locator('.cab-sendbox a[data-link]').getAttribute('data-link');
 
-    // ученик открывает ссылку
-    await S.goto(BASE + link1.slice(link1.indexOf('python-basic.html')));
+    // ученик открывает ссылку: урок 2 оплачен, но откроется, когда освоен урок 1
+    await goto(S, BASE + link1.slice(link1.indexOf('python-basic.html')));
     await S.waitForSelector('.my-row');
-    const open1 = await S.evaluate(() => JSON.parse(localStorage.getItem('unlocked_lessons') || '[]'));
-    must(open1.join() === 'lesson1.html,lesson2.html', 'по ссылке должны открыться уроки 1 и 2, а открыто: ' + open1.join(', '));
-    await S.goto(BASE + 'lesson2.html');
-    must(!(await S.locator('.lesson-lock').count()), 'урок 2 после ссылки должен открыться');
+    must(!(await isOpen(2)), 'урок 2 должен открыться только после освоения урока 1');
+    await goto(S, BASE + 'lesson2.html');
+    must(/после урока 1/.test(await S.textContent('.lesson-lock h2')), 'на закрытом уроке 2 должно быть «откроется после урока 1»');
 
-    // ученик «прошёл» урок 1 и отправляет результат
-    await S.evaluate(() => {
-        localStorage.setItem('quiz_results', JSON.stringify({ 'lesson1.html': true }));
-        localStorage.setItem('quiz_scores', JSON.stringify({ 'lesson1.html': { best: 90, attempts: 1 } }));
-    });
-    await S.goto('about:blank');
-    await S.goto(BASE + 'python-basic.html#send');
+    // урок 1 освоен (тест 90%, вся домашка) → урок 2 открылся сам, оценка «Отлично»
+    await master(1, 90, false);
+    must(await isOpen(2), 'после освоения урока 1 урок 2 должен открыться сам');
+    await goto(S, BASE + 'lesson1.html');
+    must(/Отлично/.test(await S.textContent('#lesson-status')), 'в уроке 1 должно быть «Урок освоен — Отлично»');
+    // урок 2: тест 75%, домашка без одной задачи → «Хорошо», урок 3 открылся, урок 4 не оплачен
+    await master(2, 75, true);
+    must(await isOpen(3), 'после освоения урока 2 урок 3 должен открыться сам');
+    must(!(await isOpen(4)), 'урок 4 не оплачен и должен быть закрыт');
+    must(await S.evaluate(() => PB.myState().results[2].grade) === 'good', 'урок 2 должен получить «Хорошо»');
+    await goto(S, BASE + 'lesson3.html');
+    must(await S.locator('.warmup').count() === 1, 'в уроке 3 должна быть разминка');
+    await S.click('.warmup button:has-text("Начать разминку")');
+    await S.locator('.warmup .qz-option').first().click();
+    must(await S.locator('.warmup .qz-feedback').count() === 1, 'разминка должна показать, верен ли ответ');
+    await master(3, 80, false);
+    must(!(await isOpen(4)), 'урок 4 не оплачен — даже после освоения урока 3 он закрыт');
+
+    // ученик отправляет результат
+    await goto(S, BASE + 'python-basic.html#send');
+    await S.fill('#student-name', 'Проверка Ученик');
     await S.waitForFunction(() => (document.querySelector('.send-btn') || { dataset: {} }).dataset.report);
     const report = await S.locator('.send-btn').getAttribute('data-report');
 
-    // преподаватель открывает результат, засчитывает урок 1 и открывает урок 3
-    await T.goto('about:blank');
-    await T.goto(BASE + report.slice(report.indexOf('teacher.html')));
+    // кабинет: новый результат с оценками, ученику нужна оплата
+    await goto(T, BASE + report.slice(report.indexOf('teacher.html')));
     await T.waitForSelector('.cab-review');
-    await T.click('.cab-review button:has-text("Зачесть урок")');
-    await T.waitForSelector('.cab-sendbox');
-    await T.locator('.cab-lrow', { hasText: 'Операторы' }).locator('button:has-text("Открыть")').click();
+    must(/Отлично/.test(await T.textContent('.cab-review')), 'в новом результате должна быть оценка «Отлично» за урок 1');
+    await T.click('.cab-review button:has-text("Посмотрел")');
+    await T.waitForSelector('.cab-profile');
+    must(/Нужна оплата/.test(await T.textContent('.cab-profile')), 'ученик освоил все оплаченные уроки — должно быть «Нужна оплата»');
+
+    // оплата +1 урок → новая ссылка → у ученика открылся урок 4
+    await T.click('button:has-text("+1 урок")');
     await T.waitForSelector('.cab-sendbox a[data-link]');
     const link2 = await T.locator('.cab-sendbox a[data-link]').getAttribute('data-link');
-
-    // ученик видит ответ и новый урок
-    await S.goto('about:blank');
-    await S.goto(BASE + link2.slice(link2.indexOf('python-basic.html')));
+    await goto(S, BASE + link2.slice(link2.indexOf('python-basic.html')));
     await S.waitForSelector('.my-row');
-    const open2 = await S.evaluate(() => JSON.parse(localStorage.getItem('unlocked_lessons') || '[]'));
-    must(open2.includes('lesson3.html'), 'после второй ссылки должен открыться урок 3');
-    must(await S.locator('.my-row', { hasText: 'Введение в Python' }).locator('.my-pill-ok').count() === 1, 'урок 1 у ученика должен быть «Зачтён»');
+    must(await isOpen(4), 'после оплаты и новой ссылки урок 4 должен открыться');
+    must(await S.locator('.my-row', { hasText: 'Введение в Python' }).locator('.my-pill-excellent').count() === 1, 'урок 1 у ученика должен быть «Отлично»');
     await T.context().close();
     await S.context().close();
 }

@@ -5242,3 +5242,44 @@ body.dark-mode .cab-status-open { color: #7dd3fc; }
 .subtabs a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
 .subtabs a.active { opacity: 1; background: #fff; color: var(--accent-color); }
 body.dark-mode .subtabs a.active { background: rgba(255, 255, 255, 0.92); }
+
+/* Статус урока внизу страницы: освоен / что осталось */
+.lesson-send-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.lesson-send.is-done { border-color: rgba(16, 185, 129, 0.45); background: var(--success-bg); }
+.lesson-send.is-done .lesson-send-text strong { color: var(--success-color); }
+
+/* Разминка в начале урока: вопросы из прошлых уроков */
+.warmup { margin: 0 0 28px; padding: 22px 24px; border-radius: 16px; border: 1px dashed rgba(79, 70, 229, 0.45); background: var(--card-bg); }
+.warmup-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: 8px; }
+.warmup-badge { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent-color); background: rgba(79, 70, 229, 0.1); }
+.warmup .warmup-title { margin: 0; font-size: 1.25rem; border: 0; padding: 0; }
+.warmup-lead { margin: 0 0 14px; opacity: 0.85; line-height: 1.6; }
+.warmup-from { font-size: 0.85rem; opacity: 0.7; color: inherit; }
+.warmup .warmup-q { margin: 6px 0 14px; font-size: 1.1rem; line-height: 1.5; }
+.warmup .quiz-code { margin: 0 0 14px; }
+.warmup .qz-feedback { margin-top: 14px; }
+.warmup .qz-actions { margin-top: 14px; }
+@media (max-width: 640px) { .warmup { padding: 18px 16px; } }
+
+/* Автооценка: «Отлично», «В процессе», что осталось */
+.cab-status-excellent, .my-pill-excellent { background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(79, 70, 229, 0.16)); color: var(--success-color); }
+.cab-status-work { background: rgba(14, 165, 233, 0.12); color: #0369a1; }
+body.dark-mode .cab-status-work { color: #7dd3fc; }
+.cab-lrow-main .cab-lrow-todo { color: #b45309; opacity: 1; }
+body.dark-mode .cab-lrow-main .cab-lrow-todo { color: #fbbf24; }
+.cab-rule { margin: -4px 0 12px; font-size: 0.9rem; }
+.cab-result-lesson { padding: 14px 0; border-top: 1px solid rgba(128, 128, 128, 0.18); }
+.cab-result-lesson:first-of-type { border-top: 0; }
+.cab-result-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; }
+.cab-result-head h3 { margin: 0; font-size: 1.05rem; }
+.cab-result-todo { margin: 8px 0 0; font-size: 0.92rem; color: #b45309; }
+body.dark-mode .cab-result-todo { color: #fbbf24; }
+.cab-mistakes { margin-top: 10px; font-size: 0.92rem; }
+.cab-mistakes summary { cursor: pointer; font-weight: 600; }
+.my-row.is-current { border-color: var(--accent-color); box-shadow: 0 8px 22px -16px rgba(79, 70, 229, 0.8); }
+.my-row-main .my-row-hint { color: #b45309; opacity: 1; }
+body.dark-mode .my-row-main .my-row-hint { color: #fbbf24; }
+.my-rule { margin: 12px 0 0; font-size: 0.9rem; }
+.cab-student-nums { align-items: center; gap: 0; }
+.cab-student-nums b { font-size: 1.25rem; }
+.cab-student-main .cab-left { opacity: 0.65; font-size: 0.8rem; margin-top: 2px; }
