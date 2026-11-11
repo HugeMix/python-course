@@ -282,7 +282,7 @@
                 if (res && res.ok) {
                     current = 'students';
                     openStudentId = res.student.id;
-                    notice = { kind: 'ok', text: res.duplicate ? `Этот отчёт от «${res.student.name}» уже был в журнале.` : `Отчёт от «${res.student.name}» сохранён. Ниже — его результаты.` };
+                    notice = { kind: 'ok', text: res.duplicate ? `Этот отчёт от «${res.student.name}» уже был в журнале.` : `Отчёт от «${res.student.name}» сохранён. Результаты — ниже.` };
                 } else if (res && !res.ok) {
                     notice = { kind: 'err', text: 'Не удалось прочитать отчёт: ' + res.error + '. Попросите ученика отправить его ещё раз.' };
                 }
