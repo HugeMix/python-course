@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Урок 7: Функции в Python. Создание функций, аргументы, возврат значений и значения по умолчанию.">
-    <title>Урок 7: Функции в Python | PythonBasic</title>
+        content="Урок 7 курса Python с нуля: функции def, параметры, return, значения по умолчанию, область видимости, *args, lambda и рекурсия. Примеры можно запускать прямо на странице.">
+    <title>Урок 7: Функции | PythonBasic</title>
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Урок 7: Функции в Python | PythonBasic">
-    <meta property="og:description" content="Урок 7: Функции в Python. Создание функций, аргументы, возврат значений и значения по умолчанию.">
+    <meta property="og:title" content="Урок 7: Функции | PythonBasic">
+    <meta property="og:description" content="Урок 7 курса Python с нуля: функции def, параметры, return, значения по умолчанию, область видимости, *args, lambda и рекурсия. Примеры можно запускать прямо на странице.">
     <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
     <link rel="canonical" href="https://hugemix.github.io/python-course/lesson7.html">
     <meta property="og:url" content="https://hugemix.github.io/python-course/lesson7.html">
@@ -42,157 +42,253 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h1>Урок 7: Функции в Python</h1>
-            <p>Изучаем, как создавать и использовать функции для удобства программирования.</p>
+            <h1>Функции</h1>
+            <p>Создаём свои команды: пишем код один раз и вызываем, сколько нужно.</p>
         </div>
     </section>
 
     <main class="container lesson-main">
         <section class="lesson-goal">
             <h2>Цель урока</h2>
-            <p>Научиться создавать функции, передавать в них аргументы, получать результаты и использовать
-                значения по умолчанию.</p>
+            <p>Научиться создавать свои функции через <code>def</code>, передавать им данные через параметры, возвращать результат через <code>return</code>, задавать значения по умолчанию и понимать, где «живут» переменные.</p>
+            <p class="lesson-meta">Время: около 45 минут · 2 упражнения в уроке · тест · 4 задачи на дом</p>
         </section>
 
         <section class="lesson-content">
-            <h2>Что такое функция?</h2>
-            <p>Функция - это именованный блок кода, который выполняет определённую задачу и может быть
-                <strong>вызван в программе несколько раз</strong>. Функции помогают избежать повторения кода
-                (принцип DRY - Don't Repeat Yourself).
-            </p>
+            <h2>Зачем это нужно</h2>
+            <p>Вы уже пользовались готовыми функциями: <code>print()</code>, <code>input()</code>, <code>len()</code>, <code>round()</code>. Каждая — это кусок кода с именем: вызвали по имени — он выполнился. Вам не нужно знать, как <code>len()</code> считает элементы, достаточно написать <code>len(список)</code>.</p>
+            <p>В этом уроке вы научитесь создавать <strong>свои функции</strong>. Это нужно, чтобы:</p>
+            <ul>
+                <li>не повторять один и тот же код в разных местах — написали один раз, вызываете сколько угодно;</li>
+                <li>делить большую программу на понятные части: <code>посчитать_скидку()</code>, <code>показать_меню()</code>, <code>сохранить_результат()</code>;</li>
+                <li>исправлять ошибку в одном месте, а не искать все копии кода по программе.</li>
+            </ul>
 
-            <h2>Создание функции с помощью def</h2>
-            <p>Для создания функции используется ключевое слово <code>def</code>:</p>
-            <pre><code>def greet():
-    print("Привет! Добро пожаловать в Python!")
+            <h2>Первая функция: def</h2>
+            <p>Функция создаётся словом <code>def</code> (от англ. define — «определить»):</p>
+            <ol class="steps">
+                <li>слово <code>def</code>, имя функции и круглые скобки;</li>
+                <li>двоеточие в конце строки;</li>
+                <li>тело функции — команды с отступом 4 пробела.</li>
+            </ol>
+            <pre data-run><code class="language-python">def say_hello():
+    print(&quot;Привет!&quot;)
+    print(&quot;Рад вас видеть&quot;)
 
-greet()  # Вызов функции - выведет приветствие</code></pre>
-            <p>После слова <code>def</code> указывается имя функции, затем круглые скобки <code>()</code>
-                и обязательное двоеточие <code>:</code>. Тело функции пишется с отступом.</p>
+say_hello()
+say_hello()</code></pre>
+            <p>Строки с <code>def</code> только <strong>описывают</strong> функцию — сами по себе они ничего не выводят. Код внутри выполняется, когда функцию <strong>вызывают</strong>: пишут её имя со скобками. Здесь функцию вызвали дважды — и приветствие появилось дважды.</p>
 
-            <h2>Аргументы (параметры) функции</h2>
-            <p>Функция может принимать данные через <strong>аргументы</strong> (они же параметры) и
-                использовать их внутри:</p>
-            <pre><code>def greet(name):
-    print("Привет,", name, "!")
+            <h2>Параметры: данные для функции</h2>
+            <p>Функции можно передавать данные. В скобках при создании пишут <strong>параметры</strong> — имена, под которыми функция получит значения. При вызове в скобках пишут сами значения — <strong>аргументы</strong>:</p>
+            <pre data-run><code class="language-python">def greet(name):
+    print(f&quot;Привет, {name}!&quot;)
 
-greet("Алекс")   # Выведет: Привет, Алекс !
-greet("Мария")   # Выведет: Привет, Мария !</code></pre>
-            <p>Функция с аргументами становится универсальной - одна функция работает для разных данных.</p>
+greet(&quot;Анна&quot;)
+greet(&quot;Максим&quot;)
 
-            <h2>Возвращаемое значение - оператор return</h2>
-            <p>Функция может <strong>возвращать результат</strong> своей работы с помощью оператора
-                <code>return</code>. Этот результат можно сохранить в переменную:
-            </p>
-            <pre><code>def square(number):
-    return number * number
+def show_sum(a, b):
+    print(a, &quot;+&quot;, b, &quot;=&quot;, a + b)
+
+show_sum(2, 3)
+show_sum(10, -4)</code></pre>
+            <p>При вызове <code>greet("Анна")</code> параметр <code>name</code> получает значение «Анна». Аргументы передаются по порядку: в <code>show_sum(2, 3)</code> первое число попадает в <code>a</code>, второе — в <code>b</code>.</p>
+
+            <h2>return: функция возвращает результат</h2>
+            <p>Пока наши функции только печатали. Но чаще функция должна <strong>посчитать и отдать результат</strong>, чтобы программа могла с ним дальше работать: сохранить в переменную, сравнить, передать в другую функцию. Для этого есть <code>return</code>:</p>
+            <pre data-run><code class="language-python">def square(n):
+    return n * n
 
 result = square(5)
-print("Квадрат числа 5 равен", result)  # Выведет: 25</code></pre>
-            <p><strong>Важно:</strong> функция без <code>return</code> автоматически возвращает <code>None</code>
-                - специальный объект «ничего». Это нормально, если функция просто что-то делает, а не считает.</p>
+print(result)
+print(square(3) + square(4))
 
-            <h2>Значения по умолчанию</h2>
-            <p>Параметр функции может иметь <strong>значение по умолчанию</strong>. Если при вызове аргумент
-                не передан, Python подставит это значение автоматически:</p>
-            <pre><code>def greet(name='Гость'):
-    print("Привет,", name, "!")
+if square(7) &gt; 40:
+    print(&quot;Больше сорока&quot;)</code></pre>
+            <p><code>return</code> делает две вещи: отдаёт значение туда, где функцию вызвали, и <strong>сразу завершает</strong> функцию — строки после <code>return</code> уже не выполняются.</p>
+            <div class="callout"><strong>print или return?</strong> <code>print</code> показывает значение на экране, но программа его не получает. <code>return</code> отдаёт значение программе. Если функция что-то считает — почти всегда нужен <code>return</code>. Функция без <code>return</code> возвращает специальное значение <code>None</code> — «ничего».</div>
+            <pre data-run><code class="language-python">def add_print(a, b):
+    print(a + b)
 
-greet()           # Выведет: Привет, Гость !
-greet("Дмитрий") # Выведет: Привет, Дмитрий !</code></pre>
-
-            <h2>Несколько аргументов</h2>
-            <p>Функция может принимать несколько аргументов через запятую:</p>
-            <pre><code>def add(a, b):
+def add_return(a, b):
     return a + b
 
-print(add(3, 7))   # Выведет: 10
-print(add(10, 20)) # Выведет: 30</code></pre>
+x = add_print(2, 3)
+y = add_return(2, 3)
+print(&quot;x =&quot;, x)
+print(&quot;y =&quot;, y)</code></pre>
 
-            <h2>*args и **kwargs</h2>
-            <p><code>*args</code> позволяет принять <strong>произвольное количество позиционных аргументов</strong> — они собираются в кортеж. <code>**kwargs</code> делает то же самое для <strong>именованных аргументов</strong> — они собираются в словарь. Это делает функции очень гибкими.</p>
-            <pre><code># *args — произвольное количество позиционных аргументов
-def sum_all(*args):
-    total = 0
-    for num in args:
-        total += num
-    return total
+            <div class="try-it" data-id="l7-greet">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Функция-приветствие</h3></div>
+                <p>Допишите функцию <code>greet(name)</code>: она должна <strong>возвращать</strong> строку <strong>Привет, ИМЯ!</strong>. Остальная программа уже написана: она читает имя и печатает то, что вернула функция.</p>
+                <textarea class="try-code" aria-label="Ваш код">def greet(name):
+    pass  # замените на return ...
 
-print(sum_all(1, 2, 3))        # 6
-print(sum_all(10, 20, 30, 40)) # 100
 
-# **kwargs — произвольное количество именованных аргументов
-def print_info(**kwargs):
-    for key, value in kwargs.items():
-        print(f"{key}: {value}")
+name = input()
+print(greet(name))
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "Анна", "out": "Привет, Анна!"}, {"in": "Максим", "out": "Привет, Максим!"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Вместо <code>pass</code> напишите <code>return f"Привет, {name}!"</code>. Не используйте <code>print</code> внутри функции — нужно именно вернуть строку.</p></details>
+            </div>
 
-print_info(name="Алекс", age=25, city="Москва")
-# name: Алекс
-# age: 25
-# city: Москва</code></pre>
+            <h2>Несколько return и условия</h2>
+            <p>В функции может быть несколько <code>return</code> — в разных ветках условия. Сработает тот, до которого дойдёт выполнение:</p>
+            <pre data-run><code class="language-python">def grade(score):
+    if score &gt;= 90:
+        return 5
+    if score &gt;= 70:
+        return 4
+    if score &gt;= 50:
+        return 3
+    return 2
 
-            <h2>Область видимости (scope)</h2>
-            <p>Переменные бывают <strong>глобальными</strong> (доступны во всей программе) и <strong>локальными</strong> (существуют только внутри функции). Чтобы изменить глобальную переменную изнутри функции, нужно объявить её с ключевым словом <code>global</code>.</p>
-            <pre><code>x = 10  # Глобальная переменная
+print(grade(95), grade(75), grade(55), grade(10))</code></pre>
+            <p>Здесь не нужен <code>elif</code>: если <code>score &gt;= 90</code>, функция вернёт 5 и закончится — до следующих проверок дело не дойдёт.</p>
 
-def my_func():
-    y = 20  # Локальная переменная (только внутри функции)
-    print(x)  # Можно читать глобальную
-    print(y)  # Локальная доступна
+            <h2>Значения по умолчанию</h2>
+            <p>Параметру можно задать значение по умолчанию. Тогда при вызове его можно не указывать:</p>
+            <pre data-run><code class="language-python">def power(base, exp=2):
+    return base ** exp
 
-my_func()
-# print(y)  # NameError! y не существует снаружи
+print(power(5))
+print(power(2, 10))
+print(power(base=3, exp=3))</code></pre>
+            <p>Последняя строка показывает <strong>именованные аргументы</strong>: можно прямо написать, какому параметру какое значение. Так понятнее, когда параметров много. Параметры со значением по умолчанию всегда пишут <strong>после</strong> обычных.</p>
 
-# Изменение глобальной переменной
-counter = 0
+            <h2>Вернуть несколько значений</h2>
+            <p>Функция может вернуть сразу несколько значений через запятую — Python упакует их в кортеж, а при вызове их удобно разложить по переменным:</p>
+            <pre data-run><code class="language-python">def min_max(numbers):
+    return min(numbers), max(numbers)
 
-def increment():
-    global counter  # Объявляем что работаем с глобальной
-    counter += 1
+low, high = min_max([7, 2, 9, 4])
+print(&quot;Минимум:&quot;, low)
+print(&quot;Максимум:&quot;, high)</code></pre>
 
-increment()
-increment()
-print(counter)  # 2</code></pre>
+            <div class="try-it" data-id="l7-price">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Цена со скидкой</h3></div>
+                <p>Допишите функцию <code>final_price(price, discount=10)</code>: она возвращает цену после скидки в процентах, округлённую до целого (<code>round</code>). Если скидку не указали — она 10%. Программа читает цену и скидку и печатает две строки: цену с указанной скидкой и цену со скидкой по умолчанию.</p>
+                <textarea class="try-code" aria-label="Ваш код">def final_price(price, discount=10):
+    pass
 
-            <h2>Lambda-функции</h2>
-            <p>Lambda — это <strong>анонимная функция</strong>, записанная в одну строку. Она не имеет имени и обычно используется там, где функция нужна только один раз: в сортировке, фильтрации или трансформации данных.</p>
-            <pre><code># Обычная функция
-def square(x):
-    return x ** 2
 
-# То же самое как lambda
-square = lambda x: x ** 2
-print(square(5))  # 25
+price = int(input())
+discount = int(input())
+print(final_price(price, discount))
+print(final_price(price))
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "1000\n25", "out": "750\n900"}, {"in": "500\n0", "out": "500\n450"}, {"in": "199\n50", "out": "100\n179"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Цена после скидки: <code>price * (100 - discount) / 100</code>. Оберните это в <code>round(...)</code> и верните через <code>return</code>.</p></details>
+            </div>
 
-# Lambda полезны для сортировки
-students = [("Алекс", 85), ("Боб", 92), ("Катя", 78)]
-students.sort(key=lambda student: student[1], reverse=True)
-print(students)  # [('Боб', 92), ('Алекс', 85), ('Катя', 78)]
+            <h2>Область видимости</h2>
+            <p>Переменные, созданные внутри функции, — <strong>локальные</strong>: они живут только пока функция работает и снаружи не видны. Это хорошо: функции не мешают друг другу, даже если внутри у них переменные с одинаковыми именами.</p>
+            <pre data-run><code class="language-python">def make_total():
+    total = 100
+    print(&quot;Внутри функции total =&quot;, total)
 
-# sorted() с lambda
-words = ["banana", "apple", "cherry", "date"]
-sorted_words = sorted(words, key=lambda w: len(w))
-print(sorted_words)  # ['date', 'apple', 'banana', 'cherry']</code></pre>
+total = 5
+make_total()
+print(&quot;Снаружи total =&quot;, total)</code></pre>
+            <p>Внутри функции появилась своя переменная <code>total</code>, а внешняя осталась равна 5. Правило хорошего тона: всё, что нужно функции, передавайте через параметры, а результат отдавайте через <code>return</code>.</p>
 
-            <h2>Рекурсия</h2>
-            <p>Рекурсия — это когда функция <strong>вызывает саму себя</strong>. Обязательно нужен <strong>базовый случай</strong> (условие остановки), иначе функция будет вызывать себя бесконечно. Рекурсия хорошо подходит для задач, которые естественно делятся на меньшие подзадачи того же вида.</p>
-            <pre><code># Функция которая вызывает саму себя
-def factorial(n):
-    if n == 0 or n == 1:  # Базовый случай
-        return 1
-    return n * factorial(n - 1)  # Рекурсивный вызов
+            <h2>Ещё три приёма</h2>
+            <p>Эти возможности не обязательно использовать сразу, но они часто встречаются в чужом коде.</p>
+            <p><strong>Любое количество аргументов — *args.</strong> Звёздочка перед параметром собирает все переданные значения в кортеж:</p>
+            <pre data-run><code class="language-python">def total(*numbers):
+    return sum(numbers)
 
-print(factorial(5))  # 120 (5! = 5x4x3x2x1)
-print(factorial(10)) # 3628800
+print(total(1, 2))
+print(total(5, 10, 15, 20))</code></pre>
+            <p><strong>Короткая функция — lambda.</strong> Функцию из одного выражения можно записать в одну строку. Чаще всего так задают правило сортировки:</p>
+            <pre data-run><code class="language-python">words = [&quot;арбуз&quot;, &quot;кот&quot;, &quot;яблоко&quot;, &quot;ёж&quot;]
+words.sort(key=lambda w: len(w))
+print(words)</code></pre>
+            <p><strong>Рекурсия</strong> — функция, которая вызывает саму себя. Важно, чтобы был случай, когда она останавливается, иначе вызовы будут бесконечными:</p>
+            <pre data-run><code class="language-python">def countdown(n):
+    if n == 0:
+        print(&quot;Старт!&quot;)
+        return
+    print(n)
+    countdown(n - 1)
 
-# Числа Фибоначчи
-def fibonacci(n):
-    if n &lt;= 1:
-        return n
-    return fibonacci(n - 1) + fibonacci(n - 2)
+countdown(3)</code></pre>
 
-for i in range(10):
-    print(fibonacci(i), end=" ")  # 0 1 1 2 3 5 8 13 21 34</code></pre>
+            <h2>Частые ошибки новичков</h2>
+            <p>Ошибаться — нормально, так учатся все программисты. Главное — научиться читать сообщение об ошибке: Python подсказывает, что не так и в какой строке.</p>
+            <div class="mistake">
+                <h3>Вызвали до создания</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">say_hi()
+
+def say_hi():
+    print(&quot;Привет&quot;)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">def say_hi():
+    print(&quot;Привет&quot;)
+
+say_hi()</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>NameError: name &#x27;say_hi&#x27; is not defined</code></p>
+                <p>Python читает программу сверху вниз и на первой строке ещё не знает такой функции. Сначала <code>def</code>, потом вызов.</p>
+            </div>
+            <div class="mistake">
+                <h3>print вместо return</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">def add(a, b):
+    print(a + b)
+
+result = add(2, 3) + 1</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">def add(a, b):
+    return a + b
+
+result = add(2, 3) + 1
+print(result)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: unsupported operand type(s) for +: &#x27;NoneType&#x27; and &#x27;int&#x27;</code></p>
+                <p>Функция напечатала 5, но ничего не вернула, то есть вернула <code>None</code>. А к <code>None</code> нельзя прибавить число. Нужен <code>return</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>Не передали аргумент</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">def greet(name):
+    return &quot;Привет, &quot; + name
+
+print(greet())</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">def greet(name=&quot;друг&quot;):
+    return &quot;Привет, &quot; + name
+
+print(greet())</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: greet() missing 1 required positional argument: &#x27;name&#x27;</code></p>
+                <p>Функция ждёт один аргумент, а её вызвали с пустыми скобками. Передайте значение или задайте параметру значение по умолчанию.</p>
+            </div>
+            <div class="mistake">
+                <h3>Локальная переменная снаружи</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">def calc():
+    answer = 42
+
+calc()
+print(answer)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">def calc():
+    answer = 42
+    return answer
+
+result = calc()
+print(result)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>NameError: name &#x27;answer&#x27; is not defined</code></p>
+                <p><code>answer</code> существует только внутри функции. Чтобы получить значение снаружи, верните его через <code>return</code>.</p>
+            </div>
+
+            <h2>Главное за урок</h2>
+            <ul class="lesson-summary">
+                <li>Функция — именованный кусок кода. Создаётся через <code>def имя(параметры):</code>, выполняется при вызове <code>имя(аргументы)</code>.</li>
+                <li><code>return</code> отдаёт результат и завершает функцию. Без <code>return</code> функция возвращает <code>None</code>.</li>
+                <li><code>print</code> показывает значение на экране, <code>return</code> отдаёт его программе — это разные вещи.</li>
+                <li>Параметры по умолчанию: <code>def power(base, exp=2)</code>. Можно вызывать с именами: <code>power(base=3, exp=3)</code>.</li>
+                <li>Переменные внутри функции локальные — снаружи их не видно. Данные передавайте через параметры и <code>return</code>.</li>
+            </ul>
         </section>
 
         <!-- Квиз -->
@@ -201,17 +297,19 @@ for i in range(10):
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>Домашнее задание</h2>
-            <ul>
-                <li>Создай функцию, которая принимает два числа и возвращает их сумму.</li>
-                <li>Напиши функцию, которая принимает число и определяет, является ли оно чётным
-                    (используй оператор <code>%</code>).</li>
-                <li>Создай функцию с параметром по умолчанию - например, функцию приветствия, которая
-                    говорит «Привет, Гость!» если имя не передано.</li>
-                <li>Напиши функцию <code>sum_all(*args)</code>, которая принимает произвольное количество чисел и возвращает их сумму. Проверь её с разным числом аргументов.</li>
-                <li>Напиши функцию с использованием <code>**kwargs</code>, которая принимает любые именованные аргументы и выводит их в формате <code>ключ = значение</code>, по одному на строку.</li>
-                <li>Создай lambda-функцию для сортировки списка слов по их длине (от короткого к длинному) и примени её с помощью <code>sorted()</code>.</li>
-                <li>Реализуй рекурсивную функцию <code>power(base, exp)</code>, которая вычисляет <code>base</code> в степени <code>exp</code> без использования оператора <code>**</code>. Базовый случай: <code>exp == 0</code> возвращает 1.</li>
+            <p>Задачи проверяются автоматически: откройте задачу, напишите решение и нажмите «Проверить». <span class="hw-counter"></span></p>
+            <div class="callout callout-soft">Начиная с этого урока, домашние задачи решаются функциями. В заготовке уже есть строка <code>def …:</code> — напишите тело функции и верните ответ через <code>return</code>. Проверка сама вызовет вашу функцию с разными данными и сравнит результат с правильным.</div>
+            <ul class="hw-tasks">
+                <li data-task="square"><a href="tasks.html#task=square"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Квадрат числа</strong><small>лёгкая · +1 балл</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="fahrenheit"><a href="tasks.html#task=fahrenheit"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Градусы Фаренгейта</strong><small>лёгкая · +1 балл</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="factorial"><a href="tasks.html#task=factorial"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Факториал</strong><small>средняя · +2 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="is_prime"><a href="tasks.html#task=is_prime"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Простое число</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
             </ul>
+            <div class="hw-star">
+                <h3>Задание со звёздочкой: «Калькулятор»</h3>
+                <p>Напишите в <a href="python-online.html">Python Online</a> калькулятор из функций: <code>add(a, b)</code>, <code>sub(a, b)</code>, <code>mul(a, b)</code>, <code>div(a, b)</code> (при делении на ноль пусть возвращает текст «На ноль делить нельзя») и главную функцию <code>calculate(a, op, b)</code>, которая по знаку <code>+ - * /</code> вызывает нужную. Программа спрашивает два числа и знак и печатает ответ.</p>
+                <p class="hub-muted">Эту задачу проверяет преподаватель: отправьте ему код или покажите на занятии.</p>
+            </div>
         </section>
 
         <!-- Навигация -->

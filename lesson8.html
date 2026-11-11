@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Урок 8: Словари и множества в Python. Работа с dict, set и их основными методами.">
+        content="Урок 8 курса Python с нуля: словари dict, get, items, подсчёт частоты, множества set и операции с ними. Примеры можно запускать прямо на странице.">
     <title>Урок 8: Словари и множества | PythonBasic</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="Урок 8: Словари и множества | PythonBasic">
-    <meta property="og:description" content="Урок 8: Словари и множества в Python. Работа с dict, set и их основными методами.">
+    <meta property="og:description" content="Урок 8 курса Python с нуля: словари dict, get, items, подсчёт частоты, множества set и операции с ними. Примеры можно запускать прямо на странице.">
     <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
     <link rel="canonical" href="https://hugemix.github.io/python-course/lesson8.html">
     <meta property="og:url" content="https://hugemix.github.io/python-course/lesson8.html">
@@ -42,128 +42,214 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h1>Урок 8: Словари и множества</h1>
-            <p>Изучаем работу со словарями и множествами в Python.</p>
+            <h1>Словари и множества</h1>
+            <p>Ищем данные не по номеру, а по названию, и убираем повторы.</p>
         </div>
     </section>
 
     <main class="container lesson-main">
         <section class="lesson-goal">
             <h2>Цель урока</h2>
-            <p>Научиться работать со словарями и множествами, использовать их методы для хранения и
-                обработки данных.</p>
+            <p>Научиться хранить данные парами «ключ → значение», безопасно искать, добавлять и удалять их, перебирать словарь циклом, считать частоту значений и работать с множествами: убирать повторы, находить общее и разное.</p>
+            <p class="lesson-meta">Время: около 45 минут · 2 упражнения в уроке · тест · 4 задачи на дом</p>
         </section>
 
         <section class="lesson-content">
-            <h2>Словари (dict) в Python</h2>
-            <p>Словарь - это структура данных, которая хранит <strong>пары ключ-значение</strong> в фигурных
-                скобках. Значение извлекается по ключу, а не по индексу:</p>
-            <pre><code>student = {"имя": "Алекс", "возраст": 20, "город": "Москва"}
-print(student["имя"])      # Выведет: Алекс
-print(student["возраст"])  # Выведет: 20</code></pre>
+            <h2>Зачем это нужно</h2>
+            <p>В списке значения хранятся по номерам: нулевой, первый, второй. Но часто удобнее искать не по номеру, а по названию. В телефонной книге вы ищете номер по имени, в меню кафе — цену по названию блюда, в словаре — перевод по слову.</p>
+            <p>Для этого в Python есть <strong>словари</strong> (dict): они хранят пары «ключ → значение». А ещё в этом уроке — <strong>множества</strong> (set): наборы без повторов, которые умеют быстро находить общее и разное.</p>
 
-            <h2>Методы словарей</h2>
-            <p>Основные методы для работы со словарями:</p>
-            <ul>
-                <li><code>keys()</code> - возвращает все <strong>ключи</strong> словаря.</li>
-                <li><code>values()</code> - возвращает все <strong>значения</strong> словаря.</li>
-                <li><code>items()</code> - возвращает все пары <strong>ключ-значение</strong>.</li>
-                <li><code>get(ключ)</code> - безопасно получает значение. Если ключа нет - возвращает
-                    <code>None</code>, а не ошибку.
-                </li>
-            </ul>
-            <pre><code>student = {"имя": "Алекс", "возраст": 20}
+            <h2>Создаём словарь</h2>
+            <p>Словарь пишут в фигурных скобках. Каждая пара — это ключ, двоеточие и значение; пары разделяют запятыми:</p>
+            <pre data-run><code class="language-python">menu = {&quot;чай&quot;: 50, &quot;кофе&quot;: 120, &quot;булочка&quot;: 70}
 
-print(student.keys())    # dict_keys(['имя', 'возраст'])
-print(student.values())  # dict_values(['Алекс', 20])
+print(menu)
+print(menu[&quot;кофе&quot;])
+print(&quot;Позиций в меню:&quot;, len(menu))</code></pre>
+            <p>Значение достают по ключу в квадратных скобках: <code>menu["кофе"]</code>. Ключи в словаре не повторяются — у каждого ключа одно значение. Ключом обычно бывает строка или число, а значением — что угодно, хоть список.</p>
 
-# Безопасное получение:
-print(student.get("город"))  # Выведет None (ключа нет, но без ошибки!)
-print(student.get("город", "Не указан"))  # Выведет: Не указан</code></pre>
+            <h2>Добавляем, меняем, удаляем</h2>
+            <pre data-run><code class="language-python">stock = {&quot;яблоки&quot;: 10, &quot;груши&quot;: 5}
 
-            <h2>Добавление и удаление элементов словаря</h2>
-            <pre><code>student = {"имя": "Алекс"}
+stock[&quot;бананы&quot;] = 7       # новый ключ — добавится
+stock[&quot;яблоки&quot;] = 12      # старый ключ — значение заменится
+stock[&quot;груши&quot;] -= 2       # можно менять как переменную
+del stock[&quot;бананы&quot;]       # удалить пару
 
-# Добавление / изменение значения по ключу:
-student["возраст"] = 21
+print(stock)</code></pre>
+            <p>Запись <code>словарь[ключ] = значение</code> работает в обе стороны: если такого ключа не было — пара добавится, если был — значение заменится.</p>
 
-# Удаление ключа и его значения:
-del student["возраст"]   # удаляет ключ 'возраст' полностью
+            <h2>Безопасный поиск: in и get</h2>
+            <p>Если попросить ключ, которого нет, Python выдаст ошибку <code>KeyError</code>. Поэтому перед поиском часто проверяют наличие ключа через <code>in</code> или используют метод <code>get</code> — он вернёт значение по умолчанию вместо ошибки:</p>
+            <pre data-run><code class="language-python">menu = {&quot;чай&quot;: 50, &quot;кофе&quot;: 120}
 
-print(student)  # {'имя': 'Алекс'}</code></pre>
+print(&quot;чай&quot; in menu)
+print(&quot;сок&quot; in menu)
 
-            <h2>Множества (set)</h2>
-            <p>Множество - это структура данных, которая хранит <strong>только уникальные элементы</strong>
-                без повторений. Порядок элементов не гарантирован:</p>
-            <pre><code>numbers = {1, 2, 3, 4, 5, 5}
-print(numbers)  # Выведет: {1, 2, 3, 4, 5}  - дублирующийся 5 удалён!</code></pre>
+print(menu.get(&quot;кофе&quot;))
+print(menu.get(&quot;сок&quot;))
+print(menu.get(&quot;сок&quot;, 0))</code></pre>
 
-            <h2>Операции с множествами</h2>
-            <ul>
-                <li><code>add()</code> - добавить элемент.</li>
-                <li><code>remove()</code> - удалить элемент (ошибка если нет).</li>
-                <li><code>union()</code> - объединение двух множеств.</li>
-                <li><code>intersection()</code> - пересечение (общие элементы).</li>
-            </ul>
+            <div class="try-it" data-id="l8-phones">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Телефонная книга</h3></div>
+                <p>В программе уже есть словарь с контактами. Программа получает имя. Выведите номер этого человека, а если такого имени в книге нет — <strong>Нет такого контакта</strong>.</p>
+                <textarea class="try-code" aria-label="Ваш код">phones = {&quot;Аня&quot;: &quot;111-22-33&quot;, &quot;Борис&quot;: &quot;222-33-44&quot;, &quot;Вика&quot;: &quot;333-44-55&quot;}
 
-            <h2>Важно: как создать пустое множество</h2>
-            <p>Нельзя создать пустое множество через <code>{}</code> - это создаст пустой <strong>словарь</strong>!
-                Для пустого множества нужно использовать <code>set()</code>:</p>
-            <pre><code>empty_dict = {}       # Это пустой СЛОВАРЬ
-empty_set = set()     # Это пустое МНОЖЕСТВО</code></pre>
+name = input()
+# выведите номер или сообщение
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "Аня", "out": "111-22-33"}, {"in": "Вика", "out": "333-44-55"}, {"in": "Гоша", "out": "Нет такого контакта"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Проверьте <code>if name in phones:</code> и выведите <code>phones[name]</code>, иначе — сообщение. Или одной строкой: <code>print(phones.get(name, "Нет такого контакта"))</code>.</p></details>
+            </div>
 
             <h2>Перебор словаря</h2>
-            <p>Словарь можно перебирать тремя способами: по ключам, по значениям или по парам ключ-значение. Чаще всего используют <code>items()</code>, чтобы работать сразу и с ключом, и со значением.</p>
-            <pre><code>person = {"имя": "Алекс", "возраст": 25, "город": "Москва"}
+            <p>Цикл <code>for</code> по словарю перебирает ключи. Чтобы получать сразу ключ и значение, используют метод <code>items()</code>:</p>
+            <pre data-run><code class="language-python">grades = {&quot;Аня&quot;: 5, &quot;Борис&quot;: 4, &quot;Вика&quot;: 5}
 
-# Перебор ключей
-for key in person:
-    print(key)
+for name in grades:
+    print(name)
 
-# Перебор значений
-for value in person.values():
-    print(value)
+for name, grade in grades.items():
+    print(f&quot;{name}: {grade}&quot;)
 
-# Перебор пар ключ-значение (чаще всего нужно это)
-for key, value in person.items():
-    print(f"{key}: {value}")</code></pre>
+print(&quot;Все оценки:&quot;, list(grades.values()))
+print(&quot;Средняя:&quot;, sum(grades.values()) / len(grades))</code></pre>
+            <div class="table-wrap">
+                <table class="lesson-table">
+                    <thead><tr><th>Метод</th><th>Что возвращает</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>d.keys()</code></td><td>все ключи</td></tr>
+                        <tr><td><code>d.values()</code></td><td>все значения</td></tr>
+                        <tr><td><code>d.items()</code></td><td>пары (ключ, значение)</td></tr>
+                        <tr><td><code>d.get(k, x)</code></td><td>значение по ключу k, а если его нет — x</td></tr>
+                        <tr><td><code>d.pop(k)</code></td><td>удаляет ключ k и возвращает его значение</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-            <h2>Словарные включения</h2>
-            <p>Словарные включения (dict comprehension) — это компактный способ создать словарь по формуле, аналогично генераторам списков. Синтаксис: <code>{ключ: значение for элемент in последовательность}</code>.</p>
-            <pre><code># Обычный способ
-squares = {}
-for i in range(5):
-    squares[i] = i ** 2
+            <h2>Подсчёт: словарь-счётчик</h2>
+            <p>Одна из самых полезных задач для словаря — посчитать, сколько раз встречается каждое значение. Ключ — то, что считаем, значение — сколько раз встретилось:</p>
+            <pre data-run><code class="language-python">votes = [&quot;кот&quot;, &quot;пёс&quot;, &quot;кот&quot;, &quot;хомяк&quot;, &quot;кот&quot;, &quot;пёс&quot;]
 
-# Словарное включение (dict comprehension)
-squares = {i: i ** 2 for i in range(5)}
-print(squares)  # {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+counts = {}
+for v in votes:
+    counts[v] = counts.get(v, 0) + 1
 
-# С условием
-even_squares = {i: i**2 for i in range(10) if i % 2 == 0}
-print(even_squares)  # {0: 0, 2: 4, 4: 16, 6: 36, 8: 64}
+print(counts)</code></pre>
+            <p><code>counts.get(v, 0)</code> берёт текущее число голосов, а если такого ключа ещё нет — 0. К нему прибавляется 1, и результат кладётся обратно.</p>
 
-# Инвертировать словарь
-original = {"a": 1, "b": 2, "c": 3}
-inverted = {v: k for k, v in original.items()}
-print(inverted)  # {1: 'a', 2: 'b', 3: 'c'}</code></pre>
+            <h2>Множества: наборы без повторов</h2>
+            <p><strong>Множество</strong> (set) — набор значений, где каждое встречается только один раз, а порядок не важен. Его тоже пишут в фигурных скобках, но без двоеточий. Самый частый приём — убрать повторы из списка:</p>
+            <pre data-run><code class="language-python">cities = [&quot;Москва&quot;, &quot;Казань&quot;, &quot;Москва&quot;, &quot;Сочи&quot;, &quot;Казань&quot;]
+unique = set(cities)
 
-            <h2>Практический пример: частота слов</h2>
-            <p>Словари отлично подходят для подсчёта частоты встречаемости элементов. Метод <code>get(ключ, значение_по_умолчанию)</code> позволяет безопасно увеличивать счётчик без проверки на существование ключа.</p>
-            <pre><code>text = "apple banana apple cherry banana apple"
-words = text.split()
+print(unique)
+print(&quot;Разных городов:&quot;, len(unique))
 
-# Считаем частоту каждого слова
-frequency = {}
-for word in words:
-    frequency[word] = frequency.get(word, 0) + 1
+unique.add(&quot;Омск&quot;)
+print(&quot;Сочи&quot; in unique)</code></pre>
+            <p>Порядок элементов множества может отличаться от порядка в исходном списке — множеству порядок не важен. Если нужен порядок, превратите множество в отсортированный список: <code>sorted(unique)</code>.</p>
 
-print(frequency)
-# {'apple': 3, 'banana': 2, 'cherry': 1}
+            <h2>Операции с множествами</h2>
+            <p>Множества умеют находить общие и разные элементы — как круги Эйлера на уроке математики:</p>
+            <pre data-run><code class="language-python">anna = {&quot;футбол&quot;, &quot;шахматы&quot;, &quot;рисование&quot;}
+boris = {&quot;шахматы&quot;, &quot;плавание&quot;, &quot;футбол&quot;}
 
-# Самое частое слово
-most_common = max(frequency, key=frequency.get)
-print(f"Самое частое слово: '{most_common}' ({frequency[most_common]} раз)")</code></pre>
+print(&quot;Общие:&quot;, sorted(anna &amp; boris))
+print(&quot;Все вместе:&quot;, sorted(anna | boris))
+print(&quot;Только у Анны:&quot;, sorted(anna - boris))</code></pre>
+            <div class="table-wrap">
+                <table class="lesson-table">
+                    <thead><tr><th>Знак</th><th>Название</th><th>Результат</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>a &amp; b</code></td><td>пересечение</td><td>элементы, которые есть в обоих</td></tr>
+                        <tr><td><code>a | b</code></td><td>объединение</td><td>все элементы из обоих</td></tr>
+                        <tr><td><code>a - b</code></td><td>разность</td><td>есть в a, но нет в b</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="try-it" data-id="l8-friends">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Общие друзья</h3></div>
+                <p>Программа получает две строки: друзей Ани и друзей Бориса — имена через пробел. Выведите общих друзей через пробел в алфавитном порядке. Если общих нет — <strong>Нет общих друзей</strong>.</p>
+                <textarea class="try-code" aria-label="Ваш код">anna = set(input().split())
+boris = set(input().split())
+
+# найдите общих друзей
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "Вика Гоша Дима\nГоша Ева Вика", "out": "Вика Гоша"}, {"in": "Ира\nКостя", "out": "Нет общих друзей"}, {"in": "Лёва Маша\nМаша Лёва", "out": "Лёва Маша"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Общие — это <code>anna &amp; boris</code>. Отсортируйте через <code>sorted()</code>, а склеить список в строку через пробел можно так: <code>" ".join(список)</code>.</p></details>
+            </div>
+
+            <h2>Словарь из словарей</h2>
+            <p>Значением словаря может быть другой словарь или список. Так хранят сложные данные — например, анкеты учеников:</p>
+            <pre data-run><code class="language-python">students = {
+    &quot;Аня&quot;: {&quot;возраст&quot;: 14, &quot;оценки&quot;: [5, 4, 5]},
+    &quot;Борис&quot;: {&quot;возраст&quot;: 15, &quot;оценки&quot;: [4, 4, 3]},
+}
+
+print(students[&quot;Аня&quot;][&quot;возраст&quot;])
+for name, info in students.items():
+    avg = sum(info[&quot;оценки&quot;]) / len(info[&quot;оценки&quot;])
+    print(name, round(avg, 1))</code></pre>
+
+            <h2>Частые ошибки новичков</h2>
+            <p>Ошибаться — нормально, так учатся все программисты. Главное — научиться читать сообщение об ошибке: Python подсказывает, что не так и в какой строке.</p>
+            <div class="mistake">
+                <h3>Нет такого ключа</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">ages = {&quot;Аня&quot;: 14}
+print(ages[&quot;Петя&quot;])</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">ages = {&quot;Аня&quot;: 14}
+print(ages.get(&quot;Петя&quot;, &quot;нет данных&quot;))</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>KeyError: &#x27;Петя&#x27;</code></p>
+                <p>Ключа «Петя» в словаре нет. Проверьте его через <code>in</code> или используйте <code>get</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>{} — это пустой словарь, а не множество</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">tags = {}
+tags.add(&quot;python&quot;)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">tags = set()
+tags.add(&quot;python&quot;)
+print(tags)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>AttributeError: &#x27;dict&#x27; object has no attribute &#x27;add&#x27;</code></p>
+                <p>Пустые фигурные скобки создают словарь. Пустое множество создаётся только так: <code>set()</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>Обращение к множеству по индексу</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">colors = {&quot;red&quot;, &quot;green&quot;}
+print(colors[0])</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">colors = {&quot;red&quot;, &quot;green&quot;}
+print(sorted(colors)[0])</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: &#x27;set&#x27; object is not subscriptable</code></p>
+                <p>У множества нет порядка, а значит, нет и номеров. Проверяйте наличие через <code>in</code> или превратите множество в список.</p>
+            </div>
+            <div class="mistake">
+                <h3>Список в роли ключа</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">points = {}
+points[[1, 2]] = &quot;A&quot;</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">points = {}
+points[(1, 2)] = &quot;A&quot;
+print(points)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: unhashable type: &#x27;list&#x27;</code></p>
+                <p>Ключ словаря не должен меняться, а список изменяемый. Используйте кортеж — он неизменяемый.</p>
+            </div>
+
+            <h2>Главное за урок</h2>
+            <ul class="lesson-summary">
+                <li>Словарь хранит пары «ключ → значение»: <code>{"чай": 50}</code>. Значение достают по ключу: <code>menu["чай"]</code>.</li>
+                <li><code>d[k] = v</code> добавляет или заменяет, <code>del d[k]</code> удаляет. Нет ключа — <code>KeyError</code>, поэтому используйте <code>in</code> или <code>get</code>.</li>
+                <li>Перебор: <code>for k, v in d.items():</code>. Подсчёт: <code>counts[x] = counts.get(x, 0) + 1</code>.</li>
+                <li>Множество — набор без повторов: <code>set(список)</code> убирает дубликаты. Пустое множество — <code>set()</code>, а не <code>{}</code>.</li>
+                <li><code>&amp;</code> — общие элементы, <code>|</code> — все вместе, <code>-</code> — разница.</li>
+            </ul>
         </section>
 
         <!-- Квиз -->
@@ -172,16 +258,19 @@ print(f"Самое частое слово: '{most_common}' ({frequency[most_com
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>Домашнее задание</h2>
-            <ul>
-                <li>Создай словарь с информацией о себе (имя, возраст, город) и выведи его на экран.</li>
-                <li>Добавь новый ключ в словарь и удали один из существующих с помощью <code>del</code>.</li>
-                <li>Попробуй получить несуществующий ключ через <code>get()</code> - убедись, что
-                    ошибки нет.</li>
-                <li>Создай множество из списка с повторениями и убедись, что дубликаты удалены.</li>
-                <li>Перебери словарь с помощью <code>items()</code> и выведи каждую пару в формате «Ключ → Значение».</li>
-                <li>С помощью словарного включения создай словарь, где ключи — слова из списка <code>["python", "java", "go", "rust"]</code>, а значения — длина каждого слова.</li>
-                <li>Напиши программу, которая принимает строку текста, разбивает её на слова и с помощью словаря подсчитывает частоту каждого слова. Выведи слово, встречающееся чаще всего.</li>
+            <p>Задачи проверяются автоматически: откройте задачу, напишите решение и нажмите «Проверить». <span class="hw-counter"></span></p>
+            <div class="callout callout-soft">Решение пишется внутри готовой заготовки функции. Проверка сама вызовет её с разными данными и сравнит результат с правильным.</div>
+            <ul class="hw-tasks">
+                <li data-task="menu_price"><a href="tasks.html#task=menu_price"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Цена по меню</strong><small>лёгкая · +1 балл</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="unique_dict"><a href="tasks.html#task=unique_dict"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Словарь возрастов</strong><small>средняя · +2 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="invert_dict"><a href="tasks.html#task=invert_dict"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Перевернуть словарь</strong><small>средняя · +2 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="count_words"><a href="tasks.html#task=count_words"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Частота слов</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
             </ul>
+            <div class="hw-star">
+                <h3>Задание со звёздочкой: «Англо-русский словарик»</h3>
+                <p>Сделайте в <a href="python-online.html">Python Online</a> мини-переводчик. В программе — словарь из 10 английских слов с переводом. Пользователь вводит слово, программа печатает перевод или «Не знаю такого слова». Пустая строка — выход. В конце программа показывает, сколько слов перевела и какие слова не знала (без повторов — используйте множество).</p>
+                <p class="hub-muted">Эту задачу проверяет преподаватель: отправьте ему код или покажите на занятии.</p>
+            </div>
         </section>
 
         <!-- Навигация -->

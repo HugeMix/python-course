@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Урок 9: Работа со строками в Python. Методы upper, lower, split, join, replace, strip и форматирование.">
+        content="Урок 9 курса Python с нуля: строки, срезы, upper/lower, find, replace, strip, split и join, f-строки и форматирование. Примеры можно запускать прямо на странице.">
     <title>Урок 9: Работа со строками | PythonBasic</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="Урок 9: Работа со строками | PythonBasic">
-    <meta property="og:description" content="Урок 9: Работа со строками в Python. Методы upper, lower, split, join, replace, strip и форматирование.">
+    <meta property="og:description" content="Урок 9 курса Python с нуля: строки, срезы, upper/lower, find, replace, strip, split и join, f-строки и форматирование. Примеры можно запускать прямо на странице.">
     <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
     <link rel="canonical" href="https://hugemix.github.io/python-course/lesson9.html">
     <meta property="og:url" content="https://hugemix.github.io/python-course/lesson9.html">
@@ -42,145 +42,211 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h1>Урок 9: Работа со строками</h1>
-            <p>Изучаем методы строк, форматирование и полезные приёмы работы с текстом.</p>
+            <h1>Работа со строками</h1>
+            <p>Режем, ищем, заменяем и красиво оформляем текст.</p>
         </div>
     </section>
 
     <main class="container lesson-main">
         <section class="lesson-goal">
             <h2>Цель урока</h2>
-            <p>Научиться работать со строками: изменять регистр, искать, заменять, разделять и форматировать текст.</p>
+            <p>Научиться работать с текстом: брать символы и срезы, менять регистр, искать и заменять, убирать лишние пробелы, разрезать строку на слова и склеивать обратно, проверять состав строки и форматировать вывод в f-строках.</p>
+            <p class="lesson-meta">Время: около 45 минут · 2 упражнения в уроке · тест · 4 задачи на дом</p>
         </section>
 
         <section class="lesson-content">
-            <h2>Основы строк</h2>
-            <p>Строки в Python - это текст в кавычках. Можно использовать одинарные или двойные кавычки:</p>
-            <pre><code>text = "Привет, мир!"
-print(text)
+            <h2>Зачем это нужно</h2>
+            <p>Текст — самые частые данные в программах: имена и пароли, сообщения в чатах, адреса, поисковые запросы, содержимое файлов. Почти любая программа что-то делает с текстом: проверяет, что email содержит «@», убирает лишние пробелы из введённого имени, ищет слово в документе, красиво оформляет чек.</p>
+            <p>Со строками вы уже знакомы. В этом уроке вы научитесь по-настоящему с ними работать: разрезать, искать, заменять и форматировать.</p>
 
-# Многострочная строка - тройные кавычки:
-poem = """Первая строка
-Вторая строка
-Третья строка"""
-print(poem)</code></pre>
+            <h2>Строка — последовательность символов</h2>
+            <p>Строка устроена похоже на список: у каждого символа есть индекс, начиная с нуля. Работают <code>len()</code>, срезы и перебор циклом:</p>
+            <pre data-run><code class="language-python">word = &quot;Программа&quot;
 
-            <h2>Методы изменения регистра</h2>
-            <pre><code>text = "python"
-print(text.upper())       # Верхний регистр: PYTHON
-print(text.lower())       # Нижний регистр: python
-print(text.capitalize())  # Первая буква заглавная: Python</code></pre>
+print(len(word))
+print(word[0], word[-1])
+print(word[:5])
+print(word[::-1])
+
+for ch in &quot;кот&quot;:
+    print(ch * 3)</code></pre>
+            <p>Но есть важное отличие: строку <strong>нельзя изменить</strong>. Нельзя заменить в ней одну букву, как в списке. Все методы строк не меняют исходную строку, а <strong>возвращают новую</strong>.</p>
+
+            <h2>Большие и маленькие буквы</h2>
+            <pre data-run><code class="language-python">name = &quot;аННа сМирнова&quot;
+
+print(name.upper())
+print(name.lower())
+print(name.capitalize())
+print(name.title())
+print(name)</code></pre>
+            <p>Последняя строка показывает: сама <code>name</code> не изменилась. Чтобы сохранить результат, его кладут в переменную: <code>name = name.title()</code>.</p>
+            <p>Это часто используют, чтобы сравнивать без учёта регистра: <code>answer.lower() == "да"</code> сработает и для «Да», и для «ДА».</p>
 
             <h2>Поиск и замена</h2>
-            <pre><code>text = "python"
-print(text.replace("y", "i"))  # Заменяет символы: pithon
+            <div class="table-wrap">
+                <table class="lesson-table">
+                    <thead><tr><th>Метод</th><th>Что делает</th><th>Пример → результат</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>in</code></td><td>есть ли подстрока</td><td><code>"@" in "a@b.ru"</code> → <code>True</code></td></tr>
+                        <tr><td><code>s.count(x)</code></td><td>сколько раз встречается</td><td><code>"банан".count("а")</code> → <code>2</code></td></tr>
+                        <tr><td><code>s.find(x)</code></td><td>индекс первого вхождения или -1</td><td><code>"банан".find("н")</code> → <code>2</code></td></tr>
+                        <tr><td><code>s.replace(a, b)</code></td><td>заменить все a на b</td><td><code>"2-3-4".replace("-", "+")</code> → <code>"2+3+4"</code></td></tr>
+                        <tr><td><code>s.startswith(x)</code></td><td>начинается ли с x</td><td><code>"photo.jpg".startswith("photo")</code> → <code>True</code></td></tr>
+                        <tr><td><code>s.endswith(x)</code></td><td>заканчивается ли на x</td><td><code>"photo.jpg".endswith(".jpg")</code> → <code>True</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <pre data-run><code class="language-python">email = &quot;anna@mail.ru&quot;
 
-sentence = "Я люблю Python"
-print(sentence.find("Python"))   # Возвращает индекс начала: 8
-print("Python" in sentence)      # Проверяет наличие: True</code></pre>
-            <p>Метод <code>replace('что', 'на что')</code> заменяет <strong>все</strong> вхождения первой
-                подстроки на вторую.</p>
+if &quot;@&quot; in email and email.endswith(&quot;.ru&quot;):
+    print(&quot;Похоже на российскую почту&quot;)
 
-            <h2>Длина строки</h2>
-            <pre><code>text = "python"
-print(len(text))  # Длина строки: 6</code></pre>
-            <p>Функция <code>len()</code> - это встроенная функция (не метод!), она возвращает количество
-                символов в строке.</p>
+print(&quot;Позиция @:&quot;, email.find(&quot;@&quot;))
+print(&quot;Логин:&quot;, email[:email.find(&quot;@&quot;)])
 
-            <h2>Разделение и объединение строк</h2>
-            <pre><code>words = "apple,banana,orange".split(",")
-print(words)  # ['apple', 'banana', 'orange']
+text = &quot;Я люблю кошек. Кошки — лучшие!&quot;
+print(text.replace(&quot;кош&quot;, &quot;собак&quot;).replace(&quot;Кош&quot;, &quot;Собак&quot;))</code></pre>
 
-# Объединение списка строк в одну:
-print(" - ".join(words))  # apple - banana - orange</code></pre>
-            <p>Метод <code>split(разделитель)</code> разбивает строку на список подстрок по указанному разделителю.
-                Метод <code>join(список)</code> - обратная операция.</p>
+            <h2>Убираем лишние пробелы</h2>
+            <p>Пользователи часто случайно ставят пробелы в начале или в конце ввода. Метод <code>strip()</code> убирает их с обеих сторон (а заодно и переносы строк):</p>
+            <pre data-run><code class="language-python">raw = &quot;   Максим   &quot;
+print(&quot;[&quot; + raw + &quot;]&quot;)
+print(&quot;[&quot; + raw.strip() + &quot;]&quot;)</code></pre>
 
-            <h2>Очистка строк от лишних пробелов</h2>
-            <p>Метод <code>strip()</code> удаляет пробелы и невидимые символы строго по <strong>краям</strong>
-                строки (начало и конец):</p>
-            <pre><code>messy = "   Привет!   "
-clean = messy.strip()
-print(clean)  # Выведет: Привет!</code></pre>
+            <div class="try-it" data-id="l9-initials">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Фамилия и инициалы</h3></div>
+                <p>Программа получает строку — фамилию, имя и отчество через пробел, например <code>Иванов Иван Петрович</code>. Выведите фамилию и инициалы: <strong>Иванов И. П.</strong></p>
+                <textarea class="try-code" aria-label="Ваш код">full = input()
 
-            <h2>Форматирование строк (f-строки)</h2>
-            <p>Современный и удобный способ вставить переменные в строку - <strong>f-строки</strong>
-                (f-strings). Поставьте букву <code>f</code> перед кавычками и вставляйте переменные
-                в фигурные скобки:</p>
-            <pre><code>name = "Алекс"
-age = 25
-print(f"Привет! Меня зовут {name} и мне {age} лет.")
-# Выведет: Привет! Меня зовут Алекс и мне 25 лет.</code></pre>
+# разрежьте строку на части и соберите ответ
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "Иванов Иван Петрович", "out": "Иванов И. П."}, {"in": "Смирнова Анна Сергеевна", "out": "Смирнова А. С."}, {"in": "Ли Мин Хо", "out": "Ли М. Х."}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p><code>full.split()</code> даст список из трёх слов. Первая буква слова — <code>слово[0]</code>. Соберите ответ f-строкой: <code>f"{parts[0]} {parts[1][0]}. {parts[2][0]}."</code></p></details>
+            </div>
 
-            <h2>Многострочные строки и escape-символы</h2>
-            <p>Тройные кавычки позволяют создавать строки, которые занимают несколько строк кода. Escape-символы — специальные последовательности, задающие невидимые символы внутри строки:</p>
-            <pre><code># Многострочные строки (тройные кавычки)
-poem = """
-Программирование — это искусство,
-Python — язык без барьеров,
-Код — это мысль в чистом виде.
-"""
-print(poem)
+            <h2>Разрезать и склеить: split и join</h2>
+            <p><code>split()</code> разрезает строку на список кусочков. Без аргументов — по пробелам, а можно указать любой разделитель. <code>join()</code> делает обратное: склеивает список строк в одну, вставляя между ними разделитель:</p>
+            <pre data-run><code class="language-python">sentence = &quot;Python это просто&quot;
+words = sentence.split()
+print(words)
+print(&quot;Слов:&quot;, len(words))
 
-# Escape-символы
-print("Первая строка\nВторая строка")  # \n — перенос строки
-print("Колонка 1\tКолонка 2")          # \t — табуляция
-print("Это \"цитата\" в строке")       # \" — кавычка внутри
-print("Путь: C:\\Users\\Documents")    # \\ — обратный слэш</code></pre>
+date = &quot;11.11.2026&quot;
+day, month, year = date.split(&quot;.&quot;)
+print(&quot;Год:&quot;, year)
 
-            <h2>Методы поиска и проверки</h2>
-            <p>Python предоставляет богатый набор методов для поиска подстрок и проверки содержимого строки:</p>
-            <pre><code>text = "Привет, мир! Python — отличный язык."
+print(&quot;-&quot;.join([&quot;2026&quot;, &quot;11&quot;, &quot;11&quot;]))
+print(&quot; + &quot;.join([&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]))</code></pre>
+            <p>Обратите внимание: <code>join</code> вызывается у <strong>разделителя</strong>, а список передаётся в скобках: <code>"-".join(список)</code>. Склеивать можно только строки.</p>
 
-# Поиск
-print(text.find("Python"))       # 14 — индекс начала
-print(text.find("Java"))         # -1 — не найдено
-print("Python" in text)          # True
-print(text.startswith("Привет")) # True
-print(text.endswith("язык."))    # True
-print(text.count("а"))           # Сколько раз встречается "а"
+            <h2>Проверки: из чего состоит строка</h2>
+            <pre data-run><code class="language-python">print(&quot;2026&quot;.isdigit())
+print(&quot;12a&quot;.isdigit())
+print(&quot;Python&quot;.isalpha())
+print(&quot;Hello World&quot;.isalpha())
+print(&quot;   &quot;.isspace())</code></pre>
+            <p><code>isdigit()</code> особенно полезен перед <code>int()</code>: сначала проверить, что пользователь ввёл только цифры, и только потом превращать в число. Пробел — не буква, поэтому <code>"Hello World".isalpha()</code> даёт <code>False</code>.</p>
 
-# Проверка содержимого
-age = "25"
-name = "Алекс"
-print(age.isdigit())      # True — только цифры?
-print(name.isalpha())     # True — только буквы?
-print("abc123".isalnum()) # True — буквы и цифры?</code></pre>
+            <div class="try-it" data-id="l9-password">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Надёжный пароль</h3></div>
+                <p>Программа получает пароль. Он <strong>надёжный</strong>, если в нём не меньше 8 символов и есть хотя бы одна цифра и хотя бы одна буква. Выведите <strong>Надёжный</strong> или <strong>Слабый</strong>.</p>
+                <textarea class="try-code" aria-label="Ваш код">password = input()
 
-            <h2>Форматирование и обработка</h2>
-            <p>Методы <code>join()</code>, <code>split()</code>, <code>strip()</code> и методы выравнивания делают обработку текстовых данных удобной и лаконичной:</p>
-            <pre><code># join() — соединение списка в строку
-words = ["Python", "это", "здорово"]
-sentence = " ".join(words)
-print(sentence)  # Python это здорово
+# проверьте длину, цифры и буквы
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "qwerty123", "out": "Надёжный"}, {"in": "abc12", "out": "Слабый"}, {"in": "12345678", "out": "Слабый"}, {"in": "password", "out": "Слабый"}, {"in": "пароль2026", "out": "Надёжный"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Заведите две переменные-флага: <code>has_digit = False</code> и <code>has_letter = False</code>. В цикле <code>for ch in password:</code> проверяйте <code>ch.isdigit()</code> и <code>ch.isalpha()</code>. В конце — условие с <code>len(password) &gt;= 8 and has_digit and has_letter</code>.</p></details>
+            </div>
 
-# Разделение и очистка
-csv_line = "  Алекс,25,Москва  "
-cleaned = csv_line.strip()  # Убираем пробелы по краям
-parts = cleaned.split(",")  # Разбиваем по запятой
-print(parts)  # ['Алекс', '25', 'Москва']
+            <h2>Форматирование в f-строках</h2>
+            <p>В f-строке после значения можно поставить двоеточие и указать, как его оформить. Самое полезное — количество знаков после точки и ширина колонки:</p>
+            <pre data-run><code class="language-python">price = 1234.5
+print(f&quot;Цена: {price:.2f} руб.&quot;)
+print(f&quot;Скидка: {0.15:.0%}&quot;)
 
-# Выравнивание
-name = "Боб"
-print(name.ljust(10, "."))  # "Боб......."  — влево
-print(name.rjust(10, "."))  # ".......Боб"  — вправо
-print(name.center(10, "-")) # "---Боб----" — по центру</code></pre>
+items = [(&quot;Хлеб&quot;, 45), (&quot;Молоко&quot;, 89), (&quot;Сыр&quot;, 320)]
+for name, cost in items:
+    print(f&quot;{name:&lt;10}{cost:&gt;6} руб.&quot;)</code></pre>
+            <div class="table-wrap">
+                <table class="lesson-table">
+                    <thead><tr><th>Запись</th><th>Что значит</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>{x:.2f}</code></td><td>2 знака после точки</td></tr>
+                        <tr><td><code>{x:.0%}</code></td><td>в процентах</td></tr>
+                        <tr><td><code>{s:&lt;10}</code></td><td>выровнять по левому краю, ширина 10</td></tr>
+                        <tr><td><code>{n:&gt;6}</code></td><td>выровнять по правому краю, ширина 6</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-            <h2>Практический пример: обработка данных</h2>
-            <p>Рассмотрим реальную задачу: нормализация «грязной» строки с данными пользователя — привести имя к нужному виду, извлечь число и очистить название города:</p>
-            <pre><code># Парсинг строки с данными пользователя
-raw_data = "  алеКСАНДр иВАНов,   25 лет,   г. Москва  "
+            <h2>Специальные символы и многострочный текст</h2>
+            <p>Внутри строки обратная косая черта <code>\</code> начинает специальный символ: <code>\n</code> — перенос строки, <code>\t</code> — табуляция, <code>\"</code> — кавычка внутри строки. А текст в тройных кавычках может занимать несколько строк:</p>
+            <pre data-run><code class="language-python">print(&quot;Первая строка\nВторая строка&quot;)
+print(&quot;Имя:\tАнна&quot;)
+print(&quot;Он сказал: \&quot;Привет\&quot;&quot;)
 
-parts = raw_data.split(",")
-name_raw, age_raw, city_raw = parts
+poem = &quot;&quot;&quot;Python — язык простой,
+Учится легко,
+Код читается как текст.&quot;&quot;&quot;
+print(poem)</code></pre>
 
-name = " ".join(word.capitalize() for word in name_raw.strip().split())
-age = int(''.join(filter(str.isdigit, age_raw)))
-city = city_raw.strip().replace("г. ", "")
+            <h2>Частые ошибки новичков</h2>
+            <p>Ошибаться — нормально, так учатся все программисты. Главное — научиться читать сообщение об ошибке: Python подсказывает, что не так и в какой строке.</p>
+            <div class="mistake">
+                <h3>Пытаемся изменить букву</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">word = &quot;кит&quot;
+word[0] = &quot;К&quot;</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">word = &quot;кит&quot;
+word = &quot;К&quot; + word[1:]
+print(word)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: &#x27;str&#x27; object does not support item assignment</code></p>
+                <p>Строки неизменяемы. Соберите новую строку и положите её в ту же переменную.</p>
+            </div>
+            <div class="mistake">
+                <h3>Индекс за концом строки</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">code = &quot;AB&quot;
+print(code[2])</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">code = &quot;AB&quot;
+print(code[-1])</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>IndexError: string index out of range</code></p>
+                <p>В строке из двух символов индексы 0 и 1. Последний символ надёжнее брать как <code>code[-1]</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>Опечатка в названии метода</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">name = &quot;анна&quot;
+print(name.uper())</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">name = &quot;анна&quot;
+print(name.upper())</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>AttributeError: &#x27;str&#x27; object has no attribute &#x27;uper&#x27;</code></p>
+                <p>У строк нет метода <code>uper</code> — Python сообщает, что такого атрибута нет. Проверьте написание: <code>upper</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>join со списком чисел</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">nums = [1, 2, 3]
+print(&quot;-&quot;.join(nums))</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">nums = [1, 2, 3]
+print(&quot;-&quot;.join(str(n) for n in nums))</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: sequence item 0: expected str instance, int found</code></p>
+                <p><code>join</code> склеивает только строки. Сначала превратите числа в строки.</p>
+            </div>
 
-print(f"Имя: {name}")    # Александр Иванов
-print(f"Возраст: {age}") # 25
-print(f"Город: {city}")  # Москва</code></pre>
+            <h2>Главное за урок</h2>
+            <ul class="lesson-summary">
+                <li>Строка — последовательность символов: работают индексы, срезы, <code>len()</code> и перебор <code>for</code>. Изменить строку нельзя — методы возвращают новую.</li>
+                <li><code>upper</code>, <code>lower</code>, <code>title</code> меняют регистр, <code>strip</code> убирает пробелы по краям.</li>
+                <li><code>in</code>, <code>find</code>, <code>count</code>, <code>replace</code>, <code>startswith</code>, <code>endswith</code> — поиск и замена.</li>
+                <li><code>split()</code> режет строку на список, <code>"-".join(список)</code> склеивает обратно.</li>
+                <li>f-строки умеют форматировать: <code>{x:.2f}</code> — два знака после точки. <code>\n</code> — перенос строки.</li>
+            </ul>
         </section>
 
         <!-- Квиз -->
@@ -189,19 +255,19 @@ print(f"Город: {city}")  # Москва</code></pre>
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>Домашнее задание</h2>
-            <ul>
-                <li>Написать программу, которая запрашивает имя и выводит его заглавными буквами с помощью
-                    <code>upper()</code>.
-                </li>
-                <li>Использовать <code>replace()</code> для замены пробелов в строке на подчёркивания.</li>
-                <li>Разделить строку <code>"Я изучаю Python"</code> на отдельные слова с помощью
-                    <code>split()</code>.
-                </li>
-                <li>Написать программу с использованием f-строк, которая выводит информацию о пользователе.</li>
-                <li>Напишите многострочную строку с тройными кавычками, содержащую не менее трёх строф стихотворения или текст заметки, и выведите её на экран.</li>
-                <li>Используя методы <code>isdigit()</code>, <code>isalpha()</code> и <code>isalnum()</code>, напишите функцию, которая проверяет, является ли введённая пользователем строка допустимым логином (только буквы и цифры, без пробелов).</li>
-                <li>Напишите программу, которая выравнивает список имён в таблицу: каждое имя дополняется точками до 20 символов слева, а возраст — до 5 символов справа (используйте <code>ljust()</code> и <code>rjust()</code>).</li>
+            <p>Задачи проверяются автоматически: откройте задачу, напишите решение и нажмите «Проверить». <span class="hw-counter"></span></p>
+            <div class="callout callout-soft">Решение пишется внутри готовой заготовки функции. Проверка сама вызовет её с разными данными и сравнит результат с правильным.</div>
+            <ul class="hw-tasks">
+                <li data-task="shout"><a href="tasks.html#task=shout"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Громкий голос</strong><small>лёгкая · +1 балл</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="reverse"><a href="tasks.html#task=reverse"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Перевернуть текст</strong><small>средняя · +2 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="palindrome"><a href="tasks.html#task=palindrome"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Палиндром</strong><small>средняя · +2 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="caesar"><a href="tasks.html#task=caesar"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Шифр Цезаря</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
             </ul>
+            <div class="hw-star">
+                <h3>Задание со звёздочкой: «Генератор логина»</h3>
+                <p>Напишите программу в <a href="python-online.html">Python Online</a>: пользователь вводит имя и фамилию на русском, а программа предлагает логин — фамилию транслитом, точку и первую букву имени, всё маленькими буквами: «Анна Смирнова» → <code>smirnova.a</code>. Для транслита сделайте словарь «русская буква → латинские»: <code>{"а": "a", "б": "b", "ж": "zh", …}</code>.</p>
+                <p class="hub-muted">Эту задачу проверяет преподаватель: отправьте ему код или покажите на занятии.</p>
+            </div>
         </section>
 
         <!-- Навигация -->

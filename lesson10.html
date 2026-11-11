@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Урок 10: Работа с файлами в Python. Открытие, чтение и запись файлов с помощью open() и with.">
-    <title>Урок 10: Файлы в Python | PythonBasic</title>
+        content="Урок 10 курса Python с нуля: работа с файлами, with open, режимы r/w/a, кодировка utf-8, чтение по строкам, числа в файле и CSV. Примеры можно запускать прямо на странице.">
+    <title>Урок 10: Файлы: запись и чтение | PythonBasic</title>
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Урок 10: Файлы в Python | PythonBasic">
-    <meta property="og:description" content="Урок 10: Работа с файлами в Python. Открытие, чтение и запись файлов с помощью open() и with.">
+    <meta property="og:title" content="Урок 10: Файлы: запись и чтение | PythonBasic">
+    <meta property="og:description" content="Урок 10 курса Python с нуля: работа с файлами, with open, режимы r/w/a, кодировка utf-8, чтение по строкам, числа в файле и CSV. Примеры можно запускать прямо на странице.">
     <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
     <link rel="canonical" href="https://hugemix.github.io/python-course/lesson10.html">
     <meta property="og:url" content="https://hugemix.github.io/python-course/lesson10.html">
@@ -42,157 +42,212 @@
 
     <section class="lesson-title">
         <div class="container">
-            <h1>Урок 10: Файлы в Python</h1>
-            <p>Научимся работать с файлами: читать, записывать и безопасно закрывать их.</p>
+            <h1>Файлы: запись и чтение</h1>
+            <p>Сохраняем данные, чтобы они не пропадали после закрытия программы.</p>
         </div>
     </section>
 
     <main class="container lesson-main">
         <section class="lesson-goal">
             <h2>Цель урока</h2>
-            <p>Понять, как открывать, читать и записывать файлы в Python, и научиться делать это безопасно.</p>
+            <p>Научиться записывать данные в текстовые файлы и читать их обратно: выбирать режим открытия, работать через <code>with open</code>, читать файл по строкам, сохранять числа и разбирать простые таблицы CSV.</p>
+            <p class="lesson-meta">Время: около 45 минут · 2 упражнения в уроке · тест · 4 задачи на дом</p>
         </section>
 
         <section class="lesson-content">
-            <h2>Открытие файла - функция open()</h2>
-            <p>Встроенная функция <code>open()</code> открывает файл и возвращает объект для работы с ним.
-                Принимает имя файла и режим работы:</p>
-            <pre><code>file = open("example.txt", "r")  # "r" = режим чтения
-content = file.read()            # Читаем весь файл в строку
-print(content)
-file.close()                     # ОБЯЗАТЕЛЬНО закрываем файл!</code></pre>
+            <h2>Зачем это нужно</h2>
+            <p>Всё, что программа хранит в переменных, исчезает, как только она закончила работу. Закрыли игру — и рекорд пропал. Чтобы данные сохранялись, их записывают в <strong>файлы</strong>.</p>
+            <p>Файлы нужны постоянно: сохранения в играх, настройки программ, заметки, списки контактов, отчёты и таблицы. В этом уроке вы научитесь записывать данные в текстовые файлы и читать их обратно.</p>
+            <div class="callout callout-soft"><strong>Как это работает на сайте.</strong> Примеры на этой странице создают файлы во временной памяти браузера: после перезагрузки страницы они исчезнут. Когда вы запустите такую же программу на своём компьютере, файл появится в той же папке, где лежит программа.</div>
 
-            <h2>Режимы открытия файлов</h2>
-            <ul>
-                <li><code>"r"</code> - чтение (файл должен существовать)</li>
-                <li><code>"w"</code> - запись (<strong>перезапишет</strong> файл с нуля)</li>
-                <li><code>"a"</code> - дозапись в конец файла (данные сохраняются)</li>
-                <li><code>"x"</code> - создание нового файла (ошибка, если уже существует)</li>
-            </ul>
+            <h2>Записываем и читаем файл</h2>
+            <p>Работа с файлом всегда идёт в три шага: <strong>открыть</strong>, <strong>прочитать или записать</strong>, <strong>закрыть</strong>. В Python для этого используют конструкцию <code>with open(...)</code> — она сама закроет файл, когда блок с отступом закончится:</p>
+            <pre data-run><code class="language-python">with open(&quot;hello.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;Привет, файл!\n&quot;)
+    f.write(&quot;Это вторая строка\n&quot;)
 
-            <h2>Запись в файл</h2>
-            <p>Открываем файл в режиме записи <code>"w"</code> и записываем текст:</p>
-            <pre><code>file = open("example.txt", "w")
-file.write("Привет, мир!\n")
-file.write("Это вторая строка.\n")
-file.close()</code></pre>
+with open(&quot;hello.txt&quot;, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
+    text = f.read()
 
-            <h2>Чтение построчно</h2>
-            <p>Читаем файл построчно - экономно для больших файлов:</p>
-            <pre><code>file = open("example.txt", "r")
-for line in file:
-    print(line.strip())  # strip() убирает лишний перевод строки
-file.close()</code></pre>
+print(text)</code></pre>
+            <p>Разберём строку <code>with open("hello.txt", "w", encoding="utf-8") as f:</code></p>
+            <ol class="steps">
+                <li><code>"hello.txt"</code> — имя файла;</li>
+                <li><code>"w"</code> — режим: write, «запись»;</li>
+                <li><code>encoding="utf-8"</code> — кодировка. Без неё русские буквы на некоторых компьютерах превратятся в «кракозябры» — всегда указывайте её;</li>
+                <li><code>as f</code> — открытый файл будет доступен под именем <code>f</code>.</li>
+            </ol>
+            <p><code>f.write()</code> записывает строку и <strong>не добавляет перенос строки сам</strong> — поэтому в конце мы пишем <code>\n</code>.</p>
 
-            <p>Метод <code>readlines()</code> читает все строки и возвращает их в виде списка:</p>
-            <pre><code>file = open("example.txt", "r")
-lines = file.readlines()
-file.close()
-print(lines)  # ['Привет, мир!\n', 'Это вторая строка.\n']</code></pre>
+            <h2>Режимы открытия</h2>
+            <div class="table-wrap">
+                <table class="lesson-table">
+                    <thead><tr><th>Режим</th><th>Что делает</th><th>Если файла нет</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>"r"</code></td><td>чтение (режим по умолчанию)</td><td>ошибка <code>FileNotFoundError</code></td></tr>
+                        <tr><td><code>"w"</code></td><td>запись: <strong>стирает</strong> старое содержимое</td><td>создаёт новый файл</td></tr>
+                        <tr><td><code>"a"</code></td><td>дозапись в конец, старое сохраняется</td><td>создаёт новый файл</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="callout"><strong>Осторожно с режимом "w".</strong> Он сначала очищает файл. Если нужно добавить строку к уже записанным, используйте <code>"a"</code>.</div>
+            <pre data-run><code class="language-python">with open(&quot;log.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;Программа запущена\n&quot;)
 
-            <h2>Безопасный способ: with open</h2>
-            <p>Конструкция <code>with open()</code> - <strong>рекомендуемый</strong> способ работы с файлами.
-                Файл закрывается <strong>автоматически</strong> по выходу из блока, даже если произошла ошибка:</p>
-            <pre><code>with open("example.txt", "r", encoding="utf-8") as f:
-    content = f.read()
-    print(content)
-# Файл автоматически закрывается здесь!</code></pre>
+with open(&quot;log.txt&quot;, &quot;a&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;Пользователь вошёл\n&quot;)
+    f.write(&quot;Пользователь вышел\n&quot;)
 
-            <p>Писать <code>file.close()</code> вручную ненадёжно - при ошибке файл может остаться
-                «открытым» в памяти. Блок <code>with open(...) as f:</code> решает эту проблему полностью.</p>
+with open(&quot;log.txt&quot;, encoding=&quot;utf-8&quot;) as f:
+    print(f.read())</code></pre>
 
-            <h2>Кодировка - параметр encoding</h2>
-            <p>При работе с файлами, содержащими русский текст, всегда указывайте кодировку
-                <code>encoding="utf-8"</code>, чтобы символы читались и записывались корректно:
-            </p>
-            <pre><code>with open("data.txt", "w", encoding="utf-8") as f:
-    f.write("Привет, это русский текст!")</code></pre>
+            <h2>Чтение по строкам</h2>
+            <p>Обычно файл обрабатывают строка за строкой. Цикл <code>for</code> по файлу выдаёт его строки по очереди. У каждой строки в конце есть невидимый перенос <code>\n</code> — его убирают методом <code>strip()</code>:</p>
+            <pre data-run><code class="language-python">with open(&quot;pets.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;кот\nпёс\nхомяк\n&quot;)
 
-            <h2>Запись и дозапись в файл</h2>
-            <p>Режим <code>"w"</code> каждый раз создаёт файл заново, стирая предыдущее содержимое. Режим <code>"a"</code> добавляет данные в конец, не трогая уже записанное:</p>
-            <pre><code># Запись нескольких строк
-with open("students.txt", "w", encoding="utf-8") as f:
-    students = ["Алекс", "Боб", "Катя", "Дима"]
-    for student in students:
-        f.write(student + "\n")  # \n — перенос строки
+with open(&quot;pets.txt&quot;, encoding=&quot;utf-8&quot;) as f:
+    for line in f:
+        print(repr(line), &quot;→&quot;, line.strip())</code></pre>
+            <p><code>repr()</code> показывает строку «как есть», вместе с <code>\n</code>. Если не убрать перенос, при выводе через <code>print</code> между строками появятся лишние пустые строки.</p>
 
-# Дозапись (не удаляя существующих)
-with open("students.txt", "a", encoding="utf-8") as f:
-    f.write("Маша\n")
+            <div class="try-it" data-id="l10-shopping">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Список покупок</h3></div>
+                <p>Программа получает число N, а потом N покупок. Запишите их в файл <code>shopping.txt</code> — каждую с новой строки. Затем откройте файл, прочитайте и выведите покупки с номерами: <strong>1. хлеб</strong>, <strong>2. молоко</strong> и так далее.</p>
+                <textarea class="try-code" aria-label="Ваш код">n = int(input())
 
-# Читаем результат
-with open("students.txt", "r", encoding="utf-8") as f:
-    content = f.read()
-print(content)</code></pre>
+with open(&quot;shopping.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    for i in range(n):
+        pass  # запишите покупку в файл
 
-            <h2>Работа с CSV-данными</h2>
-            <p>Модуль <code>csv</code> из стандартной библиотеки Python позволяет легко читать и записывать данные в формате CSV (таблицы с разделителем-запятой), который понимают Excel и большинство баз данных:</p>
-            <pre><code>import csv
+# прочитайте файл и выведите покупки с номерами
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "2\nхлеб\nмолоко", "out": "1. хлеб\n2. молоко"}, {"in": "3\nсыр\nчай\nяблоки", "out": "1. сыр\n2. чай\n3. яблоки"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Запись: <code>f.write(input() + "\n")</code>. Чтение: заведите счётчик <code>num = 1</code>, в цикле <code>for line in f:</code> печатайте <code>f"{num}. {line.strip()}"</code> и увеличивайте счётчик.</p></details>
+            </div>
 
-# Запись CSV
-data = [
-    ["Имя", "Возраст", "Оценка"],
-    ["Алекс", "20", "95"],
-    ["Боб", "22", "88"],
-    ["Катя", "19", "92"]
-]
+            <h2>Числа в файле</h2>
+            <p>В текстовом файле всё хранится как текст. Поэтому числа при записи превращают в строку (<code>str()</code>), а при чтении — обратно в число (<code>int()</code> или <code>float()</code>):</p>
+            <pre data-run><code class="language-python">scores = [120, 340, 95, 410]
 
-with open("students.csv", "w", newline="", encoding="utf-8") as f:
-    writer = csv.writer(f)
-    writer.writerows(data)
+with open(&quot;scores.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    for s in scores:
+        f.write(str(s) + &quot;\n&quot;)
 
-# Чтение CSV
-with open("students.csv", "r", encoding="utf-8") as f:
-    reader = csv.reader(f)
-    for row in reader:
-        print(", ".join(row))</code></pre>
+loaded = []
+with open(&quot;scores.txt&quot;, encoding=&quot;utf-8&quot;) as f:
+    for line in f:
+        loaded.append(int(line))
 
-            <h2>Работа с путями (модуль os)</h2>
-            <p>Модуль <code>os</code> позволяет проверять существование файлов, получать текущую директорию и формировать пути корректно на любой операционной системе:</p>
-            <pre><code>import os
+print(&quot;Прочитали:&quot;, loaded)
+print(&quot;Рекорд:&quot;, max(loaded))</code></pre>
+            <p>Ещё два удобных способа прочитать файл: <code>f.read().split()</code> — сразу список всех слов или чисел-строк, и <code>f.readlines()</code> — список всех строк.</p>
 
-# Проверить существование файла
-if os.path.exists("myfile.txt"):
-    print("Файл существует")
+            <div class="try-it" data-id="l10-sum">
+                <div class="try-head"><span class="try-badge">Попробуйте сами</span><h3>Сумма чисел из файла</h3></div>
+                <p>Первая часть программы уже записала в файл <code>numbers.txt</code> числа — по одному на строке. Допишите вторую часть: прочитайте файл и выведите две строки: <strong>Чисел: N</strong> и <strong>Сумма: S</strong>.</p>
+                <textarea class="try-code" aria-label="Ваш код"># эта часть записывает файл — не меняйте её
+with open(&quot;numbers.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    for x in input().split():
+        f.write(x + &quot;\n&quot;)
+
+# прочитайте numbers.txt и посчитайте
+</textarea>
+                <script type="application/json" class="try-cases">[{"in": "5 10 15", "out": "Чисел: 3\nСумма: 30"}, {"in": "-4 7", "out": "Чисел: 2\nСумма: 3"}, {"in": "100", "out": "Чисел: 1\nСумма: 100"}]</script>
+                <details class="try-hint"><summary>Подсказка</summary><p>Откройте файл на чтение и соберите числа в список: <code>numbers.append(int(line))</code>. Потом выведите <code>len(numbers)</code> и <code>sum(numbers)</code>.</p></details>
+            </div>
+
+            <h2>Таблицы: формат CSV</h2>
+            <p>CSV — простой формат таблиц: каждая строка файла — строка таблицы, значения разделены запятыми. Такие файлы открываются в Excel и Google Таблицах. Прочитать CSV можно уже знакомым <code>split(",")</code>:</p>
+            <pre data-run><code class="language-python">with open(&quot;class.csv&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;Аня,5\nБорис,4\nВика,5\n&quot;)
+
+with open(&quot;class.csv&quot;, encoding=&quot;utf-8&quot;) as f:
+    for line in f:
+        name, grade = line.strip().split(&quot;,&quot;)
+        print(f&quot;{name} получил(а) {grade}&quot;)</code></pre>
+            <p>Для сложных таблиц (например, когда внутри значений тоже бывают запятые) в Python есть готовый модуль <code>csv</code> — о модулях вы узнаете в уроке 12.</p>
+
+            <h2>Есть ли файл?</h2>
+            <p>Если открыть на чтение файл, которого нет, программа упадёт. Проверить заранее можно функцией <code>os.path.exists()</code> из модуля <code>os</code>:</p>
+            <pre data-run><code class="language-python">import os
+
+if os.path.exists(&quot;settings.txt&quot;):
+    print(&quot;Настройки найдены&quot;)
 else:
-    print("Файл не найден")
+    print(&quot;Файла настроек нет — создаём новый&quot;)
+    with open(&quot;settings.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+        f.write(&quot;theme=dark\n&quot;)
 
-# Получить текущую директорию
-current_dir = os.getcwd()
-print(f"Текущая папка: {current_dir}")
+print(os.path.exists(&quot;settings.txt&quot;))</code></pre>
+            <p>Запустите пример дважды: во второй раз файл уже будет существовать. Другой способ — перехватить ошибку через <code>try/except</code>, этому посвящён следующий урок.</p>
 
-# Создать путь безопасно (на любой ОС)
-path = os.path.join("папка", "подпапка", "файл.txt")
-print(path)  # папка/подпапка/файл.txt (Linux) или папка\подпапка\файл.txt (Windows)
+            <h2>Частые ошибки новичков</h2>
+            <p>Ошибаться — нормально, так учатся все программисты. Главное — научиться читать сообщение об ошибке: Python подсказывает, что не так и в какой строке.</p>
+            <div class="mistake">
+                <h3>Файла нет</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">with open(&quot;notes.txt&quot;, encoding=&quot;utf-8&quot;) as f:
+    print(f.read())</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">with open(&quot;notes.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;Заметка\n&quot;)
+with open(&quot;notes.txt&quot;, encoding=&quot;utf-8&quot;) as f:
+    print(f.read())</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>FileNotFoundError: [Errno 44] No such file or directory: &#x27;notes.txt&#x27;</code></p>
+                <p>Файла с таким именем нет. Проверьте имя и папку или сначала создайте файл режимом <code>"w"</code>. На вашем компьютере номер ошибки будет другим — <code>[Errno 2]</code>, смысл тот же.</p>
+            </div>
+            <div class="mistake">
+                <h3>Записываем число</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">with open(&quot;score.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(100)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">with open(&quot;score.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(str(100))</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>TypeError: write() argument must be str, not int</code></p>
+                <p><code>write</code> принимает только строки. Превратите число в строку: <code>str(100)</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>Пишем в файл, открытый для чтения</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">with open(&quot;a.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;1\n&quot;)
+with open(&quot;a.txt&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;2\n&quot;)</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">with open(&quot;a.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;1\n&quot;)
+with open(&quot;a.txt&quot;, &quot;a&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;2\n&quot;)</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>io.UnsupportedOperation: not writable</code></p>
+                <p>Без режима файл открывается только для чтения. Чтобы добавить строку, откройте его в режиме <code>"a"</code>.</p>
+            </div>
+            <div class="mistake">
+                <h3>Читаем после закрытия</h3>
+                <div class="mistake-grid">
+                    <div><span class="mistake-label mistake-label-bad">Так нельзя</span><pre><code class="language-python">with open(&quot;a.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;текст&quot;)
+with open(&quot;a.txt&quot;, encoding=&quot;utf-8&quot;) as f:
+    pass
+print(f.read())</code></pre></div>
+                    <div><span class="mistake-label mistake-label-good">Правильно</span><pre><code class="language-python">with open(&quot;a.txt&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;текст&quot;)
+with open(&quot;a.txt&quot;, encoding=&quot;utf-8&quot;) as f:
+    print(f.read())</code></pre></div>
+                </div>
+                <p class="mistake-error"><span>Python скажет:</span> <code>ValueError: I/O operation on closed file.</code></p>
+                <p>Когда блок <code>with</code> закончился, файл уже закрыт. Всё чтение и запись должны быть внутри блока, с отступом.</p>
+            </div>
 
-# Список файлов в директории
-files = os.listdir(".")
-print(files)</code></pre>
-
-            <h2>Практический пример: дневник</h2>
-            <p>Соединим всё изученное в небольшом приложении-дневнике, которое сохраняет записи с датой и временем в текстовый файл:</p>
-            <pre><code>import datetime
-import os
-
-DIARY_FILE = "diary.txt"
-
-def add_entry(text):
-    now = datetime.datetime.now()
-    date_str = now.strftime("%d.%m.%Y %H:%M")
-
-    with open(DIARY_FILE, "a", encoding="utf-8") as f:
-        f.write(f"\n[{date_str}]\n{text}\n")
-    print("Запись добавлена!")
-
-def read_diary():
-    if not os.path.exists(DIARY_FILE):
-        print("Дневник пуст")
-        return
-    with open(DIARY_FILE, "r", encoding="utf-8") as f:
-        print(f.read())
-
-add_entry("Сегодня изучил работу с файлами в Python!")
-read_diary()</code></pre>
+            <h2>Главное за урок</h2>
+            <ul class="lesson-summary">
+                <li>Файл открывают через <code>with open(имя, режим, encoding="utf-8") as f:</code> — после блока он закроется сам.</li>
+                <li><code>"r"</code> — читать, <code>"w"</code> — записать заново (старое стирается), <code>"a"</code> — дописать в конец.</li>
+                <li><code>f.write(строка)</code> не ставит перенос сам — добавляйте <code>\n</code>. Записывать можно только строки.</li>
+                <li><code>for line in f:</code> читает файл по строкам; <code>line.strip()</code> убирает перенос в конце.</li>
+                <li>Числа хранятся в файле как текст: при записи — <code>str()</code>, при чтении — <code>int()</code>.</li>
+            </ul>
         </section>
 
         <!-- Квиз -->
@@ -201,17 +256,19 @@ read_diary()</code></pre>
         <!-- Домашнее задание -->
         <section class="lesson-homework">
             <h2>Домашнее задание</h2>
-            <ul>
-                <li>Создай файл <code>data.txt</code> и запиши в него несколько строк с помощью конструкции
-                    <code>with open()</code>.
-                </li>
-                <li>Напиши код, который читает этот файл и выводит его содержимое.</li>
-                <li>Добавь новые строки в файл без удаления старых данных (режим <code>"a"</code>).</li>
-                <li>Используй <code>readlines()</code> и выведи только третью строку файла.</li>
-                <li>Создай CSV-файл со списком из пяти товаров (название, цена, количество) и выведи содержимое на экран, используя модуль <code>csv</code>.</li>
-                <li>Напиши программу, которая с помощью <code>os.path.exists()</code> проверяет наличие файла, и если файл не найден — создаёт его с заголовком.</li>
-                <li>Реализуй простой счётчик запусков программы: при каждом запуске читай число из файла <code>counter.txt</code>, увеличивай на 1 и записывай обратно. Выводи сообщение «Запуск №N».</li>
+            <p>Задачи проверяются автоматически: откройте задачу, напишите решение и нажмите «Проверить». <span class="hw-counter"></span></p>
+            <div class="callout callout-soft">Решение пишется внутри готовой заготовки функции. Проверка сама вызовет её с разными данными и сравнит результат с правильным.</div>
+            <ul class="hw-tasks">
+                <li data-task="save_and_read"><a href="tasks.html#task=save_and_read"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Записать и прочитать</strong><small>лёгкая · +1 балл</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="file_word_count"><a href="tasks.html#task=file_word_count"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Слова в файле</strong><small>средняя · +2 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="file_lines"><a href="tasks.html#task=file_lines"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Запись и чтение файла</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
+                <li data-task="file_max_number"><a href="tasks.html#task=file_max_number"><span class="hw-check" aria-hidden="true"></span><span class="hw-main"><strong>Максимум из файла</strong><small>сложная · +3 балла</small></span><span class="hw-status">Не решена</span></a></li>
             </ul>
+            <div class="hw-star">
+                <h3>Задание со звёздочкой: «Дневник»</h3>
+                <p>Напишите в <a href="python-online.html">Python Online</a> программу-дневник. Она показывает меню: «1 — написать запись, 2 — показать все записи, 0 — выход». Запись добавляется в конец файла <code>diary.txt</code> вместе с номером (например, «Запись 3: сегодня решил 5 задач»). Пункт 2 выводит все записи, а если файла ещё нет — «Дневник пуст».</p>
+                <p class="hub-muted">Эту задачу проверяет преподаватель: отправьте ему код или покажите на занятии.</p>
+            </div>
         </section>
 
         <!-- Навигация -->
