@@ -2194,5 +2194,165 @@ except AssertionError as e:
 except Exception as e:
     print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
         `
+    },
+    {
+        id: "fx_text_stats",
+        title: "Статистика текста",
+        difficulty: "medium",
+        lesson: 16,
+        hw: false,
+        exam: 4,
+        desc: "<p>Программа получает одну строку текста. Слова разделены пробелами, на концах слов могут стоять знаки <code>. , ! ?</code> — их не учитывайте. Выведите три строки:</p><ul><li><code>Слов: N</code> — сколько всего слов;</li><li><code>Уникальных слов: K</code> — без учёта регистра: «Кот» и «кот» — одно слово;</li><li><code>Самое длинное: слово</code> — маленькими буквами; если таких несколько — то, что встретилось первым.</li></ul><p>Темы: строки (урок 9), множества (урок 8), циклы (урок 5).</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">Кот видит кота, а кот видит мышь!</code></div><div><span>Вывод</span><code class=\"io-box\">Слов: 7\nУникальных слов: 5\nСамое длинное: видит</code></div></div>",
+        startCode: "text = input()\n\n# напишите решение здесь\n",
+        kind: "io",
+        cases: [{"in": "Кот видит кота, а кот видит мышь!", "out": "Слов: 7\nУникальных слов: 5\nСамое длинное: видит"}, {"in": "Учиться программировать интересно и полезно", "out": "Слов: 5\nУникальных слов: 5\nСамое длинное: программировать"}, {"in": "Да да ДА нет.", "out": "Слов: 4\nУникальных слов: 2\nСамое длинное: нет"}]
+    },
+    {
+        id: "fx_report",
+        title: "Ведомость успеваемости",
+        difficulty: "medium",
+        lesson: 16,
+        hw: false,
+        exam: 4,
+        desc: "<p>Напишите функцию <code>report(grades)</code>. Она получает словарь «имя → список оценок» и возвращает список строк <code>\"Имя: средний балл\"</code>. Средний балл округлите до одного знака: <code>round(x, 1)</code>.</p><ul><li>Сначала — ученики с самым высоким средним баллом; при равном балле — по алфавиту.</li><li>Ученики без оценок идут в конце, по алфавиту, в виде <code>\"Имя: нет оценок\"</code>.</li></ul><p>Темы: функции (урок 7), словари (урок 8), сортировка с <code>key</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">report({&quot;Анна&quot;: [5, 4, 5], &quot;Борис&quot;: [3, 4], &quot;Вера&quot;: []})</code></div><div><span>Результат</span><code class=\"io-box\">[&#x27;Анна: 4.7&#x27;, &#x27;Борис: 3.5&#x27;, &#x27;Вера: нет оценок&#x27;]</code></div></div>",
+        startCode: "def report(grades):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert report({"Анна": [5, 4, 5], "Борис": [3, 4], "Вера": [5, 5]}) == ["Вера: 5.0", "Анна: 4.7", "Борис: 3.5"], "Ожидалось ['Вера: 5.0', 'Анна: 4.7', 'Борис: 3.5']: от лучшего среднего к худшему"
+    assert report({"Яна": [4], "Иван": [4]}) == ["Иван: 4.0", "Яна: 4.0"], "При одинаковом балле — по алфавиту: ['Иван: 4.0', 'Яна: 4.0']"
+    assert report({"Олег": [], "Анна": [5]}) == ["Анна: 5.0", "Олег: нет оценок"], "Ученик без оценок — в конце: 'Олег: нет оценок'"
+    assert report({}) == [], "Для пустого словаря — пустой список"
+    __task_passed__ = True
+    print("✅ Ведомость составлена верно!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция report называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "fx_parse_numbers",
+        title: "Числа из строки",
+        difficulty: "medium",
+        lesson: 16,
+        hw: false,
+        exam: 4,
+        desc: "<p>Напишите функцию <code>parse_numbers(text)</code>. Она получает строку с числами через запятую и возвращает пару <code>(числа, ошибки)</code>: список целых чисел, которые удалось прочитать, и сколько частей оказались не числами.</p><ul><li>Пробелы вокруг чисел не мешают: <code>\" 7 \"</code> — это 7.</li><li>Пустые части (две запятые подряд, пустая строка) пропускайте — это не ошибка.</li><li>Используйте <code>try-except</code>: пусть <code>int()</code> сам скажет, что строка — не целое число.</li></ul><p>Темы: строки (урок 9), обработка ошибок (урок 11).</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">parse_numbers(&quot;10, 20, abc, 30&quot;)</code></div><div><span>Результат</span><code class=\"io-box\">([10, 20, 30], 1)</code></div></div>",
+        startCode: "def parse_numbers(text):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert __uses_node__("Try"), "Используйте try-except: пусть int() сам скажет, что строка — не число"
+    assert parse_numbers("10, 20, abc, 30") == ([10, 20, 30], 1), "Для '10, 20, abc, 30' ожидалось ([10, 20, 30], 1)"
+    assert parse_numbers("1,2,,3") == ([1, 2, 3], 0), "Пустая часть между запятыми — не ошибка: ([1, 2, 3], 0)"
+    assert parse_numbers("x, y") == ([], 2), "Для 'x, y' ожидалось ([], 2)"
+    assert parse_numbers("") == ([], 0), "Для пустой строки ожидалось ([], 0)"
+    assert parse_numbers(" -5 , 7.5, 8") == ([-5, 8], 1), "7.5 — не целое число: для ' -5 , 7.5, 8' ожидалось ([-5, 8], 1)"
+    __task_passed__ = True
+    print("✅ Все числа прочитаны, ошибки посчитаны!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция parse_numbers называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "fx_account",
+        title: "Банковский счёт",
+        difficulty: "hard",
+        lesson: 16,
+        hw: false,
+        exam: 4,
+        desc: "<p>Напишите класс <code>Account</code> — банковский счёт.</p><ul><li><code>Account(owner, balance=0)</code> — владелец и начальный баланс; в объекте есть атрибуты <code>owner</code>, <code>balance</code> и <code>history</code> — пустой список операций.</li><li><code>deposit(amount)</code> — пополнить: баланс растёт, в историю добавляется <code>(\"пополнение\", amount)</code>.</li><li><code>withdraw(amount)</code> — снять: баланс уменьшается, в историю — <code>(\"снятие\", amount)</code>.</li><li>Если сумма 0 или меньше, или денег на счёте не хватает — вызовите <code>raise ValueError(...)</code>; баланс и история при этом не меняются.</li></ul><p>Темы: классы (урок 13), обработка ошибок (урок 11), списки (урок 6).</p><p class=\"io-title\">Пример:</p><code class=\"io-box\">a = Account(&quot;Анна&quot;)\na.deposit(500)\na.withdraw(200)\na.balance  # 300\na.history  # [(&#x27;пополнение&#x27;, 500), (&#x27;снятие&#x27;, 200)]</code>",
+        startCode: "class Account:\n    def __init__(self, owner, balance=0):\n        # напишите решение здесь\n        pass\n",
+        testCode: `
+try:
+    a = Account("Анна")
+    assert a.owner == "Анна" and a.balance == 0 and a.history == [], "Новый счёт: owner = 'Анна', balance = 0, history = []"
+    a.deposit(500)
+    a.withdraw(200)
+    assert a.balance == 300, f"После +500 и −200 баланс должен быть 300, а получилось {a.balance}"
+    assert a.history == [("пополнение", 500), ("снятие", 200)], f"history должен быть [('пополнение', 500), ('снятие', 200)], а получилось {a.history}"
+    b = Account("Борис", 100)
+    assert b.balance == 100, "Начальный баланс передаётся вторым аргументом: Account('Борис', 100)"
+    ok = False
+    try:
+        b.withdraw(150)
+    except ValueError:
+        ok = True
+    assert ok, "Снять больше, чем есть на счёте, нельзя: нужна ошибка ValueError"
+    assert b.balance == 100 and b.history == [], "Неудачное снятие не должно менять баланс и историю"
+    ok = False
+    try:
+        b.deposit(0)
+    except ValueError:
+        ok = True
+    assert ok, "Пополнить на 0 (или меньше) нельзя: нужна ошибка ValueError"
+    __task_passed__ = True
+    print("✅ Счёт работает как в настоящем банке!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что класс Account называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "fx_deadline",
+        title: "Сколько до дедлайна",
+        difficulty: "medium",
+        lesson: 16,
+        hw: false,
+        exam: 4,
+        desc: "<p>Напишите функцию <code>deadline_status(deadline, today)</code>. Обе даты — строки вида <code>\"ДД.ММ.ГГГГ\"</code>. Функция возвращает:</p><ul><li><code>\"сегодня\"</code> — если срок сегодня;</li><li><code>\"завтра\"</code> — если завтра;</li><li><code>\"через N дн.\"</code> — если до срока больше одного дня;</li><li><code>\"просрочено на N дн.\"</code> — если срок прошёл.</li></ul><p>Считайте дни через <code>datetime</code>: тогда переход через месяц и год посчитается сам.</p><p>Темы: дата и время (урок 14), условия (урок 4), f-строки.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">deadline_status(&quot;15.11.2026&quot;, &quot;11.11.2026&quot;)\ndeadline_status(&quot;09.11.2026&quot;, &quot;11.11.2026&quot;)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;через 4 дн.&#x27;\n&#x27;просрочено на 2 дн.&#x27;</code></div></div>",
+        startCode: "from datetime import datetime\n\n\ndef deadline_status(deadline, today):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert deadline_status("15.11.2026", "11.11.2026") == "через 4 дн.", "До 15.11.2026 от 11.11.2026 — «через 4 дн.»"
+    assert deadline_status("11.11.2026", "11.11.2026") == "сегодня", "Срок в тот же день — «сегодня»"
+    assert deadline_status("12.11.2026", "11.11.2026") == "завтра", "Срок на следующий день — «завтра»"
+    assert deadline_status("01.01.2027", "25.12.2026") == "через 7 дн.", "Через Новый год: от 25.12.2026 до 01.01.2027 — «через 7 дн.»"
+    assert deadline_status("09.11.2026", "11.11.2026") == "просрочено на 2 дн.", "Срок 09.11.2026, сегодня 11.11.2026 — «просрочено на 2 дн.»"
+    assert deadline_status("01.03.2028", "28.02.2028") == "через 2 дн.", "2028 — високосный год: от 28.02 до 01.03 — 2 дня"
+    __task_passed__ = True
+    print("✅ Дедлайны считаются без ошибок!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция deadline_status называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "fx_top_customers",
+        title: "Лучшие покупатели",
+        difficulty: "hard",
+        lesson: 16,
+        hw: false,
+        exam: 4,
+        desc: "<p>Магазин хранит заказы в JSON: список объектов <code>{\"customer\": имя, \"items\": [{\"price\": цена, \"qty\": количество}, …]}</code>. Один покупатель может сделать несколько заказов.</p><p>Напишите функцию <code>top_customers(json_text, n)</code>. Она возвращает список из <code>n</code> покупателей, которые потратили больше всех, в виде пар <code>(имя, сумма)</code>: от большей суммы к меньшей, при равной сумме — по алфавиту. Если покупателей меньше <code>n</code> — верните всех.</p><p>Темы: JSON (урок 16), словари (урок 8), функции (урок 7), сортировка.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">top_customers(&#x27;[{&quot;customer&quot;: &quot;Анна&quot;, &quot;items&quot;: [{&quot;price&quot;: 100, &quot;qty&quot;: 2}]}, {&quot;customer&quot;: &quot;Борис&quot;, &quot;items&quot;: [{&quot;price&quot;: 50, &quot;qty&quot;: 3}]}]&#x27;, 1)</code></div><div><span>Результат</span><code class=\"io-box\">[(&#x27;Анна&#x27;, 200)]</code></div></div>",
+        startCode: "import json\n\n\ndef top_customers(json_text, n):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    data = '[{"customer": "Анна", "items": [{"price": 100, "qty": 2}]}, {"customer": "Борис", "items": [{"price": 50, "qty": 1}, {"price": 30, "qty": 5}]}, {"customer": "Анна", "items": [{"price": 70, "qty": 1}]}, {"customer": "Вера", "items": []}]'
+    assert top_customers(data, 2) == [("Анна", 270), ("Борис", 200)], "Ожидалось [('Анна', 270), ('Борис', 200)]: у Анны два заказа, их суммы складываются"
+    assert top_customers(data, 5) == [("Анна", 270), ("Борис", 200), ("Вера", 0)], "Если покупателей меньше n — верните всех, Вера с суммой 0 тоже в списке"
+    tie = '[{"customer": "Яна", "items": [{"price": 10, "qty": 1}]}, {"customer": "Иван", "items": [{"price": 5, "qty": 2}]}]'
+    assert top_customers(tie, 2) == [("Иван", 10), ("Яна", 10)], "При равной сумме — по алфавиту: [('Иван', 10), ('Яна', 10)]"
+    assert top_customers("[]", 3) == [], "Для пустого списка заказов — пустой список"
+    __task_passed__ = True
+    print("✅ Лучшие покупатели найдены!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция top_customers называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
     }
 ];

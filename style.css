@@ -5283,3 +5283,44 @@ body.dark-mode .my-row-main .my-row-hint { color: #fbbf24; }
 .cab-student-nums { align-items: center; gap: 0; }
 .cab-student-nums b { font-size: 1.25rem; }
 .cab-student-main .cab-left { opacity: 0.65; font-size: 0.8rem; margin-top: 2px; }
+
+/* Профиль ученика на «Моих уроках» */
+.my-profile-head { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 16px; }
+.my-profile-who { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.my-profile-who h2 { margin: 0; }
+.my-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.my-avatar-lg { width: 84px; height: 84px; }
+.my-avatar-text { display: inline-flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; background: linear-gradient(135deg, #4f46e5, #7c3aed); font-size: 1.6rem; }
+.my-profile-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.my-profile-stats > div { display: flex; flex-direction: column; padding: 12px 14px; border-radius: 12px; background: var(--bg-color); }
+.my-profile-stats strong { font-size: 1.2rem; }
+.my-profile-stats span { font-size: 0.82rem; opacity: 0.7; }
+.my-profile .task-progress { display: flex; flex-direction: column; gap: 6px; }
+.my-profile .task-progress .hub-bar { margin-top: 0; }
+.my-profile .hub-note { margin-top: 14px; }
+.my-profile-edit { margin-top: 16px; padding: 14px 16px; border-radius: 12px; border: 1px dashed rgba(79, 70, 229, 0.45); }
+.my-profile-edit summary { cursor: pointer; font-weight: 700; color: var(--accent-color); }
+.my-profile-edit p { margin: 10px 0; }
+.my-profile-form { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.my-profile-fields { display: flex; flex-direction: column; gap: 10px; flex: 1 1 240px; min-width: 0; }
+.my-profile-fields .hub-input { max-width: 360px; }
+.my-profile-fields > .hub-btn { align-self: flex-start; }
+.my-profile-lock { margin: 12px 0 0; font-size: 0.9rem; }
+
+/* Финиш: итоговый экзамен, условия сертификата */
+.my-checklist { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.my-checklist li { display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; margin: 0; }
+.my-checklist li::before { display: none; }
+.my-check { width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; border: 2px solid rgba(128, 128, 128, 0.4); display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; color: #fff; }
+.my-checklist li.is-done .my-check { background: var(--success-color); border-color: var(--success-color); }
+.my-checklist li.is-done { opacity: 0.75; }
+.my-finish .my-list { margin-bottom: 14px; }
+.my-cert-ready { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 16px 18px; border-radius: 12px; background: var(--success-bg); }
+.my-cert-ready > div { display: flex; flex-direction: column; gap: 2px; }
+.my-row-project { border-color: rgba(16, 185, 129, 0.5); background: rgba(16, 185, 129, 0.04); }
+.cab-cert .my-checklist { margin-bottom: 14px; }
+.cab-cert-issued { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; padding: 14px 16px; border-radius: 12px; background: var(--success-bg); }
+.cab-profile-reset { margin-top: 14px; }
+@media (max-width: 720px) {
+    .my-profile-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

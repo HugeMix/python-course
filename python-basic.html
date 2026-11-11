@@ -45,13 +45,13 @@
         </div>
     </section>
 
-    <!-- Баннер завершения курса (показывается только когда все уроки пройдены) -->
+    <!-- Баннер завершения курса (показывается, когда преподаватель выдал сертификат) -->
     <div id="course-completion-banner" style="display:none; background:linear-gradient(135deg,#4f46e5,#7c3aed); color:white; padding:32px 20px; text-align:center;">
         <div class="container">
             <h2 style="font-size:1.6rem; margin-bottom:8px;">Вы прошли весь курс!</h2>
-            <p style="opacity:0.9; margin-bottom:20px;">Поздравляем! Все 16 уроков пройдены. Получите сертификат и посмотрите, куда двигаться дальше.</p>
+            <p style="opacity:0.9; margin-bottom:20px;">Поздравляем! Все уроки, контрольные, проекты и итоговый экзамен сданы — сертификат выдан. Откройте его и посмотрите, куда двигаться дальше.</p>
             <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-                <a href="certificate.html" style="background:white; color:#4f46e5; padding:12px 24px; border-radius:10px; text-decoration:none; font-weight:700;">Получить сертификат</a>
+                <a href="certificate.html" style="background:white; color:#4f46e5; padding:12px 24px; border-radius:10px; text-decoration:none; font-weight:700;">Открыть сертификат</a>
                 <a href="next-steps.html" style="background:rgba(255,255,255,0.2); color:white; padding:12px 24px; border-radius:10px; text-decoration:none; font-weight:700; border:2px solid rgba(255,255,255,0.5);">Что дальше?</a>
             </div>
         </div>
@@ -146,13 +146,24 @@
             }
             let closed = null;
             for (let k = 2; k <= PB.LESSON_COUNT; k++) if (!state.open.has(k)) { closed = k; break; }
-            if (!closed) return { title: 'Курс пройден!', text: 'Все уроки освоены. Отправьте результат преподавателю и получите сертификат.', btn: ['Получить сертификат', 'certificate.html'] };
-            const info = PB.lockText(closed, state);
-            if (info.kind === 'exam') {
-                const k = state.gate[closed];
-                return { title: `Сдайте контрольную ${k}`, text: `Решите 4 задачи из 5 — и откроется урок ${closed}. Решено: ${state.exams[k].done} из 5.`, btn: ['К контрольной', 'tasks.html#exam=' + k] };
+            if (!closed) {
+                // все уроки освоены: итоги модуля 3, итоговый экзамен, сертификат
+                const left = [1, 2, 3].find(k => !state.exams[k].passed || !state.projects[k].passed);
+                if (left) return moduleStep(left, state, 'и откроется итоговый экзамен');
+                if (!state.exams[4].passed) return { title: 'Итоговый экзамен', text: `Последний шаг перед сертификатом: решите ${state.exams[4].need} задач из ${state.exams[4].total} по всему курсу. Решено: ${state.exams[4].done}.`, btn: ['К экзамену', 'tasks.html#exam=4'] };
+                if (access && access.cert) return { title: 'Курс пройден!', text: `Сертификат № ${access.cert.no} выдан. Его можно распечатать или сохранить в PDF.`, btn: ['Открыть сертификат', 'certificate.html'] };
+                return { title: 'Экзамен сдан — осталось получить сертификат', text: 'Отправьте результат преподавателю: он проверит и выдаст сертификат. Затем откройте новую ссылку от него.', btn: ['Отправить результат', '#send'] };
             }
+            const info = PB.lockText(closed, state);
+            if (info.kind === 'exam') return moduleStep(state.gate[closed], state, `и откроется урок ${closed}`);
             return { title: 'Оплаченные уроки освоены!', text: 'Отправьте результат преподавателю и напишите ему, чтобы продолжить: после оплаты следующий урок откроется.', btn: ['Отправить результат', '#send'] };
+        }
+
+        // Итоги модуля: контрольная и проект — что ещё не сдано
+        function moduleStep(k, state, then) {
+            const ex = state.exams[k], pr = state.projects[k];
+            if (pr.total && !pr.passed) return { title: pr.title, text: `Итог модуля ${k}: соберите программу из ${pr.total} шагов. Сделано шагов: ${pr.done}. Потом — контрольная ${k}, ${then}.`, btn: ['К проекту', 'tasks.html#project=' + k] };
+            return { title: `Сдайте контрольную ${k}`, text: `Решите ${ex.need} задачи из ${ex.total} — ${then}. Решено: ${ex.done}.`, btn: ['К контрольной', 'tasks.html#exam=' + k] };
         }
 
         function pill(kind, text) { return el('span', { class: 'my-pill my-pill-' + kind, text }); }
@@ -176,16 +187,124 @@
 
         function examRow(k, state, access) {
             const ex = state.exams[k];
+            const final = k === 4;
             const open = PB.isTeacherBrowser() || ex.open;
             const last = PB.EXAM_LESSONS[k][1];
-            const [kind, status] = !open ? ['off', access ? `После урока ${last}` : 'Откроет преподаватель']
-                : ex.passed ? ['ok', 'Зачтена'] : ex.done ? ['progress', `Решено ${ex.done} из 5`] : ['new', 'Открыта'];
+            const [kind, status] = !open ? ['off', !access ? 'Откроет преподаватель' : final ? 'В конце курса' : `После урока ${last}`]
+                : ex.passed ? ['ok', final ? 'Сдан' : 'Зачтена'] : ex.done ? ['progress', `Решено ${ex.done} из ${ex.total}`] : ['new', final ? 'Открыт' : 'Открыта'];
             const r = PB.EXAM_LESSONS[k];
             const nextLesson = Object.keys(state.gate).find(n => state.gate[n] === k);
+            const about = final ? `${ex.total} задач по всему курсу, зачёт — ${ex.need} решённых. Нужен для сертификата`
+                : `${ex.total} задач по урокам ${r[0]}–${r[1]}, зачёт — ${ex.need} решённые` + (nextLesson ? `. Нужна, чтобы перейти к уроку ${nextLesson}` : '');
             return el('li', { class: 'my-row my-row-exam' + (open ? '' : ' is-locked') }, pill(kind, status),
-                el('div', { class: 'my-row-main' }, el('strong', { text: `Контрольная ${k}` }),
-                    el('small', { text: `5 задач по урокам ${r[0]}–${r[1]}, зачёт — 4 решённые` + (nextLesson ? `. Нужна, чтобы перейти к уроку ${nextLesson}` : '') })),
+                el('div', { class: 'my-row-main' }, el('strong', { text: PB.EXAMS[k].title }), el('small', { text: about })),
                 el('div', { class: 'my-row-actions' }, open ? el('a', { class: 'hub-btn' + (ex.passed ? ' hub-btn-ghost' : ' hub-btn-primary'), href: 'tasks.html#exam=' + k, text: 'Задачи' }) : null));
+        }
+
+        function projectRow(k, state, access) {
+            const pr = state.projects[k];
+            if (!pr.total) return null;
+            const open = PB.isTeacherBrowser() || pr.open;
+            const [kind, status] = !open ? ['off', access ? `После урока ${PB.PROJECTS[k].after}` : 'Откроет преподаватель']
+                : pr.passed ? ['ok', 'Готов'] : pr.done ? ['progress', `Шаг ${pr.done + 1} из ${pr.total}`] : ['new', 'Открыт'];
+            return el('li', { class: 'my-row my-row-exam my-row-project' + (open ? '' : ' is-locked') }, pill(kind, status),
+                el('div', { class: 'my-row-main' }, el('strong', { text: pr.title }),
+                    el('small', { text: `Мини-проект модуля ${k}: настоящая программа из ${pr.total} шагов, каждый проверяется автоматически` })),
+                el('div', { class: 'my-row-actions' }, open ? el('a', { class: 'hub-btn' + (pr.passed ? ' hub-btn-ghost' : ' hub-btn-primary'), href: 'tasks.html#project=' + k, text: 'Проект' }) : null));
+        }
+
+        // --- Профиль: фото ставится один раз, имя — из ссылки преподавателя ---
+        // Фото уменьшаем до квадрата 240×240, чтобы оно занимало мало места в браузере
+        function photoFromFile(file) {
+            return new Promise((resolve, reject) => {
+                if (!file || !/^image\//.test(file.type)) return reject(new Error('Выберите файл с фотографией'));
+                const img = new Image();
+                img.onload = () => {
+                    const size = 240, side = Math.min(img.width, img.height);
+                    const c = document.createElement('canvas');
+                    c.width = c.height = size;
+                    c.getContext('2d').drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, size, size);
+                    URL.revokeObjectURL(img.src);
+                    resolve(c.toDataURL('image/jpeg', 0.85));
+                };
+                img.onerror = () => reject(new Error('Не получилось открыть фото'));
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        function avatar(photo, name, cls) {
+            if (photo && /^data:image\/(jpeg|png);base64,/.test(photo)) return el('img', { class: 'my-avatar ' + (cls || ''), src: photo, alt: 'Фото' });
+            const ini = String(name || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
+            return el('span', { class: 'my-avatar my-avatar-text ' + (cls || ''), text: ini });
+        }
+
+        function profileCard(access, state, states) {
+            const profile = PB.readProfile() || {};
+            const name = PB.profileName();
+            const locked = PB.profileLocked();
+            const card = el('section', { class: 'hub-card my-profile' });
+            const done = states.filter(x => x.r.mastered).length;
+            const excellent = states.filter(x => x.r.grade === 'excellent').length;
+            const exams = [1, 2, 3].filter(k => state.exams[k].passed).length;
+            const head = el('div', { class: 'my-profile-head' }, avatar(profile.photo, name, 'my-avatar-lg'),
+                el('div', { class: 'my-profile-who' },
+                    el('h2', { text: name ? `Здравствуйте, ${name.split(' ')[0]}!` : 'Мой профиль' }),
+                    el('span', { class: 'hub-muted', text: [name, profile.startedAt ? 'учится с ' + new Date(profile.startedAt).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) : ''].filter(Boolean).join(' · ') })));
+            card.append(head);
+            card.append(el('div', { class: 'my-profile-stats' },
+                el('div', {}, el('strong', { text: `${done} из ${PB.LESSON_COUNT}` }), el('span', { text: 'уроков освоено' })),
+                el('div', {}, el('strong', { text: String(excellent) }), el('span', { text: 'на «Отлично»' })),
+                el('div', {}, el('strong', { text: `${exams} из 3` }), el('span', { text: 'контрольных сдано' })),
+                el('div', {}, el('strong', { text: access && access.cert ? 'выдан' : state.certReady ? 'ждёт выдачи' : 'впереди' }), el('span', { text: 'сертификат' }))));
+            card.append(el('div', { class: 'task-progress' },
+                el('div', { class: 'hub-bar' }, el('div', { class: 'hub-bar-fill', style: `width:${Math.round(done / PB.LESSON_COUNT * 100)}%` })),
+                el('span', { class: 'hub-muted', text: state.paid ? `оплачено до урока ${state.paidTo}` : 'урок 1 — бесплатно' })));
+            if (access && access.note) card.append(el('blockquote', { class: 'hub-note' }, el('span', { class: 'hub-note-label', text: 'Сообщение преподавателя' }), access.note));
+
+            // заполнить профиль: фото (и имя, если преподаватель его не прислал) — один раз
+            if (!locked && !PB.isTeacherBrowser()) {
+                const nameIn = access && access.name ? null : el('input', { class: 'hub-input', type: 'text', maxlength: '60', placeholder: 'Имя и фамилия', value: profile.name || '' });
+                const file = el('input', { type: 'file', accept: 'image/*', hidden: true });
+                const preview = el('div', { class: 'my-photo-preview' }, avatar(profile.photo, name, 'my-avatar-lg'));
+                let photo = profile.photo || '';
+                const msg = el('p', { class: 'hub-error', role: 'alert' });
+                file.addEventListener('change', () => photoFromFile(file.files[0]).then(p => {
+                    photo = p; preview.textContent = ''; preview.append(avatar(p, name, 'my-avatar-lg')); msg.textContent = '';
+                }).catch(e => { msg.textContent = e.message; }));
+                const save = el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: 'Сохранить профиль', onclick: () => {
+                    const n = nameIn ? nameIn.value.trim() : access.name;
+                    if (!n) { msg.textContent = 'Напишите имя и фамилию.'; if (nameIn) nameIn.focus(); return; }
+                    if (!photo) { msg.textContent = 'Выберите фото.'; return; }
+                    if (!confirm('Профиль сохраняется один раз: потом имя и фото поменять нельзя (только через преподавателя). Сохранить?')) return;
+                    if (!PB.saveProfile({ name: n, photo })) { msg.textContent = 'Браузер не дал сохранить фото — попробуйте другое, поменьше.'; return; }
+                    render(null);
+                } });
+                card.append(el('details', { class: 'my-profile-edit', open: !profile.savedAt },
+                    el('summary', { text: profile.savedAt ? 'Изменить профиль (разрешил преподаватель)' : 'Заполните профиль: фото и имя для сертификата' }),
+                    el('p', { class: 'hub-muted', text: access && access.name ? `Имя для сертификата — «${access.name}» (его вписал преподаватель). Добавьте фото: оно будет в профиле и на сертификате.` : 'Имя и фото будут в профиле и на сертификате. Сохраняются один раз.' }),
+                    el('div', { class: 'my-profile-form' }, preview,
+                        el('div', { class: 'my-profile-fields' }, nameIn,
+                            el('button', { class: 'hub-btn', type: 'button', text: 'Выбрать фото', onclick: () => file.click() }), file,
+                            el('div', { class: 'hub-actions' }, save), msg))));
+            } else if (locked) {
+                card.append(el('p', { class: 'hub-muted my-profile-lock', text: 'Профиль сохранён. Чтобы поменять имя или фото, напишите преподавателю.' }));
+            }
+            return card;
+        }
+
+        // Финиш курса: итоговый экзамен и сертификат
+        function finishCard(state, access) {
+            const box = el('section', { class: 'hub-card my-finish' }, el('h2', { text: 'Финиш: экзамен и сертификат' }));
+            box.append(el('ul', { class: 'my-list' }, examRow(4, state, access)));
+            if (access && access.cert) {
+                box.append(el('div', { class: 'my-cert-ready' },
+                    el('div', {}, el('strong', { text: `Сертификат № ${access.cert.no} выдан` }), el('span', { class: 'hub-muted', text: 'Его можно распечатать или сохранить в PDF.' })),
+                    el('a', { class: 'hub-btn hub-btn-primary', href: 'certificate.html', text: 'Открыть сертификат' })));
+            } else {
+                box.append(el('p', { class: 'hub-muted', text: 'Сертификат выдаёт преподаватель, когда выполнено всё из списка:' }),
+                    el('ul', { class: 'my-checklist' }, PB.certChecklist(state).map(i => el('li', { class: i.done ? 'is-done' : '' }, el('span', { class: 'my-check', 'aria-hidden': 'true', text: i.done ? '✓' : '' }), i.text))));
+            }
+            return box;
         }
 
         // Блок «Отправить результат»: ссылка готовится заранее, чтобы кнопка сразу открывала Telegram
@@ -251,18 +370,10 @@
                 root.append(el('div', { class: 'hub-alert', text: 'Это браузер преподавателя: здесь открыты все уроки. Ученик видит только то, что вы открыли ему в кабинете.' }));
             }
 
-            // Приветствие или «как здесь учиться»
-            const first = access && access.name ? access.name.split(' ')[0] : '';
+            // Профиль ученика или «как здесь учиться»
             const hello = el('section', { class: 'hub-card my-hello' });
             if (access) {
-                hello.append(el('h2', { text: first ? `Здравствуйте, ${first}!` : 'Здравствуйте!' }));
-                if (access.note) hello.append(el('blockquote', { class: 'hub-note' }, el('span', { class: 'hub-note-label', text: 'Сообщение преподавателя' }), access.note));
-                const done = states.filter(x => x.r.mastered).length;
-                hello.append(el('div', { class: 'task-progress' },
-                    el('div', { class: 'task-progress-text' }, el('strong', { text: `Освоено уроков: ${done} из ${PB.LESSON_COUNT}` }),
-                        el('span', { text: state.paid ? `оплачено до урока ${state.paidTo}` : 'урок 1 — бесплатно' })),
-                    el('div', { class: 'hub-bar' }, el('div', { class: 'hub-bar-fill', style: `width:${Math.round(done / PB.LESSON_COUNT * 100)}%` }))),
-                    el('p', { class: 'hub-muted my-rule', text: 'Урок освоен, когда тест сдан на 70% и больше и решена домашка (можно без одной задачи). Тогда следующий оплаченный урок открывается сам.' }));
+                root.append(profileCard(access, state, states));
             } else {
                 hello.append(el('h2', { text: 'Как здесь учиться' }),
                     el('ol', { class: 'my-steps' },
@@ -273,7 +384,7 @@
                         el('a', { class: 'hub-btn hub-btn-primary', href: 'lesson1.html', text: 'Начать урок 1' }),
                         el('a', { class: 'hub-btn', href: PB.TEACHER_TG, target: '_blank', rel: 'noopener', text: 'Записаться в Telegram' })));
             }
-            root.append(hello);
+            if (!access) root.append(hello);
 
             // Что сделать сейчас
             const step = nextStep(access, state);
@@ -291,13 +402,16 @@
                 list.append(el('h3', { class: 'my-module', text: `${m.title} · уроки ${m.from}–${m.to}` }));
                 const ul = el('ul', { class: 'my-list' });
                 states.slice(m.from - 1, m.to).forEach(s => ul.append(lessonRow(s)));
+                const pr = projectRow(m.exam, state, access);
+                if (pr) ul.append(pr);
                 ul.append(examRow(m.exam, state, access));
                 list.append(ul);
             });
             root.append(list);
+            if (access || PB.isTeacherBrowser()) root.append(finishCard(state, access));
 
             // Отдельные задачи от преподавателя
-            const extra = access ? access.tasks.filter(id => { const t = tasks.find(x => x.id === id); return t && !t.exam && !t.hw; }) : [];
+            const extra = access ? access.tasks.filter(id => { const t = tasks.find(x => x.id === id); return t && !t.exam && !t.project && !t.hw; }) : [];
             if (extra.length) {
                 root.append(el('section', { class: 'hub-card' }, el('h2', { text: 'Дополнительные задачи от преподавателя' }),
                     el('ul', { class: 'my-list' }, extra.map(id => {

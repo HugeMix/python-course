@@ -254,7 +254,8 @@
                 if (n >= 1 && n <= PB.LESSON_COUNT && Array.isArray(v)) mk[n] = v.map(i => PB.clampInt(i, 0, 99)).slice(0, 30);
             });
             const at = isNaN(new Date(r.at)) ? new Date().toISOString() : new Date(r.at).toISOString();
-            return { mk, name, at, sid: PB.cleanText(r.sid || '', 20), aid: PB.cleanText(r.aid, 20), lessons, solved, code, assigned, received: new Date().toISOString() };
+            const op = [...new Set((Array.isArray(r.op) ? r.op : []).map(n => PB.clampInt(n, 0, 99)).filter(n => n >= 1 && n <= PB.LESSON_COUNT))];
+            return { op, mk, name, at, sid: PB.cleanText(r.sid || '', 20), aid: PB.cleanText(r.aid, 20), lessons, solved, code, assigned, received: new Date().toISOString() };
         }
 
         async function importPendingReport() {
@@ -385,7 +386,7 @@
         const accessOf = st => ({ paid: paidCount(st), lessons: st.opened, exams: st.exams, tasks: st.tasks, replies: st.replies });
         const progOf = r => r ? { lessons: r.lessons, solved: r.solved } : { lessons: {}, solved: [] };
         // Что открыто ученику и как у него дела — по тем же правилам, что у него на сайте, по последнему результату
-        const stateOf = st => PB.computeAccess(accessOf(st), progOf(lastReport(st)));
+        const stateOf = st => { const r = lastReport(st); return PB.computeAccess(accessOf(st), progOf(r), r && r.op); };
 
         function lessonInfo(st, n, state) {
             const r = state.results[n];
@@ -406,6 +407,7 @@
             const mastered = infos.filter(x => x.r.mastered).length;
             const base = { state, infos, mastered };
             if (hasNewResult(st)) return { ...base, kind: 'wait', text: 'Новый результат' };
+            if (state.certReady && !st.cert) return { ...base, kind: 'cert', text: 'Выдать сертификат' };
             const firstClosed = infos.find(x => !x.open);
             if (!state.current && firstClosed && state.why[firstClosed.n] === 'pay') return { ...base, kind: 'pay', text: 'Нужна оплата' };
             if (needsSend(st)) return { ...base, kind: 'send', text: 'Ссылка не отправлена' };
@@ -426,7 +428,7 @@
         // Ссылка для ученика: в ней сколько уроков оплачено, ручные открытия, ваши комментарии и сообщение
         async function studentLink(st) {
             const access = { v: 3, t: 'access', sid: st.id, name: st.name, note: st.msg || '', paid: paidCount(st), lessons: st.opened.slice(),
-                tasks: st.tasks.slice(), exams: st.exams.slice(), replies: st.replies, at: nowIso() };
+                tasks: st.tasks.slice(), exams: st.exams.slice(), replies: st.replies, cert: st.cert || null, profileReset: st.profileReset || '', at: nowIso() };
             return PB.pageUrl('python-basic.html') + '#a=' + await PB.encode(access);
         }
 
@@ -460,7 +462,7 @@
             }
             const search = el('input', { class: 'hub-input', type: 'search', placeholder: 'Найти ученика', 'aria-label': 'Найти ученика' });
             const grid = el('div', { class: 'cab-students' });
-            const order = { wait: 0, pay: 1, send: 2, ok: 3 };
+            const order = { wait: 0, cert: 1, pay: 2, send: 3, ok: 4 };
             const lastActivity = st => { const r = lastReport(st); return [r ? r.at : '', st.changedAt || '', st.created || ''].sort().pop(); };
             const draw = () => {
                 grid.textContent = '';
@@ -553,7 +555,7 @@
             const firstClosed = status.infos.find(x => !x.open);
             const shown = rows.filter((_, i) => status.infos[i].open || status.infos[i] === firstClosed);
             const hidden = rows.filter((_, i) => !status.infos[i].open && status.infos[i] !== firstClosed);
-            const exams = [1, 2, 3].map(k => examRow(st, k, state, refresh));
+            const exams = [1, 2, 3].flatMap(k => [projectRow(st, k, state, refresh), examRow(st, k, state, refresh)]).filter(Boolean);
             panel.append(el('section', { class: 'hub-card' },
                 el('div', { class: 'hub-card-head' }, el('h2', { text: 'Уроки' }), el('span', { class: 'hub-muted', text: `освоено ${status.mastered} из ${PB.LESSON_COUNT}` })),
                 el('p', { class: 'hub-muted cab-rule', text: 'Урок освоен, когда тест сдан на 70% и больше и решена домашка (можно без одной задачи). «Отлично» — тест от 90% и вся домашка. Следующий оплаченный урок открывается сам.' }),
@@ -561,9 +563,12 @@
                 hidden.length ? el('details', { class: 'cab-more cab-lrows-more' },
                     el('summary', { text: 'Остальные уроки (' + hidden.length + ')' }),
                     el('ul', { class: 'cab-lrows' }, hidden)) : null,
-                el('h3', { class: 'cab-sub', text: 'Контрольные' }),
-                el('p', { class: 'hub-muted cab-rule', text: 'Открываются сами после уроков 6, 11 и 16. Без сданной контрольной (4 задачи из 5) следующий модуль не откроется.' }),
+                el('h3', { class: 'cab-sub', text: 'Итоги модулей' }),
+                el('p', { class: 'hub-muted cab-rule', text: 'Проект и контрольная открываются сами после уроков 6, 11 и 16. Пока они не сданы, следующий модуль не откроется.' }),
                 el('ul', { class: 'cab-lrows' }, exams)));
+
+            // Итоговый экзамен и сертификат
+            panel.append(certCard(st, state, refresh));
 
             // Сообщение для ученика на странице «Мои уроки»
             const msg = el('textarea', { class: 'hub-input hub-textarea', rows: '2', maxlength: '300', placeholder: 'Например: «Следующее занятие в четверг в 18:00.»' });
@@ -605,7 +610,7 @@
             panel.append(el('details', { class: 'hub-card cab-more' },
                 el('summary', { text: 'Ещё: история результатов и удаление' }),
                 st.reports.length ? el('ul', { class: 'cab-history' }, st.reports.slice().reverse().map(r => {
-                    const s = PB.computeAccess(accessOf(st), progOf(r));
+                    const s = PB.computeAccess(accessOf(st), progOf(r), r.op);
                     const m = Object.values(s.results).filter(x => x.mastered).length;
                     return el('li', {},
                         el('span', { text: PB.formatDate(r.at) }),
@@ -645,21 +650,63 @@
 
         function examRow(st, k, state, refresh) {
             const ex = state.exams[k];
+            const final = k === 4;
             const last = PB.EXAM_LESSONS[k][1];
             return el('li', { class: 'cab-lrow cab-lrow-exam' + (ex.open ? '' : ' is-off') },
-                el('span', { class: 'cab-lesson-num', text: 'К' + k }),
-                el('span', { class: 'cab-lrow-main' }, el('strong', { text: `Контрольная ${k} · ${EXAM_RANGES[k]}` }),
-                    el('small', { text: ex.open ? `решено ${ex.done} из ${ex.total}, зачёт — ${PB.EXAM_PASS}` : `откроется после урока ${last}` })),
-                pill(!ex.open ? 'off' : ex.passed ? 'ok' : ex.done ? 'work' : 'open', !ex.open ? 'Не открыта' : ex.passed ? 'Зачтена' : ex.done ? 'В процессе' : 'Открыта'),
+                el('span', { class: 'cab-lesson-num', text: final ? 'И' : 'К' + k }),
+                el('span', { class: 'cab-lrow-main' }, el('strong', { text: final ? 'Итоговый экзамен · весь курс' : `Контрольная ${k} · ${EXAM_RANGES[k]}` }),
+                    el('small', { text: ex.open ? `решено ${ex.done} из ${ex.total}, зачёт — ${ex.need}` : final ? 'откроется, когда освоены все уроки и сданы итоги модулей' : `откроется после урока ${last}` })),
+                pill(!ex.open ? 'off' : ex.passed ? 'ok' : ex.done ? 'work' : 'open', !ex.open ? 'Не открыт' + (final ? '' : 'а') : ex.passed ? (final ? 'Сдан' : 'Зачтена') : ex.done ? 'В процессе' : 'Открыт' + (final ? '' : 'а')),
                 ex.open ? el('a', { class: 'hub-btn hub-btn-ghost', href: 'tasks.html#exam=' + k, target: '_blank', rel: 'noopener', text: 'Задачи' })
-                    : el('button', { class: 'hub-btn', type: 'button', text: 'Выдать', onclick: () => { st.exams.push(k); touch(st); refresh(); } }));
+                    : el('button', { class: 'hub-btn', type: 'button', text: 'Выдать', title: 'Открыть вручную, не дожидаясь условий', onclick: () => { st.exams.push(k); touch(st); refresh(); } }));
+        }
+
+        function projectRow(st, k, state, refresh) {
+            const pr = state.projects[k];
+            if (!pr.total) return null;
+            return el('li', { class: 'cab-lrow cab-lrow-exam' + (pr.open ? '' : ' is-off') },
+                el('span', { class: 'cab-lesson-num', text: 'П' + k }),
+                el('span', { class: 'cab-lrow-main' }, el('strong', { text: pr.title }),
+                    el('small', { text: pr.open ? `сделано шагов ${pr.done} из ${pr.total}` : `откроется после урока ${PB.PROJECTS[k].after}` })),
+                pill(!pr.open ? 'off' : pr.passed ? 'ok' : pr.done ? 'work' : 'open', !pr.open ? 'Не открыт' : pr.passed ? 'Готов' : pr.done ? 'В процессе' : 'Открыт'),
+                pr.open ? el('a', { class: 'hub-btn hub-btn-ghost', href: 'tasks.html#project=' + k, target: '_blank', rel: 'noopener', text: 'Задачи' })
+                    : el('button', { class: 'hub-btn', type: 'button', text: 'Выдать', title: 'Открыть вручную, не дожидаясь условий', onclick: () => { if (!st.exams.includes(k)) st.exams.push(k); touch(st); refresh(); } }));
+        }
+
+        // Сертификат: выдаёт только преподаватель, один раз, с номером из журнала.
+        // Имя на сертификате — из журнала, ученик сам его не поменяет.
+        function certCard(st, state, refresh) {
+            const box = el('section', { class: 'hub-card cab-cert' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Итоговый экзамен и сертификат' })),
+                el('ul', { class: 'cab-lrows' }, examRow(st, 4, state, refresh)));
+            if (st.cert) {
+                box.append(el('div', { class: 'cab-cert-issued' },
+                    el('strong', { text: `Сертификат № ${st.cert.no} выдан ${PB.formatDate(st.cert.at).split(',')[0]}` }),
+                    el('span', { class: 'hub-muted', text: `На имя «${st.cert.name}». Ученик увидит его после новой ссылки (раздел «Мои уроки» → «Открыть сертификат»).` })));
+            } else {
+                const list = PB.certChecklist(state);
+                box.append(el('p', { class: 'hub-muted', text: lastReport(st) ? 'По последнему результату ученика:' : 'Ученик ещё не присылал результатов. Что нужно для сертификата:' }),
+                    el('ul', { class: 'my-checklist' }, list.map(i => el('li', { class: i.done ? 'is-done' : '' }, el('span', { class: 'my-check', 'aria-hidden': 'true', text: i.done ? '✓' : '' }), i.text))),
+                    el('div', { class: 'hub-actions' }, el('button', { class: 'hub-btn' + (state.certReady ? ' hub-btn-primary' : ''), type: 'button', text: 'Выдать сертификат', onclick: () => {
+                        if (!state.certReady && !confirm('Не все условия выполнены. Всё равно выдать сертификат?')) return;
+                        if (!confirm(`Выдать сертификат на имя «${st.name}»? Имя и номер потом не меняются.`)) return;
+                        journal.certSeq = (journal.certSeq || 0) + 1;
+                        st.cert = { no: `PB-${new Date().getFullYear()}-${String(journal.certSeq).padStart(3, '0')}`, name: st.name, at: nowIso() };
+                        touch(st); toast('Сертификат выдан. Отправьте ученику новую ссылку.'); refresh();
+                    } })));
+            }
+            box.append(el('details', { class: 'cab-more cab-profile-reset' },
+                el('summary', { text: 'Профиль ученика: фото и имя' }),
+                el('p', { class: 'hub-muted', text: 'Ученик ставит фото в профиле один раз — потом сменить его нельзя, чтобы сертификат нельзя было «перевыпустить». Если ученик попросил поменять фото, разрешите здесь и отправьте новую ссылку.' }),
+                el('button', { class: 'hub-btn', type: 'button', text: 'Разрешить сменить фото', onclick: () => { st.profileReset = nowIso(); touch(st); toast('Разрешено. Отправьте ученику новую ссылку.'); refresh(); } })));
+            return box;
         }
 
         // Новый результат: по каждому уроку, где что-то изменилось, — оценка или что осталось, ошибки в тесте и код задач
         function resultCard(st, state, refresh) {
             const r = lastReport(st);
             const prev = st.reports[st.reports.length - 2] || null;
-            const prevState = prev ? PB.computeAccess(accessOf(st), progOf(prev)) : null;
+            const prevState = prev ? PB.computeAccess(accessOf(st), progOf(prev), prev.op) : null;
             const changed = [];
             for (let n = 1; n <= PB.LESSON_COUNT; n++) {
                 const now = state.results[n];
@@ -835,6 +882,11 @@
                 el('p', { class: 'hub-muted', text: 'Журнал хранится только в этом браузере. Раз в неделю скачивайте копию — из неё журнал можно восстановить на любом устройстве. Если копия устарела, кабинет напомнит об этом.' }),
                 lastBackup,
                 el('div', { class: 'hub-actions' }, exportBtn, el('button', { class: 'hub-btn', type: 'button', text: 'Восстановить из файла', onclick: () => file.click() }), file)));
+            const certs = journal.students.filter(x => x.cert).map(x => x.cert).sort((a, b) => a.no.localeCompare(b.no));
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Выданные сертификаты' }), el('span', { class: 'hub-muted', text: 'по этому списку можно проверить номер' })),
+                certs.length ? el('ul', { class: 'cab-history' }, certs.map(c => el('li', {}, el('b', { text: '№ ' + c.no }), el('span', { text: c.name }), el('span', { class: 'hub-muted', text: PB.formatDate(c.at).split(',')[0] }))))
+                    : el('p', { class: 'hub-muted', text: 'Пока ни одного.' })));
             panel.append(el('section', { class: 'hub-card' },
                 el('div', { class: 'hub-card-head' }, el('h2', { text: 'PIN-код' })),
                 el('div', { class: 'hub-actions' }, oldPin, newPin, pinBtn), pinMsg));

@@ -156,7 +156,7 @@ async function main() {
         if (!t.title || !t.desc || typeof t.startCode !== 'string') fail(where, 'нет названия, условия или заготовки');
         if (!['easy', 'medium', 'hard'].includes(t.difficulty)) fail(where, `неизвестная сложность «${t.difficulty}»`);
         if (!(t.lesson >= 1 && t.lesson <= 16)) fail(where, `неверный номер урока ${t.lesson}`);
-        if (t.exam && ![6, 11, 16].includes(t.lesson)) fail(where, 'задача контрольной должна стоять после урока 6, 11 или 16');
+        if ((t.exam || t.project) && ![6, 11, 16].includes(t.lesson)) fail(where, 'задача контрольной или проекта должна стоять после урока 6, 11 или 16');
         if (t.kind === 'io') {
             if (!Array.isArray(t.cases) || !t.cases.length) { fail(where, 'нет проверок'); continue; }
             let startPasses = true;
@@ -177,9 +177,16 @@ async function main() {
         const hw = tasks.filter(t => t.hw && t.lesson === n).length;
         if (hw < 3 || hw > 4) fail(`урок ${n}`, `в домашке ${hw} задач, нужно 3–4`);
     }
-    for (const e of [1, 2, 3]) {
+    // контрольные 1–3 — по 5 задач, итоговый экзамен (exam: 4) — 6 задач
+    for (const [e, need] of [[1, 5], [2, 5], [3, 5], [4, 6]]) {
         const k = tasks.filter(t => t.exam === e).length;
-        if (k !== 5) fail(`контрольная ${e}`, `${k} задач, нужно 5`);
+        if (k !== need) fail(e === 4 ? 'итоговый экзамен' : `контрольная ${e}`, `${k} задач, нужно ${need}`);
+    }
+    // проекты модулей: шаги 1, 2, 3… без пропусков, проект стоит после последнего урока модуля
+    for (const k of [...new Set(tasks.filter(t => t.project).map(t => t.project))]) {
+        const steps = tasks.filter(t => t.project === k).map(t => t.step).sort((a, b) => a - b);
+        if (steps.some((s, i) => s !== i + 1)) fail(`проект ${k}`, `шаги должны идти 1, 2, 3…, а сейчас: ${steps.join(', ')}`);
+        if (tasks.some(t => t.project === k && t.lesson !== [0, 6, 11, 16][k])) fail(`проект ${k}`, 'задачи проекта должны стоять после урока ' + [0, 6, 11, 16][k]);
     }
 
     console.log(`\nПроверено: ${checked}.`);
