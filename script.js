@@ -437,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const prevBtn = document.createElement('a');
                 prevBtn.href = lessonsList[lessonIndex - 1];
                 prevBtn.className = 'btn-nav prev';
-                prevBtn.textContent = '← Назад';
+                prevBtn.textContent = '← Предыдущий урок';
                 navContainer.appendChild(prevBtn);
             }
 
@@ -463,288 +463,385 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 3. Quiz Logic ---
+    // --- 3. Тест урока ---
+    // Один вопрос на экране: ответили — видно, верно ли и почему, потом «Следующий вопрос».
+    // В конце — результат, разбор ошибок и кнопки «дальше / ещё раз».
+    const QUIZ_SIZE = 10;      // сколько вопросов в одной попытке (если в уроке больше — выбираются случайно)
+    const QUIZ_PASS = 0.7;     // доля верных ответов, чтобы тест засчитался
+    const OPTION_LETTERS = 'АБВГДЕЖ';
+
+    function qel(tag, cls, text) {
+        const node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (text !== undefined && text !== null) node.textContent = text;
+        return node;
+    }
+
+    function qbtn(text, cls, onClick) {
+        const b = qel('button', 'qz-btn ' + (cls || ''), text);
+        b.type = 'button';
+        if (onClick) b.addEventListener('click', onClick);
+        return b;
+    }
+
+    function stateIcon(kind) {
+        const span = qel('span', 'qz-state-icon qz-state-icon-' + kind);
+        span.setAttribute('aria-hidden', 'true');
+        span.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' +
+            (kind === 'ok' ? '<polyline points="5 12.5 10 17.5 19 7.5"/>' : '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>') + '</svg>';
+        return span;
+    }
+
+    function readQuizScore() {
+        try { return (JSON.parse(localStorage.getItem('quiz_scores')) || {})[currentPath] || null; } catch (e) { return null; }
+    }
+
+    function quizCodeBlock(code) {
+        const pre = qel('pre', 'quiz-code');
+        const codeEl = qel('code', 'language-python', code);
+        pre.appendChild(codeEl);
+        if (window.hljs) window.hljs.highlightElement(codeEl);
+        return pre;
+    }
+
+    function scrollToQuiz(box) {
+        const top = box.getBoundingClientRect().top + window.scrollY - 90;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    }
+
+    function nextLessonFile() {
+        const i = lessonsList.indexOf(currentPath);
+        return i >= 0 && i < lessonsList.length - 1 ? lessonsList[i + 1] : null;
+    }
+
+    // Ссылка-кнопка «Следующий урок» (или сертификат после последнего урока)
+    function nextLessonLink(primary) {
+        const next = nextLessonFile();
+        const a = qel('a', 'qz-btn ' + (primary ? 'qz-btn-primary' : ''), next ? `Перейти к уроку ${lessonsList.indexOf(next) + 1} →` : 'Получить сертификат →');
+        a.href = next || 'certificate.html';
+        return a;
+    }
+
     function initQuiz() {
-        const quizContainer = document.getElementById('quiz-container');
-        if (!quizContainer || !quizData[currentPath]) return;
-        if (lessonLocked) {
-            quizContainer.style.display = 'block';
-            quizContainer.innerHTML = '<p class="quiz-locked-note">🔒 Тест станет доступен после прохождения предыдущего урока.</p>';
-            return;
-        }
-
-        // Ensure clean state
-        quizContainer.innerHTML = '';
-        quizContainer.style.display = 'none';
-
-        // Add "Start Quiz" Button BEFORE container
-        // Check if button already exists to avoid duplicates
-        let startBtn = document.getElementById('btn-start-quiz');
-        if (!startBtn) {
-            startBtn = document.createElement('button');
-            startBtn.id = 'btn-start-quiz';
-            startBtn.textContent = 'Теория изучена — начать тест';
-            startBtn.className = 'btn-complete';
-            startBtn.onclick = () => {
-                startBtn.style.display = 'none'; // Hide self
-                quizContainer.style.display = 'block'; // Show quiz
-                toggleLessonVisibility(false); // Hide lesson text!
-                renderQuizContent(quizContainer);
-                quizContainer.scrollIntoView({ behavior: 'smooth' });
-            };
-            quizContainer.parentNode.insertBefore(startBtn, quizContainer);
-        }
-
-        startBtn.style.display = 'block';
-
-        // Check if already passed
-        const savedResults = safeGetProgress();
-        if (savedResults[currentPath]) {
-            startBtn.style.display = 'none';
-            quizContainer.style.display = 'block';
-            renderQuizContent(quizContainer, true); // True = render passed state
-            showNextLessonButton(); // Show navigation since passed
-        }
-    }
-
-    // Алгоритм Фишера-Йейтса для надёжного перемешивания
-    function shuffleArray(array) {
-        const arr = [...array];
-        for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-    }
-
-    function renderQuizContent(container, alreadyPassed = false) {
-        try {
-            if (alreadyPassed) {
-                renderQuizCompleted(container);
-                return;
-            }
-
-            // Если вопросов больше 10 — каждый раз выбираем 10 случайных (при пересдаче будут другие)
-            const QUIZ_SIZE = 10;
-            const allQuestions = quizData[currentPath] || [];
-            const questions = allQuestions.length > QUIZ_SIZE ? shuffleArray(allQuestions).slice(0, QUIZ_SIZE) : allQuestions;
-            if (!questions || questions.length === 0) {
-                container.innerHTML = `<h3 style="color:var(--error-color)">Вопросов пока нет</h3>`;
-                return;
-            }
-            container.innerHTML = ''; // Clear
-
-            const title = document.createElement('h2');
-            title.id = 'quiz-title';
-            title.textContent = 'Проверочный тест';
-            container.setAttribute('role', 'region');
-            container.setAttribute('aria-labelledby', 'quiz-title');
-            container.appendChild(title);
-
-            questions.forEach((q, index) => {
-                const qId = `quiz-q-${index}`;
-                const qBlock = document.createElement('div');
-                qBlock.className = 'quiz-question';
-                qBlock.setAttribute('role', 'group');
-                qBlock.setAttribute('aria-labelledby', qId);
-
-                const qText = document.createElement('p');
-                qText.id = qId;
-                qText.textContent = `${index + 1}. ${q.question}`;
-                qBlock.appendChild(qText);
-                // Вопрос с фрагментом кода («Что выведет программа?»)
-                if (q.code) {
-                    const pre = document.createElement('pre');
-                    pre.className = 'quiz-code';
-                    const codeEl = document.createElement('code');
-                    codeEl.className = 'language-python';
-                    codeEl.textContent = q.code;
-                    pre.appendChild(codeEl);
-                    qBlock.appendChild(pre);
-                    if (window.hljs) window.hljs.highlightElement(codeEl);
-                }
-
-                if (q.type === 'code') {
-                    const inputArea = document.createElement('textarea');
-                    inputArea.className = 'code-input';
-                    inputArea.rows = 2;
-                    inputArea.placeholder = 'Напишите ваш ответ...';
-                    inputArea.setAttribute('aria-label', 'Поле для ввода кода');
-                    inputArea.setAttribute('aria-describedby', qId);
-
-                    const checkBtn = document.createElement('button');
-                    checkBtn.textContent = 'Проверить';
-                    checkBtn.className = 'btn-quiz-opt';
-                    checkBtn.setAttribute('aria-label', 'Проверить ответ');
-
-                    const feedback = document.createElement('p');
-                    feedback.className = 'quiz-feedback';
-                    feedback.setAttribute('aria-live', 'polite');
-
-                    checkBtn.onclick = () => {
-                        // Нормализация: убираем пробелы вокруг знаков и скобок и лишние пробелы между словами.
-                        // Регистр не меняем: для Python Print и print — разные имена.
-                        const norm = (str) => str.trim()
-                            .replace(/\s+/g, ' ')
-                            .replace(/\s*([()\[\]{}=<>!+\-*/%,:.])\s*/g, '$1');
-                        // Кавычки допускаем любые, но парные: 'текст' и "текст" — одно и то же
-                        const swapQuotes = (str) => str.replace(/['"]/g, c => (c === '"' ? "'" : '"'));
-
-                        const userCode = norm(inputArea.value);
-                        const isCorrect = q.correct.some(ans => {
-                            const normAns = norm(ans);
-                            return userCode === normAns || userCode === swapQuotes(normAns);
-                        });
-
-                        inputArea.disabled = true;
-                        checkBtn.disabled = true;
-
-                        if (isCorrect) {
-                            feedback.textContent = '✅ Верно!';
-                            feedback.classList.add('is-correct');
-                            qBlock.classList.add('answered-correct');
-                        } else {
-                            const exampleAns = q.correct[0];
-                            feedback.textContent = '❌ Ошибка. Правильный ответ: ';
-                            const codeEl = document.createElement('code');
-                            codeEl.textContent = exampleAns;
-                            feedback.appendChild(codeEl);
-                            feedback.classList.add('is-wrong');
-                            qBlock.classList.add('answered-wrong');
-                        }
-
-                        // Show explanation
-                        if (q.explanation && !qBlock.querySelector('.quiz-explanation')) {
-                            const expEl = document.createElement('p');
-                            expEl.className = 'quiz-explanation';
-                            expEl.textContent = q.explanation;
-                            qBlock.appendChild(expEl);
-                        }
-
-                        checkQuizCompletion(questions.length);
-                    };
-
-                    qBlock.appendChild(inputArea);
-                    qBlock.appendChild(checkBtn);
-                    qBlock.appendChild(feedback);
-
-                } else {
-                    const optionsDiv = document.createElement('div');
-                    optionsDiv.setAttribute('role', 'group');
-                    optionsDiv.setAttribute('aria-label', 'Варианты ответа');
-
-                    const indexedOptions = q.options.map((opt, i) => ({ text: opt, originalIndex: i }));
-                    const shuffled = shuffleArray(indexedOptions);
-
-                    shuffled.forEach((optObj) => {
-                        const btn = document.createElement('button');
-                        btn.textContent = optObj.text;
-                        btn.className = 'btn-quiz-opt';
-                        btn.dataset.origIndex = optObj.originalIndex;
-                        btn.setAttribute('aria-label', optObj.text);
-                        btn.onclick = () => checkAnswer(btn, optObj.originalIndex, q.correct, questions.length, q.explanation);
-                        optionsDiv.appendChild(btn);
-                    });
-                    qBlock.appendChild(optionsDiv);
-
-                    const feedback = document.createElement('p');
-                    feedback.className = 'quiz-feedback';
-                    feedback.setAttribute('aria-live', 'polite');
-                    qBlock.appendChild(feedback);
-                }
-
-                container.appendChild(qBlock);
-            });
-        } catch (e) {
-            const errWrap = document.createElement('div');
-            errWrap.style.cssText = 'padding:20px;background:#fee2e2;color:#b91c1c;border-radius:12px;border:2px solid #ef4444;';
-            const errTitle = document.createElement('h3');
-            errTitle.style.marginTop = '0';
-            errTitle.textContent = 'ОШИБКА ОТРИСОВКИ ТЕСТА!';
-            const errDesc = document.createElement('p');
-            errDesc.innerHTML = '<strong>Мы не смогли загрузить тест из-за сбоя:</strong>';
-            const errDetails = document.createElement('div');
-            errDetails.style.cssText = 'background:#fff;padding:10px;border-radius:6px;font-family:monospace;font-size:0.9em;overflow-x:auto;';
-            errDetails.textContent = `${e.name}: ${e.message}\n\n${e.stack}`;
-            const reloadBtn = document.createElement('button');
-            reloadBtn.className = 'btn-retake';
-            reloadBtn.textContent = 'Перезагрузить страницу';
-            reloadBtn.onclick = () => window.location.reload();
-            errWrap.appendChild(errTitle);
-            errWrap.appendChild(errDesc);
-            errWrap.appendChild(errDetails);
-            errWrap.appendChild(reloadBtn);
-            container.innerHTML = '';
-            container.appendChild(errWrap);
-        }
-    }
-
-    function checkAnswer(btn, selected, correct, total, explanation) {
-        const optionsDiv = btn.parentElement;
-        const qBlock = optionsDiv.parentElement;
-        const feedback = qBlock.querySelector('.quiz-feedback');
-
-        // Блокируем все кнопки в этом вопросе
-        optionsDiv.querySelectorAll('.btn-quiz-opt').forEach(b => b.disabled = true);
-
-        if (selected === correct) {
-            btn.classList.add('correct');
-            feedback.textContent = '✅ Верно!';
-            feedback.classList.add('is-correct');
-            qBlock.classList.add('answered-correct');
+        const box = document.getElementById('quiz-container');
+        if (!box || !quizData[currentPath]) return;
+        box.classList.add('qz');
+        box.setAttribute('role', 'region');
+        box.setAttribute('aria-label', 'Тест по уроку');
+        if (lessonLocked) { renderQuizLocked(box); return; }
+        if (safeGetProgress()[currentPath]) {
+            renderQuizDone(box);
+            showNextLessonButton();
         } else {
-            btn.classList.add('incorrect');
-            // Подсвечиваем правильный вариант зелёным
-            optionsDiv.querySelectorAll('.btn-quiz-opt').forEach(b => {
-                if (parseInt(b.dataset.origIndex) === correct) {
-                    b.classList.add('correct');
-                }
-            });
-            feedback.textContent = '❌ Ошибка';
-            feedback.classList.add('is-wrong');
-            qBlock.classList.add('answered-wrong');
+            renderQuizIntro(box);
         }
-
-        // Show explanation
-        if (explanation && !qBlock.querySelector('.quiz-explanation')) {
-            const expEl = document.createElement('p');
-            expEl.className = 'quiz-explanation';
-            expEl.textContent = explanation;
-            feedback.after(expEl);
-        }
-
-        checkQuizCompletion(total);
     }
 
-    function checkQuizCompletion(total) {
-        const container = document.getElementById('quiz-container');
-        const correctCount = container.querySelectorAll('.answered-correct').length;
-        const wrongCount = container.querySelectorAll('.answered-wrong').length;
+    function renderQuizLocked(box) {
+        const i = lessonsList.indexOf(currentPath);
+        box.textContent = '';
+        const card = qel('div', 'qz-card qz-state');
+        card.append(stateIcon('lock'));
+        const body = qel('div', 'qz-state-body');
+        body.append(qel('h2', 'qz-title', 'Тест пока закрыт'));
+        const p = qel('p', 'qz-lead', 'Он откроется, когда вы пройдёте тест ');
+        const a = qel('a', '', `урока ${i}`);
+        a.href = lessonsList[i - 1];
+        p.append(a, '. Теорию этого урока можно читать уже сейчас.');
+        body.append(p);
+        card.append(body);
+        box.append(card);
+    }
 
-        if (correctCount + wrongCount === total) {
-            // Quiz Finished — сохраняем результат в процентах (для отчёта преподавателю)
-            saveQuizScore(correctCount, total);
-            if (correctCount / total >= 0.7) {
-                // SUCCESS (70% threshold)
-                const progress = safeGetProgress();
-                progress[currentPath] = true;
+    // Карточка перед началом теста
+    function renderQuizIntro(box) {
+        const all = quizData[currentPath] || [];
+        const total = Math.min(QUIZ_SIZE, all.length);
+        const need = Math.ceil(total * QUIZ_PASS);
+        const score = readQuizScore();
+        box.textContent = '';
+        const card = qel('div', 'qz-card qz-intro');
+        card.append(qel('span', 'qz-eyebrow', 'Тест по уроку'), qel('h2', 'qz-title', 'Проверьте себя'));
+        card.append(qel('p', 'qz-lead', `Ответьте на ${total} вопросов по теме урока. Если верных ответов будет ${need} или больше, тест засчитается и откроется следующий урок.`));
+        const facts = qel('ul', 'qz-facts');
+        [[String(total), 'вопросов'], [`${need} из ${total}`, 'чтобы пройти'], [`≈ ${Math.max(3, Math.round(total / 2))} мин`, 'на весь тест']].forEach(([big, small]) => {
+            const li = qel('li');
+            li.append(qel('strong', '', big), qel('span', '', small));
+            facts.append(li);
+        });
+        card.append(facts);
+        if (score) card.append(qel('p', 'qz-muted', `Ваш лучший результат: ${score.best}% · попыток: ${score.attempts}`));
+        const actions = qel('div', 'qz-actions');
+        const start = qbtn('Начать тест', 'qz-btn-primary', () => startQuiz(box));
+        start.id = 'btn-start-quiz';
+        actions.append(start);
+        if (all.length > QUIZ_SIZE) actions.append(qel('span', 'qz-muted', 'Вопросы каждый раз выбираются заново, поэтому пересдавать можно сколько угодно.'));
+        card.append(actions);
+        box.append(card);
+    }
+
+    // Тест уже пройден (повторное открытие урока)
+    function renderQuizDone(box) {
+        const score = readQuizScore();
+        box.textContent = '';
+        const card = qel('div', 'qz-card qz-state');
+        card.append(stateIcon('ok'));
+        const body = qel('div', 'qz-state-body');
+        body.append(qel('h2', 'qz-title', 'Тест пройден'));
+        body.append(qel('p', 'qz-lead', score ? `Лучший результат: ${score.best}% · попыток: ${score.attempts}. Можно пройти ещё раз, чтобы закрепить тему.` : 'Можно пройти ещё раз, чтобы закрепить тему.'));
+        const actions = qel('div', 'qz-actions');
+        actions.append(nextLessonLink(true));
+        const again = qbtn('Пройти ещё раз', 'qz-btn-ghost', () => startQuiz(box));
+        again.id = 'btn-start-quiz';
+        actions.append(again);
+        body.append(actions);
+        card.append(body);
+        box.append(card);
+    }
+
+    function startQuiz(box) {
+        const all = quizData[currentPath] || [];
+        const questions = all.length > QUIZ_SIZE ? shuffleArray(all).slice(0, QUIZ_SIZE) : all.slice();
+        if (!questions.length) return;
+        const state = { questions, index: 0, answers: [] };
+        box._quiz = state;
+        toggleLessonVisibility(false);
+        renderQuestion(box, state);
+        scrollToQuiz(box);
+    }
+
+    function leaveQuiz(box) {
+        box._quiz = null;
+        toggleLessonVisibility(true);
+        if (safeGetProgress()[currentPath]) renderQuizDone(box); else renderQuizIntro(box);
+        scrollToQuiz(box);
+    }
+
+    // Ответ кодом: пробелы вокруг знаков не важны, кавычки любые (но парные), регистр важен
+    function codeAnswerOk(q, value) {
+        const norm = (str) => String(str).trim().replace(/\s+/g, ' ').replace(/\s*([()\[\]{}=<>!+\-*/%,:.])\s*/g, '$1');
+        const swapQuotes = (str) => str.replace(/['"]/g, c => (c === '"' ? "'" : '"'));
+        const user = norm(value);
+        return q.correct.some(ans => user === norm(ans) || user === swapQuotes(norm(ans)));
+    }
+
+    function renderQuestion(box, st) {
+        const q = st.questions[st.index];
+        const n = st.questions.length;
+        box.textContent = '';
+        const card = qel('div', 'qz-card qz-run');
+
+        const head = qel('div', 'qz-head');
+        head.append(qel('span', 'qz-step', `Вопрос ${st.index + 1} из ${n}`));
+        head.append(qbtn('Выйти из теста', 'qz-link', () => {
+            if (st.answers.length && !confirm('Выйти из теста? Эта попытка не сохранится.')) return;
+            leaveQuiz(box);
+        }));
+        card.append(head);
+
+        const bar = qel('div', 'qz-progress');
+        bar.setAttribute('role', 'progressbar');
+        bar.setAttribute('aria-valuemin', '0');
+        bar.setAttribute('aria-valuemax', String(n));
+        bar.setAttribute('aria-valuenow', String(st.answers.length));
+        st.questions.forEach((_, i) => {
+            const a = st.answers[i];
+            bar.append(qel('span', 'qz-seg' + (a ? (a.correct ? ' is-ok' : ' is-bad') : i === st.index ? ' is-current' : '')));
+        });
+        card.append(bar);
+
+        const title = qel('h3', 'qz-question', q.question);
+        title.id = 'qz-question';
+        card.append(title);
+        if (q.code) card.append(quizCodeBlock(q.code));
+
+        if (q.type === 'code') {
+            const form = qel('form', 'qz-answer');
+            const input = qel('input', 'qz-input');
+            input.type = 'text';
+            input.autocomplete = 'off';
+            input.spellcheck = false;
+            input.setAttribute('autocapitalize', 'off');
+            input.placeholder = 'Напишите ответ кодом';
+            input.setAttribute('aria-labelledby', 'qz-question');
+            const check = qel('button', 'qz-btn qz-btn-primary', 'Проверить');
+            check.type = 'submit';
+            form.append(input, check);
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (form.dataset.done) return;
+                if (!input.value.trim()) { input.focus(); return; }
+                form.dataset.done = '1';
+                const ok = codeAnswerOk(q, input.value);
+                input.readOnly = true;
+                check.disabled = true;
+                form.classList.add(ok ? 'is-ok' : 'is-bad');
+                answerGiven(box, st, card, ok, input.value.trim(), q.correct[0]);
+            });
+            card.append(form);
+            card.append(qel('p', 'qz-muted qz-tip', 'Пробелы вокруг знаков не важны, кавычки можно писать любые.'));
+            setTimeout(() => input.focus({ preventScroll: true }), 60);
+        } else {
+            const list = qel('div', 'qz-options');
+            list.setAttribute('role', 'group');
+            list.setAttribute('aria-labelledby', 'qz-question');
+            // Варианты-«вывод программы» показываем моноширинным шрифтом, как в консоли
+            const mono = !!q.code && /выведет/i.test(q.question);
+            shuffleArray(q.options.map((text, i) => ({ text, i }))).forEach((o, k) => {
+                const b = qel('button', 'qz-option' + (mono ? ' is-mono' : ''));
+                b.type = 'button';
+                b.dataset.origIndex = String(o.i);
+                b.append(qel('span', 'qz-letter', OPTION_LETTERS[k]), qel('span', 'qz-option-text', o.text), qel('span', 'qz-mark'));
+                b.addEventListener('click', () => {
+                    if (list.dataset.done) return;
+                    list.dataset.done = '1';
+                    const ok = o.i === q.correct;
+                    list.querySelectorAll('.qz-option').forEach(x => {
+                        x.disabled = true;
+                        if (Number(x.dataset.origIndex) === q.correct) x.classList.add('is-correct');
+                    });
+                    b.classList.add('is-picked');
+                    if (!ok) b.classList.add('is-wrong');
+                    answerGiven(box, st, card, ok, o.text, q.options[q.correct]);
+                });
+                list.append(b);
+            });
+            card.append(list);
+            card.append(qel('p', 'qz-muted qz-tip', 'Выберите один ответ. Можно нажать цифру на клавиатуре: 1, 2, 3…'));
+        }
+        box.append(card);
+    }
+
+    function answerGiven(box, st, card, ok, given, right) {
+        const q = st.questions[st.index];
+        st.answers.push({ correct: ok, given, right });
+        const seg = card.querySelectorAll('.qz-seg')[st.index];
+        if (seg) seg.className = 'qz-seg ' + (ok ? 'is-ok' : 'is-bad');
+        const bar = card.querySelector('.qz-progress');
+        if (bar) bar.setAttribute('aria-valuenow', String(st.answers.length));
+        const tip = card.querySelector('.qz-tip');
+        if (tip) tip.remove();
+
+        const fb = qel('div', 'qz-feedback ' + (ok ? 'is-ok' : 'is-bad'));
+        fb.setAttribute('role', 'status');
+        fb.append(qel('strong', 'qz-feedback-title', ok ? 'Верно' : 'Неверно'));
+        if (!ok && q.type === 'code') {
+            const p = qel('p', 'qz-feedback-right', 'Правильный ответ: ');
+            p.append(qel('code', '', right));
+            fb.append(p);
+        }
+        if (q.explanation) fb.append(qel('p', 'qz-feedback-text', q.explanation));
+
+        const last = st.index === st.questions.length - 1;
+        const next = qbtn(last ? 'Показать результат' : 'Следующий вопрос →', 'qz-btn-primary qz-next', () => {
+            if (last) finishQuiz(box, st);
+            else { st.index++; renderQuestion(box, st); scrollToQuiz(box); }
+        });
+        const actions = qel('div', 'qz-actions');
+        actions.append(next);
+        card.append(fb, actions);
+        next.focus({ preventScroll: true });
+        const r = actions.getBoundingClientRect();
+        if (r.bottom > window.innerHeight) window.scrollBy({ top: r.bottom - window.innerHeight + 24, behavior: 'smooth' });
+    }
+
+    function finishQuiz(box, st) {
+        const total = st.questions.length;
+        const correct = st.answers.filter(a => a.correct).length;
+        saveQuizScore(correct, total);
+        const passed = correct / total >= QUIZ_PASS;
+        if (passed) {
+            const progress = safeGetProgress();
+            progress[currentPath] = true;
+            try {
                 localStorage.setItem('quiz_results', JSON.stringify(progress));
                 if (lessonsList.every(l => progress[l]) && !localStorage.getItem('course_completed_at')) {
                     localStorage.setItem('course_completed_at', new Date().toISOString());
                 }
-
-                setTimeout(() => {
-                    renderQuizCompleted(container);
-                    showNextLessonButton();
-                }, 800);
-            } else {
-                // FAIL
-                setTimeout(() => {
-                    renderQuizFailed(container, correctCount, total);
-                }, 800);
-            }
+            } catch (e) { /* хранилище недоступно */ }
+            showNextLessonButton();
         }
+        box._quiz = null;
+        renderQuizResult(box, st, correct, total, passed);
+        scrollToQuiz(box);
     }
+
+    function scoreRing(percent, passed) {
+        const r = 52, c = 2 * Math.PI * r;
+        const wrap = qel('div', 'qz-ring' + (passed ? ' is-ok' : ' is-bad'));
+        wrap.innerHTML = `<svg viewBox="0 0 120 120" aria-hidden="true"><circle class="qz-ring-track" cx="60" cy="60" r="${r}"/>` +
+            `<circle class="qz-ring-value" cx="60" cy="60" r="${r}" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${(c * (1 - percent / 100)).toFixed(1)}"/></svg>`;
+        const label = qel('div', 'qz-ring-label');
+        label.append(qel('strong', '', percent + '%'), qel('span', '', 'верно'));
+        wrap.append(label);
+        return wrap;
+    }
+
+    function renderQuizResult(box, st, correct, total, passed) {
+        const percent = Math.round(correct / total * 100);
+        const need = Math.ceil(total * QUIZ_PASS);
+        box.textContent = '';
+        const card = qel('div', 'qz-card qz-result');
+
+        const top = qel('div', 'qz-result-top');
+        top.append(scoreRing(percent, passed));
+        const text = qel('div', 'qz-result-text');
+        text.append(qel('span', 'qz-eyebrow' + (passed ? ' is-ok' : ' is-bad'), passed ? 'Тест пройден' : 'Тест не пройден'));
+        text.append(qel('h2', 'qz-title', passed ? (correct === total ? 'Отлично, без единой ошибки!' : 'Хороший результат!') : 'Пока не получилось'));
+        text.append(qel('p', 'qz-lead', passed
+            ? `Верных ответов: ${correct} из ${total}. ${nextLessonFile() ? 'Следующий урок открыт.' : 'Это был последний урок курса.'}`
+            : `Верных ответов: ${correct} из ${total}, а нужно хотя бы ${need}. Посмотрите разбор ниже, повторите урок и попробуйте снова.`));
+        top.append(text);
+        card.append(top);
+
+        const actions = qel('div', 'qz-actions');
+        if (passed) {
+            actions.append(nextLessonLink(true));
+            actions.append(qbtn('Пройти ещё раз', 'qz-btn-ghost', () => startQuiz(box)));
+            actions.append(qbtn('Вернуться к уроку', 'qz-link', () => leaveQuiz(box)));
+        } else {
+            actions.append(qbtn('Пройти ещё раз', 'qz-btn-primary', () => startQuiz(box)));
+            actions.append(qbtn('Повторить урок', 'qz-btn-ghost', () => { leaveQuiz(box); window.scrollTo({ top: 0, behavior: 'smooth' }); }));
+        }
+        card.append(actions);
+
+        const wrong = st.answers.map((a, i) => ({ a, q: st.questions[i], n: i + 1 })).filter(x => !x.a.correct);
+        const review = qel('div', 'qz-review');
+        if (!wrong.length) {
+            review.append(qel('p', 'qz-muted', 'Все ответы верные — разбирать нечего.'));
+        } else {
+            review.append(qel('h3', 'qz-review-title', wrong.length === 1 ? 'Разбор ошибки' : `Разбор ошибок (${wrong.length})`));
+            wrong.forEach(({ a, q, n }) => {
+                const item = qel('div', 'qz-review-item');
+                item.append(qel('p', 'qz-review-q', `${n}. ${q.question}`));
+                if (q.code) item.append(quizCodeBlock(q.code));
+                const mono = q.type === 'code' || (!!q.code && /выведет/i.test(q.question));
+                const line = (label, value, cls) => {
+                    const p = qel('p', 'qz-review-line ' + cls);
+                    p.append(qel('span', 'qz-review-label', label));
+                    p.append(qel('span', 'qz-review-value' + (mono ? ' is-mono' : ''), value));
+                    return p;
+                };
+                item.append(line('Ваш ответ', a.given, 'is-bad'), line('Правильный ответ', a.right, 'is-ok'));
+                if (q.explanation) item.append(qel('p', 'qz-review-why', q.explanation));
+                review.append(item);
+            });
+        }
+        card.append(review);
+        box.append(card);
+    }
+
+    // Клавиатура во время теста: 1–9 — выбрать вариант, Enter — следующий вопрос
+    document.addEventListener('keydown', (e) => {
+        const box = document.getElementById('quiz-container');
+        if (!box || !box._quiz || e.ctrlKey || e.metaKey || e.altKey) return;
+        const tag = (e.target && e.target.tagName) || '';
+        if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+        if (/^[1-9]$/.test(e.key)) {
+            const opt = box.querySelectorAll('.qz-option:not(:disabled)')[Number(e.key) - 1];
+            if (opt) { e.preventDefault(); opt.click(); }
+        }
+    });
 
     function saveQuizScore(correct, total) {
         let scores = {};
@@ -761,117 +858,26 @@ document.addEventListener('DOMContentLoaded', () => {
         try { localStorage.setItem('quiz_scores', JSON.stringify(scores)); } catch (e) { /* не страшно */ }
     }
 
-    function renderQuizFailed(container, score, total) {
-        const percent = Math.round((score / total) * 100);
-        const wrong = total - score;
-        let motivText = '';
-        if (percent === 0) {
-            motivText = 'Не расстраивайся — повтори теорию и попробуй снова! Для прохождения нужно 70%.';
-        } else if (percent < 50) {
-            motivText = 'Хорошее начало! Повтори пропущенные темы. Для прохождения нужно набрать 70%.';
-        } else {
-            motivText = 'Совсем чуть-чуть не хватило! Нужно 70% — ещё одна попытка и урок твой!';
-        }
-
-        container.innerHTML = `
-            <div class="quiz-failed-wrapper">
-                <h3 class="quiz-failed-title">Тест не пройден</h3>
-                <p class="quiz-failed-subtitle">${motivText}</p>
-                <div class="quiz-failed-score-box">
-                    <div class="quiz-score-stat quiz-score-correct">
-                        <span class="score-num">${score}</span>
-                        <span class="score-label">верных</span>
-                    </div>
-                    <div class="quiz-score-divider">из ${total}</div>
-                    <div class="quiz-score-stat quiz-score-wrong">
-                        <span class="score-num">${wrong}</span>
-                        <span class="score-label">ошибок</span>
-                    </div>
-                </div>
-                <div class="quiz-failed-bar-wrap">
-                    <div class="quiz-failed-bar-track">
-                        <div class="quiz-failed-bar-fill" style="width:0%" data-target="${percent}"></div>
-                    </div>
-                    <span class="quiz-failed-percent">${percent}%</span>
-                </div>
-                <div class="quiz-failed-actions">
-                    <button class="quiz-action-btn quiz-btn-retry" id="btn-restart-quiz">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-                        Пересдать тест
-                    </button>
-                    <button class="quiz-action-btn quiz-btn-review" id="btn-read-lesson">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                        Повторить урок
-                    </button>
-                </div>
-            </div>
-        `;
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                const bar = container.querySelector('.quiz-failed-bar-fill');
-                if (bar) bar.style.width = bar.dataset.target + '%';
-            });
-        });
-
-        document.getElementById('btn-restart-quiz').onclick = () => {
-            renderQuizContent(container);
-            container.scrollIntoView({ behavior: 'smooth' });
-        };
-        document.getElementById('btn-read-lesson').onclick = () => {
-            toggleLessonVisibility(true);
-            container.style.display = 'none';
-            container.innerHTML = '';
-            document.getElementById('btn-start-quiz').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-    }
-
-    function renderQuizCompleted(container) {
-        toggleLessonVisibility(true); // Always show lesson again after passing
-
-        container.innerHTML = `
-            <div class="quiz-passed-container">
-                <h3>Урок пройден</h3>
-                <p>Доступ к следующему уроку открыт.</p>
-                <button class="btn-retake" id="btn-retake-finished">Пройти заново для закрепления</button>
-            </div>
-        `;
-        const retakeBtn = document.getElementById('btn-retake-finished');
-        if (retakeBtn) {
-            retakeBtn.onclick = () => {
-                toggleLessonVisibility(false);
-                renderQuizContent(container, false); // Start quiz normally
-                container.scrollIntoView({ behavior: 'smooth' });
-            };
-        }
-    }
-
+    // Кнопка «Следующий урок» внизу страницы — появляется, когда тест пройден
     function showNextLessonButton() {
-        const lessonIndex = lessonsList.indexOf(currentPath);
         const navContainer = document.querySelector('.lesson-navigation');
-        if (!navContainer) return;
+        if (!navContainer || navContainer.querySelector('.next, .finish')) return;
+        const next = nextLessonFile();
+        const a = document.createElement('a');
+        a.className = next ? 'btn-nav next' : 'btn-nav next finish';
+        a.href = next || 'certificate.html';
+        a.textContent = next ? 'Следующий урок →' : 'Получить сертификат →';
+        navContainer.appendChild(a);
+    }
 
-        // Avoid dupes
-        if (navContainer.querySelector('.next') || navContainer.querySelector('.finish')) return;
-
-        if (lessonIndex >= 0 && lessonIndex < lessonsList.length - 1) {
-            const nextLink = lessonsList[lessonIndex + 1];
-            const nextBtn = document.createElement('a');
-            nextBtn.href = nextLink;
-            nextBtn.className = 'btn-nav next';
-            nextBtn.textContent = 'Следующий урок →';
-            navContainer.appendChild(nextBtn);
-
-            // Auto scroll to nav
-            navContainer.scrollIntoView({ behavior: 'smooth' });
-
-        } else if (lessonIndex === lessonsList.length - 1) {
-            const finishDiv = document.createElement('div');
-            finishDiv.className = 'btn-nav finish';
-            finishDiv.textContent = 'Курс завершён';
-            navContainer.appendChild(finishDiv);
+    // Алгоритм Фишера-Йейтса для надёжного перемешивания
+    function shuffleArray(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
         }
+        return arr;
     }
 
     // --- 4. Utilities ---
@@ -1142,13 +1148,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Ссылка lessonN.html#quiz сразу открывает тест урока ---
     function initDirectQuizLink() {
         if (location.hash !== '#quiz') return;
-        const startBtn = document.getElementById('btn-start-quiz');
         const container = document.getElementById('quiz-container');
-        if (startBtn && startBtn.style.display !== 'none') {
-            startBtn.click();
-        } else if (container) {
-            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        const startBtn = container && container.querySelector('.qz-intro #btn-start-quiz');
+        if (startBtn) startBtn.click();
+        else if (container) container.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // --- Для преподавателя (только в браузере, где выполнен вход в кабинет) ---

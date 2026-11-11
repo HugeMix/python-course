@@ -250,7 +250,7 @@ const tasks = [
         lesson: 6,
         hw: true,
         desc: "<p>Программа получает число N, а потом N целых чисел. Выведите (каждое на своей строке, в исходном порядке) те числа, которые <strong>больше среднего</strong>. Если таких нет — выведите <strong>Нет</strong>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">5\n1\n2\n3\n4\n5</code></div><div><span>Вывод</span><code class=\"io-box\">4\n5</code></div></div>",
-        startCode: "n = int(input())\nnumbers = []\n\n# ваш код\n",
+        startCode: "n = int(input())\nnumbers = []\n\n# напишите решение здесь\n",
         kind: "io",
         cases: [{"in": "5\n1\n2\n3\n4\n5", "out": "4\n5"}, {"in": "3\n7\n7\n7", "out": "Нет"}, {"in": "4\n10\n1\n1\n1", "out": "10"}]
     },
@@ -260,8 +260,8 @@ const tasks = [
         difficulty: "easy",
         lesson: 7,
         hw: true,
-        desc: "<p>Напишите функцию <code>square(n)</code>, которая возвращает квадрат числа <code>n</code> (число, умноженное само на себя).</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>square(4) -> 16</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>square(-3) -> 9</code>",
-        startCode: "def square(n):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>square(n)</code>, которая возвращает квадрат числа <code>n</code> — число, умноженное само на себя. Должно работать и с дробными числами.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">square(4)\nsquare(-3)\nsquare(1.5)</code></div><div><span>Результат</span><code class=\"io-box\">16\n9\n2.25</code></div></div>",
+        startCode: "def square(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert square(4) == 16, "square(4) должно вернуть 16"
@@ -284,8 +284,8 @@ except Exception as e:
         difficulty: "easy",
         lesson: 7,
         hw: true,
-        desc: "<p>Напишите функцию <code>to_fahrenheit(c)</code>, которая переводит температуру из градусов Цельсия в градусы Фаренгейта по формуле <code>F = C * 9 / 5 + 32</code>.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>to_fahrenheit(0) -> 32.0</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>to_fahrenheit(100) -> 212.0</code>",
-        startCode: "def to_fahrenheit(c):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>to_fahrenheit(c)</code>, которая переводит температуру из градусов Цельсия в градусы Фаренгейта по формуле <code>F = C * 9 / 5 + 32</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">to_fahrenheit(0)\nto_fahrenheit(100)\nto_fahrenheit(-40)</code></div><div><span>Результат</span><code class=\"io-box\">32.0\n212.0\n-40.0</code></div></div>",
+        startCode: "def to_fahrenheit(c):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert to_fahrenheit(0) == 32, "0 °C = 32 °F"
@@ -308,8 +308,8 @@ except Exception as e:
         difficulty: "medium",
         lesson: 7,
         hw: true,
-        desc: "<p>Напишите функцию <code>factorial(n)</code>, которая возвращает факториал числа: произведение всех чисел от 1 до <code>n</code>. По определению <code>factorial(0) = 1</code>.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>factorial(5) -> 120</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>factorial(0) -> 1</code>",
-        startCode: "def factorial(n):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>factorial(n)</code>, которая возвращает факториал числа — произведение всех чисел от 1 до <code>n</code>. Факториал нуля по определению равен 1.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">factorial(5)\nfactorial(1)\nfactorial(0)</code></div><div><span>Результат</span><code class=\"io-box\">120\n1\n1</code></div></div>",
+        startCode: "def factorial(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert factorial(5) == 120, "5! = 1 * 2 * 3 * 4 * 5 = 120"
@@ -332,8 +332,8 @@ except Exception as e:
         difficulty: "hard",
         lesson: 7,
         hw: true,
-        desc: "<p>Напишите функцию <code>is_prime(n)</code>, которая возвращает <code>True</code>, если число простое (делится без остатка только на 1 и на само себя), иначе <code>False</code>. Числа меньше 2 простыми не считаются.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>is_prime(7) -> True</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>is_prime(91) -> False  # 91 = 7 * 13</code>",
-        startCode: "def is_prime(n):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>is_prime(n)</code>, которая возвращает <code>True</code>, если число простое (делится без остатка только на 1 и на само себя), и <code>False</code>, если нет. Числа меньше 2 простыми не считаются.</p><p>91 = 7 × 13, поэтому <code>is_prime(91)</code> — <code>False</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">is_prime(7)\nis_prime(91)\nis_prime(1)</code></div><div><span>Результат</span><code class=\"io-box\">True\nFalse\nFalse</code></div></div>",
+        startCode: "def is_prime(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert is_prime(2) is True, "2 — самое маленькое простое число"
@@ -359,8 +359,8 @@ except Exception as e:
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>add(a, b)</code>, которая принимает два числа и возвращает их сумму.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>add(2, 3) -> 5</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>add(-1, 1) -> 0</code>",
-        startCode: "def add(a, b):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>add(a, b)</code>, которая принимает два числа и возвращает их сумму.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">add(2, 3)\nadd(-1, 1)</code></div><div><span>Результат</span><code class=\"io-box\">5\n0</code></div></div>",
+        startCode: "def add(a, b):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert add(2, 3) == 5, "add(2, 3) должно вернуть 5"
@@ -382,8 +382,8 @@ except Exception as e:
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>is_even(n)</code>. Она должна возвращать логическое <code>True</code>, если число <code>n</code> чётное, и <code>False</code>, если нечётное (остаток от деления <code>%</code>).</p>",
-        startCode: "def is_even(n):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>is_even(n)</code>, которая возвращает <code>True</code>, если число чётное, и <code>False</code>, если нечётное. Ноль — чётное число.</p><p>Подсказка: чётность проверяют остатком от деления на 2 — <code>n % 2</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">is_even(4)\nis_even(7)\nis_even(0)</code></div><div><span>Результат</span><code class=\"io-box\">True\nFalse\nTrue</code></div></div>",
+        startCode: "def is_even(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert is_even(4) == True, "Для чётного числа 4 должен быть ответ True"
@@ -402,12 +402,12 @@ except Exception as e:
     },
     {
         id: "max",
-        title: "Поиск максимума без max()",
+        title: "Большее из двух без max()",
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>find_max(a, b)</code>, которая принимает два числа и возвращает наибольшее из них. <strong>Внимание:</strong> Запрещено использовать встроенную функцию <code>max()</code>. Используйте условный оператор if - else.</p>",
-        startCode: "def find_max(a, b):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>find_max(a, b)</code>, которая возвращает большее из двух чисел.</p><p>Встроенную функцию <code>max()</code> использовать нельзя — решите задачу условием <code>if</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">find_max(10, 5)\nfind_max(-5, -2)\nfind_max(7, 7)</code></div><div><span>Результат</span><code class=\"io-box\">10\n-2\n7</code></div></div>",
+        startCode: "def find_max(a, b):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert find_max(10, 5) == 10, "find_max(10, 5) должно вернуть 10"
@@ -432,8 +432,8 @@ except Exception as e:
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>fast_power(base, exp)</code>, которая возводит число <code>base</code> в степень <code>exp</code> без использования операторов цикла (используйте оператор **).</p>",
-        startCode: "def fast_power(base, exp):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>fast_power(base, exp)</code>, которая возводит число <code>base</code> в степень <code>exp</code>.</p><p>Цикл не нужен: в Python есть оператор степени <code>**</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">fast_power(2, 3)\nfast_power(5, 2)\nfast_power(10, 0)</code></div><div><span>Результат</span><code class=\"io-box\">8\n25\n1</code></div></div>",
+        startCode: "def fast_power(base, exp):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert fast_power(2, 3) == 8, "2 в степени 3 равно 8"
@@ -451,12 +451,12 @@ except Exception as e:
     },
     {
         id: "greet",
-        title: "Приветствие",
+        title: "Функция: приветствие",
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>greet(name)</code>, которая принимает одну строку (имя) и возвращает строку вида <code>\"Привет, ИМЯ!\"</code>. Например: <code>\"Привет, Иван!\"</code>. Не забывайте запятую и восклицательный знак.</p>",
-        startCode: "def greet(name):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>greet(name)</code>, которая возвращает строку <code>Привет, ИМЯ!</code> — с запятой и восклицательным знаком.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">greet(&#x27;Иван&#x27;)\ngreet(&#x27;Python&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;Привет, Иван!&#x27;\n&#x27;Привет, Python!&#x27;</code></div></div>",
+        startCode: "def greet(name):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert greet("Иван") == "Привет, Иван!", "Для Иван должно быть 'Привет, Иван!'"
@@ -473,12 +473,12 @@ except Exception as e:
     },
     {
         id: "last_digit",
-        title: "Последняя цифра",
+        title: "Функция: последняя цифра",
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>last_digit(n)</code>, которая возвращает последнюю цифру целого числа. Для отрицательных чисел тоже: у <code>-57</code> последняя цифра <code>7</code>.</p><p>Подсказка: остаток от деления на 10 и функция <code>abs()</code>.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>last_digit(1234) -> 4</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>last_digit(-57) -> 7</code>",
-        startCode: "def last_digit(n):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>last_digit(n)</code>, которая возвращает последнюю цифру целого числа. У отрицательных чисел тоже: у <code>-57</code> последняя цифра <code>7</code>.</p><p>Подсказка: остаток от деления на 10 и функция <code>abs()</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">last_digit(1234)\nlast_digit(-57)\nlast_digit(0)</code></div><div><span>Результат</span><code class=\"io-box\">4\n7\n0</code></div></div>",
+        startCode: "def last_digit(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert last_digit(1234) == 4, "last_digit(1234) должно вернуть 4"
@@ -501,8 +501,8 @@ except Exception as e:
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>is_adult(age)</code>, которая возвращает <code>True</code>, если человеку 18 лет или больше, и <code>False</code> в остальных случаях.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>is_adult(20) -> True</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>is_adult(17) -> False</code>",
-        startCode: "def is_adult(age):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>is_adult(age)</code>, которая возвращает <code>True</code>, если человеку 18 лет или больше, и <code>False</code> в остальных случаях.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">is_adult(20)\nis_adult(18)\nis_adult(17)</code></div><div><span>Результат</span><code class=\"io-box\">True\nTrue\nFalse</code></div></div>",
+        startCode: "def is_adult(age):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert is_adult(20) is True, "is_adult(20) должно вернуть True"
@@ -525,8 +525,8 @@ except Exception as e:
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>my_abs(x)</code>, которая возвращает модуль числа (число без знака минус). <strong>Внимание:</strong> встроенную функцию <code>abs()</code> использовать нельзя — используйте условие <code>if</code>.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>my_abs(-5) -> 5</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>my_abs(3) -> 3</code>",
-        startCode: "def my_abs(x):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>my_abs(x)</code>, которая возвращает модуль числа — число без знака минус.</p><p>Встроенную функцию <code>abs()</code> использовать нельзя — решите задачу условием <code>if</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">my_abs(-5)\nmy_abs(3)\nmy_abs(-2.5)</code></div><div><span>Результат</span><code class=\"io-box\">5\n3\n2.5</code></div></div>",
+        startCode: "def my_abs(x):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert my_abs(-5) == 5, "my_abs(-5) должно вернуть 5"
@@ -550,8 +550,8 @@ except Exception as e:
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>count_chars(text)</code>, которая возвращает количество символов в строке. <strong>Внимание:</strong> функцию <code>len()</code> использовать нельзя — посчитайте символы циклом <code>for</code>.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>count_chars('кот') -> 3</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>count_chars('') -> 0</code>",
-        startCode: "def count_chars(text):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>count_chars(text)</code>, которая возвращает количество символов в строке. Пробелы и знаки препинания тоже считаются.</p><p>Функцию <code>len()</code> использовать нельзя — посчитайте символы циклом <code>for</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">count_chars(&#x27;кот&#x27;)\ncount_chars(&#x27;Привет, мир!&#x27;)\ncount_chars(&#x27;&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">3\n12\n0</code></div></div>",
+        startCode: "def count_chars(text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert count_chars("кот") == 3, "В слове кот 3 символа"
@@ -574,8 +574,8 @@ except Exception as e:
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>first_and_last(items)</code>, которая принимает непустой список и возвращает <strong>кортеж</strong> из его первого и последнего элементов.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>first_and_last([1, 2, 3]) -> (1, 3)</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>first_and_last(['a']) -> ('a', 'a')</code>",
-        startCode: "def first_and_last(items):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>first_and_last(items)</code>, которая принимает непустой список и возвращает кортеж из первого и последнего элементов.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">first_and_last([1, 2, 3])\nfirst_and_last([&#x27;a&#x27;])</code></div><div><span>Результат</span><code class=\"io-box\">(1, 3)\n(&#x27;a&#x27;, &#x27;a&#x27;)</code></div></div>",
+        startCode: "def first_and_last(items):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert first_and_last([1, 2, 3]) == (1, 3), "first_and_last([1, 2, 3]) должно вернуть (1, 3)"
@@ -598,8 +598,8 @@ except Exception as e:
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>sign(n)</code>, которая возвращает строку <code>\"положительное\"</code>, <code>\"отрицательное\"</code> или <code>\"ноль\"</code> в зависимости от числа.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>sign(5) -> 'положительное'</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>sign(0) -> 'ноль'</code>",
-        startCode: "def sign(n):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>sign(n)</code>, которая возвращает строку <code>положительное</code>, <code>отрицательное</code> или <code>ноль</code> в зависимости от числа.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">sign(5)\nsign(-3)\nsign(0)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;положительное&#x27;\n&#x27;отрицательное&#x27;\n&#x27;ноль&#x27;</code></div></div>",
+        startCode: "def sign(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert sign(5) == "положительное", "sign(5) должно вернуть «положительное»"
@@ -622,8 +622,8 @@ except Exception as e:
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>repeat(word, n)</code>, которая возвращает слово, повторённое <code>n</code> раз через пробел. Если <code>n</code> равно 0, верните пустую строку.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>repeat('да', 3) -> 'да да да'</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>repeat('ок', 1) -> 'ок'</code>",
-        startCode: "def repeat(word, n):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>repeat(word, n)</code>, которая возвращает слово, повторённое <code>n</code> раз через пробел. Если <code>n</code> равно 0, верните пустую строку. Лишнего пробела в конце быть не должно.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">repeat(&#x27;да&#x27;, 3)\nrepeat(&#x27;ок&#x27;, 1)\nrepeat(&#x27;эхо&#x27;, 0)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;да да да&#x27;\n&#x27;ок&#x27;\n&#x27;&#x27;</code></div></div>",
+        startCode: "def repeat(word, n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert repeat("да", 3) == "да да да", "repeat('да', 3) должно вернуть 'да да да'"
@@ -642,12 +642,12 @@ except Exception as e:
     },
     {
         id: "min_of_three",
-        title: "Минимум из трёх без min()",
+        title: "Наименьшее из трёх без min()",
         difficulty: "easy",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>min3(a, b, c)</code>, которая возвращает наименьшее из трёх чисел. <strong>Внимание:</strong> функцию <code>min()</code> использовать нельзя.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>min3(5, 2, 8) -> 2</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>min3(-1, -7, 0) -> -7</code>",
-        startCode: "def min3(a, b, c):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>min3(a, b, c)</code>, которая возвращает наименьшее из трёх чисел.</p><p>Функцию <code>min()</code> использовать нельзя — только сравнения.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">min3(5, 2, 8)\nmin3(-1, -7, 0)</code></div><div><span>Результат</span><code class=\"io-box\">2\n-7</code></div></div>",
+        startCode: "def min3(a, b, c):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert min3(5, 2, 8) == 2, "min3(5, 2, 8) должно вернуть 2"
@@ -668,12 +668,12 @@ except Exception as e:
     },
     {
         id: "list_sum",
-        title: "Сумма списка",
+        title: "Сумма списка без sum()",
         difficulty: "medium",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>sum_list(numbers)</code>, которая принимает список чисел и возвращает их сумму. <strong>Запрещено</strong> использовать встроенную функцию <code>sum()</code>. Используйте цикл <code>for</code>.</p>",
-        startCode: "def sum_list(numbers):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>sum_list(numbers)</code>, которая возвращает сумму чисел из списка. Сумма пустого списка — 0.</p><p>Встроенную функцию <code>sum()</code> использовать нельзя — сложите числа циклом <code>for</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">sum_list([1, 2, 3])\nsum_list([-5, 10, 5])\nsum_list([])</code></div><div><span>Результат</span><code class=\"io-box\">6\n10\n0</code></div></div>",
+        startCode: "def sum_list(numbers):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert sum_list([1, 2, 3]) == 6, "Сумма 1+2+3 равна 6"
@@ -698,8 +698,8 @@ except Exception as e:
         difficulty: "medium",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>count_even(numbers)</code>, которая возвращает, сколько <strong>чётных</strong> чисел в списке.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>count_even([1, 2, 3, 4]) -> 2</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>count_even([]) -> 0</code>",
-        startCode: "def count_even(numbers):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>count_even(numbers)</code>, которая возвращает, сколько в списке чётных чисел.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">count_even([1, 2, 3, 4])\ncount_even([0, -2, 7, 10])\ncount_even([])</code></div><div><span>Результат</span><code class=\"io-box\">2\n3\n0</code></div></div>",
+        startCode: "def count_even(numbers):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert count_even([1, 2, 3, 4]) == 2, "В [1, 2, 3, 4] два чётных числа"
@@ -722,8 +722,8 @@ except Exception as e:
         difficulty: "medium",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>only_positive(numbers)</code>, которая возвращает <strong>новый список</strong> только из положительных чисел (больше нуля), сохраняя их порядок.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>only_positive([3, -1, 0, 5]) -> [3, 5]</code>",
-        startCode: "def only_positive(numbers):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>only_positive(numbers)</code>, которая возвращает <strong>новый</strong> список только из положительных чисел (больше нуля) в том же порядке. Исходный список менять нельзя.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">only_positive([3, -1, 0, 5])\nonly_positive([-5, -1])</code></div><div><span>Результат</span><code class=\"io-box\">[3, 5]\n[]</code></div></div>",
+        startCode: "def only_positive(numbers):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     data = [3, -1, 0, 5]
@@ -747,8 +747,8 @@ except Exception as e:
         difficulty: "medium",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>unique(items)</code>, которая возвращает новый список без повторяющихся элементов, <strong>сохраняя порядок</strong> их первого появления.</p><p>Внимание: <code>set()</code> порядок не сохраняет — подумайте, как его сохранить.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>unique([3, 1, 3, 2, 1]) -> [3, 1, 2]</code>",
-        startCode: "def unique(items):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>unique(items)</code>, которая возвращает новый список без повторов, сохраняя порядок, в котором элементы встретились впервые.</p><p><code>set()</code> убирает повторы, но не сохраняет порядок — подумайте, как обойтись без него.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">unique([3, 1, 3, 2, 1])\nunique([&#x27;б&#x27;, &#x27;а&#x27;, &#x27;б&#x27;])</code></div><div><span>Результат</span><code class=\"io-box\">[3, 1, 2]\n[&#x27;б&#x27;, &#x27;а&#x27;]</code></div></div>",
+        startCode: "def unique(items):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert unique([3, 1, 3, 2, 1]) == [3, 1, 2], "unique([3, 1, 3, 2, 1]) должно вернуть [3, 1, 2] — порядок первого появления"
@@ -771,8 +771,8 @@ except Exception as e:
         difficulty: "medium",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>digit_sum(n)</code>, которая возвращает сумму цифр неотрицательного целого числа.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>digit_sum(1234) -> 10</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>digit_sum(0) -> 0</code>",
-        startCode: "def digit_sum(n):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>digit_sum(n)</code>, которая возвращает сумму цифр неотрицательного целого числа.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">digit_sum(1234)\ndigit_sum(9)\ndigit_sum(0)</code></div><div><span>Результат</span><code class=\"io-box\">10\n9\n0</code></div></div>",
+        startCode: "def digit_sum(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert digit_sum(1234) == 10, "1 + 2 + 3 + 4 = 10"
@@ -795,8 +795,8 @@ except Exception as e:
         difficulty: "medium",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>table_row(n)</code>, которая возвращает список из 10 чисел: <code>n * 1</code>, <code>n * 2</code>, …, <code>n * 10</code>.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>table_row(3) -> [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]</code>",
-        startCode: "def table_row(n):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>table_row(n)</code>, которая возвращает список из 10 чисел: <code>n * 1</code>, <code>n * 2</code>, …, <code>n * 10</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">table_row(3)</code></div><div><span>Результат</span><code class=\"io-box\">[3, 6, 9, 12, 15, 18, 21, 24, 27, 30]</code></div></div>",
+        startCode: "def table_row(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert table_row(3) == [3, 6, 9, 12, 15, 18, 21, 24, 27, 30], "Неверная строка для 3"
@@ -819,8 +819,8 @@ except Exception as e:
         difficulty: "medium",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>is_leap(year)</code>, которая возвращает <code>True</code>, если год високосный, и <code>False</code>, если нет.</p><p>Правило: год високосный, если делится на 4, <strong>но</strong> годы, которые делятся на 100, високосные только если делятся ещё и на 400.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>is_leap(2024) -> True</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>is_leap(1900) -> False</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>is_leap(2000) -> True</code>",
-        startCode: "def is_leap(year):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>is_leap(year)</code>, которая возвращает <code>True</code>, если год високосный, и <code>False</code>, если нет.</p><p>Правило: год високосный, если делится на 4. Но годы, которые делятся на 100, високосные, только если делятся ещё и на 400.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">is_leap(2024)\nis_leap(1900)\nis_leap(2000)</code></div><div><span>Результат</span><code class=\"io-box\">True\nFalse\nTrue</code></div></div>",
+        startCode: "def is_leap(year):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert is_leap(2024) is True, "2024 делится на 4 — високосный"
@@ -844,8 +844,8 @@ except Exception as e:
         difficulty: "hard",
         lesson: 7,
         hw: false,
-        desc: "<p>Сложный алгоритм! Напишите функцию <code>fib(n)</code>. Она возвращает n-ое число Фибоначчи. Пример ряда: 0, 1, 1, 2, 3, 5, 8. Где fib(0)=0, fib(1)=1, fib(2)=1, fib(6)=8.</p>",
-        startCode: "def fib(n):\n    # Ваш код\n    pass\n",
+        desc: "<p>Напишите функцию <code>fib(n)</code>, которая возвращает число Фибоначчи с номером <code>n</code>. В этом ряду каждое число равно сумме двух предыдущих: 0, 1, 1, 2, 3, 5, 8, 13… Нумерация с нуля: <code>fib(0)</code> — это 0.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">fib(0)\nfib(2)\nfib(6)\nfib(10)</code></div><div><span>Результат</span><code class=\"io-box\">0\n1\n8\n55</code></div></div>",
+        startCode: "def fib(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert fib(0) == 0, "fib(0) должно быть 0"
@@ -865,12 +865,12 @@ except Exception as e:
     },
     {
         id: "flatten",
-        title: "Выпрямить список (рекурсия)",
+        title: "Выпрямить вложенный список",
         difficulty: "hard",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>flatten(items)</code>, которая превращает вложенный список любой глубины в обычный «плоский» список.</p><p>Подсказка: проверка <code>isinstance(x, list)</code> и рекурсия — функция может вызывать саму себя.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>flatten([1, [2, [3, 4]], 5]) -> [1, 2, 3, 4, 5]</code>",
-        startCode: "def flatten(items):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>flatten(items)</code>, которая превращает вложенный список любой глубины в обычный «плоский» список.</p><p>Подсказка: проверка <code>isinstance(x, list)</code> и рекурсия — функция может вызывать саму себя.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">flatten([1, [2, [3, 4]], 5])\nflatten([[], [1], [2, []]])</code></div><div><span>Результат</span><code class=\"io-box\">[1, 2, 3, 4, 5]\n[1, 2]</code></div></div>",
+        startCode: "def flatten(items):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert flatten([1, [2, [3, 4]], 5]) == [1, 2, 3, 4, 5], "flatten([1, [2, [3, 4]], 5]) должно вернуть [1, 2, 3, 4, 5]"
@@ -894,8 +894,8 @@ except Exception as e:
         difficulty: "hard",
         lesson: 7,
         hw: false,
-        desc: "<p>Напишите функцию <code>ticket_price(age, weekend)</code>, которая возвращает цену билета в рублях:</p><ul><li>детям до 7 лет — бесплатно (<code>0</code>);</li><li>от 7 до 17 лет включительно — <code>150</code>;</li><li>от 65 лет — <code>100</code>;</li><li>всем остальным — <code>300</code>.</li></ul><p>Если <code>weekend</code> равно <code>True</code> (выходной), к платным билетам добавляется <code>50</code> рублей. Бесплатные остаются бесплатными.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>ticket_price(5, True) -> 0</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>ticket_price(12, False) -> 150</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>ticket_price(30, True) -> 350</code>",
-        startCode: "def ticket_price(age, weekend):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>ticket_price(age, weekend)</code>, которая возвращает цену билета в рублях: до 7 лет — 0; от 7 до 17 лет включительно — 150; от 65 лет — 100; остальным — 300. Если <code>weekend</code> равно <code>True</code> (выходной), к платным билетам добавляется 50, а бесплатные остаются бесплатными.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">ticket_price(5, True)\nticket_price(12, False)\nticket_price(30, True)</code></div><div><span>Результат</span><code class=\"io-box\">0\n150\n350</code></div></div>",
+        startCode: "def ticket_price(age, weekend):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert ticket_price(5, False) == 0, "Ребёнку 5 лет — бесплатно"
@@ -925,7 +925,7 @@ except Exception as e:
         lesson: 8,
         hw: true,
         desc: "<p>Напишите функцию <code>price(menu, item)</code>. <code>menu</code> — словарь «блюдо → цена». Верните цену блюда <code>item</code>, а если такого блюда нет — <code>0</code>.</p><p>Подсказка: метод <code>get()</code> умеет возвращать значение по умолчанию.</p>",
-        startCode: "def price(menu, item):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "def price(menu, item):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     menu = {"чай": 50, "кофе": 120}
@@ -944,12 +944,12 @@ except Exception as e:
     },
     {
         id: "unique_dict",
-        title: "Словарь возрастов",
+        title: "Самый старший",
         difficulty: "medium",
         lesson: 8,
         hw: true,
-        desc: "<p>Напишите функцию <code>get_oldest(people)</code>. На вход подается словарь, где ключ - имя, значение - возраст. <code>{'Иван': 20, 'Анна': 25}</code>. Верните ИМЯ самого старшего человека.</p>",
-        startCode: "def get_oldest(people):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>get_oldest(people)</code>. Она получает словарь, где ключ — имя, а значение — возраст. Верните имя самого старшего человека.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">get_oldest({&#x27;Иван&#x27;: 20, &#x27;Анна&#x27;: 25})\nget_oldest({&#x27;Борис&#x27;: 50, &#x27;Глеб&#x27;: 15})</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;Анна&#x27;\n&#x27;Борис&#x27;</code></div></div>",
+        startCode: "def get_oldest(people):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert get_oldest({'Иван': 20, 'Анна': 25}) == 'Анна', "Анна (25) старше Ивана (20)"
@@ -970,8 +970,8 @@ except Exception as e:
         difficulty: "medium",
         lesson: 8,
         hw: true,
-        desc: "<p>Напишите функцию <code>invert(d)</code>, которая возвращает новый словарь, где ключи и значения поменялись местами. Все значения в исходном словаре разные.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>invert({'a': 1, 'b': 2}) -> {1: 'a', 2: 'b'}</code>",
-        startCode: "def invert(d):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>invert(d)</code>, которая возвращает новый словарь, где ключи и значения поменялись местами. Все значения в исходном словаре разные.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">invert({&#x27;a&#x27;: 1, &#x27;b&#x27;: 2})\ninvert({&#x27;кот&#x27;: &#x27;cat&#x27;})</code></div><div><span>Результат</span><code class=\"io-box\">{1: &#x27;a&#x27;, 2: &#x27;b&#x27;}\n{&#x27;cat&#x27;: &#x27;кот&#x27;}</code></div></div>",
+        startCode: "def invert(d):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert invert({"a": 1, "b": 2}) == {1: "a", 2: "b"}, "invert({'a': 1, 'b': 2}) должно вернуть {1: 'a', 2: 'b'}"
@@ -993,7 +993,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 8,
         hw: true,
-        desc: "<p>Напишите функцию <code>word_counts(text)</code>, которая принимает строку и возвращает <strong>словарь</strong>, где ключ - слово (в нижнем регистре), а значение - сколько раз оно встретилось. Знаков препинания в строке не будет.</p>",
+        desc: "<p>Напишите функцию <code>word_counts(text)</code>, которая возвращает словарь: ключ — слово в нижнем регистре, значение — сколько раз оно встретилось. Знаков препинания в тексте нет.</p><p>Подсказка: <code>split()</code> разрезает строку на слова, а <code>lower()</code> делает буквы маленькими.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">word_counts(&#x27;кот ест кот спит&#x27;)\nword_counts(&#x27;Раз раз два&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">{&#x27;кот&#x27;: 2, &#x27;ест&#x27;: 1, &#x27;спит&#x27;: 1}\n{&#x27;раз&#x27;: 2, &#x27;два&#x27;: 1}</code></div></div>",
         startCode: "def word_counts(text):\n    # Подсказка: .split() разбивает на слова\n    pass\n",
         testCode: `
 try:
@@ -1019,7 +1019,7 @@ except Exception as e:
         lesson: 9,
         hw: true,
         desc: "<p>Напишите функцию <code>shout(text)</code>, которая возвращает текст заглавными буквами с восклицательным знаком в конце.</p><p>Пример: <code>shout(\"привет\")</code> → <code>\"ПРИВЕТ!\"</code></p>",
-        startCode: "def shout(text):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "def shout(text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert shout("привет") == "ПРИВЕТ!", "shout('привет') должно вернуть 'ПРИВЕТ!'"
@@ -1041,8 +1041,8 @@ except Exception as e:
         difficulty: "medium",
         lesson: 9,
         hw: true,
-        desc: "<p>Напишите функцию <code>reverse_string(text)</code>, которая принимает строку и возвращает её задом наперёд.</p><strong>Примените срезы (slices) или цикл for:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>reverse_string('собака') -> 'акабос'</code>",
-        startCode: "def reverse_string(text):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>reverse_string(text)</code>, которая возвращает строку задом наперёд.</p><p>Подсказка: подойдёт срез или цикл.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">reverse_string(&#x27;собака&#x27;)\nreverse_string(&#x27;Python&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;акабос&#x27;\n&#x27;nohtyP&#x27;</code></div></div>",
+        startCode: "def reverse_string(text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert reverse_string("кот") == "ток", "Слово 'кот' должно стать 'ток'"
@@ -1064,7 +1064,7 @@ except Exception as e:
         difficulty: "medium",
         lesson: 9,
         hw: true,
-        desc: "<p>Напишите функцию <code>is_palindrome(text)</code>, которая возвращает <code>True</code>, если текст читается одинаково туда и обратно (без учета пробелов и регистра!), иначе <code>False</code>. Пример: <code>\"Леша на полке клопа нашел\" -> True</code>.</p>",
+        desc: "<p>Напишите функцию <code>is_palindrome(text)</code>, которая возвращает <code>True</code>, если текст читается одинаково слева направо и справа налево — без учёта пробелов и регистра, иначе <code>False</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">is_palindrome(&#x27;казак&#x27;)\nis_palindrome(&#x27;А роза упала на лапу Азора&#x27;)\nis_palindrome(&#x27;собака&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">True\nTrue\nFalse</code></div></div>",
         startCode: "def is_palindrome(text):\n    # Очистите текст от пробелов и приведите к одному регистру\n    pass\n",
         testCode: `
 try:
@@ -1087,8 +1087,8 @@ except Exception as e:
         difficulty: "hard",
         lesson: 9,
         hw: true,
-        desc: "<p>Напишите функцию <code>caesar(text, shift)</code>, которая шифрует текст шифром Цезаря: каждая <strong>латинская</strong> буква сдвигается по алфавиту на <code>shift</code> позиций (после <code>z</code> снова идёт <code>a</code>). Заглавные буквы остаются заглавными, все остальные символы не меняются.</p><p>Подсказка: функции <code>ord()</code> и <code>chr()</code>.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>caesar('abc', 1) -> 'bcd'</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>caesar('Hello, World!', 3) -> 'Khoor, Zruog!'</code>",
-        startCode: "def caesar(text, shift):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>caesar(text, shift)</code>, которая шифрует текст шифром Цезаря: каждая латинская буква сдвигается по алфавиту на <code>shift</code> позиций (после <code>z</code> снова идёт <code>a</code>). Заглавные буквы остаются заглавными, остальные символы не меняются. Отрицательный сдвиг расшифровывает текст.</p><p>Подсказка: функции <code>ord()</code> и <code>chr()</code> превращают букву в номер и обратно.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">caesar(&#x27;abc&#x27;, 1)\ncaesar(&#x27;xyz&#x27;, 3)\ncaesar(&#x27;Hello, World!&#x27;, 3)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;bcd&#x27;\n&#x27;abc&#x27;\n&#x27;Khoor, Zruog!&#x27;</code></div></div>",
+        startCode: "def caesar(text, shift):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert caesar("abc", 1) == "bcd", "caesar('abc', 1) должно вернуть 'bcd'"
@@ -1108,12 +1108,12 @@ except Exception as e:
     },
     {
         id: "count_vowels",
-        title: "Подсчет гласных",
+        title: "Сколько гласных",
         difficulty: "medium",
         lesson: 9,
         hw: false,
-        desc: "<p>Напишите функцию <code>count_vowels(word)</code>, которая принимает строку и возвращает <strong>количество гласных</strong> букв в ней (а, е, ё, и, о, у, ы, э, ю, я - для русского алфавита). Регистр не имеет значения.</p>",
-        startCode: "def count_vowels(word):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>count_vowels(word)</code>, которая возвращает количество русских гласных в строке: а, е, ё, и, о, у, ы, э, ю, я. Регистр не важен.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">count_vowels(&#x27;Привет&#x27;)\ncount_vowels(&#x27;Яблоко&#x27;)\ncount_vowels(&#x27;КРТК&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">2\n3\n0</code></div></div>",
+        startCode: "def count_vowels(word):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert count_vowels("Привет") == 2, "В 'Привет' две гласные (и, е)"
@@ -1136,8 +1136,8 @@ except Exception as e:
         difficulty: "medium",
         lesson: 9,
         hw: false,
-        desc: "<p>Напишите функцию <code>title_case(text)</code>, которая делает первую букву каждого слова заглавной, а остальные — строчными. Слова разделены одним пробелом.</p><p>Подсказка: <code>split()</code>, <code>capitalize()</code> и <code>join()</code>.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>title_case('привет мир') -> 'Привет Мир'</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>title_case('pYTHON рулит') -> 'Python Рулит'</code>",
-        startCode: "def title_case(text):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>title_case(text)</code>, которая делает первую букву каждого слова заглавной, а остальные — строчными. Слова разделены одним пробелом.</p><p>Подсказка: <code>split()</code>, <code>capitalize()</code> и <code>join()</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">title_case(&#x27;привет мир&#x27;)\ntitle_case(&#x27;pYTHON рулит&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;Привет Мир&#x27;\n&#x27;Python Рулит&#x27;</code></div></div>",
+        startCode: "def title_case(text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert title_case("привет мир") == "Привет Мир", "title_case('привет мир') должно вернуть 'Привет Мир'"
@@ -1160,8 +1160,8 @@ except Exception as e:
         difficulty: "medium",
         lesson: 9,
         hw: false,
-        desc: "<p>Напишите функцию <code>longest_word(text)</code>, которая возвращает самое длинное слово в строке. Если таких слов несколько, верните <strong>первое</strong> из них.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>longest_word('я люблю программировать') -> 'программировать'</code>",
-        startCode: "def longest_word(text):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>longest_word(text)</code>, которая возвращает самое длинное слово в строке. Если таких слов несколько, верните первое из них.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">longest_word(&#x27;я люблю программировать&#x27;)\nlongest_word(&#x27;кот пёс мыш&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;программировать&#x27;\n&#x27;кот&#x27;</code></div></div>",
+        startCode: "def longest_word(text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert longest_word("я люблю программировать") == "программировать", "Ожидалось слово «программировать»"
@@ -1183,8 +1183,8 @@ except Exception as e:
         difficulty: "medium",
         lesson: 9,
         hw: false,
-        desc: "<p>Напишите функцию <code>count_letter(text, letter)</code>, которая возвращает, сколько раз буква встречается в тексте <strong>без учёта регистра</strong>.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>count_letter('Абракадабра', 'а') -> 5</code>",
-        startCode: "def count_letter(text, letter):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>count_letter(text, letter)</code>, которая возвращает, сколько раз буква встречается в тексте, без учёта регистра.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">count_letter(&#x27;Абракадабра&#x27;, &#x27;а&#x27;)\ncount_letter(&#x27;python&#x27;, &#x27;P&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">5\n1</code></div></div>",
+        startCode: "def count_letter(text, letter):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert count_letter("Абракадабра", "а") == 5, "В «Абракадабра» пять букв «а» (с учётом заглавной)"
@@ -1207,8 +1207,8 @@ except Exception as e:
         difficulty: "hard",
         lesson: 9,
         hw: false,
-        desc: "<p>Напишите функцию <code>is_anagram(a, b)</code>, которая возвращает <code>True</code>, если строки состоят из одних и тех же букв (<strong>без учёта регистра и пробелов</strong>), иначе <code>False</code>.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>is_anagram('Листок', 'стоклИ') -> True</code><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>is_anagram('кот', 'кит') -> False</code>",
-        startCode: "def is_anagram(a, b):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>is_anagram(a, b)</code>, которая возвращает <code>True</code>, если строки состоят из одних и тех же букв в том же количестве — без учёта регистра и пробелов, иначе <code>False</code>.</p><p>Подсказка: отсортированные буквы анаграмм совпадают.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">is_anagram(&#x27;Листок&#x27;, &#x27;стоклИ&#x27;)\nis_anagram(&#x27;кот&#x27;, &#x27;кит&#x27;)\nis_anagram(&#x27;аа&#x27;, &#x27;а&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">True\nFalse\nFalse</code></div></div>",
+        startCode: "def is_anagram(a, b):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert is_anagram("Листок", "стоклИ") is True, "«Листок» и «стоклИ» — анаграммы"
@@ -1233,7 +1233,7 @@ except Exception as e:
         lesson: 10,
         hw: true,
         desc: "<p>Напишите функцию <code>write_and_read(filename, text)</code>: запишите <code>text</code> в файл <code>filename</code>, затем прочитайте файл и верните его содержимое.</p><p>Используйте <code>with open(...)</code> и <code>encoding=\"utf-8\"</code>. Файл создаётся во временной памяти браузера.</p>",
-        startCode: "def write_and_read(filename, text):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "def write_and_read(filename, text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert write_and_read("a.txt", "Привет, файл!") == "Привет, файл!", "Функция должна вернуть то, что записали"
@@ -1255,7 +1255,7 @@ except Exception as e:
         lesson: 10,
         hw: true,
         desc: "<p>Напишите функцию <code>count_words_in_file(filename)</code>, которая возвращает количество слов в текстовом файле. Слова разделены пробелами и переносами строк.</p>",
-        startCode: "def count_words_in_file(filename):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "def count_words_in_file(filename):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     with open("w1.txt", "w", encoding="utf-8") as f:
@@ -1279,12 +1279,12 @@ except Exception as e:
     },
     {
         id: "file_lines",
-        title: "Запись и чтение файла",
+        title: "Записать строки и посчитать",
         difficulty: "hard",
         lesson: 10,
         hw: true,
-        desc: "<p>Напишите функцию <code>save_and_count(filename, lines)</code>. Она записывает строки из списка <code>lines</code> в файл <code>filename</code> — каждую с новой строки, — затем открывает этот файл на чтение и возвращает, сколько в нём строк.</p><p>Используйте <code>with open(...)</code>. Файл создаётся во временной памяти браузера, ваш компьютер он не затронет.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>save_and_count('notes.txt', ['купить хлеб', 'позвонить маме']) -> 2</code>",
-        startCode: "def save_and_count(filename, lines):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>save_and_count(filename, lines)</code>. Она записывает строки из списка <code>lines</code> в файл <code>filename</code> — каждую с новой строки, а если файл уже был, перезаписывает его. Затем открывает файл на чтение и возвращает, сколько в нём строк.</p><p>Используйте <code>with open(...)</code> и <code>encoding=&quot;utf-8&quot;</code>. Файл создаётся во временной памяти браузера.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">save_and_count(&#x27;notes.txt&#x27;, [&#x27;купить хлеб&#x27;, &#x27;позвонить маме&#x27;])</code></div><div><span>Результат</span><code class=\"io-box\">2</code></div></div>",
+        startCode: "def save_and_count(filename, lines):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert save_and_count("t1.txt", ["купить хлеб", "позвонить маме"]) == 2, "В файле должно получиться 2 строки"
@@ -1310,7 +1310,7 @@ except Exception as e:
         lesson: 10,
         hw: true,
         desc: "<p>Напишите функцию <code>max_in_file(filename)</code>. В файле записаны целые числа — по одному на строке, но могут встречаться пустые строки. Верните самое большое число. Если чисел нет совсем — верните <code>None</code>.</p>",
-        startCode: "def max_in_file(filename):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "def max_in_file(filename):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     with open("n1.txt", "w", encoding="utf-8") as f:
@@ -1339,7 +1339,7 @@ except Exception as e:
         lesson: 11,
         hw: true,
         desc: "<p>Напишите функцию <code>to_int(text, default)</code>: попробуйте превратить <code>text</code> в целое число через <code>int()</code>. Если не получилось — верните <code>default</code>. Обязательно используйте <code>try-except</code>.</p>",
-        startCode: "def to_int(text, default):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "def to_int(text, default):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert to_int("42", 0) == 42, "to_int('42', 0) должно вернуть 42"
@@ -1364,7 +1364,7 @@ except Exception as e:
         lesson: 11,
         hw: true,
         desc: "<p>Напишите функцию <code>check_age(age)</code>. Если возраст от 0 до 120 включительно — верните его. Иначе вызовите ошибку: <code>raise ValueError(\"Неверный возраст\")</code>.</p>",
-        startCode: "def check_age(age):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "def check_age(age):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert check_age(25) == 25, "check_age(25) должно вернуть 25"
@@ -1395,8 +1395,8 @@ except Exception as e:
         difficulty: "hard",
         lesson: 11,
         hw: true,
-        desc: "<p>Напишите функцию <code>safe_divide(a, b)</code>, которая делит <code>a</code> на <code>b</code>. Если возникает ошибка деления на ноль, используйте блок <code>try-except</code> и возвращайте строку <code>\"Ошибка\"</code>.</p>",
-        startCode: "def safe_divide(a, b):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>safe_divide(a, b)</code>, которая возвращает результат деления <code>a / b</code>. Если делить на ноль, функция должна вернуть строку <code>Ошибка</code>.</p><p>Обязательно используйте <code>try-except</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">safe_divide(10, 2)\nsafe_divide(10, 0)</code></div><div><span>Результат</span><code class=\"io-box\">5.0\n&#x27;Ошибка&#x27;</code></div></div>",
+        startCode: "def safe_divide(a, b):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert safe_divide(10, 2) == 5, "10 / 2 должно быть 5"
@@ -1416,12 +1416,12 @@ except Exception as e:
     },
     {
         id: "parse_numbers",
-        title: "Числа из строк (try-except)",
+        title: "Числа из строк",
         difficulty: "hard",
         lesson: 11,
         hw: true,
-        desc: "<p>Напишите функцию <code>parse_numbers(items)</code>. Она получает список строк и возвращает список целых чисел из тех строк, которые удалось превратить в число через <code>int()</code>. Строки, которые числом не являются, пропускаются. Обязательно используйте <code>try-except</code>.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>parse_numbers(['10', 'abc', '-3', '4.5']) -> [10, -3]</code>",
-        startCode: "def parse_numbers(items):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>parse_numbers(items)</code>. Она получает список строк и возвращает список целых чисел из тех строк, которые удалось превратить в число через <code>int()</code>. Остальные строки пропускаются.</p><p>Обязательно используйте <code>try-except</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">parse_numbers([&#x27;10&#x27;, &#x27;abc&#x27;, &#x27;-3&#x27;, &#x27;4.5&#x27;])\nparse_numbers([&#x27;один&#x27;, &#x27;два&#x27;])</code></div><div><span>Результат</span><code class=\"io-box\">[10, -3]\n[]</code></div></div>",
+        startCode: "def parse_numbers(items):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert parse_numbers(["10", "abc", "-3", "4.5"]) == [10, -3], "Ожидалось [10, -3]: «abc» и «4.5» нельзя превратить в int"
@@ -1446,7 +1446,7 @@ except Exception as e:
         lesson: 12,
         hw: true,
         desc: "<p>Напишите функцию <code>circle_area(r)</code>, которая возвращает площадь круга радиуса <code>r</code>, округлённую до 2 знаков: <code>round(x, 2)</code>. Число π возьмите из модуля <code>math</code>: <code>math.pi</code>.</p>",
-        startCode: "import math\n\ndef circle_area(r):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "import math\n\ndef circle_area(r):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert circle_area(1) == 3.14, "Площадь круга радиуса 1 — 3.14"
@@ -1469,7 +1469,7 @@ except Exception as e:
         lesson: 12,
         hw: true,
         desc: "<p>Напишите функцию <code>hypotenuse(a, b)</code>, которая возвращает длину гипотенузы прямоугольного треугольника с катетами <code>a</code> и <code>b</code>, округлённую до 2 знаков. Формула: корень из <code>a² + b²</code>, корень — <code>math.sqrt()</code>.</p>",
-        startCode: "import math\n\ndef hypotenuse(a, b):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "import math\n\ndef hypotenuse(a, b):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert hypotenuse(3, 4) == 5, "Катеты 3 и 4 — гипотенуза 5"
@@ -1492,7 +1492,7 @@ except Exception as e:
         lesson: 12,
         hw: true,
         desc: "<p>Напишите функцию <code>roll_dice(n)</code>, которая возвращает список из <code>n</code> случайных бросков игрального кубика — целых чисел от 1 до 6. Используйте модуль <code>random</code>.</p>",
-        startCode: "import random\n\ndef roll_dice(n):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "import random\n\ndef roll_dice(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     rolls = roll_dice(600)
@@ -1536,11 +1536,11 @@ except Exception as e:
     },
     {
         id: "oop_rectangle",
-        title: "Основы ООП (Прямоугольник)",
+        title: "Класс «Прямоугольник»",
         difficulty: "hard",
         lesson: 13,
         hw: true,
-        desc: "<p>Напишите класс <code>Rectangle</code>, у которого в конструкторе <code>__init__</code> задаются ширина и высота. Добавьте метод <code>get_area()</code>, который возвращает его площадь (ширина на высоту).</p>",
+        desc: "<p>Напишите класс <code>Rectangle</code>. При создании он получает ширину и высоту: <code>Rectangle(10, 5)</code>. Метод <code>get_area()</code> возвращает площадь — ширину, умноженную на высоту.</p><p class=\"io-title\">Пример:</p><code class=\"io-box\">r = Rectangle(10, 5)\nr.get_area()  # 50\nRectangle(2, 3).get_area()  # 6</code>",
         startCode: "class Rectangle:\n    def __init__(self, w, h):\n        pass\n\n    def get_area(self):\n        pass\n",
         testCode: `
 try:
@@ -1563,11 +1563,11 @@ except Exception as e:
     },
     {
         id: "bank_account",
-        title: "Банковский счёт (ООП)",
+        title: "Класс «Банковский счёт»",
         difficulty: "hard",
         lesson: 13,
         hw: true,
-        desc: "<p>Напишите класс <code>BankAccount</code>:</p><ul><li><code>BankAccount(balance)</code> — создаёт счёт с начальным балансом;</li><li><code>deposit(amount)</code> — пополняет счёт;</li><li><code>withdraw(amount)</code> — снимает деньги и возвращает <code>True</code>. Если денег не хватает, баланс не меняется, а метод возвращает <code>False</code>;</li><li>атрибут <code>balance</code> хранит текущий баланс.</li></ul>",
+        desc: "<p>Напишите класс <code>BankAccount</code>: <code>BankAccount(balance)</code> создаёт счёт с начальным балансом, атрибут <code>balance</code> хранит текущий баланс, <code>deposit(amount)</code> пополняет счёт, <code>withdraw(amount)</code> снимает деньги и возвращает <code>True</code>. Если денег не хватает, баланс не меняется, а <code>withdraw</code> возвращает <code>False</code>.</p><p class=\"io-title\">Пример:</p><code class=\"io-box\">acc = BankAccount(100)\nacc.deposit(50)\nacc.balance  # 150\nacc.withdraw(30)  # True\nacc.withdraw(500)  # False\nacc.balance  # 120</code>",
         startCode: "class BankAccount:\n    def __init__(self, balance):\n        pass\n\n    def deposit(self, amount):\n        pass\n\n    def withdraw(self, amount):\n        pass\n",
         testCode: `
 try:
@@ -1593,11 +1593,11 @@ except Exception as e:
     },
     {
         id: "stack",
-        title: "Стек (ООП)",
+        title: "Класс «Стек»",
         difficulty: "hard",
         lesson: 13,
         hw: true,
-        desc: "<p>Напишите класс <code>Stack</code> — «стопку», в которой последний положенный элемент забирается первым:</p><ul><li><code>push(item)</code> — положить элемент наверх;</li><li><code>pop()</code> — забрать и вернуть верхний элемент, а если стек пуст — вернуть <code>None</code>;</li><li><code>peek()</code> — вернуть верхний элемент, не забирая его (<code>None</code>, если пусто);</li><li><code>is_empty()</code> — <code>True</code>, если стек пуст;</li><li><code>size()</code> — количество элементов.</li></ul>",
+        desc: "<p>Напишите класс <code>Stack</code> — «стопку», в которой последний положенный элемент забирается первым. Методы: <code>push(item)</code> — положить наверх; <code>pop()</code> — забрать и вернуть верхний элемент (<code>None</code>, если стек пуст); <code>peek()</code> — вернуть верхний элемент, не забирая (<code>None</code>, если пусто); <code>is_empty()</code> — пуст ли стек; <code>size()</code> — сколько элементов.</p><p class=\"io-title\">Пример:</p><code class=\"io-box\">s = Stack()\ns.push(1)\ns.push(2)\ns.peek()  # 2\ns.pop()  # 2\ns.size()  # 1</code>",
         startCode: "class Stack:\n    def __init__(self):\n        pass\n\n    def push(self, item):\n        pass\n\n    def pop(self):\n        pass\n\n    def peek(self):\n        pass\n\n    def is_empty(self):\n        pass\n\n    def size(self):\n        pass\n",
         testCode: `
 try:
@@ -1628,7 +1628,7 @@ except Exception as e:
         lesson: 14,
         hw: true,
         desc: "<p>Напишите функцию <code>format_date(text)</code>, которая получает дату в формате <code>ГГГГ-ММ-ДД</code> и возвращает её в привычном виде <code>ДД.ММ.ГГГГ</code>. Используйте <code>datetime.strptime()</code> и <code>strftime()</code>.</p>",
-        startCode: "from datetime import datetime\n\ndef format_date(text):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "from datetime import datetime\n\ndef format_date(text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert format_date("2024-03-08") == "08.03.2024", "2024-03-08 → 08.03.2024"
@@ -1646,11 +1646,11 @@ except Exception as e:
     },
     {
         id: "datetime_days",
-        title: "Разница в днях (datetime)",
+        title: "Разница в днях",
         difficulty: "hard",
         lesson: 14,
         hw: true,
-        desc: "<p>Заимпортируйте модуль <code>datetime</code>. Напишите функцию <code>get_days_diff(date1_str, date2_str)</code>. Даты приходят в формате <code>YYYY-MM-DD</code>. Верните целое количество дней (разницу) между первой и второй датой.</p>",
+        desc: "<p>Напишите функцию <code>get_days_diff(date1_str, date2_str)</code>. Даты приходят строками в формате ГГГГ-ММ-ДД. Верните, сколько дней проходит от первой даты до второй.</p><p>Подсказка: <code>datetime.strptime()</code> превращает строку в дату, а у разности дат есть атрибут <code>.days</code>. В 2024 году в феврале 29 дней.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">get_days_diff(&#x27;2025-01-01&#x27;, &#x27;2025-01-10&#x27;)\nget_days_diff(&#x27;2024-02-01&#x27;, &#x27;2024-03-01&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">9\n29</code></div></div>",
         startCode: "from datetime import datetime\n\ndef get_days_diff(date1_str, date2_str):\n    # Вам поможет datetime.strptime()\n    pass\n",
         testCode: `
 try:
@@ -1672,8 +1672,8 @@ except Exception as e:
         difficulty: "hard",
         lesson: 14,
         hw: true,
-        desc: "<p>Напишите функцию <code>weekday_name(date_str)</code>. Она получает дату в формате <code>YYYY-MM-DD</code> и возвращает название дня недели по-русски строчными буквами: <code>\"понедельник\"</code>, <code>\"вторник\"</code>, …, <code>\"воскресенье\"</code>.</p><p>Подсказка: <code>datetime.strptime()</code> и метод <code>weekday()</code>, который возвращает 0 для понедельника.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>weekday_name('2024-01-01') -> 'понедельник'</code>",
-        startCode: "from datetime import datetime\n\ndef weekday_name(date_str):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>weekday_name(date_str)</code>. Она получает дату строкой в формате ГГГГ-ММ-ДД и возвращает день недели по-русски маленькими буквами: <code>понедельник</code>, <code>вторник</code>, …, <code>воскресенье</code>.</p><p>Подсказка: метод <code>weekday()</code> возвращает 0 для понедельника и 6 для воскресенья.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">weekday_name(&#x27;2024-01-01&#x27;)\nweekday_name(&#x27;2000-01-01&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;понедельник&#x27;\n&#x27;суббота&#x27;</code></div></div>",
+        startCode: "from datetime import datetime\n\ndef weekday_name(date_str):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert weekday_name("2024-01-01") == "понедельник", "1 января 2024 года — понедельник"
@@ -1697,7 +1697,7 @@ except Exception as e:
         lesson: 14,
         hw: true,
         desc: "<p>Напишите функцию <code>age_on(birth, day)</code>: обе даты приходят строками в формате <code>ГГГГ-ММ-ДД</code>. Верните, сколько <strong>полных</strong> лет исполнилось человеку на дату <code>day</code>. Если день рождения в этом году ещё не наступил — год не засчитывается.</p>",
-        startCode: "from datetime import datetime\n\ndef age_on(birth, day):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "from datetime import datetime\n\ndef age_on(birth, day):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert age_on("2010-05-20", "2026-05-20") == 16, "В день рождения исполняется 16"
@@ -1720,8 +1720,8 @@ except Exception as e:
         difficulty: "hard",
         lesson: 15,
         hw: true,
-        desc: "<p>Напишите функцию <code>most_common_word(text)</code>, которая возвращает слово, встречающееся в тексте чаще всего, <strong>в нижнем регистре</strong>. Знаков препинания в тексте нет. Если таких слов несколько, верните то, что встретилось в тексте раньше.</p><strong>Пример:</strong><br><code style='background:rgba(0,0,0,0.05); padding:2px 5px; border-radius:4px;'>most_common_word('Кот видит кота а кот спит') -> 'кот'</code>",
-        startCode: "def most_common_word(text):\n    # Ваш код пишите здесь\n    pass\n",
+        desc: "<p>Напишите функцию <code>most_common_word(text)</code>, которая возвращает самое частое слово текста маленькими буквами. Регистр не важен, знаков препинания нет. Если таких слов несколько, верните то, что встретилось раньше.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">most_common_word(&#x27;Кот видит кота а кот спит&#x27;)\nmost_common_word(&#x27;яблоко груша&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;кот&#x27;\n&#x27;яблоко&#x27;</code></div></div>",
+        startCode: "def most_common_word(text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert most_common_word("Кот видит кота а кот спит") == "кот", "Слово «кот» встречается 2 раза"
@@ -1798,7 +1798,7 @@ except Exception as e:
         lesson: 16,
         hw: true,
         desc: "<p>Напишите функцию <code>build_url(base, params)</code>. <code>params</code> — словарь параметров запроса. Верните адрес вида <code>base?ключ1=значение1&amp;ключ2=значение2</code> в порядке ключей словаря. Если параметров нет — верните <code>base</code> без знака вопроса.</p>",
-        startCode: "def build_url(base, params):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "def build_url(base, params):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert build_url("https://api.site/w", {"city": "Moscow", "days": 3}) == "https://api.site/w?city=Moscow&days=3", "Неверный адрес с двумя параметрами"
@@ -1821,7 +1821,7 @@ except Exception as e:
         lesson: 16,
         hw: true,
         desc: "<p>Сервис погоды прислал ответ в формате JSON (строкой). Напишите функцию <code>avg_temp(json_text)</code>, которая возвращает среднюю температуру за все дни, округлённую до 1 знака. Используйте <code>json.loads()</code>.</p><p>Пример ответа: <code>{\"city\": \"Москва\", \"days\": [{\"temp\": 10}, {\"temp\": 14}]}</code></p>",
-        startCode: "import json\n\ndef avg_temp(json_text):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "import json\n\ndef avg_temp(json_text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert avg_temp('{"city": "Москва", "days": [{"temp": 10}, {"temp": 14}]}') == 12, "Среднее 10 и 14 — 12"
@@ -1844,7 +1844,7 @@ except Exception as e:
         lesson: 16,
         hw: true,
         desc: "<p>API игры возвращает таблицу результатов — JSON-список вида <code>[{\"name\": \"Аня\", \"score\": 120}, ...]</code>. Напишите функцию <code>top_player(json_text)</code>, которая возвращает имя игрока с наибольшим счётом. Если список пуст — верните <code>None</code>. При равенстве — того, кто раньше в списке.</p>",
-        startCode: "import json\n\ndef top_player(json_text):\n    # Ваш код пишите здесь\n    pass\n",
+        startCode: "import json\n\ndef top_player(json_text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
 try:
     assert top_player('[{"name": "Аня", "score": 120}, {"name": "Игорь", "score": 300}, {"name": "Оля", "score": 90}]') == "Игорь", "Больше всех очков у Игоря"
