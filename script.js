@@ -7,17 +7,22 @@ document.addEventListener('DOMContentLoaded', () => {
         'lesson16.html'
     ];
 
-    // Уроки, которые преподаватель открыл по ссылке-заданию (страница «Моё задание»)
+    // Уроки, которые открыл преподаватель своей ссылкой (страница «Мои уроки» сохраняет список)
     function getUnlockedLessons() {
         try { return JSON.parse(localStorage.getItem('unlocked_lessons')) || []; }
         catch (e) { return []; }
     }
 
-    // Урок доступен: первый урок, или пройден предыдущий, или его открыл преподаватель
-    function isLessonOpen(lessonFile, progress) {
+    // Урок 1 бесплатный и открыт всем. Остальные уроки открывает преподаватель своей ссылкой
+    // (список хранится в unlocked_lessons). В браузере преподавателя открыты все уроки.
+    function isLessonOpen(lessonFile) {
         const i = lessonsList.indexOf(lessonFile);
         if (i <= 0) return true;
-        return !!progress[lessonsList[i - 1]] || getUnlockedLessons().includes(lessonFile);
+        return isTeacherBrowser() || getUnlockedLessons().includes(lessonFile);
+    }
+
+    function hasTeacherAccess() {
+        try { return !!localStorage.getItem('pb_access') || !!localStorage.getItem('pb_assignment'); } catch (e) { return false; }
     }
 
     function safeGetProgress() {
@@ -29,18 +34,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPath = window.location.pathname.split('/').pop();
     if (currentPath === '') currentPath = 'index.html';
 
-    const navLinks = document.querySelectorAll('nav ul li a');
-    navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        const isLesson = currentPath.startsWith('lesson');
-
-        if (href === currentPath) {
-            link.classList.add('active');
-        } else if (isLesson && href === 'python-basic.html') {
-            link.classList.add('active');
-        } else {
-            link.classList.remove('active');
-        }
+    // Пункт меню, к которому относится страница: уроки — к «Моим урокам», редактор — к «Практике» и т. д.
+    const NAV_SECTION = {
+        'python-online.html': 'tasks.html', 'glossary.html': 'cheatsheet.html',
+        'certificate.html': 'python-basic.html', 'next-steps.html': 'python-basic.html', 'libraries.html': 'cheatsheet.html'
+    };
+    const navTarget = /^lesson\d+\.html$/.test(currentPath) ? 'python-basic.html' : (NAV_SECTION[currentPath] || currentPath);
+    document.querySelectorAll('header nav ul li a').forEach(link => {
+        const on = link.getAttribute('href') === navTarget;
+        link.classList.toggle('active', on);
+        if (on) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
     });
 
     // --- 1. Quiz Data (15 Lessons) ---
@@ -411,20 +414,29 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // B. Урок закрыт, если не пройден предыдущий.
-        //    Текст урока остаётся доступен (его могут прочитать и ученик, и поисковик),
-        //    а тест и переход дальше откроются только после прохождения предыдущего урока.
+        // B. Урок закрыт, если его ещё не открыл преподаватель (урок 1 открыт всем).
+        //    Видна только цель урока и карточка «как получить доступ».
         const lessonIndex = lessonsList.indexOf(currentPath);
-        if (lessonIndex > 0 && !isLessonOpen(currentPath, progress)) {
+        if (lessonIndex > 0 && !isLessonOpen(currentPath)) {
             lessonLocked = true;
-            const prevLesson = lessonsList[lessonIndex - 1];
-            const banner = document.createElement('div');
-            banner.className = 'lesson-locked-banner';
-            banner.setAttribute('role', 'note');
-            banner.innerHTML = `🔒 <strong>Урок пока закрыт.</strong> Читать теорию можно, но тест откроется после
-                прохождения <a href="${prevLesson}">урока ${lessonIndex}</a>.`;
+            document.body.classList.add('lesson-is-locked');
+            const card = document.createElement('section');
+            card.className = 'lesson-lock';
+            card.setAttribute('role', 'note');
+            card.innerHTML = `
+                <span class="lesson-lock-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+                <div class="lesson-lock-body">
+                    <h2>Этот урок откроет преподаватель</h2>
+                    <p>Урок 1 бесплатный — его можно пройти прямо сейчас. Остальные уроки открываются после записи на занятия: преподаватель пришлёт ссылку, и урок появится в разделе «Мои уроки».</p>
+                    <div class="lesson-lock-actions">
+                        <a class="hub-btn hub-btn-primary" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Записаться в Telegram</a>
+                        <a class="hub-btn" href="lesson1.html">Пройти урок 1 бесплатно</a>
+                    </div>
+                    <p class="lesson-lock-note">Уже занимаетесь? Откройте ссылку от преподавателя ещё раз — уроки откроются.</p>
+                </div>`;
+            const goal = document.querySelector('main .lesson-goal');
             const main = document.querySelector('main');
-            if (main) main.insertBefore(banner, main.firstChild);
+            if (goal) goal.after(card); else if (main) main.insertBefore(card, main.firstChild);
         }
 
         // C. Generate Nav Buttons (Prev/Next)
@@ -442,6 +454,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Next Button is handled by showNextLessonButton after quiz
+        }
+
+        // D. В конце открытого урока — «Отправить результат преподавателю»
+        if (lessonIndex >= 0 && !lessonLocked && navContainer && !isTeacherBrowser()) {
+            const box = document.createElement('section');
+            box.className = 'lesson-send';
+            if (hasTeacherAccess()) {
+                box.innerHTML = `<div class="lesson-send-text"><strong>Прошли урок?</strong><span>Отправьте результат преподавателю: он проверит тест и домашку и откроет следующий урок.</span></div>
+                    <a class="hub-btn hub-btn-primary" href="python-basic.html#send">Отправить результат</a>`;
+            } else {
+                box.innerHTML = `<div class="lesson-send-text"><strong>Хотите продолжить?</strong><span>Запишитесь на занятия: преподаватель откроет следующие уроки, будет проверять домашку и отвечать на вопросы.</span></div>
+                    <a class="hub-btn hub-btn-primary" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Записаться в Telegram</a>`;
+            }
+            navContainer.parentNode.insertBefore(box, navContainer);
         }
     }
 
@@ -514,12 +540,27 @@ document.addEventListener('DOMContentLoaded', () => {
         return i >= 0 && i < lessonsList.length - 1 ? lessonsList[i + 1] : null;
     }
 
-    // Ссылка-кнопка «Следующий урок» (или сертификат после последнего урока)
+    // Кнопка после теста: следующий урок, если он уже открыт; иначе — отправить результат преподавателю
     function nextLessonLink(primary) {
         const next = nextLessonFile();
-        const a = qel('a', 'qz-btn ' + (primary ? 'qz-btn-primary' : ''), next ? `Перейти к уроку ${lessonsList.indexOf(next) + 1} →` : 'Получить сертификат →');
-        a.href = next || 'certificate.html';
+        let text, href;
+        if (!next) { text = 'Получить сертификат →'; href = 'certificate.html'; }
+        else if (isLessonOpen(next) && !isTeacherBrowser()) { text = `Перейти к уроку ${lessonsList.indexOf(next) + 1} →`; href = next; }
+        else if (isTeacherBrowser()) { text = `Урок ${lessonsList.indexOf(next) + 1} →`; href = next; }
+        else if (hasTeacherAccess()) { text = 'Отправить результат преподавателю'; href = 'python-basic.html#send'; }
+        else { text = 'Записаться на занятия'; href = 'https://t.me/HugeMixProfile'; }
+        const a = qel('a', 'qz-btn ' + (primary ? 'qz-btn-primary' : ''), text);
+        a.href = href;
+        if (href.startsWith('https://')) { a.target = '_blank'; a.rel = 'noopener'; }
         return a;
+    }
+
+    function afterPassText() {
+        const next = nextLessonFile();
+        if (!next) return 'Это был последний урок курса.';
+        if (isLessonOpen(next) && !isTeacherBrowser()) return 'Следующий урок уже открыт.';
+        if (hasTeacherAccess()) return 'Отправьте результат преподавателю — он проверит и откроет следующий урок.';
+        return 'Чтобы продолжить, запишитесь на занятия — преподаватель откроет следующий урок.';
     }
 
     function initQuiz() {
@@ -562,7 +603,7 @@ document.addEventListener('DOMContentLoaded', () => {
         box.textContent = '';
         const card = qel('div', 'qz-card qz-intro');
         card.append(qel('span', 'qz-eyebrow', 'Тест по уроку'), qel('h2', 'qz-title', 'Проверьте себя'));
-        card.append(qel('p', 'qz-lead', `Ответьте на ${total} вопросов по теме урока. Если верных ответов будет ${need} или больше, тест засчитается и откроется следующий урок.`));
+        card.append(qel('p', 'qz-lead', `Ответьте на ${total} вопросов по теме урока. Если верных ответов будет ${need} или больше, тест засчитается. Результат увидит преподаватель, когда вы его отправите.`));
         const facts = qel('ul', 'qz-facts');
         [[String(total), 'вопросов'], [`${need} из ${total}`, 'чтобы пройти'], [`≈ ${Math.max(3, Math.round(total / 2))} мин`, 'на весь тест']].forEach(([big, small]) => {
             const li = qel('li');
@@ -789,7 +830,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text.append(qel('span', 'qz-eyebrow' + (passed ? ' is-ok' : ' is-bad'), passed ? 'Тест пройден' : 'Тест не пройден'));
         text.append(qel('h2', 'qz-title', passed ? (correct === total ? 'Отлично, без единой ошибки!' : 'Хороший результат!') : 'Пока не получилось'));
         text.append(qel('p', 'qz-lead', passed
-            ? `Верных ответов: ${correct} из ${total}. ${nextLessonFile() ? 'Следующий урок открыт.' : 'Это был последний урок курса.'}`
+            ? `Верных ответов: ${correct} из ${total}. ${afterPassText()}`
             : `Верных ответов: ${correct} из ${total}, а нужно хотя бы ${need}. Посмотрите разбор ниже, повторите урок и попробуйте снова.`));
         top.append(text);
         card.append(top);
@@ -858,11 +899,12 @@ document.addEventListener('DOMContentLoaded', () => {
         try { localStorage.setItem('quiz_scores', JSON.stringify(scores)); } catch (e) { /* не страшно */ }
     }
 
-    // Кнопка «Следующий урок» внизу страницы — появляется, когда тест пройден
+    // Кнопка «Следующий урок» внизу страницы — когда тест пройден и следующий урок открыт
     function showNextLessonButton() {
         const navContainer = document.querySelector('.lesson-navigation');
         if (!navContainer || navContainer.querySelector('.next, .finish')) return;
         const next = nextLessonFile();
+        if (next && !isLessonOpen(next)) return;
         const a = document.createElement('a');
         a.className = next ? 'btn-nav next' : 'btn-nav next finish';
         a.href = next || 'certificate.html';
@@ -956,7 +998,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!resetBtn) return;
 
         resetBtn.onclick = () => {
-            if (confirm('Вы уверены, что хотите сбросить весь прогресс обучения? Все пройденные уроки будут снова заблокированы.')) {
+            if (confirm('Сбросить результаты тестов на этом устройстве? Открытые уроки и решённые задачи останутся.')) {
                 localStorage.removeItem('quiz_results');
                 location.reload();
             }
@@ -1161,7 +1203,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initTeacherExtras() {
         if (!isTeacherBrowser()) return;
-        // Ссылка на кабинет в подвале — её видит только преподаватель
+        // Пункт «Кабинет» в меню — его видит только преподаватель
+        const navList = document.querySelector('header nav ul');
+        if (navList && !navList.querySelector('a[href="teacher.html"]')) {
+            const li = document.createElement('li');
+            li.innerHTML = '<a href="teacher.html">Кабинет</a>';
+            const themeLi = navList.querySelector('.theme-toggle-btn');
+            if (themeLi) navList.insertBefore(li, themeLi.closest('li')); else navList.appendChild(li);
+        }
         const footerCol = document.querySelector('.site-footer .footer-col ul');
         if (footerCol && !footerCol.querySelector('a[href="teacher.html"]')) {
             const li = document.createElement('li');
@@ -1172,21 +1221,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!lessonsList.includes(currentPath)) return;
         const titleBox = document.querySelector('.lesson-title .container');
         if (!titleBox) return;
-        const base = location.href.split('#')[0].split('?')[0];
+        // Открывают уроки ученику из кабинета (там же отправляется ссылка), здесь — быстрый вход в слайды
         const bar = document.createElement('div');
         bar.className = 'teacher-bar';
-        bar.innerHTML = '<span>Для преподавателя:</span>';
-        [['Ссылка на урок', base], ['Ссылка на тест', base + '#quiz'], ['Ссылка на слайды', base + '#present']].forEach(([label, url]) => {
-            const b = document.createElement('button');
-            b.type = 'button';
-            b.textContent = label;
-            b.onclick = () => {
-                const done = () => showToast('Ссылка скопирована — отправьте её ученику', 'success');
-                if (navigator.clipboard) navigator.clipboard.writeText(url).then(done).catch(() => prompt('Скопируйте ссылку:', url));
-                else prompt('Скопируйте ссылку:', url);
-            };
-            bar.appendChild(b);
-        });
+        bar.innerHTML = '<span>Для преподавателя:</span><a href="teacher.html">Кабинет</a>';
         titleBox.appendChild(bar);
     }
 
@@ -1205,7 +1243,7 @@ document.addEventListener('DOMContentLoaded', () => {
         titleBox.insertBefore(kicker, titleBox.firstChild);
 
         // Ссылка вида lesson3.html#present сразу открывает урок слайдами — у всех
-        if (location.hash === '#present') openPresentation();
+        if (location.hash === '#present' && !lessonLocked) openPresentation();
 
         // Кнопку видит только преподаватель — ученикам режим слайдов не нужен
         if (!isTeacherBrowser()) return;

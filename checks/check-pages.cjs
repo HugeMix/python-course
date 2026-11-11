@@ -1,6 +1,7 @@
 // Проверка страниц в настоящем браузере (Chromium через Playwright):
-// страницы открываются без ошибок JavaScript, тесты уроков проходятся, Python запускается,
-// задачи и контрольные показываются, на телефоне ничего не вылезает за экран.
+// страницы открываются без ошибок JavaScript, в меню 4 пункта, тесты уроков проходятся, Python запускается,
+// задачи показываются, закрытые уроки закрыты, путь «кабинет → ссылка ученику → результат → ответ» работает,
+// на телефоне ничего не вылезает за экран.
 // Запуск: cd checks && npm install && npx playwright install chromium && node check-pages.cjs
 const fs = require('fs');
 const path = require('path');
@@ -28,7 +29,7 @@ function serve() {
     });
 }
 
-async function newContext(browser, options = {}) {
+async function newContext(browser, options = {}, openAll = true) {
     const ctx = await browser.newContext(options);
     // Python берём из пакета pyodide той же версии, что и на сайте, — не зависим от сети
     await ctx.route('https://cdn.jsdelivr.net/pyodide/v0.24.1/full/**', (route) => {
@@ -36,7 +37,7 @@ async function newContext(browser, options = {}) {
         if (!fs.existsSync(f)) return route.abort();
         route.fulfill({ body: fs.readFileSync(f), contentType: TYPES[path.extname(f)] || 'application/octet-stream', headers: { 'access-control-allow-origin': '*' } });
     });
-    await ctx.addInitScript(() => {
+    if (openAll) await ctx.addInitScript(() => {
         try {
             if (!localStorage.getItem('unlocked_lessons')) {
                 localStorage.setItem('unlocked_lessons', JSON.stringify(Array.from({ length: 16 }, (_, i) => 'lesson' + (i + 1) + '.html')));
@@ -48,6 +49,69 @@ async function newContext(browser, options = {}) {
 
 function watchErrors(page, where) {
     page.on('pageerror', (e) => fail(where(), 'ошибка JavaScript: ' + e.message));
+}
+
+// Ученик и преподаватель — в разных браузерах (как в жизни), ссылки передаются между ними
+async function accessFlow(browser, BASE) {
+    const T = await (await newContext(browser, {}, false)).newPage();
+    const S = await (await newContext(browser, {}, false)).newPage();
+    for (const [p, who] of [[T, 'кабинет'], [S, 'ученик']]) { watchErrors(p, () => 'доступ к урокам (' + who + ')'); p.on('dialog', d => d.accept()); }
+    const must = (ok, what) => { if (!ok) throw new Error(what); };
+
+    await S.goto(BASE + 'lesson1.html');
+    must(!(await S.locator('.lesson-lock').count()), 'урок 1 должен быть открыт всем');
+    await S.goto(BASE + 'lesson3.html');
+    must(await S.locator('.lesson-lock').count() === 1, 'урок 3 без ссылки преподавателя должен быть закрыт');
+
+    // кабинет: PIN, новый ученик с двумя оплаченными уроками → открывается урок 2
+    await T.goto(BASE + 'teacher.html');
+    await T.fill('#pin', '1234');
+    await T.fill('.hub-gate-form input:nth-of-type(2)', '1234');
+    await T.click('.hub-gate-form button[type=submit]');
+    await T.waitForSelector('.cab-nav');
+    await T.fill('#new-name', 'Проверка Ученик');
+    await T.fill('#new-paid', '2');
+    await T.click('.cab-new button[type=submit]');
+    await T.waitForSelector('.cab-sendbox a[data-link]');
+    const link1 = await T.locator('.cab-sendbox a[data-link]').getAttribute('data-link');
+
+    // ученик открывает ссылку
+    await S.goto(BASE + link1.slice(link1.indexOf('python-basic.html')));
+    await S.waitForSelector('.my-row');
+    const open1 = await S.evaluate(() => JSON.parse(localStorage.getItem('unlocked_lessons') || '[]'));
+    must(open1.join() === 'lesson1.html,lesson2.html', 'по ссылке должны открыться уроки 1 и 2, а открыто: ' + open1.join(', '));
+    await S.goto(BASE + 'lesson2.html');
+    must(!(await S.locator('.lesson-lock').count()), 'урок 2 после ссылки должен открыться');
+
+    // ученик «прошёл» урок 1 и отправляет результат
+    await S.evaluate(() => {
+        localStorage.setItem('quiz_results', JSON.stringify({ 'lesson1.html': true }));
+        localStorage.setItem('quiz_scores', JSON.stringify({ 'lesson1.html': { best: 90, attempts: 1 } }));
+    });
+    await S.goto('about:blank');
+    await S.goto(BASE + 'python-basic.html#send');
+    await S.waitForFunction(() => (document.querySelector('.send-btn') || { dataset: {} }).dataset.report);
+    const report = await S.locator('.send-btn').getAttribute('data-report');
+
+    // преподаватель открывает результат, засчитывает урок 1 и открывает урок 3
+    await T.goto('about:blank');
+    await T.goto(BASE + report.slice(report.indexOf('teacher.html')));
+    await T.waitForSelector('.cab-review');
+    await T.click('.cab-review button:has-text("Зачесть урок")');
+    await T.waitForSelector('.cab-sendbox');
+    await T.locator('.cab-lrow', { hasText: 'Операторы' }).locator('button:has-text("Открыть")').click();
+    await T.waitForSelector('.cab-sendbox a[data-link]');
+    const link2 = await T.locator('.cab-sendbox a[data-link]').getAttribute('data-link');
+
+    // ученик видит ответ и новый урок
+    await S.goto('about:blank');
+    await S.goto(BASE + link2.slice(link2.indexOf('python-basic.html')));
+    await S.waitForSelector('.my-row');
+    const open2 = await S.evaluate(() => JSON.parse(localStorage.getItem('unlocked_lessons') || '[]'));
+    must(open2.includes('lesson3.html'), 'после второй ссылки должен открыться урок 3');
+    must(await S.locator('.my-row', { hasText: 'Введение в Python' }).locator('.my-pill-ok').count() === 1, 'урок 1 у ученика должен быть «Зачтён»');
+    await T.context().close();
+    await S.context().close();
 }
 
 async function main() {
@@ -63,10 +127,17 @@ async function main() {
 
     // 1. Все страницы открываются без ошибок JavaScript
     const pages = fs.readdirSync(ROOT).filter(f => f.endsWith('.html') && !/^(google|yandex)/.test(f));
+    const MENU = ['index.html', 'python-basic.html', 'tasks.html', 'cheatsheet.html'];
     for (const f of pages) {
         current = f;
         await page.goto(BASE + f, { waitUntil: 'load' });
         await page.waitForTimeout(300);
+        if (['assignment.html', 'exams.html'].includes(f)) {
+            if (!page.url().includes('python-basic.html')) fail(f, 'старая страница должна переводить на «Мои уроки»');
+            continue;
+        }
+        const menu = await page.$$eval('header nav ul li a', as => as.map(a => a.getAttribute('href')));
+        if (menu.join() !== MENU.join()) fail(f, `в меню должно быть 4 пункта (${MENU.join(', ')}), а там: ${menu.join(', ')}`);
     }
     console.log(`Открыто страниц: ${pages.length}`);
 
@@ -124,20 +195,22 @@ async function main() {
         await page.waitForSelector('.task-item');
         if (await page.locator('.task-item').count() !== 5) fail('tasks.html#exam=2', 'должно быть 5 задач контрольной');
     } catch (e) { fail('tasks.html', e.message.split('\n')[0]); }
-    current = 'exams.html';
-    await page.goto(BASE + 'exams.html');
-    const cards = await page.locator('.exam-card').count();
-    const items = await page.locator('.exam-card .hw-tasks li').count();
-    if (cards !== 3 || items !== 15) fail('exams.html', `контрольных ${cards} (нужно 3), задач ${items} (нужно 15)`);
+    current = 'python-basic.html';
+    await page.goto(BASE + 'python-basic.html');
+    if (await page.locator('.my-row').count() !== 19) fail('python-basic.html', 'на «Моих уроках» должно быть 16 уроков и 3 контрольные');
     current = 'teacher.html';
     await page.goto(BASE + 'teacher.html');
     if (!(await page.locator('.hub-gate').count())) fail('teacher.html', 'не показан вход по PIN-коду');
 
-    // 5. На телефоне страницы не прокручиваются вбок
+    // 5. Доступ к урокам: без ссылки открыт только урок 1; путь «кабинет → ученик → результат → ответ»
+    try { await accessFlow(browser, BASE); console.log('Доступ к урокам и связь с кабинетом работают'); }
+    catch (e) { fail('доступ к урокам', e.message.split('\n')[0]); }
+
+    // 6. На телефоне страницы не прокручиваются вбок
     const phone = await newContext(browser, { ...devices['iPhone 13'] });
     const p2 = await phone.newPage();
     watchErrors(p2, () => 'телефон: ' + current);
-    for (const f of ['index.html', 'python-basic.html', 'lesson4.html', 'lesson13.html', 'tasks.html', 'exams.html', 'python-online.html', 'teacher.html']) {
+    for (const f of ['index.html', 'python-basic.html', 'lesson4.html', 'lesson13.html', 'tasks.html', 'python-online.html', 'cheatsheet.html', 'teacher.html']) {
         current = f;
         await p2.goto(BASE + f);
         await p2.waitForTimeout(300);

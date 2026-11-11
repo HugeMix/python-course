@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Кабинет преподавателя: задания, отчёты учеников и журнал оценок.">
+    <meta name="description" content="Кабинет преподавателя: ученики, оплата, доступ к урокам и проверка результатов.">
     <meta name="robots" content="noindex, nofollow">
     <title>Кабинет преподавателя | PythonBasic</title>
     <link rel="stylesheet" href="style.css">
@@ -24,12 +24,9 @@
             <nav>
                 <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
                     <li><a href="index.html">Главная</a></li>
-                    <li><a href="python-basic.html">Уроки</a></li>
-                    <li><a href="tasks.html">Задачи</a></li>
-                    <li><a href="exams.html">Контрольные</a></li>
-                    <li><a href="python-online.html">Python Online</a></li>
-                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
-                    <li><a href="glossary.html">Глоссарий</a></li>
+                    <li><a href="python-basic.html">Мои уроки</a></li>
+                    <li><a href="tasks.html">Практика</a></li>
+                    <li><a href="cheatsheet.html">Справочник</a></li>
                 </ul>
             </nav>
         </div>
@@ -38,7 +35,7 @@
     <section class="lesson-title">
         <div class="container">
             <h1>Кабинет преподавателя</h1>
-            <p>Ученики, задания и уроки — всё в одном месте.</p>
+            <p>Ученики, оплата, доступ к урокам и проверка результатов — всё в одном месте.</p>
         </div>
     </section>
 
@@ -56,11 +53,10 @@
             <div class="footer-col" role="navigation" aria-label="Обучение">
                 <h4>Обучение</h4>
                 <ul>
-                    <li><a href="python-basic.html">Уроки</a></li>
+                    <li><a href="python-basic.html">Мои уроки</a></li>
                     <li><a href="tasks.html">Задачи</a></li>
-                    <li><a href="python-online.html">Python Online</a></li>
+                    <li><a href="python-online.html">Редактор кода</a></li>
                     <li><a href="certificate.html">Сертификат</a></li>
-                    <li><a href="assignment.html">Моё задание</a></li>
                 </ul>
             </div>
             <div class="footer-col" role="navigation" aria-label="Справочник">
@@ -166,8 +162,8 @@
                 el('h2', { text: hasPin ? 'Вход в кабинет' : 'Добро пожаловать в кабинет преподавателя' }),
                 el('p', { class: 'hub-muted', text: hasPin
                     ? 'Кабинет защищён PIN-кодом, чтобы ученики не открыли его случайно на вашем устройстве.'
-                    : 'Здесь вы будете выдавать задания ученикам, получать от них отчёты и вести журнал оценок. Все данные хранятся только в этом браузере — время от времени сохраняйте резервную копию (вкладка «Настройки»).' }),
-                pendingReport ? el('div', { class: 'hub-alert hub-alert-ok', text: 'Вам прислали отчёт ученика. Войдите — он сохранится в журнал.' }) : null,
+                    : 'Здесь вы будете открывать ученикам уроки, отмечать оплату и проверять их результаты. Все данные хранятся только в этом браузере — раз в неделю сохраняйте копию журнала (⚙ Настройки).' }),
+                pendingReport ? el('div', { class: 'hub-alert hub-alert-ok', text: 'Вам прислали результат ученика. Войдите — он сохранится в журнал.' }) : null,
                 form));
             pin.focus();
         }
@@ -211,6 +207,9 @@
             if (snoozeUntil && now < new Date(snoozeUntil).getTime()) return null;
             if (backupAt && changedAt && new Date(changedAt) <= new Date(backupAt)) return null;   // после копии ничего не менялось
             if (backupAt && now - new Date(backupAt).getTime() < BACKUP_EVERY_DAYS * DAY) return null;
+            // Журнал только что начали вести — не отвлекаем в первый день
+            const firstAt = Math.min(...journal.students.map(st => new Date(st.created || 0).getTime() || now));
+            if (!backupAt && now - firstAt < DAY) return null;
             const box = el('div', { class: 'cab-reminder', role: 'status' },
                 el('div', { class: 'cab-reminder-text' },
                     el('strong', { text: 'Сохраните копию журнала' }),
@@ -223,15 +222,6 @@
             return box;
         }
         const norm = s => String(s || '').trim().toLowerCase().replace(/\s+/g, ' ');
-
-        function findOrCreateStudent(name) {
-            let st = journal.students.find(s => norm(s.name) === norm(name));
-            if (!st) {
-                st = { id: PB.randomId(), name: PB.cleanText(name.trim(), 60), created: new Date().toISOString(), reports: [], grades: [], note: '' };
-                journal.students.push(st);
-            }
-            return st;
-        }
 
         function cleanReport(r) {
             if (!r || r.t !== 'report') throw new Error('это не отчёт ученика');
@@ -258,7 +248,7 @@
                 };
             }
             const at = isNaN(new Date(r.at)) ? new Date().toISOString() : new Date(r.at).toISOString();
-            return { name, at, aid: PB.cleanText(r.aid, 20), lessons, solved, code, assigned, received: new Date().toISOString() };
+            return { name, at, sid: PB.cleanText(r.sid || '', 20), aid: PB.cleanText(r.aid, 20), lessons, solved, code, assigned, received: new Date().toISOString() };
         }
 
         async function importPendingReport() {
@@ -267,7 +257,7 @@
             pendingReport = null; // один отчёт — одна обработка
             try {
                 const r = cleanReport(await PB.decode(packed));
-                const st = findOrCreateStudent(r.name);
+                const st = findOrCreateStudent(r.name, r.sid);
                 const duplicate = st.reports.some(x => x.at === r.at);
                 if (!duplicate) {
                     st.reports.push(r);
@@ -280,55 +270,38 @@
             }
         }
 
-        function summary(st) {
-            const last = st.reports[st.reports.length - 1];
-            const grades = st.grades.map(g => g.v);
-            const avgGrade = grades.length ? (grades.reduce((a, b) => a + b, 0) / grades.length) : null;
-            if (!last) return { last: null, tests: 0, avg: null, solved: 0, points: 0, avgGrade };
-            const ls = Object.values(last.lessons);
-            return {
-                last,
-                tests: ls.filter(l => l.p).length,
-                avg: ls.length ? Math.round(ls.reduce((s, l) => s + l.b, 0) / ls.length) : null,
-                solved: last.solved.length,
-                points: PB.computePoints(last.lessons, last.solved),
-                avgGrade
-            };
-        }
-
         // ---------- каркас кабинета ----------
         // Домашние задачи каждого урока (в tasks_data.js у них hw: true и номер урока)
         const LESSON_TASKS = {};
         tasks.forEach(t => { if (t.hw) (LESSON_TASKS[t.lesson] = LESSON_TASKS[t.lesson] || []).push(t.id); });
+        const EXAM_RANGES = { 1: 'уроки 1–6', 2: 'уроки 7–11', 3: 'уроки 12–16' };
 
         const SECTIONS = [
             ['students', 'Ученики'],
-            ['assign', 'Дать задание'],
-            ['teach', 'Провести урок']
+            ['teach', 'Провести урок'],
+            ['guide', 'Как это работает']
         ];
         let current = null;        // текущий раздел
         let openStudentId = null;  // открытая карточка ученика
-        let prefillName = '';
         let notice = null;
 
         function go(section, opts) {
             current = section;
             openStudentId = (opts && opts.student) || null;
-            prefillName = (opts && opts.name) || '';
             notice = (opts && opts.notice) || null;
             renderApp();
             window.scrollTo({ top: document.querySelector('.cab-nav').offsetTop - 90, behavior: 'smooth' });
         }
 
         function start() {
+            migrateJournal();
             importPendingReport().then(res => {
-                current = journal.students.length ? 'students' : 'assign';
+                current = 'students';
                 if (res && res.ok) {
-                    current = 'students';
                     openStudentId = res.student.id;
-                    notice = { kind: 'ok', text: res.duplicate ? `Этот отчёт от «${res.student.name}» уже был в журнале.` : `Отчёт от «${res.student.name}» сохранён. Результаты — ниже.` };
+                    notice = { kind: 'ok', text: res.duplicate ? `Этот результат от «${res.student.name}» уже был в журнале.` : `Пришёл результат от «${res.student.name}». Проверьте его ниже и ответьте ученику.` };
                 } else if (res && !res.ok) {
-                    notice = { kind: 'err', text: 'Не удалось прочитать отчёт: ' + res.error + '. Попросите ученика отправить его ещё раз.' };
+                    notice = { kind: 'err', text: 'Не удалось прочитать результат: ' + res.error + '. Попросите ученика отправить его ещё раз.' };
                 }
                 renderApp();
             });
@@ -352,7 +325,7 @@
             if (reminder) root.append(reminder);
             const panel = el('div', { class: 'hub-panel' });
             root.append(panel);
-            ({ students: renderStudents, assign: renderAssign, teach: renderTeach, settings: renderSettings })[current](panel);
+            ({ students: renderStudents, teach: renderTeach, guide: renderGuide, settings: renderSettings })[current](panel);
         }
 
         const initials = name => name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
@@ -360,296 +333,428 @@
             const m10 = n % 10, m100 = n % 100;
             return n + ' ' + (m10 === 1 && m100 !== 11 ? one : m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20) ? few : many);
         };
+        const nowIso = () => new Date().toISOString();
+
+        // ---------- ученик: оплаты, доступ, ответы ----------
+        // Поля ученика в журнале:
+        //   payments — [{at, count, note}]: сколько уроков оплачено (урок 1 бесплатный);
+        //   opened — уроки, которые вы открыли; exams — выданные контрольные; tasks — отдельные задачи;
+        //   replies — {урок: {s: 'ok' | 'redo', c: комментарий, at}}: ваши ответы по урокам;
+        //   msg — сообщение, которое ученик видит на странице «Мои уроки»;
+        //   changedAt / sentAt — когда меняли доступ и когда последний раз отправили ссылку ученику.
+        function ensureStudent(st) {
+            st.payments = Array.isArray(st.payments) ? st.payments : [];
+            st.opened = Array.isArray(st.opened) ? st.opened : [];
+            st.exams = Array.isArray(st.exams) ? st.exams : [];
+            st.tasks = Array.isArray(st.tasks) ? st.tasks : [];
+            st.replies = st.replies && typeof st.replies === 'object' ? st.replies : {};
+            st.reports = Array.isArray(st.reports) ? st.reports : [];
+            st.grades = Array.isArray(st.grades) ? st.grades : [];
+            PB.FREE_LESSONS.forEach(n => { if (!st.opened.includes(n)) st.opened.push(n); });
+            st.opened.sort((a, b) => a - b);
+            return st;
+        }
+
+        // Журнал из прошлой версии кабинета: уроки и задачи из выданных заданий становятся «открытыми»
+        function migrateJournal() {
+            journal.students.forEach(ensureStudent);
+            if (journal.v === 2) return;
+            (journal.assignments || []).forEach(a => {
+                const st = journal.students.find(s => norm(s.name) === norm(a.name));
+                if (!st) return;
+                (a.lessons || []).forEach(n => { if (!st.opened.includes(n)) st.opened.push(n); });
+                (a.tasks || []).forEach(id => { const t = taskById(id); if (!t) return; if (t.exam) { if (!st.exams.includes(t.exam)) st.exams.push(t.exam); } else if (!t.hw && !st.tasks.includes(id)) st.tasks.push(id); });
+                st.opened.sort((x, y) => x - y);
+            });
+            journal.v = 2;
+            saveJournal();
+        }
+
+        const paidCount = st => st.payments.reduce((s, p) => s + p.count, 0);
+        const usedCount = st => st.opened.filter(n => !PB.FREE_LESSONS.includes(n)).length;
+        const leftCount = st => paidCount(st) - usedCount(st);
+        const lastReport = st => st.reports[st.reports.length - 1] || null;
+        const nextClosed = st => { for (let n = 1; n <= PB.LESSON_COUNT; n++) if (!st.opened.includes(n)) return n; return null; };
+        const touch = st => { st.changedAt = nowIso(); saveJournal(); };
+        const needsSend = st => (st.changedAt || '') > (st.sentAt || '');
+
+        function lessonInfo(st, n) {
+            const r = lastReport(st);
+            const quiz = r && r.lessons[n];
+            const hw = LESSON_TASKS[n] || [];
+            const solved = r ? hw.filter(id => r.solved.includes(id)).length : 0;
+            const reply = st.replies[n];
+            const opened = st.opened.includes(n);
+            const fresh = r && (quiz || solved) && (!reply || r.at > reply.at);   // пришло после вашего последнего ответа
+            let kind, label;
+            if (!opened) [kind, label] = ['off', 'Не открыт'];
+            else if (reply && reply.s === 'ok' && !fresh) [kind, label] = ['ok', 'Зачтён'];
+            else if (fresh && !(reply && reply.s === 'ok')) [kind, label] = ['wait', 'Ждёт проверки'];
+            else if (reply && reply.s === 'redo') [kind, label] = ['redo', 'На доработке'];
+            else if (reply && reply.s === 'ok') [kind, label] = ['ok', 'Зачтён'];
+            else [kind, label] = ['open', 'Открыт'];
+            return { n, opened, quiz, hw, solved, reply, kind, label, report: r };
+        }
+
+        function studentStatus(st) {
+            const infos = PB.LESSON_TITLES.map((_, i) => lessonInfo(st, i + 1));
+            const waiting = infos.filter(x => x.kind === 'wait');
+            if (waiting.length) return { kind: 'wait', text: 'Ждёт вашего ответа', infos, waiting };
+            if (needsSend(st)) return { kind: 'send', text: 'Ссылка не отправлена', infos, waiting };
+            if (leftCount(st) <= 0 && nextClosed(st)) return { kind: 'pay', text: 'Нужна оплата', infos, waiting };
+            return { kind: 'ok', text: 'Учится', infos, waiting };
+        }
+
+        function findOrCreateStudent(name, id) {
+            let st = (id && journal.students.find(s => s.id === id)) || journal.students.find(s => norm(s.name) === norm(name));
+            if (!st) {
+                st = ensureStudent({ id: id || PB.randomId(), name: PB.cleanText(name.trim(), 60), created: nowIso(), reports: [], grades: [], note: '' });
+                journal.students.push(st);
+            }
+            return ensureStudent(st);
+        }
+
+        // Ссылка для ученика: в ней всё его состояние — открытые уроки, контрольные, задачи и ваши ответы
+        async function studentLink(st) {
+            const access = { v: 2, t: 'access', sid: st.id, name: st.name, note: st.msg || '', lessons: st.opened.slice(), tasks: st.tasks.slice(),
+                exams: st.exams.slice(), replies: st.replies, at: nowIso() };
+            return PB.pageUrl('python-basic.html') + '#a=' + await PB.encode(access);
+        }
+
+        // Кнопки «Отправить в Telegram» и «Скопировать»: ссылка готовится заранее,
+        // чтобы Telegram открывался сразу по нажатию (браузеры блокируют окна, открытые с задержкой)
+        function sendButtons(st, onSent) {
+            const tg = el('a', { class: 'hub-btn hub-btn-primary', href: '#', target: '_blank', rel: 'noopener', text: 'Отправить в Telegram' });
+            const cp = el('button', { class: 'hub-btn', type: 'button', text: 'Скопировать ссылку' });
+            let link = '';
+            studentLink(st).then(l => { link = l; tg.setAttribute('href', PB.telegramShare(l, 'Ваши уроки по Python, ' + st.name.split(' ')[0])); tg.dataset.link = l; });
+            const sent = () => { st.sentAt = nowIso(); saveJournal(); if (onSent) setTimeout(onSent, 300); };
+            tg.addEventListener('click', (e) => { if (!link) { e.preventDefault(); return; } sent(); });
+            cp.addEventListener('click', () => { if (!link) return; copyLink(link, 'Ссылка для ученика'); sent(); });
+            return [tg, cp];
+        }
 
         // ---------- раздел «Ученики» ----------
         function renderStudents(panel) {
             if (openStudentId) {
                 const st = journal.students.find(s => s.id === openStudentId);
-                if (st) return renderStudent(panel, st);
+                if (st) return renderStudent(panel, ensureStudent(st));
             }
+            const form = newStudentForm();
             if (!journal.students.length) {
                 panel.append(el('section', { class: 'hub-card cab-empty' },
                     el('h2', { text: 'Учеников пока нет' }),
-                    el('p', { text: 'Ученик появится здесь, когда вы дадите ему задание или откроете его отчёт.' }),
-                    el('button', { class: 'hub-btn hub-btn-primary hub-btn-lg', type: 'button', text: 'Дать первое задание', onclick: () => go('assign') })));
+                    el('p', { text: 'Добавьте первого ученика: кабинет подготовит для него ссылку. Ученик откроет её — и увидит свои уроки. Урок 1 открыт всем бесплатно.' }),
+                    el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Как это работает', onclick: () => go('guide') })));
+                panel.append(form);
                 return;
             }
             const search = el('input', { class: 'hub-input', type: 'search', placeholder: 'Найти ученика', 'aria-label': 'Найти ученика' });
             const grid = el('div', { class: 'cab-students' });
-            const lastActivity = st => { const s = summary(st); return s.last ? s.last.at : st.created; };
+            const order = { wait: 0, send: 1, pay: 2, ok: 3 };
+            const lastActivity = st => { const r = lastReport(st); return [r ? r.at : '', st.changedAt || '', st.created || ''].sort().pop(); };
             const draw = () => {
                 grid.textContent = '';
                 const q = norm(search.value);
-                const list = journal.students.filter(s => !q || norm(s.name).includes(q)).sort((a, b) => lastActivity(b).localeCompare(lastActivity(a)));
+                const list = journal.students.map(ensureStudent).filter(s => !q || norm(s.name).includes(q))
+                    .map(st => ({ st, status: studentStatus(st) }))
+                    .sort((a, b) => order[a.status.kind] - order[b.status.kind] || lastActivity(b.st).localeCompare(lastActivity(a.st)));
                 if (!list.length) { grid.append(el('p', { class: 'hub-muted', text: 'Никого не нашли.' })); return; }
-                list.forEach(st => {
-                    const s = summary(st);
-                    const pct = Math.round(s.tests / PB.LESSON_COUNT * 100);
+                list.forEach(({ st, status }) => {
+                    const okCount = status.infos.filter(x => x.kind === 'ok').length;
+                    const left = leftCount(st);
                     grid.append(el('button', { class: 'cab-student', type: 'button', onclick: () => go('students', { student: st.id }) },
                         el('span', { class: 'cab-avatar', text: initials(st.name) }),
                         el('span', { class: 'cab-student-main' },
                             el('strong', { text: st.name }),
-                            el('small', { text: s.last ? 'отчёт ' + PB.formatDate(s.last.at) : 'отчётов ещё нет' }),
-                            el('span', { class: 'cab-mini-bar', title: `Сдано тестов: ${s.tests} из ${PB.LESSON_COUNT}` }, el('span', { style: `width:${pct}%` }))),
+                            el('span', { class: 'cab-status cab-status-' + status.kind, text: status.text }),
+                            el('span', { class: 'cab-mini-bar', title: `Зачтено уроков: ${okCount} из ${PB.LESSON_COUNT}` }, el('span', { style: `width:${Math.round(okCount / PB.LESSON_COUNT * 100)}%` }))),
                         el('span', { class: 'cab-student-nums' },
-                            el('span', {}, el('b', { text: String(s.points) }), ' баллов'),
-                            s.avgGrade === null ? el('span', { class: 'cab-grade-empty', text: 'без оценок' }) : el('span', { class: 'hub-grade hub-grade-' + Math.round(s.avgGrade), text: s.avgGrade.toFixed(1) }))));
+                            el('span', {}, el('b', { text: `${okCount}/${PB.LESSON_COUNT}` }), ' зачтено'),
+                            el('span', { class: left > 0 ? 'cab-left' : 'cab-left is-empty', text: left > 0 ? `оплачено ещё ${plural(left, 'урок', 'урока', 'уроков')}` : 'оплата закончилась' }))));
                 });
             };
             search.addEventListener('input', draw);
+            const addBtn = el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: '+ Новый ученик', onclick: () => { form.hidden = !form.hidden; if (!form.hidden) form.querySelector('input').focus(); } });
+            form.hidden = true;
             panel.append(el('section', { class: 'hub-card' },
-                el('div', { class: 'hub-card-head' },
-                    el('h2', { text: 'Ученики' }),
-                    el('div', { class: 'hub-actions' }, search,
-                        el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: '+ Задание', onclick: () => go('assign') }))),
-                grid));
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Ученики' }), el('div', { class: 'hub-actions' }, search, addBtn)),
+                form, grid));
             draw();
         }
 
+        function newStudentForm() {
+            const name = el('input', { class: 'hub-input', id: 'new-name', type: 'text', maxlength: '60', placeholder: 'Имя и фамилия ученика', autocomplete: 'off' });
+            const paid = el('input', { class: 'hub-input cab-num', id: 'new-paid', type: 'number', min: '0', max: '99', value: '0', inputmode: 'numeric' });
+            const msg = el('p', { class: 'hub-error', role: 'alert' });
+            const form = el('form', { class: 'cab-new' },
+                el('h3', { text: 'Новый ученик' }),
+                el('label', { class: 'hub-label', for: 'new-name', text: 'Имя' }), name,
+                el('label', { class: 'hub-label', for: 'new-paid', text: 'Сколько уроков уже оплачено (урок 1 — бесплатно)' }), paid,
+                el('p', { class: 'hub-muted', text: 'Если оплата уже есть, сразу откроется урок 2. Потом кабинет подготовит ссылку — отправьте её ученику.' }),
+                el('div', { class: 'hub-actions' }, el('button', { class: 'hub-btn hub-btn-primary', type: 'submit', text: 'Добавить ученика' })), msg);
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const n = name.value.trim();
+                if (!n) { msg.textContent = 'Напишите имя ученика.'; name.focus(); return; }
+                if (journal.students.some(s => norm(s.name) === norm(n))) { msg.textContent = 'Такой ученик уже есть в журнале.'; return; }
+                const st = findOrCreateStudent(n);
+                const count = PB.clampInt(paid.value, 0, 99);
+                if (count) { st.payments.push({ at: nowIso(), count, note: '' }); if (!st.opened.includes(2)) st.opened.push(2); }
+                touch(st);
+                go('students', { student: st.id, notice: { kind: 'ok', text: `«${st.name}» добавлен(а). Отправьте ссылку — по ней ученик увидит свои уроки.` } });
+            });
+            return form;
+        }
+
+        function pill(kind, text) { return el('span', { class: 'cab-status cab-status-' + kind, text }); }
+
+        function openLesson(st, n) {
+            if (st.opened.includes(n)) return true;
+            if (leftCount(st) <= 0 && !confirm(`Оплаченные уроки у «${st.name}» закончились. Всё равно открыть урок ${n}?`)) return false;
+            st.opened.push(n); st.opened.sort((a, b) => a - b);
+            return true;
+        }
+
         function renderStudent(panel, st) {
-            const s = summary(st);
+            const status = studentStatus(st);
+            const refresh = () => go('students', { student: st.id });
             panel.append(el('div', { class: 'hub-actions' },
                 el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: '← Все ученики', onclick: () => go('students') })));
 
-            // Шапка ученика
+            // Шапка: имя, статус, ссылка ученика, урок по созвону
+            const live = status.infos.find(x => x.opened && x.kind !== 'ok') || status.infos.find(x => !x.opened) || status.infos[status.infos.length - 1];
             panel.append(el('section', { class: 'hub-card cab-profile' },
                 el('div', { class: 'cab-profile-head' },
                     el('span', { class: 'cab-avatar cab-avatar-lg', text: initials(st.name) }),
-                    el('div', {},
-                        el('h2', { text: st.name }),
-                        el('span', { class: 'hub-muted', text: s.last ? 'Последний отчёт: ' + PB.formatDate(s.last.at) : 'Отчётов пока нет — дайте задание' })),
-                    el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: 'Дать задание', onclick: () => go('assign', { name: st.name }) })),
-                el('div', { class: 'hub-stats' },
-                    el('div', { class: 'hub-stat' }, el('strong', { text: `${s.tests}/${PB.LESSON_COUNT}` }), el('span', { text: 'тестов сдано' })),
-                    el('div', { class: 'hub-stat' }, el('strong', { text: s.avg === null ? '—' : s.avg + '%' }), el('span', { text: 'средний результат' })),
-                    el('div', { class: 'hub-stat' }, el('strong', { text: `${s.solved}/${tasks.length}` }), el('span', { text: 'задач решено' })),
-                    el('div', { class: 'hub-stat' }, el('strong', { text: String(s.points) }), el('span', { text: 'баллов' })))));
+                    el('div', { class: 'cab-profile-title' }, el('h2', { text: st.name }), pill(status.kind, status.text)),
+                    el('a', { class: 'hub-btn', href: PB.lessonFile(live.n) + '#present', target: '_blank', rel: 'noopener', text: `Провести урок ${live.n} по созвону` }))));
 
-            // Оценка одним нажатием
-            const comment = el('input', { class: 'hub-input', type: 'text', maxlength: '120', placeholder: 'Комментарий к оценке (необязательно)' });
-            const gradeButtons = [5, 4, 3, 2].map(v => el('button', {
-                class: 'cab-grade-btn hub-grade-' + v, type: 'button', text: String(v), title: 'Поставить ' + v,
-                onclick: () => {
-                    st.grades.push({ v, note: comment.value.trim().slice(0, 120), at: new Date().toISOString() });
-                    saveJournal(); toast(`Оценка ${v} поставлена`); go('students', { student: st.id });
-                }
-            }));
-            const history = st.grades.length
-                ? el('ul', { class: 'cab-grades' }, st.grades.slice().reverse().map((g, i) => el('li', {},
-                    el('span', { class: 'hub-grade hub-grade-' + g.v, text: String(g.v) }),
-                    el('span', { class: 'cab-grade-text' }, g.note || 'Без комментария', el('small', { text: PB.formatDate(g.at) })),
-                    el('button', { class: 'cab-x', type: 'button', title: 'Удалить оценку', 'aria-label': 'Удалить оценку', text: '×', onclick: () => {
-                        if (!confirm('Удалить эту оценку?')) return;
-                        st.grades.splice(st.grades.length - 1 - i, 1); saveJournal(); go('students', { student: st.id });
-                    } }))))
-                : null;
-            panel.append(el('section', { class: 'hub-card' },
-                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Оценки' }),
-                    el('span', { class: 'hub-muted', text: s.avgGrade === null ? 'пока нет' : 'средняя ' + s.avgGrade.toFixed(1) })),
-                el('div', { class: 'cab-grade-row' }, el('div', { class: 'cab-grade-buttons' }, gradeButtons), comment),
-                history));
-
-            // Результаты последнего отчёта
-            if (s.last) {
-                const r = s.last;
-                const lessonNums = r.assigned && r.assigned.lessons.length ? r.assigned.lessons : Object.keys(r.lessons).map(Number).sort((a, b) => a - b);
-                const taskIds = (r.assigned && r.assigned.tasks.length ? r.assigned.tasks : r.solved).filter(taskById);
-                const items = [];
-                lessonNums.forEach(n => {
-                    const l = r.lessons[n];
-                    items.push(el('li', { class: 'cab-result' + (l && l.p ? ' is-done' : '') },
-                        el('span', { class: 'cab-check', 'aria-hidden': 'true', text: l && l.p ? '✓' : '' }),
-                        el('span', { class: 'cab-result-title' }, `Тест к уроку ${n}. ${PB.LESSON_TITLES[n - 1]}`,
-                            el('small', { text: l ? `лучший результат ${l.b}% · попыток: ${l.a}` : 'не начат' })),
-                        l ? el('span', { class: 'hub-pill ' + (l.p ? 'hub-pill-ok' : 'hub-pill-warn'), text: l.b + '%' }) : el('span', { class: 'hub-pill hub-pill-idle', text: '—' })));
-                });
-                taskIds.forEach(id => {
-                    const t = taskById(id); const solved = r.solved.includes(id); const code = r.code[id];
-                    items.push(el('li', { class: 'cab-result' + (solved ? ' is-done' : '') },
-                        el('span', { class: 'cab-check', 'aria-hidden': 'true', text: solved ? '✓' : '' }),
-                        el('span', { class: 'cab-result-title' }, (t.exam ? 'Контрольная ' + t.exam + ': ' : 'Задача ') + '«' + t.title + '»', el('small', { text: DIFF[t.difficulty] + ' · +' + PB.TASK_POINTS[t.difficulty] + ' б.' })),
-                        el('span', { class: 'hub-pill ' + (solved ? 'hub-pill-ok' : 'hub-pill-idle'), text: solved ? 'решена' : 'не решена' }),
-                        code ? el('details', { class: 'hub-code' }, el('summary', { text: 'Посмотреть код' }), el('pre', {}, el('code', { class: 'language-python', text: code }))) : null));
-                });
-                panel.append(el('section', { class: 'hub-card' },
-                    el('div', { class: 'hub-card-head' }, el('h2', { text: r.assigned ? 'Последнее задание' : 'Последний отчёт' }), el('span', { class: 'hub-muted', text: PB.formatDate(r.at) })),
-                    items.length ? el('ul', { class: 'cab-results' }, items) : el('p', { class: 'hub-muted', text: 'В отчёте пока нет результатов.' })));
+            // Ссылка ученику, если что-то поменялось
+            if (needsSend(st)) {
+                panel.append(el('section', { class: 'hub-card cab-sendbox' },
+                    el('div', { class: 'cab-sendbox-text' },
+                        el('strong', { text: 'Отправьте ученику новую ссылку' }),
+                        el('span', { text: 'Вы открыли урок или ответили по уроку. Ученик увидит это, когда откроет новую ссылку. Нажмите «Отправить в Telegram» и выберите чат с учеником.' })),
+                    el('div', { class: 'hub-actions' }, ...sendButtons(st, refresh))));
             }
 
-            // Заметки
-            const note = el('textarea', { class: 'hub-input hub-textarea', rows: '3', maxlength: '2000', placeholder: 'Что получается, над чем поработать, о чём договорились…' });
+            // Результаты, которые ждут вашего ответа
+            status.waiting.forEach(info => panel.append(reviewCard(st, info, refresh)));
+
+            // Оплата
+            panel.append(paymentsCard(st, refresh));
+
+            // Уроки и контрольные
+            const rows = status.infos.map(info => {
+                const meta = info.opened ? [info.quiz ? `тест ${info.quiz.b}%` : 'тест не пройден', info.hw.length ? `домашка ${info.solved} из ${info.hw.length}` : ''].filter(Boolean).join(' · ') : '';
+                return el('li', { class: 'cab-lrow' + (info.opened ? '' : ' is-off') },
+                    el('span', { class: 'cab-lesson-num', text: String(info.n) }),
+                    el('span', { class: 'cab-lrow-main' }, el('strong', { text: PB.LESSON_TITLES[info.n - 1] }), meta ? el('small', { text: meta }) : null,
+                        info.reply && info.reply.c ? el('small', { class: 'cab-lrow-reply', text: (info.reply.s === 'ok' ? 'Ваш ответ: ' : 'Попросили повторить: ') + info.reply.c }) : null),
+                    pill(info.kind, info.label),
+                    info.opened
+                        ? el('a', { class: 'hub-btn hub-btn-ghost', href: PB.lessonFile(info.n) + '#present', target: '_blank', rel: 'noopener', text: 'Слайды' })
+                        : el('button', { class: 'hub-btn', type: 'button', text: 'Открыть', onclick: () => { if (openLesson(st, info.n)) { touch(st); refresh(); } } }));
+            });
+            const exams = [1, 2, 3].map(k => {
+                const on = st.exams.includes(k);
+                const r = lastReport(st);
+                const ids = tasks.filter(t => t.exam === k).map(t => t.id);
+                const done = r ? ids.filter(id => r.solved.includes(id)).length : 0;
+                return el('li', { class: 'cab-lrow cab-lrow-exam' + (on ? '' : ' is-off') },
+                    el('span', { class: 'cab-lesson-num', text: 'К' + k }),
+                    el('span', { class: 'cab-lrow-main' }, el('strong', { text: `Контрольная ${k} · ${EXAM_RANGES[k]}` }), on ? el('small', { text: `решено ${done} из 5, зачёт — 4` }) : el('small', { text: 'не выдана' })),
+                    pill(!on ? 'off' : done >= 4 ? 'ok' : 'open', !on ? 'Не выдана' : done >= 4 ? 'Зачтена' : 'Выдана'),
+                    el('button', { class: 'hub-btn' + (on ? ' hub-btn-ghost' : ''), type: 'button', text: on ? 'Забрать' : 'Выдать', onclick: () => {
+                        if (on) st.exams = st.exams.filter(x => x !== k); else st.exams.push(k);
+                        touch(st); refresh();
+                    } }));
+            });
+            // Открытые уроки и следующий закрытый — сразу, остальные закрытые — под кнопкой
+            const firstClosed = nextClosed(st);
+            const shown = rows.filter((_, i) => st.opened.includes(i + 1) || i + 1 === firstClosed);
+            const hidden = rows.filter((_, i) => !st.opened.includes(i + 1) && i + 1 !== firstClosed);
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Уроки' }), el('span', { class: 'hub-muted', text: 'урок 1 — бесплатный' })),
+                el('ul', { class: 'cab-lrows' }, shown),
+                hidden.length ? el('details', { class: 'cab-more cab-lrows-more' },
+                    el('summary', { text: 'Остальные уроки (' + hidden.length + ')' }),
+                    el('ul', { class: 'cab-lrows' }, hidden)) : null,
+                el('h3', { class: 'cab-sub', text: 'Контрольные' }),
+                el('ul', { class: 'cab-lrows' }, exams)));
+
+            // Сообщение для ученика на странице «Мои уроки»
+            const msg = el('textarea', { class: 'hub-input hub-textarea', rows: '2', maxlength: '300', placeholder: 'Например: «Следующее занятие в четверг в 18:00. Решите домашку до среды.»' });
+            msg.value = st.msg || '';
+            msg.addEventListener('change', () => { st.msg = msg.value.trim(); touch(st); refresh(); });
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Сообщение ученику' }), el('span', { class: 'hub-muted', text: 'он увидит его на странице «Мои уроки»' })), msg));
+
+            // Ссылка ученика — всегда под рукой (например, если ученик сменил телефон)
+            panel.append(el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Ссылка ученика' })),
+                el('p', { class: 'hub-muted', text: 'По этой ссылке ученик видит свои уроки. Если он открыл сайт на другом устройстве или потерял ссылку — просто отправьте её ещё раз.' }),
+                el('div', { class: 'hub-actions' }, ...sendButtons(st, null))));
+
+            // Отдельные задачи
+            const chosen = new Set(st.tasks);
+            const boxes = tasks.filter(t => !t.exam).map(t => {
+                const cb = el('input', { type: 'checkbox', value: t.id, checked: chosen.has(t.id) });
+                cb.addEventListener('change', () => { cb.checked ? chosen.add(t.id) : chosen.delete(t.id); st.tasks = [...chosen]; touch(st); });
+                return { t, node: el('label', { class: 'hub-chip' }, cb, el('span', { text: t.title }), el('small', { class: 'cab-chip-diff cab-diff-' + t.difficulty, text: '+' + PB.TASK_POINTS[t.difficulty] })) };
+            });
+            const extra = el('details', { class: 'hub-card cab-more' },
+                el('summary', { text: `Отдельные задачи${st.tasks.length ? ' · выдано ' + st.tasks.length : ''}` }),
+                el('p', { class: 'hub-muted', text: 'Домашние задачи открываются вместе с уроком сами. Здесь можно выдать задачу из другого урока — например, для повторения. После выбора отправьте ученику новую ссылку.' }),
+                el('div', { class: 'hub-chip-groups' }, PB.LESSON_TITLES.map((title, i) => {
+                    const b = boxes.filter(x => x.t.lesson === i + 1);
+                    return b.length ? el('div', { class: 'hub-chip-group' }, el('h4', { text: 'Урок ' + (i + 1) + '. ' + title }), el('div', { class: 'hub-chips hub-chips-col' }, b.map(x => x.node))) : null;
+                })),
+                el('button', { class: 'hub-btn', type: 'button', text: 'Готово', onclick: refresh }));
+            panel.append(extra);
+
+            // Заметки только для вас
+            const note = el('textarea', { class: 'hub-input hub-textarea', rows: '3', maxlength: '2000', placeholder: 'Только для вас: цели, договорённости, над чем поработать…' });
             note.value = st.note || '';
             note.addEventListener('input', () => { st.note = note.value; saveJournal(); });
             panel.append(el('section', { class: 'hub-card' },
-                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Заметки' }), el('span', { class: 'hub-muted', text: 'сохраняются сами' })), note));
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Заметки' }), el('span', { class: 'hub-muted', text: 'видите только вы' })), note));
 
             // История и удаление — внизу, свёрнуто
             panel.append(el('details', { class: 'hub-card cab-more' },
-                el('summary', { text: 'Ещё: история отчётов и удаление' }),
+                el('summary', { text: 'Ещё: история результатов и удаление' }),
                 st.reports.length ? el('ul', { class: 'cab-history' }, st.reports.slice().reverse().map(r => el('li', {},
                     el('span', { text: PB.formatDate(r.at) }),
-                    el('span', { class: 'hub-muted', text: `${plural(Object.values(r.lessons).filter(l => l.p).length, 'тест', 'теста', 'тестов')} · ${plural(r.solved.length, 'задача', 'задачи', 'задач')} · ${PB.computePoints(r.lessons, r.solved)} б.` })))) : el('p', { class: 'hub-muted', text: 'Отчётов нет.' }),
+                    el('span', { class: 'hub-muted', text: `${plural(Object.values(r.lessons).filter(l => l.p).length, 'тест сдан', 'теста сдано', 'тестов сдано')} · ${plural(r.solved.length, 'задача', 'задачи', 'задач')}` })))) : el('p', { class: 'hub-muted', text: 'Результатов пока не присылали.' }),
                 el('button', { class: 'hub-btn hub-btn-danger', type: 'button', text: 'Удалить ученика', onclick: () => {
-                    if (!confirm(`Удалить «${st.name}» вместе с отчётами и оценками?`)) return;
+                    if (!confirm(`Удалить «${st.name}» вместе с результатами и оплатами?`)) return;
                     journal.students = journal.students.filter(x => x.id !== st.id); saveJournal(); go('students');
                 } })));
             if (window.hljs) panel.querySelectorAll('.hub-code code').forEach(c => window.hljs.highlightElement(c));
         }
 
-        // ---------- раздел «Дать задание» (3 шага) ----------
-        function renderAssign(panel) {
-            const datalist = el('datalist', { id: 'cab-names' }, journal.students.map(s => el('option', { value: s.name })));
-            const name = el('input', { class: 'hub-input', id: 'as-name', type: 'text', maxlength: '60', list: 'cab-names', placeholder: 'Имя и фамилия ученика', value: prefillName, autocomplete: 'off' });
-            const note = el('textarea', { class: 'hub-input hub-textarea', id: 'as-note', rows: '2', maxlength: '600', placeholder: 'Комментарий для ученика: срок, подсказка… (необязательно)' });
+        // Проверка результата урока: тест, домашка с кодом, ответ «зачесть» или «повторить»
+        function reviewCard(st, info, refresh) {
+            const r = info.report;
+            const n = info.n;
+            const items = [];
+            items.push(el('li', { class: 'cab-result' + (info.quiz && info.quiz.p ? ' is-done' : '') },
+                el('span', { class: 'cab-check', 'aria-hidden': 'true', text: info.quiz && info.quiz.p ? '✓' : '' }),
+                el('span', { class: 'cab-result-title' }, 'Тест урока', el('small', { text: info.quiz ? `лучший результат ${info.quiz.b}% · попыток: ${info.quiz.a}` : 'не пройден' })),
+                info.quiz ? el('span', { class: 'hub-pill ' + (info.quiz.p ? 'hub-pill-ok' : 'hub-pill-warn'), text: info.quiz.b + '%' }) : el('span', { class: 'hub-pill hub-pill-idle', text: '—' })));
+            info.hw.forEach(id => {
+                const t = taskById(id); const solved = r.solved.includes(id); const code = r.code[id];
+                items.push(el('li', { class: 'cab-result' + (solved ? ' is-done' : '') },
+                    el('span', { class: 'cab-check', 'aria-hidden': 'true', text: solved ? '✓' : '' }),
+                    el('span', { class: 'cab-result-title' }, 'Задача «' + t.title + '»', el('small', { text: DIFF[t.difficulty] })),
+                    el('span', { class: 'hub-pill ' + (solved ? 'hub-pill-ok' : 'hub-pill-idle'), text: solved ? 'решена' : 'не решена' }),
+                    code ? el('details', { class: 'hub-code' }, el('summary', { text: 'Код ученика' }), el('pre', {}, el('code', { class: 'language-python', text: code }))) : null));
+            });
+            const next = n < PB.LESSON_COUNT && !st.opened.includes(n + 1) ? n + 1 : null;
+            const comment = el('textarea', { class: 'hub-input hub-textarea', rows: '2', maxlength: '300', placeholder: 'Комментарий ученику (необязательно для «Зачесть»): что получилось, что повторить' });
+            const openNext = next ? el('input', { type: 'checkbox', id: 'open-next-' + n, checked: leftCount(st) > 0 }) : null;
+            const ok = el('button', { class: 'hub-btn hub-btn-primary', type: 'button', text: 'Зачесть урок', onclick: () => {
+                st.replies[n] = { s: 'ok', c: comment.value.trim(), at: nowIso() };
+                if (openNext && openNext.checked && !openLesson(st, next)) return;
+                touch(st); refresh();
+            } });
+            const redo = el('button', { class: 'hub-btn', type: 'button', text: 'Попросить повторить', onclick: () => {
+                const c = comment.value.trim();
+                if (!c) { comment.focus(); comment.placeholder = 'Напишите, что повторить: например, «Перерешайте задачу 3 — цикл должен начинаться с 1»'; return; }
+                st.replies[n] = { s: 'redo', c, at: nowIso() };
+                touch(st); refresh();
+            } });
+            return el('section', { class: 'hub-card cab-review' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: `Проверьте урок ${n}. ${PB.LESSON_TITLES[n - 1]}` }), el('span', { class: 'hub-muted', text: 'результат от ' + PB.formatDate(r.at) })),
+                el('ul', { class: 'cab-results' }, items),
+                el('label', { class: 'hub-label', text: 'Ваш ответ' }), comment,
+                next ? el('label', { class: 'cab-toggle' }, openNext, el('span', { text: `Сразу открыть урок ${next}` + (leftCount(st) > 0 ? ` (оплачено ещё ${plural(leftCount(st), 'урок', 'урока', 'уроков')})` : ' — оплаченные уроки закончились') })) : null,
+                el('div', { class: 'hub-actions' }, ok, redo));
+        }
 
-            const selectedLessons = new Set();
-            const selectedTasks = new Set();
-            const counter = el('span', { class: 'cab-counter' });
-            const taskInfo = el('div', { class: 'cab-task-info' });
-            const updateCounter = () => {
-                counter.textContent = selectedLessons.size || selectedTasks.size
-                    ? `Выбрано: ${plural(selectedLessons.size, 'урок', 'урока', 'уроков')}, ${plural(selectedTasks.size, 'задача', 'задачи', 'задач')}`
-                    : 'Ничего не выбрано';
-                renderTaskInfo();
+        function paymentsCard(st, refresh) {
+            const paid = paidCount(st), used = usedCount(st), left = paid - used;
+            const custom = el('input', { class: 'hub-input cab-num', type: 'number', min: '1', max: '99', placeholder: 'другое', 'aria-label': 'Сколько уроков оплачено' });
+            const noteIn = el('input', { class: 'hub-input', type: 'text', maxlength: '60', placeholder: 'Сумма или заметка (необязательно)' });
+            const add = (count) => {
+                count = PB.clampInt(count, 0, 99);
+                if (!count) { custom.focus(); return; }
+                st.payments.push({ at: nowIso(), count, note: noteIn.value.trim() });
+                saveJournal(); toast(`Оплата отмечена: +${plural(count, 'урок', 'урока', 'уроков')}`); refresh();
             };
-
-            const lessonButtons = PB.LESSON_TITLES.map((t, i) => {
-                const n = i + 1;
-                const btn = el('button', { class: 'cab-lesson', type: 'button', 'aria-pressed': 'false' },
-                    el('span', { class: 'cab-lesson-num', text: String(n) }), el('span', { text: t }));
-                btn.addEventListener('click', () => {
-                    const on = !selectedLessons.has(n);
-                    on ? selectedLessons.add(n) : selectedLessons.delete(n);
-                    btn.classList.toggle('active', on); btn.setAttribute('aria-pressed', String(on));
-                    // Автоматически добавляем домашние задачи урока (если авто-подбор включён)
-                    if (autoTasks.checked) {
-                        (LESSON_TASKS[n] || []).forEach(id => on ? selectedTasks.add(id) : selectedTasks.delete(id));
-                        syncTaskBoxes();
-                    }
-                    updateCounter();
-                });
-                return btn;
-            });
-
-            // Контрольные: кнопка добавляет в задание все 5 задач контрольной
-            const EXAM_RANGES = { 1: 'уроки 1–6', 2: 'уроки 7–11', 3: 'уроки 12–16' };
-            const examButtons = [1, 2, 3].map(n => {
-                const ids = tasks.filter(t => t.exam === n).map(t => t.id);
-                const btn = el('button', { class: 'cab-lesson cab-exam', type: 'button', 'aria-pressed': 'false' },
-                    el('span', { class: 'cab-lesson-num', text: 'К' + n }), el('span', { text: 'Контрольная ' + n + ' · ' + EXAM_RANGES[n] }));
-                btn.addEventListener('click', () => {
-                    const on = !ids.every(id => selectedTasks.has(id));
-                    ids.forEach(id => on ? selectedTasks.add(id) : selectedTasks.delete(id));
-                    syncTaskBoxes();
-                    updateCounter();
-                });
-                return { btn, ids };
-            });
-            const syncExamButtons = () => examButtons.forEach(({ btn, ids }) => {
-                const on = ids.length > 0 && ids.every(id => selectedTasks.has(id));
-                btn.classList.toggle('active', on); btn.setAttribute('aria-pressed', String(on));
-            });
-
-            const autoTasks = el('input', { type: 'checkbox', checked: true, id: 'cab-auto' });
-            const taskBoxes = tasks.map(t => {
-                const cb = el('input', { type: 'checkbox', value: t.id });
-                cb.addEventListener('change', () => { cb.checked ? selectedTasks.add(t.id) : selectedTasks.delete(t.id); syncExamButtons(); updateCounter(); });
-                return { cb, t, node: el('label', { class: 'hub-chip' }, cb, el('span', { text: t.title }), el('small', { class: 'cab-chip-diff cab-diff-' + t.difficulty, text: '+' + PB.TASK_POINTS[t.difficulty] })) };
-            });
-            const syncTaskBoxes = () => { taskBoxes.forEach(b => { b.cb.checked = selectedTasks.has(b.t.id); }); syncExamButtons(); };
-            function renderTaskInfo() {
-                taskInfo.textContent = '';
-                if (!selectedTasks.size) { taskInfo.append(el('p', { class: 'hub-muted', text: 'Задачи не выбраны.' })); return; }
-                taskInfo.append(el('div', { class: 'cab-tags' }, [...selectedTasks].map(id => {
-                    const t = taskById(id);
-                    return el('span', { class: 'cab-tag' }, (t.exam ? 'К' + t.exam + ': ' : '') + t.title, el('button', { type: 'button', 'aria-label': 'Убрать задачу', text: '×', onclick: () => { selectedTasks.delete(id); syncTaskBoxes(); updateCounter(); } }));
-                })));
-            }
-
-            const manual = el('details', { class: 'cab-manual' },
-                el('summary', { text: 'Выбрать задачи вручную' }),
-                el('p', { class: 'hub-muted', text: 'Задачи сгруппированы по урокам. Цифра справа — сколько баллов даёт задача.' }),
-                el('div', { class: 'hub-chip-groups' }, PB.LESSON_TITLES.flatMap((title, i) => {
-                    const group = (head, boxes) => boxes.length ? el('div', { class: 'hub-chip-group' },
-                        el('h4', { text: head }), el('div', { class: 'hub-chips hub-chips-col' }, boxes.map(b => b.node))) : null;
-                    const exam = taskBoxes.filter(b => b.t.exam && b.t.lesson === i + 1);
-                    return [group('Урок ' + (i + 1) + '. ' + title, taskBoxes.filter(b => !b.t.exam && b.t.lesson === i + 1)),
-                        exam.length ? group('Контрольная ' + exam[0].t.exam + ' · ' + EXAM_RANGES[exam[0].t.exam], exam) : null];
-                })));
-
-            const msg = el('p', { class: 'hub-error', role: 'alert' });
-            const out = el('div', { class: 'cab-result-box', hidden: true });
-            const create = el('button', { class: 'hub-btn hub-btn-primary hub-btn-lg', type: 'button', text: 'Создать задание' });
-            create.addEventListener('click', async () => {
-                msg.textContent = '';
-                if (!name.value.trim()) { msg.textContent = 'Укажите, кому задание (шаг 1).'; name.focus(); return; }
-                if (!selectedLessons.size && !selectedTasks.size) { msg.textContent = 'Выберите хотя бы один урок (шаг 2).'; return; }
-                const a = { v: 1, t: 'assign', id: PB.randomId(), name: name.value.trim().slice(0, 60), note: note.value.trim().slice(0, 600),
-                    lessons: [...selectedLessons].sort((x, y) => x - y), tasks: [...selectedTasks], at: new Date().toISOString() };
-                const link = PB.pageUrl('assignment.html') + '#a=' + await PB.encode(a);
-                journal.assignments = [{ ...a, link }, ...(journal.assignments || [])].slice(0, 30);
-                findOrCreateStudent(a.name);
-                saveJournal();
-                out.textContent = '';
-                out.append(
-                    el('div', { class: 'cab-result-icon', 'aria-hidden': 'true', text: '✓' }),
-                    el('h3', { text: 'Задание для «' + a.name + '» готово' }),
-                    el('p', { class: 'hub-muted', text: 'Отправьте ссылку ученику. По ней откроются выбранные уроки и список задач.' }),
-                    el('div', { class: 'hub-actions cab-center' },
-                        el('a', { class: 'hub-btn hub-btn-primary hub-btn-lg', href: PB.telegramShare(link, 'Задание по Python для ' + a.name), target: '_blank', rel: 'noopener', text: 'Отправить в Telegram' }),
-                        el('button', { class: 'hub-btn hub-btn-lg', type: 'button', text: 'Скопировать ссылку', onclick: () => copyLink(link) })));
-                out.hidden = false;
-                out.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            });
-
-            const step = (n, title, hint, ...body) => el('section', { class: 'hub-card cab-step' },
-                el('div', { class: 'cab-step-head' }, el('span', { class: 'cab-step-num', text: String(n) }),
-                    el('div', {}, el('h2', { text: title }), hint ? el('p', { class: 'hub-muted', text: hint }) : null)),
-                ...body);
-
-            panel.append(
-                step(1, 'Кому', 'Начните вводить имя — подскажем учеников из журнала.', datalist, name),
-                step(2, 'Какие уроки', 'Выбранные уроки откроются у ученика сразу. Нажмите на урок, чтобы выбрать.',
-                    el('div', { class: 'cab-lessons' }, lessonButtons),
-                    el('label', { class: 'cab-toggle' }, autoTasks, el('span', { text: 'Добавлять домашние задачи к каждому выбранному уроку' })),
-                    el('h3', { class: 'hub-subtitle', text: 'Контрольные' }),
-                    el('p', { class: 'hub-muted cab-exam-hint', text: '5 задач, в которых смешаны темы блока. Нажмите, чтобы добавить контрольную в задание.' }),
-                    el('div', { class: 'cab-lessons cab-exams' }, examButtons.map(x => x.btn)),
-                    el('h3', { class: 'hub-subtitle', text: 'Задачи в задании' }), taskInfo, manual),
-                step(3, 'Отправить', null,
-                    el('label', { class: 'hub-label', for: 'as-note', text: 'Комментарий (необязательно)' }), note,
-                    el('div', { class: 'cab-submit' }, counter, create), msg, out));
-            updateCounter();
-
-            const recent = (journal.assignments || []).slice(0, 5);
-            if (recent.length) {
-                panel.append(el('details', { class: 'hub-card cab-more' },
-                    el('summary', { text: 'Недавние задания' }),
-                    el('ul', { class: 'cab-history' }, recent.map(a => el('li', {},
-                        el('span', {}, el('strong', { text: a.name || 'Без имени' }), ' · ' + PB.formatDate(a.at)),
-                        el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Скопировать ссылку', onclick: () => copyLink(a.link) }))))));
-            }
+            return el('section', { class: 'hub-card' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Оплата' }), el('span', { class: 'hub-muted', text: 'каждый открытый урок, кроме первого, списывает один оплаченный' })),
+                el('div', { class: 'hub-stats' },
+                    el('div', { class: 'hub-stat' }, el('strong', { text: String(paid) }), el('span', { text: 'оплачено уроков' })),
+                    el('div', { class: 'hub-stat' }, el('strong', { text: String(used) }), el('span', { text: 'открыто платных' })),
+                    el('div', { class: 'hub-stat' + (left <= 0 ? ' is-warn' : '') }, el('strong', { text: String(left) }), el('span', { text: left < 0 ? 'в долг' : 'осталось' }))),
+                el('div', { class: 'cab-pay-row' },
+                    el('span', { class: 'hub-muted', text: 'Пришла оплата:' }),
+                    el('button', { class: 'hub-btn', type: 'button', text: '+1 урок', onclick: () => add(1) }),
+                    el('button', { class: 'hub-btn', type: 'button', text: '+4 урока', onclick: () => add(4) }),
+                    el('button', { class: 'hub-btn', type: 'button', text: '+8 уроков', onclick: () => add(8) }),
+                    custom, el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Добавить', onclick: () => add(custom.value) })),
+                noteIn,
+                st.payments.length ? el('ul', { class: 'cab-history cab-payments' }, st.payments.slice().reverse().map((p, i) => el('li', {},
+                    el('span', {}, el('b', { text: '+' + plural(p.count, 'урок', 'урока', 'уроков') }), p.note ? ' · ' + p.note : ''),
+                    el('span', { class: 'hub-muted', text: PB.formatDate(p.at) }),
+                    el('button', { class: 'cab-x', type: 'button', title: 'Удалить запись', 'aria-label': 'Удалить запись об оплате', text: '×', onclick: () => {
+                        if (!confirm('Удалить эту запись об оплате?')) return;
+                        st.payments.splice(st.payments.length - 1 - i, 1); saveJournal(); refresh();
+                    } })))) : null);
         }
 
         // ---------- раздел «Провести урок» ----------
         function renderTeach(panel) {
             panel.append(el('section', { class: 'hub-card' },
-                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Провести урок' })),
-                el('p', { class: 'hub-muted', text: 'Нажмите «Слайды» — урок откроется на весь экран. Включите показ экрана в программе для созвона и листайте стрелками. Ссылки можно сразу отправить ученику.' }),
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Провести урок по созвону' })),
+                el('p', { class: 'hub-muted', text: 'Нажмите «Слайды» — урок откроется на весь экран крупным шрифтом. Включите показ экрана в программе для звонка и листайте стрелками. После звонка откройте карточку ученика: проверьте, что урок у него открыт, и отправьте ссылку — по ней он сделает домашку.' }),
                 el('div', { class: 'cab-teach' }, PB.LESSON_TITLES.map((t, i) => {
-                    const n = i + 1; const base = PB.pageUrl(PB.lessonFile(n));
+                    const n = i + 1;
                     return el('div', { class: 'cab-teach-card' },
                         el('span', { class: 'cab-lesson-num', text: String(n) }),
                         el('strong', { text: t }),
                         el('div', { class: 'cab-teach-actions' },
-                            el('a', { class: 'hub-btn hub-btn-primary', href: PB.lessonFile(n) + '#present', text: 'Слайды' }),
-                            el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Ссылка на тест', title: 'Скопировать ссылку на тест урока', onclick: () => copyLink(base + '#quiz', 'Ссылка на тест') })));
+                            el('a', { class: 'hub-btn hub-btn-primary', href: PB.lessonFile(n) + '#present', target: '_blank', rel: 'noopener', text: 'Слайды' }),
+                            el('a', { class: 'hub-btn hub-btn-ghost', href: PB.lessonFile(n), target: '_blank', rel: 'noopener', text: 'Урок' })));
                 }))));
-            panel.append(el('details', { class: 'hub-card cab-more' },
-                el('summary', { text: 'Ссылки на отдельные задачи' }),
-                el('ul', { class: 'cab-history' }, tasks.map(t => el('li', {},
-                    el('span', {}, t.title, el('small', { class: 'hub-muted', text: ' · ' + DIFF[t.difficulty] })),
-                    el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Скопировать', onclick: () => copyLink(PB.pageUrl('tasks.html') + '#task=' + t.id, 'Ссылка на задачу') }))))));
+        }
+
+        // ---------- раздел «Как это работает» ----------
+        function renderGuide(panel) {
+            const steps = (items) => el('ol', { class: 'cab-guide-steps' }, items.map(([b, t]) => el('li', {}, el('strong', { text: b }), t ? ' ' + t : '')));
+            panel.append(el('section', { class: 'hub-card cab-guide' },
+                el('h2', { text: 'Как работать с учеником' }),
+                el('p', { class: 'hub-muted', text: 'Урок 1 открыт всем бесплатно. Остальные уроки видит только ученик, которому вы их открыли.' }),
+                el('h3', { text: 'Первый раз' }),
+                steps([
+                    ['Ученик пишет вам в Telegram.', 'Можно предложить пройти бесплатный урок 1.'],
+                    ['Ученик платит переводом.', 'За один урок или сразу пакетом.'],
+                    ['«Ученики» → «+ Новый ученик».', 'Впишите имя и сколько уроков оплачено — откроется урок 2.'],
+                    ['Нажмите «Отправить в Telegram»', 'и выберите чат с учеником. По ссылке он увидит свои уроки на странице «Мои уроки».']
+                ]),
+                el('h3', { text: 'Если ученик проходит урок сам' }),
+                steps([
+                    ['Ученик проходит урок:', 'читает теорию, решает упражнения, сдаёт тест и домашку.'],
+                    ['Нажимает «Отправить результат».', 'Вам в Telegram приходит ссылка — нажмите на неё, результат сам сохранится в кабинете.'],
+                    ['В карточке ученика появится «Проверьте урок».', 'Там тест, домашка и код решений.'],
+                    ['Ответьте:', '«Зачесть урок» (и сразу открыть следующий) или «Попросить повторить» с комментарием.'],
+                    ['Отправьте новую ссылку.', 'Ученик увидит ваш ответ и новый урок.']
+                ]),
+                el('h3', { text: 'Если урок по созвону' }),
+                steps([
+                    ['Созвонитесь и нажмите «Провести урок по созвону»', 'в карточке ученика (или в разделе «Провести урок»). Покажите экран.'],
+                    ['После звонка урок должен быть открыт у ученика', '— если нет, нажмите «Открыть» и отправьте ссылку.'],
+                    ['Ученик делает домашку и отправляет результат.', 'Дальше — как в схеме выше.']
+                ]),
+                el('h3', { text: 'Оплата' }),
+                el('p', { text: 'Когда приходит перевод — в карточке ученика нажмите «+1 урок», «+4 урока» или впишите своё число. Каждый открытый урок, кроме первого, списывает один оплаченный. Когда оплаченные закончатся, кабинет предупредит и пометит ученика «Нужна оплата».' }),
+                el('h3', { text: 'Частые вопросы' }),
+                el('ul', { class: 'hub-list' },
+                    el('li', { text: 'Ученик сменил телефон или потерял ссылку — в его карточке есть «Ссылка ученика», отправьте её ещё раз.' }),
+                    el('li', { text: 'Журнал хранится только в этом браузере. Раз в неделю сохраняйте копию (⚙ Настройки) — кабинет напомнит.' }),
+                    el('li', { text: 'Закрытые уроки защищены «мягко»: обычный ученик их не увидит, но человек, который разбирается в сайтах, может найти текст.' }))));
         }
 
         // ---------- настройки ----------
@@ -666,7 +771,8 @@
                         const data = JSON.parse(reader.result);
                         if (!data || data.app !== 'pythonbasic-journal' || !data.journal || !Array.isArray(data.journal.students)) throw new Error();
                         if (!confirm('Заменить текущий журнал данными из файла?')) return;
-                        journal = { students: data.journal.students, assignments: Array.isArray(data.journal.assignments) ? data.journal.assignments : [] };
+                        journal = { ...data.journal, assignments: Array.isArray(data.journal.assignments) ? data.journal.assignments : [] };
+                        migrateJournal();
                         saveJournal(); PB.write('pb_journal_backup_at', new Date().toISOString());
                         toast('Журнал восстановлен'); go('students');
                     } catch (e) { toast('Это не копия журнала', 'err'); }
@@ -694,9 +800,10 @@
             panel.append(el('details', { class: 'hub-card cab-more' },
                 el('summary', { text: 'Как это устроено и ограничения' }),
                 el('ul', { class: 'hub-list' },
-                    el('li', { text: 'У сайта нет сервера: задания и отчёты передаются ссылками, журнал хранится в вашем браузере.' }),
+                    el('li', { text: 'У сайта нет сервера: доступ к урокам и результаты передаются ссылками, журнал хранится в вашем браузере.' }),
+                    el('li', { text: 'В этом браузере (где задан PIN) открыты все уроки — чтобы вы могли их показывать.' }),
                     el('li', { text: 'PIN защищает кабинет от случайного просмотра на вашем устройстве, но не от взлома.' }),
-                    el('li', { text: 'Отчёт создаётся в браузере ученика, поэтому теоретически его можно подделать. Для экзаменов нужен сервер.' }))));
+                    el('li', { text: 'Результат создаётся в браузере ученика, поэтому теоретически его можно подделать. Если сомневаетесь — попросите решить задачу на созвоне.' }))));
         }
 
 

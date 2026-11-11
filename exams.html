@@ -4,166 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Контрольные работы курса Python: три блока по 5 задач с автоматической проверкой — после уроков 6, 11 и 16.">
+    <meta name="robots" content="noindex">
     <title>Контрольные работы | PythonBasic</title>
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Контрольные работы | PythonBasic">
-    <meta property="og:description" content="Три контрольные по 5 задач с автоматической проверкой: темы уроков в одной задаче.">
-    <meta property="og:image" content="https://hugemix.github.io/python-course/logo.png">
-    <link rel="canonical" href="https://hugemix.github.io/python-course/exams.html">
-    <meta property="og:url" content="https://hugemix.github.io/python-course/exams.html">
+    <link rel="canonical" href="https://hugemix.github.io/python-course/python-basic.html">
+    <!-- Страница переехала на «Мои уроки». Старые ссылки продолжают работать: адрес (вместе с #a=…) передаётся дальше. -->
+    <script>location.replace('python-basic.html#exams');</script>
+    <noscript><meta http-equiv="refresh" content="0; url=python-basic.html#exams"></noscript>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
-    <header>
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html"
-                style="display: flex; align-items: center; text-decoration: none; transition: transform 0.2s;" class="logo-link">
-                <img src="logo.png" alt="Логотип" class="logo" style="height: 40px;">
-                <span
-                    style="font-weight: 800; font-size: 1.4rem; margin-left: 12px; color: var(--text-color); font-family: 'Inter', sans-serif;">Python<span
-                        style="color: var(--accent-color);">Basic</span></span>
-            </a>
-            <nav>
-                <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; align-items: center;">
-                    <li><a href="index.html">Главная</a></li>
-                    <li><a href="python-basic.html">Уроки</a></li>
-                    <li><a href="tasks.html">Задачи</a></li>
-                    <li><a href="exams.html">Контрольные</a></li>
-                    <li><a href="python-online.html">Python Online</a></li>
-                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
-                    <li><a href="glossary.html">Глоссарий</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <section class="lesson-title">
-        <div class="container">
-            <h1>Контрольные работы</h1>
-            <p>После каждого блока уроков — 5 задач, в которых темы смешаны. Так видно, что материал усвоен целиком.</p>
-        </div>
-    </section>
-
-    <main class="container lesson-main">
-        <section class="exam-intro">
-            <p>Задачи проверяются автоматически, как обычные: откройте задачу, напишите решение и нажмите «Проверить». <strong>Контрольная зачтена, если решено 4 задачи из 5.</strong> Решать можно в любом порядке и сколько угодно раз.</p>
-        </section>
-        <div id="exams-root"></div>
+    <main class="container" style="padding: 60px 20px; text-align: center;">
+        <p>Контрольные работы теперь на странице <a href="python-basic.html#exams">Мои уроки</a>.</p>
     </main>
-
-    <footer class="site-footer">
-        <div class="container footer-grid">
-            <div class="footer-brand">
-                <a href="index.html" class="footer-logo">Python<span>Basic</span></a>
-                <p>Курс Python с нуля на русском языке: уроки, тесты и задачи с автоматической проверкой.</p>
-                <a class="footer-cta" href="https://t.me/HugeMixProfile" target="_blank" rel="noopener">Записаться на занятия в Telegram</a>
-            </div>
-            <div class="footer-col" role="navigation" aria-label="Обучение">
-                <h4>Обучение</h4>
-                <ul>
-                    <li><a href="python-basic.html">Уроки</a></li>
-                    <li><a href="tasks.html">Задачи</a></li>
-                    <li><a href="python-online.html">Python Online</a></li>
-                    <li><a href="certificate.html">Сертификат</a></li>
-                    <li><a href="assignment.html">Моё задание</a></li>
-                </ul>
-            </div>
-            <div class="footer-col" role="navigation" aria-label="Справочник">
-                <h4>Справочник</h4>
-                <ul>
-                    <li><a href="cheatsheet.html">Шпаргалка</a></li>
-                    <li><a href="glossary.html">Глоссарий</a></li>
-                    <li><a href="libraries.html">Библиотеки</a></li>
-                    <li><a href="next-steps.html">Что дальше?</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="container footer-bottom">© <span class="footer-year"></span> PythonBasic — Python для начинающих</div>
-    </footer>
-
-    <script src="tasks_data.js"></script>
-    <script>
-        // Контрольные: задачи из tasks_data.js с полем exam (1, 2, 3)
-        const EXAMS = [
-            { n: 1, from: 1, to: 6, title: 'Основы', topics: 'переменные, ввод и вывод, вычисления, условия, циклы, списки',
-              note: 'Задачи без функций: программа читает данные через input() и печатает ответ — как в домашке уроков 1–6.' },
-            { n: 2, from: 7, to: 11, title: 'Функции и данные', topics: 'функции, словари и множества, строки, файлы, обработка ошибок',
-              note: 'Решения пишутся функциями: проверка сама вызовет вашу функцию с разными данными.' },
-            { n: 3, from: 12, to: 16, title: 'Модули, классы и JSON', topics: 'модули, классы и объекты, дата и время, данные в формате JSON',
-              note: 'Здесь пригодится всё из курса: классы, datetime, json и списки словарей.' }
-        ];
-        const PASS_SOLVED = 4;
-        const POINTS = { easy: 1, medium: 2, hard: 3 };
-        const DIFF = { easy: 'лёгкая', medium: 'средняя', hard: 'сложная' };
-        const plural = (n, one, few, many) => {
-            const m10 = n % 10, m100 = n % 100;
-            return n + ' ' + (m10 === 1 && m100 !== 11 ? one : m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20) ? few : many);
-        };
-        function readJSON(key) { try { return JSON.parse(localStorage.getItem(key)) || {}; } catch (e) { return {}; } }
-        function el(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
-
-        function renderExams() {
-            const root = document.getElementById('exams-root');
-            const solved = readJSON('solved_tasks');
-            const passed = readJSON('quiz_results');
-            root.textContent = '';
-            EXAMS.forEach(ex => {
-                const list = tasks.filter(t => t.exam === ex.n);
-                const done = list.filter(t => solved[t.id]).length;
-                const pts = list.reduce((s, t) => s + (solved[t.id] ? POINTS[t.difficulty] : 0), 0);
-                const maxPts = list.reduce((s, t) => s + POINTS[t.difficulty], 0);
-                const state = done >= PASS_SOLVED ? ['is-ok', 'Зачтена'] : done ? ['is-progress', 'В процессе'] : ['', 'Не начата'];
-
-                const card = el('section', 'exam-card' + (done >= PASS_SOLVED ? ' is-passed' : ''));
-                card.id = 'exam-' + ex.n;
-                const head = el('div', 'exam-head');
-                const titles = el('div', 'exam-titles');
-                titles.append(el('span', 'exam-kicker', `Контрольная ${ex.n} · уроки ${ex.from}–${ex.to}`), el('h2', '', ex.title), el('p', 'exam-topics', ex.topics));
-                const side = el('div', 'exam-side');
-                side.append(el('span', 'exam-pill ' + state[0], state[1]), el('span', 'exam-score', `Решено ${done} из ${list.length} · ${pts} из ${plural(maxPts, 'балла', 'баллов', 'баллов')}`));
-                head.append(titles, side);
-                card.append(head);
-
-                const bar = el('div', 'exam-bar');
-                list.forEach(t => bar.append(el('span', solved[t.id] ? 'is-done' : '')));
-                card.append(bar);
-
-                const lastLesson = 'lesson' + ex.to + '.html';
-                if (!passed[lastLesson] && !done) {
-                    const p = el('p', 'exam-note', 'Лучше браться после того, как пройдёте ');
-                    const a = el('a', '', `уроки ${ex.from}–${ex.to}`); a.href = 'python-basic.html';
-                    p.append(a, '. Но если уверены в себе — можно и сейчас.');
-                    card.append(p);
-                }
-                card.append(el('p', 'exam-note', ex.note));
-
-                const ul = el('ul', 'hw-tasks');
-                list.forEach(t => {
-                    const li = el('li'); li.dataset.task = t.id;
-                    const a = el('a'); a.href = 'tasks.html#task=' + t.id;
-                    const main = el('span', 'hw-main');
-                    main.append(el('strong', '', t.title), el('small', '', `${DIFF[t.difficulty]} · +${plural(POINTS[t.difficulty], 'балл', 'балла', 'баллов')}`));
-                    const check = el('span', 'hw-check'); check.setAttribute('aria-hidden', 'true');
-                    a.append(check, main, el('span', 'hw-status', solved[t.id] ? 'Решена' : 'Не решена'));
-                    if (solved[t.id]) li.classList.add('is-done');
-                    li.append(a); ul.append(li);
-                });
-                card.append(ul);
-                const actions = el('div', 'exam-actions');
-                const all = el('a', 'hub-btn', 'Все задачи контрольной на странице задач'); all.href = 'tasks.html#exam=' + ex.n;
-                actions.append(all);
-                card.append(actions);
-                root.append(card);
-            });
-        }
-        renderExams();
-        window.addEventListener('focus', renderExams);
-        window.addEventListener('pageshow', renderExams);
-    </script>
-    <script src="script.js"></script>
 </body>
 
 </html>
