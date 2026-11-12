@@ -175,7 +175,12 @@ async function main() {
     }
     for (let n = 1; n <= 16; n++) {
         const hw = tasks.filter(t => t.hw && t.lesson === n).length;
-        if (hw < 3 || hw > 4) fail(`урок ${n}`, `в домашке ${hw} задач, нужно 3–4`);
+        if (hw < 3 || hw > 5) fail(`урок ${n}`, `в домашке ${hw} задач, нужно 3–5`);
+        // задача на повторение: ровно одна в уроках 3–16, и она входит в домашку
+        const rv = tasks.filter(t => t.review && t.lesson === n);
+        if (n >= 3 && rv.length !== 1) fail(`урок ${n}`, `задач на повторение ${rv.length}, нужна 1`);
+        if (n < 3 && rv.length) fail(`урок ${n}`, 'в уроках 1–2 задач на повторение нет');
+        rv.filter(t => !t.hw).forEach(t => fail(`задача ${t.id}`, 'задача на повторение должна быть в домашке (hw: true)'));
     }
     // контрольные 1–3 — по 5 задач, итоговый экзамен (exam: 4) — 6 задач
     for (const [e, need] of [[1, 5], [2, 5], [3, 5], [4, 6]]) {
