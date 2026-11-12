@@ -1,4 +1,6 @@
 // Задачи курса. lesson — номер урока (тема), hw — задача входит в домашнее задание урока.
+// review: true — задача на повторение: тема урока вместе с прошлыми темами (всегда в домашке, hw: true).
+// project, step, projectTitle — шаг мини-проекта модуля (проект 1 — после урока 6, 2 — после 11, 3 — после 16).
 // kind: "io" — задача «ввод → вывод»: программа читает input() и печатает ответ, проверка по cases.
 const tasks = [
     {
@@ -123,6 +125,18 @@ const tasks = [
         cases: [{"in": "38", "out": "10: 3\n5: 1\n2: 1\n1: 1"}, {"in": "7", "out": "10: 0\n5: 1\n2: 1\n1: 0"}, {"in": "20", "out": "10: 2\n5: 0\n2: 0\n1: 0"}]
     },
     {
+        id: "rv3_fruit",
+        title: "Фрукты на развес",
+        difficulty: "medium",
+        lesson: 3,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> ввод данных, переменные и арифметика.</p><p>Программа получает три целых числа, каждое на своей строке: цену за килограмм, вес покупки в граммах и сколько денег дал покупатель. Стоимость считается в целых рублях, копейки отбрасываются: цена × граммы, нацело делённое на 1000. Выведите две строки: <code>Стоимость: C</code> и <code>Сдача: S</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">120\n1500\n500</code></div><div><span>Вывод</span><code class=\"io-box\">Стоимость: 180\nСдача: 320</code></div></div>",
+        startCode: "# Напишите программу ниже\n",
+        kind: "io",
+        cases: [{"in": "120\n1500\n500", "out": "Стоимость: 180\nСдача: 320"}, {"in": "99\n250\n100", "out": "Стоимость: 24\nСдача: 76"}, {"in": "300\n1000\n300", "out": "Стоимость: 300\nСдача: 0"}, {"in": "80\n125\n50", "out": "Стоимость: 10\nСдача: 40"}]
+    },
+    {
         id: "io_sign",
         title: "Знак числа",
         difficulty: "easy",
@@ -165,6 +179,18 @@ const tasks = [
         startCode: "age = int(input())\nweekend = input()\n\n# посчитайте цену\n",
         kind: "io",
         cases: [{"in": "30\nда", "out": "350"}, {"in": "5\nда", "out": "0"}, {"in": "12\nнет", "out": "150"}, {"in": "17\nда", "out": "200"}, {"in": "70\nнет", "out": "100"}, {"in": "18\nнет", "out": "300"}]
+    },
+    {
+        id: "rv4_discount",
+        title: "Скидка в магазине",
+        difficulty: "medium",
+        lesson: 4,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> условия, арифметика и ввод.</p><p>Программа получает сумму покупки (целое число) и ответ <code>да</code> или <code>нет</code> — есть ли у покупателя карта магазина. Скидка: от 5000 — 10%, от 2000 — 5%, меньше — 0%. С картой к скидке добавляется ещё 3%.</p><p>Выведите две строки: <code>Скидка: P%</code> и <code>К оплате: X</code>, где X — сумма минус скидка. Скидку в рублях считайте нацело: <code>сумма * P // 100</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">6000\nнет</code></div><div><span>Вывод</span><code class=\"io-box\">Скидка: 10%\nК оплате: 5400</code></div></div>",
+        startCode: "# Напишите программу ниже\n",
+        kind: "io",
+        cases: [{"in": "6000\nнет", "out": "Скидка: 10%\nК оплате: 5400"}, {"in": "6000\nда", "out": "Скидка: 13%\nК оплате: 5220"}, {"in": "2500\nда", "out": "Скидка: 8%\nК оплате: 2300"}, {"in": "999\nнет", "out": "Скидка: 0%\nК оплате: 999"}, {"in": "2000\nнет", "out": "Скидка: 5%\nК оплате: 1900"}, {"in": "1000\nда", "out": "Скидка: 3%\nК оплате: 970"}, {"in": "5000\nнет", "out": "Скидка: 10%\nК оплате: 4500"}]
     },
     {
         id: "io_countdown",
@@ -211,6 +237,18 @@ const tasks = [
         cases: [{"in": "12345", "out": "5"}, {"in": "7", "out": "1"}, {"in": "0", "out": "1"}, {"in": "-904", "out": "3"}, {"in": "1000000", "out": "7"}]
     },
     {
+        id: "rv5_multiples",
+        title: "Кратные числа",
+        difficulty: "medium",
+        lesson: 5,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> циклы, условия и остаток от деления.</p><p>Программа получает два целых числа N и K. Выведите в одной строке через пробел все числа от 1 до N, которые делятся на K без остатка, а на следующей строке — <code>Всего: C</code>. Если таких чисел нет, вместо первой строки выведите <code>Нет</code>.</p><p>Подсказка: <code>print(i, end=\" \")</code> печатает без перехода на новую строку.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">20\n5</code></div><div><span>Вывод</span><code class=\"io-box\">5 10 15 20\nВсего: 4</code></div></div>",
+        startCode: "# Напишите программу ниже\n",
+        kind: "io",
+        cases: [{"in": "20\n5", "out": "5 10 15 20\nВсего: 4"}, {"in": "10\n3", "out": "3 6 9\nВсего: 3"}, {"in": "4\n7", "out": "Нет\nВсего: 0"}, {"in": "1\n1", "out": "1\nВсего: 1"}, {"in": "12\n12", "out": "12\nВсего: 1"}]
+    },
+    {
         id: "io_list_max",
         title: "Самое большое число",
         difficulty: "easy",
@@ -253,6 +291,60 @@ const tasks = [
         startCode: "n = int(input())\nnumbers = []\n\n# напишите решение здесь\n",
         kind: "io",
         cases: [{"in": "5\n1\n2\n3\n4\n5", "out": "4\n5"}, {"in": "3\n7\n7\n7", "out": "Нет"}, {"in": "4\n10\n1\n1\n1", "out": "10"}]
+    },
+    {
+        id: "rv6_weather",
+        title: "Погода за неделю",
+        difficulty: "medium",
+        lesson: 6,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> списки, циклы, условия и ввод.</p><p>Программа получает одной строкой температуры за несколько дней через пробел (целые числа). Выведите четыре строки:</p><ul><li><code>Мин: A</code> — самая низкая температура;</li><li><code>Макс: B</code> — самая высокая;</li><li><code>Морозных дней: C</code> — сколько дней было ниже нуля;</li><li><code>Средняя: X</code> — средняя температура, округлённая до 1 знака: <code>round(x, 1)</code>.</li></ul><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">3 -2 0 5 -1 4 2</code></div><div><span>Вывод</span><code class=\"io-box\">Мин: -2\nМакс: 5\nМорозных дней: 2\nСредняя: 1.6</code></div></div>",
+        startCode: "# Напишите программу ниже\n",
+        kind: "io",
+        cases: [{"in": "3 -2 0 5 -1 4 2", "out": "Мин: -2\nМакс: 5\nМорозных дней: 2\nСредняя: 1.6"}, {"in": "-5 -3 -10", "out": "Мин: -10\nМакс: -3\nМорозных дней: 3\nСредняя: -6.0"}, {"in": "10", "out": "Мин: 10\nМакс: 10\nМорозных дней: 0\nСредняя: 10.0"}, {"in": "0 0 1", "out": "Мин: 0\nМакс: 1\nМорозных дней: 0\nСредняя: 0.3"}]
+    },
+    {
+        id: "pr1_hint",
+        title: "Угадай число: подсказка",
+        difficulty: "easy",
+        lesson: 6,
+        hw: false,
+        project: 1,
+        step: 1,
+        projectTitle: "Проект 1: Угадай число",
+        desc: "<p>Соберём игру «Угадай число» за три шага. Шаг 1 — подсказка игроку.</p><p>Программа получает два целых числа, каждое на своей строке: загаданное число и попытку игрока. Выведите одно слово:</p><ul><li><code>больше</code> — если загаданное число больше попытки;</li><li><code>меньше</code> — если загаданное число меньше попытки;</li><li><code>Угадано!</code> — если числа совпали.</li></ul><p>В игре загадывают числа от 1 до 100. Если попытка меньше 1 или больше 100, вместо подсказки выведите <code>Число должно быть от 1 до 100</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">42\n50</code></div><div><span>Вывод</span><code class=\"io-box\">меньше</code></div></div>",
+        startCode: "# Напишите программу ниже\n",
+        kind: "io",
+        cases: [{"in": "42\n50", "out": "меньше"}, {"in": "42\n10", "out": "больше"}, {"in": "42\n42", "out": "Угадано!"}, {"in": "7\n0", "out": "Число должно быть от 1 до 100"}, {"in": "7\n101", "out": "Число должно быть от 1 до 100"}, {"in": "100\n100", "out": "Угадано!"}, {"in": "1\n2", "out": "меньше"}]
+    },
+    {
+        id: "pr1_game",
+        title: "Угадай число: игра до победы",
+        difficulty: "medium",
+        lesson: 6,
+        hw: false,
+        project: 1,
+        step: 2,
+        projectTitle: "Проект 1: Угадай число",
+        desc: "<p>Шаг 2 — игра продолжается, пока число не угадано, и считает попытки.</p><p>Первая строка — загаданное число. Дальше идут попытки игрока, по одной на строке. На каждую попытку выведите её номер и подсказку: <code>Попытка K: больше</code> или <code>Попытка K: меньше</code>. Когда число угадано, выведите <code>Попытка K: угадано!</code>, а последней строкой — <code>Победа! Попыток: K</code>.</p><p>Подсказка: используйте <code>while True</code>, счётчик попыток и <code>break</code>, когда число угадано.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">42\n50\n25\n42</code></div><div><span>Вывод</span><code class=\"io-box\">Попытка 1: меньше\nПопытка 2: больше\nПопытка 3: угадано!\nПобеда! Попыток: 3</code></div></div>",
+        startCode: "# Напишите программу ниже\n",
+        kind: "io",
+        cases: [{"in": "42\n50\n25\n42", "out": "Попытка 1: меньше\nПопытка 2: больше\nПопытка 3: угадано!\nПобеда! Попыток: 3"}, {"in": "7\n7", "out": "Попытка 1: угадано!\nПобеда! Попыток: 1"}, {"in": "10\n1\n2\n20\n10", "out": "Попытка 1: больше\nПопытка 2: больше\nПопытка 3: меньше\nПопытка 4: угадано!\nПобеда! Попыток: 4"}, {"in": "100\n50\n75\n90\n99\n100", "out": "Попытка 1: больше\nПопытка 2: больше\nПопытка 3: больше\nПопытка 4: больше\nПопытка 5: угадано!\nПобеда! Попыток: 5"}]
+    },
+    {
+        id: "pr1_limit",
+        title: "Угадай число: лимит попыток",
+        difficulty: "hard",
+        lesson: 6,
+        hw: false,
+        project: 1,
+        step: 3,
+        projectTitle: "Проект 1: Угадай число",
+        desc: "<p>Шаг 3 — у игрока ограниченное число попыток, а в конце игра показывает все его догадки.</p><p>Первая строка — загаданное число, вторая — сколько попыток разрешено (N). Дальше идут попытки игрока, по одной на строке. На каждую неверную попытку выведите <code>больше</code> или <code>меньше</code>. Игра заканчивается:</p><ul><li>победой — выведите <code>Угадано! Попыток: K</code>;</li><li>или когда N попыток закончились — выведите <code>Попытки кончились. Было загадано: X</code>.</li></ul><p>Последней строкой в любом случае выведите все догадки по порядку через запятую и пробел: <code>Ваши догадки: 50, 25, 42</code>.</p><p>Подсказка: складывайте догадки в список через <code>append()</code>. Число попыток — это длина списка.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">42\n5\n50\n25\n42</code></div><div><span>Вывод</span><code class=\"io-box\">меньше\nбольше\nУгадано! Попыток: 3\nВаши догадки: 50, 25, 42</code></div></div>",
+        startCode: "# Напишите программу ниже\n",
+        kind: "io",
+        cases: [{"in": "42\n5\n50\n25\n42", "out": "меньше\nбольше\nУгадано! Попыток: 3\nВаши догадки: 50, 25, 42"}, {"in": "42\n3\n50\n25\n30", "out": "меньше\nбольше\nбольше\nПопытки кончились. Было загадано: 42\nВаши догадки: 50, 25, 30"}, {"in": "42\n3\n10\n90\n42", "out": "больше\nменьше\nУгадано! Попыток: 3\nВаши догадки: 10, 90, 42"}, {"in": "8\n4\n8", "out": "Угадано! Попыток: 1\nВаши догадки: 8"}, {"in": "5\n1\n6", "out": "меньше\nПопытки кончились. Было загадано: 5\nВаши догадки: 6"}, {"in": "60\n2\n60", "out": "Угадано! Попыток: 1\nВаши догадки: 60"}]
     },
     {
         id: "ex1_even_odd",
@@ -407,6 +499,34 @@ try:
     print("✅ Проверка на простоту работает безупречно!")
 except NameError as e:
     print(f"❌ Ошибка: {e}.\\nПроверьте, что функция is_prime называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "rv7_filter_range",
+        title: "Числа из диапазона",
+        difficulty: "medium",
+        lesson: 7,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> функции, списки, циклы и условия.</p><p>Напишите функцию <code>filter_range(nums, low, high)</code>. Она возвращает <strong>новый</strong> список из тех чисел <code>nums</code>, которые лежат от <code>low</code> до <code>high</code> включительно, отсортированный по возрастанию. Исходный список менять нельзя.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">filter_range([5, 1, 9, 3, 7], 3, 7)\nfilter_range([1, 2], 5, 10)</code></div><div><span>Результат</span><code class=\"io-box\">[3, 5, 7]\n[]</code></div></div>",
+        startCode: "def filter_range(nums, low, high):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    nums = [5, 1, 9, 3, 7]
+    assert filter_range(nums, 3, 7) == [3, 5, 7], f"filter_range([5, 1, 9, 3, 7], 3, 7) должна вернуть [3, 5, 7], а вернула {filter_range(nums, 3, 7)}"
+    assert nums == [5, 1, 9, 3, 7], "Исходный список менять нельзя"
+    assert filter_range([1, 2], 5, 10) == [], "Нет подходящих чисел — пустой список"
+    assert filter_range([], 0, 100) == [], "Пустой список — пустой результат"
+    assert filter_range([10, -5, 0, 5, -10], -5, 5) == [-5, 0, 5], "Границы входят в диапазон, отрицательные числа тоже"
+    assert filter_range([4, 4, 2], 4, 4) == [4, 4], "Повторы сохраняются"
+    __task_passed__ = True
+    print("✅ Функция отбирает числа из диапазона!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция filter_range называется именно так.")
 except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:
@@ -1073,6 +1193,32 @@ except Exception as e:
         `
     },
     {
+        id: "rv8_cart",
+        title: "Корзина по прайсу",
+        difficulty: "medium",
+        lesson: 8,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> словари и множества вместе со списками, циклами и функциями.</p><p>Напишите функцию <code>cart_total(prices, cart)</code>. <code>prices</code> — словарь «товар → цена», <code>cart</code> — список товаров в корзине (товар может повторяться). Верните кортеж из двух значений: сумму за товары, которые есть в прайсе, и отсортированный список товаров, которых в прайсе нет (каждый — один раз).</p><p>Подсказка: повторы удобно убирать множеством <code>set()</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">prices = {\"хлеб\": 45, \"молоко\": 89}\ncart_total(prices, [\"хлеб\", \"молоко\", \"хлеб\", \"икра\", \"икра\"])</code></div><div><span>Результат</span><code class=\"io-box\">(179, [\"икра\"])</code></div></div>",
+        startCode: "def cart_total(prices, cart):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    prices = {"хлеб": 45, "молоко": 89, "сыр": 300}
+    assert cart_total(prices, ["хлеб", "молоко", "хлеб", "икра", "икра"]) == (179, ["икра"]), f"Вернулось {cart_total(prices, ['хлеб', 'молоко', 'хлеб', 'икра', 'икра'])}, а нужно (179, ['икра'])"
+    assert cart_total(prices, []) == (0, []), "Пустая корзина: (0, [])"
+    assert cart_total(prices, ["сыр", "торт", "арбуз", "торт"]) == (300, ["арбуз", "торт"]), "Товары без цены — по алфавиту и без повторов"
+    assert cart_total({}, ["хлеб"]) == (0, ["хлеб"]), "Пустой прайс: всё в списке отсутствующих"
+    __task_passed__ = True
+    print("✅ Корзина считается верно!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция cart_total называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
         id: "shout",
         title: "Громкий голос",
         difficulty: "easy",
@@ -1160,6 +1306,31 @@ try:
     print("✅ Шифр работает! Вы настоящий криптограф.")
 except NameError as e:
     print(f"❌ Ошибка: {e}.\\nПроверьте, что функция caesar называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "rv9_initials",
+        title: "Фамилия и инициалы",
+        difficulty: "medium",
+        lesson: 9,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> строки вместе со списками, циклами и функциями.</p><p>Напишите функцию <code>initials(full_name)</code>. Она получает фамилию, имя и, может быть, отчество — в любом регистре и с лишними пробелами. Верните фамилию с большой буквы и инициалы: <code>Иванов И. П.</code>. Если отчества нет — <code>Петрова А.</code>, если есть только фамилия — просто фамилию.</p><p>Подсказки: <code>split()</code> без аргументов сам убирает лишние пробелы, <code>capitalize()</code> делает первую букву большой, а остальные маленькими.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">initials(\"иванов иван петрович\")\ninitials(\"  ПЕТРОВА   анна \")\ninitials(\"пушкин\")</code></div><div><span>Результат</span><code class=\"io-box\">\"Иванов И. П.\"\n\"Петрова А.\"\n\"Пушкин\"</code></div></div>",
+        startCode: "def initials(full_name):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert initials("иванов иван петрович") == "Иванов И. П.", f"initials(\\"иванов иван петрович\\") должна вернуть \\"Иванов И. П.\\", а вернула \\"{initials('иванов иван петрович')}\\""
+    assert initials("  ПЕТРОВА   анна ") == "Петрова А.", "Лишние пробелы и большие буквы: должно быть \\"Петрова А.\\""
+    assert initials("пушкин") == "Пушкин", "Только фамилия — вернуть фамилию"
+    assert initials("Толстой Лев Николаевич") == "Толстой Л. Н.", "Должно быть \\"Толстой Л. Н.\\""
+    __task_passed__ = True
+    print("✅ Инициалы получаются правильно!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция initials называется именно так.")
 except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:
@@ -1393,6 +1564,40 @@ except Exception as e:
         `
     },
     {
+        id: "rv10_copy_upper",
+        title: "Копия файла большими буквами",
+        difficulty: "medium",
+        lesson: 10,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> файлы вместе со строками, циклами и функциями.</p><p>Напишите функцию <code>copy_upper(src, dst)</code>. Она читает файл <code>src</code> и записывает в файл <code>dst</code> его строки большими буквами, по одной на строке. Пробелы по краям строк уберите, пустые строки пропустите. Функция возвращает, сколько строк записано.</p><p>Файлы открывайте с <code>encoding=\"utf-8\"</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\"># в файле src.txt:  «привет», «», «  мир  »\ncopy_upper(\"src.txt\", \"dst.txt\")\n# в файле dst.txt:</code></div><div><span>Результат</span><code class=\"io-box\">\n2\nПРИВЕТ\nМИР</code></div></div>",
+        startCode: "def copy_upper(src, dst):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    with open("rv10_src.txt", "w", encoding="utf-8") as f:
+        f.write("привет\\n\\n   мир  \\nPython 3\\n")
+    n = copy_upper("rv10_src.txt", "rv10_dst.txt")
+    assert n == 3, f"Записано 3 непустые строки, а функция вернула {n}"
+    with open("rv10_dst.txt", encoding="utf-8") as f:
+        lines = f.read().split("\\n")
+    lines = [x for x in lines if x != ""]
+    assert lines == ["ПРИВЕТ", "МИР", "PYTHON 3"], f"В новом файле должны быть строки ['ПРИВЕТ', 'МИР', 'PYTHON 3'], а сейчас {lines}"
+    with open("rv10_src.txt", "w", encoding="utf-8") as f:
+        f.write("\\n\\n")
+    assert copy_upper("rv10_src.txt", "rv10_dst.txt") == 0, "Файл из пустых строк — записано 0 строк"
+    with open("rv10_dst.txt", encoding="utf-8") as f:
+        assert f.read().strip() == "", "Старое содержимое нового файла нужно перезаписать (режим \\"w\\")"
+    __task_passed__ = True
+    print("✅ Файл копируется большими буквами!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция copy_upper называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
         id: "to_int",
         title: "Безопасное число",
         difficulty: "easy",
@@ -1493,6 +1698,153 @@ try:
     print("✅ Обработка ошибок работает надёжно!")
 except NameError as e:
     print(f"❌ Ошибка: {e}.\\nПроверьте, что функция parse_numbers называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "rv11_average_age",
+        title: "Средний возраст из анкет",
+        difficulty: "medium",
+        lesson: 11,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> обработка ошибок вместе со строками, списками и функциями.</p><p>Напишите функцию <code>average_age(records)</code>. <code>records</code> — список строк вида <code>\"Имя,возраст\"</code>. Посчитайте средний возраст по правильным анкетам и верните его, округлив до 1 знака. Пропустите анкеты без запятой, с возрастом не числом и с отрицательным возрастом. Если правильных анкет нет — верните <code>None</code>.</p><p>Подсказка: <code>int(\"abc\")</code> выбрасывает <code>ValueError</code> — перехватите её через <code>try / except</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">average_age([\"Аня,20\", \"Боря,abc\", \"Вера,31\"])\naverage_age([\"Гена\"])</code></div><div><span>Результат</span><code class=\"io-box\">25.5\nNone</code></div></div>",
+        startCode: "def average_age(records):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    r = average_age(["Аня,20", "Боря,30", "Вера,abc", "Гена", "Дима,-5", "Ева, 25 "])
+    assert r == 25.0, f"Правильные анкеты: 20, 30 и 25 — средний возраст 25.0, а функция вернула {r}"
+    assert average_age(["Аня,20", "Боря,abc", "Вера,31"]) == 25.5, "Должно получиться 25.5"
+    assert average_age(["Гена"]) is None, "Нет правильных анкет — None"
+    assert average_age([]) is None, "Пустой список — None"
+    assert average_age(["Аня,10", "Боря,11", "Вера,11"]) == 10.7, "Округление до 1 знака: 10.7"
+    __task_passed__ = True
+    print("✅ Средний возраст считается, а плохие анкеты не мешают!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция average_age называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "pr2_add",
+        title: "Телефонная книга: добавить и найти",
+        difficulty: "medium",
+        lesson: 11,
+        hw: false,
+        project: 2,
+        step: 1,
+        projectTitle: "Проект 2: Телефонная книга",
+        desc: "<p>Соберём телефонную книгу за три шага. Книга — это словарь: ключ — имя, значение — номер. Шаг 1 — три функции:</p><ul><li><code>normalize_phone(text)</code> — оставляет в строке только цифры и приводит номер к виду <code>+7XXXXXXXXXX</code>. Подходят 11 цифр, начинающиеся с <code>7</code> или <code>8</code> (первую цифру заменяем на <code>+7</code>), и 10 цифр (добавляем <code>+7</code> впереди). В остальных случаях — <code>raise ValueError(\"Неверный номер\")</code>.</li><li><code>add_contact(book, name, phone)</code> — убирает пробелы вокруг имени и записывает в словарь <code>book</code> номер в виде <code>+7…</code>. Пустое имя — <code>ValueError(\"Пустое имя\")</code>. С плохим номером ошибка, и книга не меняется.</li><li><code>find_contact(book, name)</code> — ищет контакт без учёта регистра букв и возвращает номер, а если такого нет — <code>None</code>.</li></ul><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">normalize_phone(\"8 (912) 345-67-89\")\nnormalize_phone(\"912 345 67 89\")\nnormalize_phone(\"12345\")</code></div><div><span>Результат</span><code class=\"io-box\">\"+79123456789\"\n\"+79123456789\"\nValueError: Неверный номер</code></div></div>",
+        startCode: "def normalize_phone(text):\n    # напишите решение здесь\n    pass\n\ndef add_contact(book, name, phone):\n    pass\n\ndef find_contact(book, name):\n    pass\n",
+        testCode: `
+try:
+    assert normalize_phone("8 (912) 345-67-89") == "+79123456789", "normalize_phone(\\"8 (912) 345-67-89\\") должно вернуть \\"+79123456789\\""
+    assert normalize_phone("+7 912 345 67 89") == "+79123456789", "Номер с +7 и пробелами: должно получиться \\"+79123456789\\""
+    assert normalize_phone("912-345-67-89") == "+79123456789", "10 цифр — добавьте +7 впереди"
+    for bad in ["12345", "5 912 345 67 89", "", "звонить вечером", "8 912 345 67 89 0"]:
+        try:
+            normalize_phone(bad)
+            assert False, f"normalize_phone(\\"{bad}\\") должна выбросить ValueError"
+        except ValueError:
+            pass
+    book = {}
+    add_contact(book, "Аня", "8 912 345 67 89")
+    assert book == {"Аня": "+79123456789"}, f"После add_contact(book, \\"Аня\\", \\"8 912 345 67 89\\") книга должна быть {{'Аня': '+79123456789'}}, а сейчас {book}"
+    add_contact(book, "  Борис ", "+7(903)111-22-33")
+    assert book.get("Борис") == "+79031112233", "Пробелы вокруг имени нужно убрать: ключ \\"Борис\\""
+    try:
+        add_contact(book, "Вера", "123")
+        assert False, "add_contact с номером \\"123\\" должна выбросить ValueError"
+    except ValueError:
+        pass
+    assert "Вера" not in book, "С неверным номером контакт не должен попасть в книгу"
+    try:
+        add_contact(book, "   ", "89123456789")
+        assert False, "Пустое имя — должна быть ошибка ValueError"
+    except ValueError:
+        pass
+    assert len(book) == 2, f"В книге должно быть 2 контакта, а их {len(book)}"
+    assert find_contact(book, "аня") == "+79123456789", "find_contact(book, \\"аня\\") должна найти Аню без учёта регистра"
+    assert find_contact(book, "БОРИС") == "+79031112233", "find_contact(book, \\"БОРИС\\") должна найти Бориса"
+    assert find_contact(book, "Гена") is None, "Если контакта нет — верните None"
+    __task_passed__ = True
+    print("✅ Контакты добавляются, номера приводятся к виду +7… — книга заработала!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функции normalize_phone, add_contact и find_contact называются именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "pr2_search",
+        title: "Телефонная книга: поиск и статистика",
+        difficulty: "medium",
+        lesson: 11,
+        hw: false,
+        project: 2,
+        step: 2,
+        projectTitle: "Проект 2: Телефонная книга",
+        desc: "<p>Шаг 2 — поиск по части имени и статистика. Книга — словарь вида <code>{\"Аня\": \"+79123456789\", …}</code>, номера уже приведены к виду <code>+7…</code>. Напишите две функции:</p><ul><li><code>search(book, part)</code> — возвращает список имён, в которых есть <code>part</code> (без учёта регистра), отсортированный по алфавиту. Пустая <code>part</code> подходит ко всем именам.</li><li><code>stats(book)</code> — возвращает словарь <code>{\"total\": N, \"codes\": {…}}</code>: сколько всего контактов и сколько номеров с каждым кодом. Код — три цифры после <code>+7</code>: у <code>+79123456789</code> код <code>\"912\"</code>.</li></ul><p>Функции из шага 1 можно оставить в программе — они не помешают.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">book = {\"Аня\": \"+79123456789\", \"Таня\": \"+79031112233\"}\nsearch(book, \"ан\")\nstats(book)</code></div><div><span>Результат</span><code class=\"io-box\">[\"Аня\", \"Таня\"]\n{\"total\": 2, \"codes\": {\"912\": 1, \"903\": 1}}</code></div></div>",
+        startCode: "def search(book, part):\n    # напишите решение здесь\n    pass\n\ndef stats(book):\n    pass\n",
+        testCode: `
+try:
+    book = {"Аня": "+79123456789", "Анатолий": "+79031112233", "Борис": "+79125550000", "Таня": "+79991234567"}
+    copy = dict(book)
+    assert search(book, "ан") == ["Анатолий", "Аня", "Таня"], f"search(book, \\"ан\\") должна вернуть ['Анатолий', 'Аня', 'Таня'], а вернула {search(book, 'ан')}"
+    assert search(book, "БОР") == ["Борис"], "Поиск без учёта регистра: search(book, \\"БОР\\") == ['Борис']"
+    assert search(book, "zz") == [], "Если ничего не найдено — пустой список"
+    assert search(book, "") == ["Анатолий", "Аня", "Борис", "Таня"], "Пустая строка поиска — все имена по алфавиту"
+    assert stats(book) == {"total": 4, "codes": {"912": 2, "903": 1, "999": 1}}, f"stats(book) вернула {stats(book)}, а нужно {{'total': 4, 'codes': {{'912': 2, '903': 1, '999': 1}}}}"
+    assert stats({}) == {"total": 0, "codes": {}}, "Для пустой книги: {'total': 0, 'codes': {}}"
+    assert book == copy, "Функции не должны менять книгу"
+    __task_passed__ = True
+    print("✅ Поиск и статистика работают!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функции search и stats называются именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "pr2_file",
+        title: "Телефонная книга: сохранить в файл",
+        difficulty: "hard",
+        lesson: 11,
+        hw: false,
+        project: 2,
+        step: 3,
+        projectTitle: "Проект 2: Телефонная книга",
+        desc: "<p>Шаг 3 — книга сохраняется в файл и не пропадает между запусками. Напишите две функции:</p><ul><li><code>save_book(book, filename)</code> — записывает контакты в файл, по одному на строке, в виде <code>Имя;+79123456789</code>, по алфавиту имён.</li><li><code>load_book(filename)</code> — читает такой файл и возвращает словарь. Пробелы вокруг имени и номера уберите, номер приведите к виду <code>+7…</code>. Пустые строки, строки без <code>;</code> и строки с неверным номером пропустите. Если файла нет — верните пустой словарь (перехватите <code>FileNotFoundError</code>).</li></ul><p>Скопируйте в программу <code>normalize_phone</code> из шага 1: она приведёт номер к нужному виду, а на плохом номере выбросит <code>ValueError</code>, который нужно перехватить.</p><p>Файлы открывайте с <code>encoding=\"utf-8\"</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">save_book({\"Таня\": \"+79991234567\", \"Аня\": \"+79123456789\"}, \"book.txt\")\n# в файле book.txt:</code></div><div><span>Результат</span><code class=\"io-box\">Аня;+79123456789\nТаня;+79991234567</code></div></div>",
+        startCode: "# Скопируйте сюда normalize_phone из шага 1 — она пригодится\n\ndef save_book(book, filename):\n    # напишите решение здесь\n    pass\n\ndef load_book(filename):\n    pass\n",
+        testCode: `
+try:
+    book = {"Таня": "+79991234567", "Аня": "+79123456789", "Борис": "+79031112233"}
+    save_book(book, "pr2_book.txt")
+    with open("pr2_book.txt", encoding="utf-8") as f:
+        lines = [line.strip() for line in f if line.strip()]
+    assert lines == ["Аня;+79123456789", "Борис;+79031112233", "Таня;+79991234567"], f"В файле должно быть по строке «Имя;номер» по алфавиту, а сейчас: {lines}"
+    assert load_book("pr2_book.txt") == book, "Сохранили и загрузили — книга должна совпасть"
+    with open("pr2_messy.txt", "w", encoding="utf-8") as f:
+        f.write("Вера;8 (912) 000-11-22\\nбез точки с запятой\\nГена;123\\n\\n  Дима ; +7 903 111 22 33 \\n")
+    loaded = load_book("pr2_messy.txt")
+    assert loaded == {"Вера": "+79120001122", "Дима": "+79031112233"}, f"Из файла с плохими строками должны загрузиться только Вера и Дима с номерами +7…, а загрузилось: {loaded}"
+    assert load_book("pr2_no_such_book.txt") == {}, "Если файла нет — пустой словарь, а не ошибка"
+    save_book({}, "pr2_empty.txt")
+    assert load_book("pr2_empty.txt") == {}, "Пустая книга сохраняется и загружается как пустая"
+    __task_passed__ = True
+    print("✅ Телефонная книга сохраняется в файл и загружается обратно. Проект готов!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функции save_book и load_book (и normalize_phone) называются именно так.")
 except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:
@@ -1701,6 +2053,32 @@ except Exception as e:
         `
     },
     {
+        id: "rv12_path_length",
+        title: "Длина маршрута",
+        difficulty: "medium",
+        lesson: 12,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> модуль <code>math</code> вместе с кортежами, циклами и функциями.</p><p>Напишите функцию <code>path_length(points)</code>. <code>points</code> — список точек маршрута, каждая точка — кортеж <code>(x, y)</code>. Верните длину маршрута — сумму расстояний между соседними точками, округлённую до 2 знаков. Если точек меньше двух, верните <code>0</code>.</p><p>Расстояние между точками: <code>math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">path_length([(0, 0), (3, 4), (3, 10)])\npath_length([(0, 0), (1, 1)])</code></div><div><span>Результат</span><code class=\"io-box\">11.0\n1.41</code></div></div>",
+        startCode: "import math\n\ndef path_length(points):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert path_length([(0, 0), (3, 4), (3, 10)]) == 11.0, f"Маршрут (0,0) → (3,4) → (3,10): 5 + 6 = 11.0, а функция вернула {path_length([(0, 0), (3, 4), (3, 10)])}"
+    assert path_length([(0, 0), (1, 1)]) == 1.41, "Диагональ квадрата 1×1 — 1.41"
+    assert path_length([]) == 0, "Нет точек — длина 0"
+    assert path_length([(5, 5)]) == 0, "Одна точка — длина 0"
+    assert path_length([(0, 0), (0, 2), (0, 0)]) == 4.0, "Туда и обратно: 2 + 2 = 4.0"
+    __task_passed__ = True
+    print("✅ Длина маршрута считается верно!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция path_length называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
         id: "dog_class",
         title: "Класс Собака",
         difficulty: "easy",
@@ -1812,6 +2190,51 @@ except Exception as e:
         `
     },
     {
+        id: "rv13_cart_class",
+        title: "Класс «Корзина»",
+        difficulty: "hard",
+        lesson: 13,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> классы вместе со словарями, циклами и ошибками.</p><p>Напишите класс <code>Cart</code> — корзину интернет-магазина:</p><ul><li><code>add(name, price, qty=1)</code> — добавить товар. Если товар уже есть, увеличить количество (цена остаётся прежней). Цена или количество меньше 1 — <code>ValueError</code>;</li><li><code>remove(name)</code> — убрать товар целиком. Если его нет — <code>ValueError(\"Нет такого товара\")</code>;</li><li><code>total()</code> — стоимость всей корзины (цена × количество);</li><li><code>count()</code> — сколько всего штук товаров.</li></ul><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">c = Cart()\nc.add(\"хлеб\", 45, 2)\nc.add(\"сыр\", 300)\nc.total()\nc.count()</code></div><div><span>Результат</span><code class=\"io-box\">\n\n\n390\n3</code></div></div>",
+        startCode: "class Cart:\n    def __init__(self):\n        # напишите решение здесь\n        pass\n\n    def add(self, name, price, qty=1):\n        pass\n\n    def remove(self, name):\n        pass\n\n    def total(self):\n        pass\n\n    def count(self):\n        pass\n",
+        testCode: `
+try:
+    c = Cart()
+    assert c.total() == 0 and c.count() == 0, "Пустая корзина: total() == 0 и count() == 0"
+    c.add("хлеб", 45, 2)
+    c.add("сыр", 300)
+    assert c.total() == 390, f"2 хлеба по 45 и сыр за 300 — 390, а total() вернул {c.total()}"
+    assert c.count() == 3, f"В корзине 3 штуки товаров, а count() вернул {c.count()}"
+    c.add("хлеб", 45)
+    assert c.count() == 4 and c.total() == 435, "Повторный хлеб увеличивает количество: 4 штуки, 435 рублей"
+    for args in [("молоко", 0), ("молоко", 89, 0), ("молоко", -5, 1)]:
+        try:
+            c.add(*args)
+            assert False, f"add{args} должен выбросить ValueError"
+        except ValueError:
+            pass
+    assert c.total() == 435, "Неверный товар не должен попасть в корзину"
+    c.remove("сыр")
+    assert c.total() == 135 and c.count() == 3, "После remove(\\"сыр\\") остаётся 3 хлеба на 135 рублей"
+    try:
+        c.remove("сыр")
+        assert False, "Повторный remove(\\"сыр\\") должен выбросить ValueError"
+    except ValueError:
+        pass
+    other = Cart()
+    assert other.count() == 0, "У каждой корзины свои товары"
+    __task_passed__ = True
+    print("✅ Корзина работает!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что класс Cart и его методы называются именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
         id: "format_date",
         title: "Дата по-русски",
         difficulty: "medium",
@@ -1905,6 +2328,33 @@ except Exception as e:
         `
     },
     {
+        id: "rv14_weekends",
+        title: "Сколько выходных",
+        difficulty: "medium",
+        lesson: 14,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> дата и время вместе с циклами, условиями и функциями.</p><p>Напишите функцию <code>weekend_days(start, end)</code>. Даты приходят строками вида <code>\"ДД.ММ.ГГГГ\"</code>. Верните, сколько суббот и воскресений в промежутке от <code>start</code> до <code>end</code> включительно. Если <code>end</code> раньше <code>start</code> — верните 0.</p><p>Подсказки: строку в дату — <code>datetime.strptime(s, \"%d.%m.%Y\")</code>, следующий день — <code>+ timedelta(days=1)</code>, у субботы <code>weekday()</code> равен 5, у воскресенья — 6.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">weekend_days(\"09.11.2026\", \"15.11.2026\")\nweekend_days(\"01.12.2026\", \"31.12.2026\")</code></div><div><span>Результат</span><code class=\"io-box\">2\n8</code></div></div>",
+        startCode: "from datetime import datetime, timedelta\n\ndef weekend_days(start, end):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    assert weekend_days("09.11.2026", "15.11.2026") == 2, f"С понедельника 9 ноября по воскресенье 15 ноября 2026 — 2 выходных, а функция вернула {weekend_days('09.11.2026', '15.11.2026')}"
+    assert weekend_days("01.12.2026", "31.12.2026") == 8, "В декабре 2026 года 8 выходных дней"
+    assert weekend_days("14.11.2026", "14.11.2026") == 1, "Один день, и это суббота — 1"
+    assert weekend_days("12.11.2026", "12.11.2026") == 0, "Один день, четверг — 0"
+    assert weekend_days("15.11.2026", "09.11.2026") == 0, "Конец раньше начала — 0"
+    assert weekend_days("26.12.2026", "03.01.2027") == 4, "Через Новый год: 26, 27 декабря и 2, 3 января — 4"
+    __task_passed__ = True
+    print("✅ Выходные считаются верно!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция weekend_days называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
         id: "most_common_word",
         title: "Самое частое слово",
         difficulty: "hard",
@@ -1982,6 +2432,37 @@ except Exception as e:
         `
     },
     {
+        id: "rv15_todo_report",
+        title: "Отчёт по делам",
+        difficulty: "medium",
+        lesson: 15,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> список дел из словарей, циклы, условия и строки.</p><p>Напишите функцию <code>todo_report(todos)</code>. <code>todos</code> — список словарей вида <code>{\"title\": \"купить хлеб\", \"done\": True}</code>. Верните отчёт строкой: первая строка — <code>Сделано: X из Y</code>, а под ней — каждое несделанное дело в исходном порядке в виде <code>- название</code>. Строки соединяются через <code>\"\\n\"</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">todos = [{\"title\": \"купить хлеб\", \"done\": True},\n         {\"title\": \"сделать уроки\", \"done\": False}]\nprint(todo_report(todos))</code></div><div><span>Результат</span><code class=\"io-box\">\n\nСделано: 1 из 2\n- сделать уроки</code></div></div>",
+        startCode: "def todo_report(todos):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    todos = [
+        {"title": "купить хлеб", "done": True},
+        {"title": "сделать уроки", "done": False},
+        {"title": "позвонить бабушке", "done": False},
+    ]
+    r = todo_report(todos)
+    assert r == "Сделано: 1 из 3\\n- сделать уроки\\n- позвонить бабушке", f"Неверный отчёт:\\n{r}"
+    assert todo_report([]) == "Сделано: 0 из 0", "Пустой список: «Сделано: 0 из 0»"
+    assert todo_report([{"title": "зарядка", "done": True}]) == "Сделано: 1 из 1", "Всё сделано — только первая строка"
+    assert todo_report([{"title": "а", "done": False}]) == "Сделано: 0 из 1\\n- а", "Одно несделанное дело"
+    __task_passed__ = True
+    print("✅ Отчёт по делам собирается верно!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция todo_report называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
         id: "build_query",
         title: "Адрес запроса с параметрами",
         difficulty: "medium",
@@ -2044,6 +2525,175 @@ try:
     print("✅ Разбор ответа API — на отлично!")
 except NameError as e:
     print(f"❌ Ошибка: {e}.\\nПроверьте, что функция top_player называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "rv16_weather_json",
+        title: "Сводка погоды из JSON",
+        difficulty: "medium",
+        lesson: 16,
+        hw: true,
+        review: true,
+        desc: "<p><strong>Повторение:</strong> JSON вместе со словарями, списками, ошибками и функциями.</p><p>Сервис погоды присылает текст JSON вида <code>{\"city\": \"Москва\", \"days\": [{\"date\": \"10.11\", \"t\": 3}, …]}</code>. Напишите функцию <code>weather_summary(text)</code>, которая возвращает строку <code>Москва: от -2 до 5, в среднем 1.5</code> — самую низкую и самую высокую температуру и среднюю, округлённую до 1 знака.</p><p>Если дней в списке нет — верните <code>Москва: нет данных</code>. Если текст — не JSON, верните <code>Ошибка данных</code> (<code>json.loads</code> выбрасывает <code>ValueError</code>).</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">weather_summary('{\"city\": \"Сочи\", \"days\": [{\"date\": \"10.11\", \"t\": 12}, {\"date\": \"11.11\", \"t\": 15}]}')\nweather_summary(\"не json\")</code></div><div><span>Результат</span><code class=\"io-box\">\"Сочи: от 12 до 15, в среднем 13.5\"\n\"Ошибка данных\"</code></div></div>",
+        startCode: "import json\n\ndef weather_summary(text):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    import json
+    data = {"city": "Москва", "days": [{"date": "10.11", "t": 3}, {"date": "11.11", "t": -2}, {"date": "12.11", "t": 5}, {"date": "13.11", "t": 0}]}
+    r = weather_summary(json.dumps(data, ensure_ascii=False))
+    assert r == "Москва: от -2 до 5, в среднем 1.5", f"Должно быть «Москва: от -2 до 5, в среднем 1.5», а вернулось «{r}»"
+    r = weather_summary('{"city": "Сочи", "days": [{"date": "10.11", "t": 12}, {"date": "11.11", "t": 15}]}')
+    assert r == "Сочи: от 12 до 15, в среднем 13.5", f"Сочи: должно быть «Сочи: от 12 до 15, в среднем 13.5», а вернулось «{r}»"
+    assert weather_summary('{"city": "Омск", "days": []}') == "Омск: нет данных", "Пустой список дней — «Омск: нет данных»"
+    assert weather_summary("не json") == "Ошибка данных", "Не JSON — «Ошибка данных»"
+    assert weather_summary('{"city": "Тула", "days": [{"date": "1.11", "t": 1}, {"date": "2.11", "t": 1}, {"date": "3.11", "t": 2}]}') == "Тула: от 1 до 2, в среднем 1.3", "Среднее округляется до 1 знака: 1.3"
+    __task_passed__ = True
+    print("✅ Сводка погоды собирается из JSON!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что функция weather_summary называется именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "pr3_habit",
+        title: "Трекер привычек: класс Habit",
+        difficulty: "medium",
+        lesson: 16,
+        hw: false,
+        project: 3,
+        step: 1,
+        projectTitle: "Проект 3: Трекер привычек",
+        desc: "<p>Соберём трекер привычек за три шага. Шаг 1 — класс <code>Habit</code> (одна привычка):</p><ul><li><code>Habit(name)</code> — у объекта есть атрибут <code>name</code>, отметок пока нет;</li><li><code>mark(day)</code> — отметить, что в день <code>day</code> (объект <code>date</code>) привычка выполнена. Повторная отметка того же дня ничего не меняет;</li><li><code>is_done(day)</code> — <code>True</code>, если день отмечен;</li><li><code>total()</code> — сколько всего дней отмечено;</li><li><code>streak(today)</code> — серия: сколько дней подряд привычка выполнялась, считая назад от <code>today</code>. Если <code>today</code> ещё не отмечен, серия не прервана — считайте от вчерашнего дня.</li></ul><p>Подсказка: предыдущий день — <code>day - timedelta(days=1)</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">h = Habit(\"Зарядка\")\nh.mark(date(2026, 11, 9))\nh.mark(date(2026, 11, 10))\nh.streak(date(2026, 11, 10))\nh.streak(date(2026, 11, 11))\nh.streak(date(2026, 11, 12))</code></div><div><span>Результат</span><code class=\"io-box\">\n\n\n2\n2\n0</code></div></div>",
+        startCode: "from datetime import date, timedelta\n\nclass Habit:\n    def __init__(self, name):\n        # напишите решение здесь\n        pass\n\n    def mark(self, day):\n        pass\n\n    def is_done(self, day):\n        pass\n\n    def total(self):\n        pass\n\n    def streak(self, today):\n        pass\n",
+        testCode: `
+try:
+    from datetime import date
+    h = Habit("Зарядка")
+    assert h.name == "Зарядка", "У привычки должен быть атрибут name"
+    assert h.total() == 0, "У новой привычки 0 отметок"
+    assert h.streak(date(2026, 11, 10)) == 0, "У новой привычки серия 0"
+    h.mark(date(2026, 11, 10))
+    h.mark(date(2026, 11, 10))
+    assert h.total() == 1, "Повторная отметка того же дня не считается"
+    h.mark(date(2026, 11, 9))
+    h.mark(date(2026, 11, 8))
+    h.mark(date(2026, 11, 5))
+    assert h.total() == 4, f"Отмечено 4 разных дня, а total() вернул {h.total()}"
+    assert h.is_done(date(2026, 11, 9)) is True, "9 ноября отмечено — is_done должен вернуть True"
+    assert h.is_done(date(2026, 11, 7)) is False, "7 ноября не отмечено — is_done должен вернуть False"
+    assert h.streak(date(2026, 11, 10)) == 3, f"Отмечены 8, 9 и 10 ноября: серия на 10 ноября — 3, а не {h.streak(date(2026, 11, 10))}"
+    assert h.streak(date(2026, 11, 11)) == 3, "11 ноября ещё не отмечено — серия считается от вчера и равна 3"
+    assert h.streak(date(2026, 11, 12)) == 0, "11 ноября пропущено — на 12 ноября серия 0"
+    assert h.streak(date(2026, 11, 6)) == 1, "На 6 ноября: вчера (5-е) отмечено, 4-е нет — серия 1"
+    m = Habit("Чтение")
+    m.mark(date(2026, 10, 31))
+    m.mark(date(2026, 11, 1))
+    assert m.streak(date(2026, 11, 1)) == 2, "Серия должна переходить через конец месяца: 31 октября и 1 ноября — это 2 дня подряд"
+    assert Habit("Бег").name == "Бег" and Habit("Бег").total() == 0, "У каждой привычки свои отметки"
+    __task_passed__ = True
+    print("✅ Класс Habit готов: отметки и серии дней считаются!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что класс Habit и его методы называются именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "pr3_tracker",
+        title: "Трекер привычек: класс Tracker",
+        difficulty: "hard",
+        lesson: 16,
+        hw: false,
+        project: 3,
+        step: 2,
+        projectTitle: "Проект 3: Трекер привычек",
+        desc: "<p>Шаг 2 — класс <code>Tracker</code>, который хранит все привычки. Скопируйте в программу класс <code>Habit</code> из шага 1 и напишите:</p><ul><li><code>Tracker()</code> — у объекта есть словарь <code>habits</code>: имя → объект <code>Habit</code>;</li><li><code>add(name)</code> — создаёт привычку, кладёт в словарь и возвращает её. Если такая уже есть — <code>ValueError(\"Такая привычка уже есть\")</code>;</li><li><code>mark(name, day)</code> — отмечает день у привычки. Если привычки нет — <code>ValueError(\"Нет такой привычки\")</code>;</li><li><code>report(today)</code> — отчёт строкой: по строке на привычку, по алфавиту, в виде <code>Зарядка: серия 2, всего 3</code>. Строки соединяются через <code>\"\\n\"</code>. Если привычек нет — <code>Привычек пока нет</code>.</li></ul><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">t = Tracker()\nt.add(\"Чтение\")\nt.add(\"Зарядка\")\nt.mark(\"Зарядка\", date(2026, 11, 10))\nprint(t.report(date(2026, 11, 10)))</code></div><div><span>Результат</span><code class=\"io-box\">\n\n\n\nЗарядка: серия 1, всего 1\nЧтение: серия 0, всего 0</code></div></div>",
+        startCode: "from datetime import date, timedelta\n\n# Скопируйте сюда класс Habit из шага 1\n\nclass Tracker:\n    def __init__(self):\n        # напишите решение здесь\n        pass\n\n    def add(self, name):\n        pass\n\n    def mark(self, name, day):\n        pass\n\n    def report(self, today):\n        pass\n",
+        testCode: `
+try:
+    from datetime import date
+    t = Tracker()
+    assert t.report(date(2026, 11, 10)) == "Привычек пока нет", "Пустой трекер: отчёт «Привычек пока нет»"
+    h = t.add("Чтение")
+    assert isinstance(h, Habit) and h.name == "Чтение", "add должен вернуть новый объект Habit"
+    t.add("Зарядка")
+    assert sorted(t.habits) == ["Зарядка", "Чтение"], "В словаре habits должны лежать обе привычки"
+    try:
+        t.add("Зарядка")
+        assert False, "Повторный add(\\"Зарядка\\") должен выбросить ValueError"
+    except ValueError:
+        pass
+    for d in [8, 9, 10]:
+        t.mark("Зарядка", date(2026, 11, d))
+    t.mark("Чтение", date(2026, 11, 5))
+    try:
+        t.mark("Бег", date(2026, 11, 10))
+        assert False, "mark для несуществующей привычки должен выбросить ValueError"
+    except ValueError:
+        pass
+    r = t.report(date(2026, 11, 10))
+    assert r == "Зарядка: серия 3, всего 3\\nЧтение: серия 0, всего 1", f"Неверный отчёт на 10 ноября:\\n{r}"
+    r = t.report(date(2026, 11, 11))
+    assert r == "Зарядка: серия 3, всего 3\\nЧтение: серия 0, всего 1", f"11 ноября ещё не отмечено — серия зарядки по-прежнему 3:\\n{r}"
+    __task_passed__ = True
+    print("✅ Трекер собирает привычки и строит отчёт!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что классы Habit и Tracker и их методы называются именно так.")
+except AssertionError as e:
+    print(f"❌ Провален скрытый тест: {e}")
+except Exception as e:
+    print(f"❌ Ошибка выполнения кода: {type(e).__name__}: {e}")
+        `
+    },
+    {
+        id: "pr3_json",
+        title: "Трекер привычек: сохранить в JSON",
+        difficulty: "hard",
+        lesson: 16,
+        hw: false,
+        project: 3,
+        step: 3,
+        projectTitle: "Проект 3: Трекер привычек",
+        desc: "<p>Шаг 3 — трекер сохраняется в файл JSON и загружается обратно. Скопируйте классы <code>Habit</code> и <code>Tracker</code> из шага 2 и добавьте:</p><ul><li>метод <code>save(filename)</code> у класса <code>Tracker</code> — записывает в файл JSON-объект: имя привычки → список отмеченных дат строками <code>\"ГГГГ-ММ-ДД\"</code>, даты по возрастанию. Например: <code>{\"Зарядка\": [\"2026-11-09\", \"2026-11-10\"], \"Чтение\": []}</code>;</li><li>функцию <code>load_tracker(filename)</code> — читает такой файл и возвращает новый <code>Tracker</code> со всеми привычками и отметками. Если файла нет — пустой <code>Tracker</code>.</li></ul><p>Подсказки: дату в строку — <code>day.strftime(\"%Y-%m-%d\")</code>, строку в дату — <code>datetime.strptime(s, \"%Y-%m-%d\").date()</code>. Текст JSON — <code>json.dumps(data, ensure_ascii=False)</code> и <code>json.loads(text)</code>. Файлы открывайте с <code>encoding=\"utf-8\"</code>.</p>",
+        startCode: "import json\nfrom datetime import date, datetime, timedelta\n\n# Скопируйте сюда классы Habit и Tracker из шага 2\n# и добавьте классу Tracker метод save(self, filename)\n\ndef load_tracker(filename):\n    # напишите решение здесь\n    pass\n",
+        testCode: `
+try:
+    import json
+    from datetime import date
+    t = Tracker()
+    t.add("Чтение")
+    t.add("Зарядка")
+    t.add("Бег")
+    for d in [10, 8, 9]:
+        t.mark("Зарядка", date(2026, 11, d))
+    t.mark("Чтение", date(2026, 10, 31))
+    t.save("pr3_habits.json")
+    with open("pr3_habits.json", encoding="utf-8") as f:
+        data = json.loads(f.read())
+    expected = {"Чтение": ["2026-10-31"], "Зарядка": ["2026-11-08", "2026-11-09", "2026-11-10"], "Бег": []}
+    assert data == expected, f"В файле должен быть JSON {expected}, а сейчас {data}"
+    t2 = load_tracker("pr3_habits.json")
+    assert isinstance(t2, Tracker), "load_tracker должна вернуть объект Tracker"
+    assert sorted(t2.habits) == ["Бег", "Зарядка", "Чтение"], "После загрузки должны быть все три привычки"
+    assert t2.habits["Зарядка"].is_done(date(2026, 11, 9)), "После загрузки отметки должны стать датами: is_done(date(2026, 11, 9)) — True"
+    assert t2.report(date(2026, 11, 10)) == t.report(date(2026, 11, 10)), "Отчёт загруженного трекера должен совпадать с исходным"
+    t2.mark("Бег", date(2026, 11, 10))
+    assert t2.habits["Бег"].total() == 1, "В загруженный трекер можно добавлять отметки"
+    empty = load_tracker("pr3_no_such_file.json")
+    assert isinstance(empty, Tracker) and empty.report(date(2026, 11, 10)) == "Привычек пока нет", "Если файла нет — пустой Tracker"
+    __task_passed__ = True
+    print("✅ Трекер сохраняется в JSON и загружается обратно. Проект готов!")
+except NameError as e:
+    print(f"❌ Ошибка: {e}.\\nПроверьте, что классы Habit, Tracker, метод save и функция load_tracker называются именно так.")
 except AssertionError as e:
     print(f"❌ Провален скрытый тест: {e}")
 except Exception as e:

@@ -625,7 +625,7 @@
             document.getElementById("task-title").textContent = task.title;
             const meta = document.getElementById("task-meta");
             meta.textContent = (task.project ? `${groupTitle(task)} · шаг ${task.step} из ${projectSteps(task.project)}`
-                : task.exam ? groupTitle(task) : `Урок ${task.lesson}. ${LESSON_NAMES[task.lesson - 1]}` + (task.hw ? " · домашнее задание" : ""))
+                : task.exam ? groupTitle(task) : `Урок ${task.lesson}. ${LESSON_NAMES[task.lesson - 1]}` + (task.hw ? (task.review ? " · домашнее задание · повторение" : " · домашнее задание") : ""))
                 + " · " + DIFF[task.difficulty][0].toLowerCase();
             const locked = !PB.isTaskOpen(task);
             document.getElementById("task-text").innerHTML = locked ? lockedText(task) : task.desc;
