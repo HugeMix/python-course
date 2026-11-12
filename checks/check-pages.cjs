@@ -141,6 +141,28 @@ async function accessFlow(browser, BASE) {
     await S.waitForSelector('.my-row');
     must(await isOpen(4), 'после оплаты и новой ссылки урок 4 должен открыться');
     must(await S.locator('.my-row', { hasText: 'Введение в Python' }).locator('.my-pill-excellent').count() === 1, 'урок 1 у ученика должен быть «Отлично»');
+
+    // профиль: фото ставится один раз, потом профиль закрыт для изменений
+    const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64');
+    await S.setInputFiles('.my-profile-edit input[type=file]', { name: 'me.png', mimeType: 'image/png', buffer: PNG });
+    await S.waitForSelector('.my-photo-preview img');
+    await S.click('button:has-text("Сохранить профиль")');
+    await S.waitForSelector('.my-profile-lock');
+    must(!(await S.locator('.my-profile-edit').count()), 'после сохранения профиль нельзя менять без разрешения преподавателя');
+
+    // сертификат: пока не выдан — список условий; выдал преподаватель — номер, имя и фото
+    await goto(S, BASE + 'certificate.html');
+    must(await S.locator('#cert-locked').isVisible() && await S.locator('#cert-checklist li').count() >= 5, 'до выдачи на странице сертификата должен быть список условий');
+    await T.click('.cab-cert button:has-text("Выдать сертификат")');
+    await T.waitForSelector('.cab-cert-issued');
+    await T.waitForSelector('.cab-sendbox a[data-link]');
+    const link3 = await T.locator('.cab-sendbox a[data-link]').getAttribute('data-link');
+    await goto(S, BASE + link3.slice(link3.indexOf('python-basic.html')));
+    await S.waitForSelector('.my-row');
+    await goto(S, BASE + 'certificate.html');
+    must(/PB-\d{4}-001/.test(await S.textContent('#cert-number')), 'на сертификате должен быть номер вида PB-2026-001');
+    must((await S.textContent('#cert-name-display')).trim() === 'Проверка Ученик', 'на сертификате должно быть имя из кабинета');
+    must(await S.locator('#cert-photo').isVisible(), 'на сертификате должно быть фото из профиля');
     await T.context().close();
     await S.context().close();
 }
@@ -229,7 +251,9 @@ async function main() {
     } catch (e) { fail('tasks.html', e.message.split('\n')[0]); }
     current = 'python-basic.html';
     await page.goto(BASE + 'python-basic.html');
-    if (await page.locator('.my-row').count() !== 19) fail('python-basic.html', 'на «Моих уроках» должно быть 16 уроков и 3 контрольные');
+    const projects = new Set(tasks.filter(t => t.project).map(t => t.project)).size;
+    const rows = await page.locator('.my-row').count();
+    if (rows !== 20 + projects) fail('python-basic.html', `на «Моих уроках» ${rows} строк, а должно быть 16 уроков, ${projects} проектов, 3 контрольные и итоговый экзамен`);
     current = 'teacher.html';
     await page.goto(BASE + 'teacher.html');
     if (!(await page.locator('.hub-gate').count())) fail('teacher.html', 'не показан вход по PIN-коду');

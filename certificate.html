@@ -210,6 +210,21 @@
             color: #94a3b8;
         }
 
+        .cert-photo {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #c7d2fe;
+            margin-bottom: 14px;
+        }
+
+        .cert-checklist { list-style: none; padding: 0; margin: 0 auto 24px; max-width: 440px; text-align: left; display: flex; flex-direction: column; gap: 8px; }
+        .cert-checklist li { display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; }
+        .cert-checklist li::before { display: none; }
+        .cert-checklist .my-check { flex-shrink: 0; }
+        .cert-sample { display: inline-block; margin-bottom: 18px; padding: 6px 14px; border-radius: 999px; background: rgba(245, 158, 11, 0.16); color: #b45309; font-weight: 700; font-size: 0.9rem; }
+
         .cert-seal {
             width: 68px;
             height: 68px;
@@ -288,24 +303,19 @@
         <div class="cert-page">
             <section style="text-align:center; margin-bottom: 28px;">
                 <h1 style="font-size:1.8rem; margin-bottom:8px;">Ваш сертификат</h1>
-                <p style="color: var(--text-muted-color, #64748b);">Введите своё имя и распечатайте сертификат — он подтвердит прохождение курса.</p>
+                <p style="color: var(--text-muted-color, #64748b);" id="cert-lead">Сертификат выдаёт преподаватель после итогового экзамена. В нём ваше имя, фото и номер.</p>
             </section>
 
             <div class="cert-locked" id="cert-locked" hidden>
-                <h2>Сертификат пока недоступен</h2>
-                <p id="cert-locked-text">Сертификат выдаётся после прохождения всех уроков курса.</p>
-                <a href="python-basic.html" class="btn">Продолжить обучение</a>
+                <h2>Сертификат пока не выдан</h2>
+                <p id="cert-locked-text">Сертификат выдаёт преподаватель, когда выполнено всё из списка:</p>
+                <ul class="cert-checklist my-checklist" id="cert-checklist"></ul>
+                <a href="python-basic.html" class="btn">Мои уроки</a>
             </div>
 
-            <div class="cert-controls">
-                <input
-                    class="cert-input"
-                    id="cert-name-input"
-                    type="text"
-                    placeholder="Введите ваше имя..."
-                    maxlength="40"
-                />
-                <button class="btn" onclick="window.print()">Распечатать</button>
+            <div class="cert-controls" id="cert-controls">
+                <span class="cert-sample" id="cert-sample" hidden>Образец — так сертификат увидит ученик</span>
+                <button class="btn" type="button" id="cert-print">Распечатать или сохранить в PDF</button>
             </div>
 
             <div class="cert-wrapper" id="certificate">
@@ -324,7 +334,8 @@
 
                     <div class="cert-headline">Образовательная платформа</div>
 
-                    <div class="cert-seal">PB</div>
+                    <img class="cert-photo" id="cert-photo" alt="Фото выпускника" hidden>
+                    <div class="cert-seal" id="cert-seal">PB</div>
 
                     <div class="cert-headline">Настоящий сертификат подтверждает, что</div>
 
@@ -335,8 +346,8 @@
                     <div class="cert-title">Базовый курс по Python</div>
 
                     <div class="cert-course">
-                        успешно прошёл(а) все уроки курса, включая темы:<br>
-                        <strong>переменные, циклы, функции, ООП, исключения, файлы, модули и финальный проект</strong>
+                        освоил(а) все 16 уроков курса, сдал(а) контрольные работы, проекты модулей и итоговый экзамен. Темы курса:<br>
+                        <strong>переменные, условия, циклы, списки, функции, словари, строки, файлы, исключения, модули, ООП, дата и время, JSON и API</strong>
                     </div>
 
                     <div class="cert-footer-row">
@@ -383,58 +394,43 @@
         <div class="container footer-bottom">© <span class="footer-year"></span> PythonBasic — Python для начинающих</div>
     </footer>
 
+    <script src="tasks_data.js"></script>
+    <script src="pb-share.js"></script>
     <script src="script.js"></script>
     <script>
-        // Сертификат доступен только после прохождения всех 16 уроков
-        const LESSONS_TOTAL = 16;
-        let progress = {};
-        try { progress = JSON.parse(localStorage.getItem('quiz_results')) || {}; } catch (e) { progress = {}; }
-        let passed = 0;
-        for (let i = 1; i <= LESSONS_TOTAL; i++) if (progress['lesson' + i + '.html']) passed++;
-
-        if (passed < LESSONS_TOTAL) {
-            document.getElementById('cert-locked').hidden = false;
-            document.getElementById('cert-locked-text').textContent =
-                `Сертификат выдаётся после прохождения всех ${LESSONS_TOTAL} уроков. Сейчас пройдено: ${passed} из ${LESSONS_TOTAL}.`;
-            document.querySelectorAll('.cert-controls, #certificate, .cert-note').forEach(el => { el.hidden = true; });
-        } else {
-            initCertificate();
-        }
-
-        function initCertificate() {
-            const nameInput = document.getElementById('cert-name-input');
-            const nameDisplay = document.getElementById('cert-name-display');
-            const certDate = document.getElementById('cert-date');
-            const certNumber = document.getElementById('cert-number');
-
-            // Дата — день окончания курса, а не сегодняшний день.
-            // Для тех, кто прошёл курс до появления этой записи, сохраняем дату первого открытия сертификата.
-            let completedAt = localStorage.getItem('course_completed_at');
-            if (!completedAt) {
-                completedAt = new Date().toISOString();
-                localStorage.setItem('course_completed_at', completedAt);
+        // Сертификат выдаёт преподаватель в кабинете: номер, имя и дата приходят в его ссылке,
+        // поэтому ученик не может сам выпустить сертификат или поменять в нём имя. Фото — из профиля ученика.
+        (function () {
+            const access = PB.readAccess();
+            const cert = access && access.cert;
+            const teacher = PB.isTeacherBrowser();
+            const show = (id, on) => { document.getElementById(id).hidden = !on; };
+            document.getElementById('cert-print').addEventListener('click', () => window.print());
+            if (!cert && !teacher) {
+                show('cert-locked', true);
+                document.querySelectorAll('#cert-controls, #certificate, .cert-note').forEach(el => { el.hidden = true; });
+                const list = document.getElementById('cert-checklist');
+                PB.certChecklist(PB.myState()).forEach(item => {
+                    const li = PB.el('li', { class: item.done ? 'is-done' : '' }, PB.el('span', { class: 'my-check', 'aria-hidden': 'true', text: item.done ? '✓' : '' }), item.text);
+                    list.append(li);
+                });
+                if (!access) document.getElementById('cert-locked-text').textContent = 'Сертификат получают ученики, которые прошли курс с преподавателем. Что для этого нужно:';
+                return;
             }
-            const doneDate = new Date(completedAt);
-            certDate.textContent = doneDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-
-            const stored = localStorage.getItem('cert_number');
-            const num = stored || ('PB-' + doneDate.getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000));
-            if (!stored) localStorage.setItem('cert_number', num);
-            certNumber.textContent = '№ ' + num;
-
-            const savedName = localStorage.getItem('cert_name') || '';
-            if (savedName) {
-                nameInput.value = savedName;
-                nameDisplay.textContent = savedName;
+            const data = cert || { no: 'PB-0000-000', name: 'Имя Фамилия', at: new Date().toISOString() };
+            if (!cert) { show('cert-sample', true); document.getElementById('cert-lead').textContent = 'Это образец. Настоящий сертификат вы выдаёте ученику в кабинете — с его именем, фото и номером.'; }
+            document.getElementById('cert-name-display').textContent = data.name;
+            document.getElementById('cert-number').textContent = '№ ' + data.no;
+            const d = new Date(data.at);
+            document.getElementById('cert-date').textContent = isNaN(d) ? '' : d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+            const profile = PB.readProfile();
+            if (cert && profile && /^data:image\/(jpeg|png);base64,/.test(profile.photo || '')) {
+                const img = document.getElementById('cert-photo');
+                img.src = profile.photo;
+                show('cert-photo', true);
+                show('cert-seal', false);
             }
-
-            nameInput.addEventListener('input', () => {
-                const val = nameInput.value.trim();
-                nameDisplay.textContent = val || 'Ваше Имя';
-                if (val) localStorage.setItem('cert_name', val);
-                else localStorage.removeItem('cert_name');
-            });
-        }
+        })();
     </script>
 </body>
 

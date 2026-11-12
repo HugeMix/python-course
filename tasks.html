@@ -459,9 +459,15 @@
         // Урок из адреса tasks.html#lesson=4 или выбранный в списке
         // Что показывать в списке: "0" — все задачи, "4" — задачи урока 4, "e1" — контрольная 1.
         // Можно открыть сразу нужное: tasks.html#lesson=4 или tasks.html#exam=1
-        let currentLesson = (location.hash.match(/^#lesson=(\d+)/) || [])[1] || ((location.hash.match(/^#exam=(\d)/) || [])[1] ? "e" + location.hash.match(/^#exam=(\d)/)[1] : "0");
-        const EXAM_LESSONS = { 1: "уроки 1–6", 2: "уроки 7–11", 3: "уроки 12–16" };
-        const groupKey = t => (t.exam ? "e" + t.exam : String(t.lesson));
+        let currentLesson = (location.hash.match(/^#lesson=(\d+)/) || [])[1]
+            || ((location.hash.match(/^#exam=(\d)/) || [])[1] ? "e" + location.hash.match(/^#exam=(\d)/)[1] : "")
+            || ((location.hash.match(/^#project=(\d)/) || [])[1] ? "p" + location.hash.match(/^#project=(\d)/)[1] : "0");
+        const EXAM_LESSONS = { 1: "уроки 1–6", 2: "уроки 7–11", 3: "уроки 12–16", 4: "весь курс" };
+        const groupKey = t => (t.exam ? "e" + t.exam : t.project ? "p" + t.project : String(t.lesson));
+        const projectSteps = k => tasks.filter(t => t.project === k).length;
+        // Название группы: урок, проект модуля, контрольная или итоговый экзамен
+        const groupTitle = t => t.exam ? `${PB.EXAMS[t.exam].title} · ${EXAM_LESSONS[t.exam]}`
+            : t.project ? (t.projectTitle || `Проект модуля ${t.project}`) : `Урок ${t.lesson}. ${LESSON_NAMES[t.lesson - 1]}`;
         const LESSON_NAMES = ["Введение в Python", "Переменные и типы данных", "Операторы", "Условия", "Циклы",
             "Списки и кортежи", "Функции", "Словари и множества", "Строки", "Файлы", "Обработка ошибок",
             "Модули и библиотеки", "Основы ООП", "Дата и время", "Итоговый проект", "Работа с API"];
@@ -499,11 +505,14 @@
             const word = n => (n % 10 === 1 && n % 100 !== 11 ? "задача" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? "задачи" : "задач");
             lessonSelect.appendChild(new Option(`Все уроки · ${tasks.length} ${word(tasks.length)}`, "0"));
             LESSON_NAMES.forEach((name, i) => {
-                const n = tasks.filter(t => t.lesson === i + 1 && !t.exam).length;
+                const n = tasks.filter(t => t.lesson === i + 1 && !t.exam && !t.project).length;
                 if (n) lessonSelect.appendChild(new Option(`Урок ${i + 1}. ${name} · ${n}`, String(i + 1)));
-                // контрольная — сразу после последнего урока блока
-                const exam = tasks.find(t => t.exam && t.lesson === i + 1);
-                if (exam) lessonSelect.appendChild(new Option(`Контрольная ${exam.exam} (${EXAM_LESSONS[exam.exam]}) · ${tasks.filter(t => t.exam === exam.exam).length}`, "e" + exam.exam));
+                // проект и контрольная модуля — сразу после последнего урока модуля (после урока 16 — ещё итоговый экзамен)
+                const keys = [...new Set(tasks.filter(t => t.lesson === i + 1 && (t.exam || t.project)).map(groupKey))];
+                keys.forEach(key => {
+                    const first = tasks.find(t => groupKey(t) === key);
+                    lessonSelect.appendChild(new Option(`${groupTitle(first)} · ${tasks.filter(t => groupKey(t) === key).length}`, key));
+                });
             });
             lessonSelect.value = currentLesson;
             if (lessonSelect.value !== currentLesson) { currentLesson = "0"; lessonSelect.value = "0"; }
@@ -538,8 +547,8 @@
                     lastLesson = groupKey(task);
                     const h = document.createElement("div");
                     h.className = "tasks-group";
-                    h.textContent = task.exam ? `Контрольная ${task.exam} · ${EXAM_LESSONS[task.exam]}` : `Урок ${task.lesson}. ${LESSON_NAMES[task.lesson - 1]}`;
-                    if (task.exam) h.classList.add("is-exam");
+                    h.textContent = groupTitle(task);
+                    if (task.exam || task.project) h.classList.add("is-exam");
                     list.appendChild(h);
                 }
                 const item = document.createElement("button");
@@ -585,10 +594,16 @@
         let taskLocked = false;
         function lockedText(task) {
             const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-            if (task.exam) {
-                const last = PB.EXAM_LESSONS[task.exam][1];
-                return `<div class="task-locked"><p><strong>Задача откроется вместе с контрольной ${task.exam}.</strong></p>
-                    <p>Контрольная открывается, когда освоен урок ${last}: тест сдан и решена домашка.</p>
+            if (task.exam === 4) {
+                return `<div class="task-locked"><p><strong>Итоговый экзамен откроется в конце курса.</strong></p>
+                    <p>Для этого нужно освоить все уроки и сдать все контрольные и проекты модулей.</p>
+                    <p><a class="hub-btn hub-btn-primary" href="python-basic.html">Мои уроки</a></p></div>`;
+            }
+            if (task.exam || task.project) {
+                const last = PB.EXAM_LESSONS[task.exam || task.project][1];
+                const what = task.exam ? `контрольной ${task.exam}` : `проектом модуля ${task.project}`;
+                return `<div class="task-locked"><p><strong>Задача откроется вместе с ${what}.</strong></p>
+                    <p>Они открываются, когда освоен урок ${last}: тест сдан и решена домашка.</p>
                     <p><a class="hub-btn hub-btn-primary" href="python-basic.html">Мои уроки</a></p></div>`;
             }
             const info = PB.lockText(task.lesson);
@@ -609,7 +624,8 @@
             const task = tasks[index];
             document.getElementById("task-title").textContent = task.title;
             const meta = document.getElementById("task-meta");
-            meta.textContent = (task.exam ? `Контрольная ${task.exam} · ${EXAM_LESSONS[task.exam]}` : `Урок ${task.lesson}. ${LESSON_NAMES[task.lesson - 1]}` + (task.hw ? " · домашнее задание" : ""))
+            meta.textContent = (task.project ? `${groupTitle(task)} · шаг ${task.step} из ${projectSteps(task.project)}`
+                : task.exam ? groupTitle(task) : `Урок ${task.lesson}. ${LESSON_NAMES[task.lesson - 1]}` + (task.hw ? " · домашнее задание" : ""))
                 + " · " + DIFF[task.difficulty][0].toLowerCase();
             const locked = !PB.isTaskOpen(task);
             document.getElementById("task-text").innerHTML = locked ? lockedText(task) : task.desc;
@@ -727,7 +743,13 @@
                 }
                 const opened = [...after.open].filter(n => !before.open.has(n));
                 if (opened.length) output += `\n🔓 Открыт урок ${opened.join(', ')}!`;
-                [1, 2, 3].forEach(k => { if (!before.exams[k].passed && after.exams[k].passed) output += `\n🏆 Контрольная ${k} зачтена!`; });
+                Object.keys(after.exams).forEach(k => {
+                    if (before.exams[k].passed || !after.exams[k].passed) return;
+                    output += k === "4" ? "\n🏆 Итоговый экзамен сдан! Отправьте результат преподавателю — он выдаст сертификат." : `\n🏆 Контрольная ${k} зачтена!`;
+                });
+                Object.keys(after.projects).forEach(k => {
+                    if (!before.projects[k].passed && after.projects[k].passed && after.projects[k].total) output += `\n🏆 ${after.projects[k].title} готов!`;
+                });
                 renderTasks();
                 setResult(output);
                 setStatus("ok");

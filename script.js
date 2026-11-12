@@ -704,7 +704,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const start = qbtn('Начать тест', 'qz-btn-primary', () => startQuiz(box));
         start.id = 'btn-start-quiz';
         actions.append(start);
-        if (all.length > QUIZ_SIZE) actions.append(qel('span', 'qz-muted', 'Вопросы каждый раз выбираются заново, поэтому пересдавать можно сколько угодно.'));
+        if (all.length > QUIZ_SIZE) actions.append(qel('span', 'qz-muted', `В тесте урока ${all.length} вопросов, в каждую попытку попадают ${total} случайных — поэтому при пересдаче вопросы другие. Так проверяется понимание темы, а не память на ответы.`));
         card.append(actions);
         box.append(card);
     }
@@ -1250,9 +1250,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initCourseCompletionBanner() {
         if (currentPath !== 'python-basic.html') return;
-        const progress = safeGetProgress();
-        const allDone = lessonsList.every(l => progress[l]);
-        if (!allDone) return;
+        // Баннер — когда преподаватель выдал сертификат (курс пройден целиком, включая итоговый экзамен)
+        const access = hasPB ? PB.readAccess() : null;
+        if (!access || !access.cert) return;
 
         const banner = document.getElementById('course-completion-banner');
         if (banner) banner.style.display = 'block';
