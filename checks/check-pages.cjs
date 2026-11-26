@@ -201,13 +201,19 @@ async function main() {
         current = file;
         try {
             await page.goto('about:blank');
+            // тест открывается после упражнений «Попробуйте сами» — отмечаем их решёнными
+            const tryIds = [...read(file).matchAll(/<div class="try-it" data-id="([^"]+)"/g)].map(m => m[1]);
+            await page.goto(BASE + file);
+            await page.evaluate((ids) => { const d = {}; ids.forEach(id => { d[id] = true; }); localStorage.setItem('try_done', JSON.stringify(d)); }, tryIds);
+            await page.goto('about:blank');
             await page.goto(BASE + file + '#quiz');
             await page.waitForSelector('.qz-run', { timeout: 10000 });
             let asked = 0;
             while (await page.locator('.qz-run').count()) {
                 const text = await page.textContent('.qz-question');
                 const code = await page.locator('.qz-run .quiz-code code').count() ? await page.textContent('.qz-run .quiz-code code') : '';
-                const q = quizData[file].find(x => x.question === text && (x.code || '') === code);
+                const q = quizData[file].flatMap(x => x.variants ? x.variants.map(v => ({ ...x, ...v })) : [x])
+                    .find(x => x.question === text && (x.code || '') === code);
                 if (!q) throw new Error('вопрос на странице не найден в quizData: ' + text);
                 if (q.type === 'code') { await page.fill('.qz-input', q.correct[0]); await page.click('.qz-answer button[type=submit]'); }
                 else await page.click(`.qz-option[data-orig-index="${q.correct}"]`);
@@ -224,6 +230,89 @@ async function main() {
         } catch (e) { fail(file, 'тест: ' + e.message.split('\n')[0]); }
     }
     console.log('Тесты всех уроков пройдены в браузере');
+
+    // 2б. Правила честной сдачи теста (урок 3, браузер ученика)
+    current = 'lesson3.html: правила сдачи';
+    try {
+        const tryIds = [...read('lesson3.html').matchAll(/<div class="try-it" data-id="([^"]+)"/g)].map(m => m[1]);
+        const setState = (st) => page.evaluate(([s, ids]) => {
+            ['quiz_results', 'quiz_scores', 'try_done', 'solved_tasks', 'quiz_mistakes'].forEach(k => localStorage.removeItem(k));
+            const d = {}; ids.slice(0, s.tries).forEach(id => { d[id] = true; });
+            localStorage.setItem('try_done', JSON.stringify(d));
+            if (s.score) localStorage.setItem('quiz_scores', JSON.stringify({ 'lesson3.html': s.score }));
+            if (s.hw) localStorage.setItem('solved_tasks', JSON.stringify(Object.fromEntries(tasks.filter(t => t.hw && t.lesson === 3).map(t => [t.id, true]))));
+        }, [st, tryIds]);
+        const gateText = async () => (await page.locator('#quiz-container .qz-gate').count()) ? await page.textContent('#quiz-container .qz-gate') : '';
+        const startBtn = () => page.locator('#quiz-container #btn-start-quiz').count();
+        await page.goto(BASE + 'lesson3.html');
+        // упражнения не решены — теста нет
+        await setState({ tries: 0 });
+        await page.goto(BASE + 'lesson3.html');
+        if (!/Попробуйте сами/.test(await gateText()) || await startBtn()) fail('lesson3.html', 'без решённых упражнений тест должен быть закрыт');
+        // неудача минуту назад — пауза
+        await setState({ tries: 9, score: { best: 40, attempts: 1, failStreak: 1, lastFailAt: new Date(Date.now() - 60000).toISOString() } });
+        await page.goto(BASE + 'lesson3.html');
+        if (!/Пересдать можно через/.test(await gateText()) || await startBtn()) fail('lesson3.html', 'после неудачной попытки должна быть пауза');
+        // пауза прошла — тест открыт; неверный ответ не раскрывает правильный
+        await setState({ tries: 9, score: { best: 40, attempts: 1, failStreak: 1, lastFailAt: new Date(Date.now() - 11 * 60000).toISOString() } });
+        await page.goto(BASE + 'lesson3.html');
+        if (!(await startBtn())) fail('lesson3.html', 'после паузы тест должен открыться');
+        else {
+            await page.click('#btn-start-quiz');
+            for (let k = 0; k < 10 && await page.locator('.qz-run').count(); k++) {
+                if (await page.locator('.qz-run .qz-input').count()) { await page.fill('.qz-input', 'нет'); await page.click('.qz-answer button[type=submit]'); }
+                else {
+                    const text = await page.textContent('.qz-question');
+                    const code = await page.locator('.qz-run .quiz-code code').count() ? await page.textContent('.qz-run .quiz-code code') : '';
+                    const q = quizData['lesson3.html'].flatMap(x => x.variants ? x.variants.map(v => ({ ...x, ...v })) : [x]).find(x => x.question === text && (x.code || '') === code);
+                    await page.click(`.qz-option:not([data-orig-index="${q.correct}"])`);
+                    if (await page.locator('.qz-option.is-correct').count()) { fail('lesson3.html', 'пока тест не сдан, правильный вариант не должен подсвечиваться'); break; }
+                }
+                await page.click('.qz-next');
+            }
+            await page.waitForSelector('.qz-result', { timeout: 5000 });
+            if (await page.locator('.qz-review-line.is-ok').count()) fail('lesson3.html', 'в разборе проваленного теста не должно быть правильных ответов');
+            if (!/Пересдать можно через|закрыт/.test(await page.textContent('.qz-result'))) fail('lesson3.html', 'после провала должно быть сказано, когда можно пересдать');
+        }
+        // 3 неудачи подряд — тест закрыт до решения домашки; домашка решена — можно открыть ещё попытки
+        await setState({ tries: 9, score: { best: 40, attempts: 3, failStreak: 3, lastFailAt: new Date(Date.now() - 3600000).toISOString() } });
+        await page.goto(BASE + 'lesson3.html');
+        if (!/закрыт/.test(await gateText()) || await startBtn()) fail('lesson3.html', 'после 3 неудачных попыток тест должен закрыться');
+        await setState({ tries: 9, hw: true, score: { best: 40, attempts: 3, failStreak: 3, lastFailAt: new Date(Date.now() - 3600000).toISOString() } });
+        await page.goto(BASE + 'lesson3.html');
+        await page.click('#quiz-container button:has-text("Открыть ещё")');
+        if (!(await startBtn())) fail('lesson3.html', 'после решённой домашки должны открыться ещё попытки');
+        // после второй серии неудач — только преподаватель
+        await setState({ tries: 9, hw: true, score: { best: 40, attempts: 6, failStreak: 3, hwUnlock: true, lastFailAt: new Date(Date.now() - 3600000).toISOString() } });
+        await page.goto(BASE + 'lesson3.html');
+        if (!/преподавател/.test(await gateText()) || await startBtn()) fail('lesson3.html', 'после второй серии неудач тест открывает только преподаватель');
+        // «Отлично» — только с 1-й или 2-й попытки
+        const grade = await page.evaluate(() => {
+            const g = (f) => PB.lessonResult(3, { lessons: { 3: { p: 1, b: 100, a: f, f } }, solved: tasks.filter(t => t.hw && t.lesson === 3).map(t => t.id) }, null).grade;
+            return [g(2), g(3)];
+        });
+        if (grade[0] !== 'excellent' || grade[1] !== 'good') fail('lesson3.html', `«Отлично» только с 1–2 попытки, а получилось: ${grade.join(', ')}`);
+        await setState({ tries: 0 });
+        console.log('Правила честной сдачи теста работают');
+    } catch (e) { fail('lesson3.html', 'правила сдачи: ' + e.message.split('\n')[0]); }
+
+    // 2в. Подсказки к задачам: закрыты до первой проверки, открываются по одной
+    current = 'tasks.html: подсказки';
+    try {
+        await page.goto(BASE + 'tasks.html#task=io_candies');
+        await page.waitForSelector('#task-hints:not([hidden])', { timeout: 10000 });
+        if (!(await page.locator('#task-hints .task-hint-btn[disabled]').count())) fail('tasks.html', 'до первой проверки подсказки должны быть закрыты');
+        await page.evaluate(() => localStorage.setItem('task_tried', JSON.stringify({ io_candies: true })));
+        await page.goto('about:blank');
+        await page.goto(BASE + 'tasks.html#task=io_candies');
+        await page.waitForSelector('#task-hints .task-hint-btn:not([disabled])', { timeout: 10000 });
+        await page.click('#task-hints .task-hint-btn');
+        if (await page.locator('#task-hints .task-hint').count() !== 1) fail('tasks.html', 'подсказка должна открыться');
+        const pts = await page.evaluate(() => [PB.taskPoints('io_candies', 0), PB.taskPoints('io_candies', 1), PB.taskPoints('io_candies', 3)]);
+        if (pts.join() !== '1,0.7,0') fail('tasks.html', 'баллы с подсказками считаются неверно: ' + pts.join());
+        await page.evaluate(() => { localStorage.removeItem('task_tried'); localStorage.removeItem('task_hints'); });
+        console.log('Подсказки к задачам работают');
+    } catch (e) { fail('tasks.html', 'подсказки: ' + e.message.split('\n')[0]); }
 
     // 3. Python запускается: пример урока 1 и упражнение «Попробуйте сами»
     current = 'lesson1.html';

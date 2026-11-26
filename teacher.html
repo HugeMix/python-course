@@ -232,6 +232,9 @@
                 const n = PB.clampInt(k, 0, 99);
                 if (n >= 1 && n <= PB.LESSON_COUNT && v && typeof v === 'object') {
                     lessons[n] = { p: v.p ? 1 : 0, b: PB.clampInt(v.b, 0, 100), a: PB.clampInt(v.a, 0, 999) };
+                    if (v.f) lessons[n].f = PB.clampInt(v.f, 1, 999);   // с какой попытки сдан тест
+                    if (v.s) lessons[n].s = PB.clampInt(v.s, 0, 999);   // неудачных попыток подряд
+                    if (v.q) lessons[n].q = PB.clampInt(v.q, 0, 999);   // ответов «за пару секунд»
                 }
             });
             const known = new Set(tasks.map(t => t.id));
@@ -253,9 +256,18 @@
                 const n = PB.clampInt(k, 0, 99);
                 if (n >= 1 && n <= PB.LESSON_COUNT && Array.isArray(v)) mk[n] = v.map(i => PB.clampInt(i, 0, 99)).slice(0, 30);
             });
+            // разминка: по каждому прошлому уроку — сколько ответов верно и неверно
+            const w = {};
+            Object.entries(r.w && typeof r.w === 'object' ? r.w : {}).forEach(([k, v]) => {
+                const n = PB.clampInt(k, 0, 99);
+                if (n >= 1 && n <= PB.LESSON_COUNT && Array.isArray(v)) w[n] = [PB.clampInt(v[0], 0, 9999), PB.clampInt(v[1], 0, 9999)];
+            });
             const at = isNaN(new Date(r.at)) ? new Date().toISOString() : new Date(r.at).toISOString();
             const op = [...new Set((Array.isArray(r.op) ? r.op : []).map(n => PB.clampInt(n, 0, 99)).filter(n => n >= 1 && n <= PB.LESSON_COUNT))];
-            return { op, mk, name, at, sid: PB.cleanText(r.sid || '', 20), aid: PB.cleanText(r.aid, 20), lessons, solved, code, assigned, received: new Date().toISOString() };
+            // подсказки: сколько ступенек открыто к задаче
+            const hn = {};
+            Object.entries(r.hn && typeof r.hn === 'object' ? r.hn : {}).forEach(([id, h]) => { if (known.has(id) && h) hn[id] = PB.clampInt(h, 0, 9); });
+            return { op, mk, w, hn, name, at, sid: PB.cleanText(r.sid || '', 20), aid: PB.cleanText(r.aid, 20), lessons, solved, code, assigned, received: new Date().toISOString() };
         }
 
         async function importPendingReport() {
@@ -547,6 +559,10 @@
             // Новый результат: оценки считаются сами, вам — только посмотреть
             if (hasNewResult(st)) panel.append(resultCard(st, state, refresh));
 
+            // Вопросы для созвона и итоги разминки
+            const call = callCard(st);
+            if (call) panel.append(call);
+
             // Оплата
             panel.append(paymentsCard(st, state, refresh));
 
@@ -558,7 +574,7 @@
             const exams = [1, 2, 3].flatMap(k => [projectRow(st, k, state, refresh), examRow(st, k, state, refresh)]).filter(Boolean);
             panel.append(el('section', { class: 'hub-card' },
                 el('div', { class: 'hub-card-head' }, el('h2', { text: 'Уроки' }), el('span', { class: 'hub-muted', text: `освоено ${status.mastered} из ${PB.LESSON_COUNT}` })),
-                el('p', { class: 'hub-muted cab-rule', text: 'Урок освоен, когда тест сдан на 70% и больше и решена домашка (можно без одной задачи). «Отлично» — тест от 90% и вся домашка. Следующий оплаченный урок открывается сам.' }),
+                el('p', { class: 'hub-muted cab-rule', text: 'Урок освоен, когда тест сдан на 70% и больше и решена домашка (можно без одной задачи). «Отлично» — тест от 90%, сданный с 1-й или 2-й попытки, и вся домашка. После 3 неудачных попыток подряд тест закрывается: ученик открывает ещё попытки, решив домашку, а дальше — вы кнопкой «Разрешить пересдачу». Следующий оплаченный урок открывается сам.' }),
                 el('ul', { class: 'cab-lrows' }, shown),
                 hidden.length ? el('details', { class: 'cab-more cab-lrows-more' },
                     el('summary', { text: 'Остальные уроки (' + hidden.length + ')' }),
@@ -625,13 +641,25 @@
 
         function lessonRow(st, info, state, refresh) {
             const r = info.r;
-            const meta = info.open ? [r.quiz ? `тест ${r.best}%` : 'тест не сдан', r.hw.length ? `домашка ${r.solved} из ${r.hw.length}` : ''].filter(Boolean).join(' · ') : '';
+            const meta = info.open ? [r.quiz ? `тест ${r.best}%` : 'тест не сдан', r.hw.length ? `домашка ${r.solved} из ${r.hw.length}` : '',
+                r.quizLocked ? `тест закрыт: ${PB.QUIZ_FAIL_LIMIT} неудачи подряд` : '', r.manyTries ? 'много попыток — обсудите тему' : ''].filter(Boolean).join(' · ') : '';
             let action;
             if (!info.open) {
                 action = el('button', { class: 'hub-btn', type: 'button', text: 'Открыть', title: 'Открыть урок вручную — например, чтобы провести его по созвону', onclick: () => {
                     if (info.n > state.paidTo && !confirm(`Урок ${info.n} не оплачен. Всё равно открыть?`)) return;
                     st.opened.push(info.n); st.opened.sort((a, b) => a - b); touch(st); refresh();
                 } });
+            } else if (!r.mastered && r.quizLocked) {
+                // тест закрыт после неудачных попыток: разобрать тему с учеником и разрешить пересдачу
+                action = el('span', { class: 'hub-actions cab-lrow-actions' },
+                    el('button', { class: 'hub-btn', type: 'button', text: 'Разрешить пересдачу', title: 'Ученик получит ещё попытки теста, когда откроет новую ссылку', onclick: () => {
+                        st.replies[info.n] = { s: 'redo', c: `Можно пересдать тест урока ${info.n}. Сначала разберите ошибки по уроку — не отвечайте наугад.`, at: nowIso() };
+                        touch(st); toast('Пересдача разрешена. Отправьте ученику новую ссылку.'); refresh();
+                    } }),
+                    el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Засчитать', onclick: () => {
+                        if (!confirm(`Засчитать урок ${info.n} вручную? Следующий оплаченный урок откроется ученику.`)) return;
+                        st.replies[info.n] = { s: 'ok', c: (st.replies[info.n] && st.replies[info.n].c) || '', at: nowIso() }; touch(st); refresh();
+                    } }));
             } else if (!r.mastered) {
                 action = el('button', { class: 'hub-btn hub-btn-ghost', type: 'button', text: 'Засчитать', title: 'Засчитать урок вручную — например, после занятия по созвону', onclick: () => {
                     if (!confirm(`Засчитать урок ${info.n} вручную? Следующий оплаченный урок откроется ученику.`)) return;
@@ -702,6 +730,47 @@
             return box;
         }
 
+        // Предупреждения по уроку: тест взят «измором» или наугад — стоит обсудить тему на занятии
+        function lessonWarnings(res) {
+            const out = [];
+            if (res.passTry >= PB.ATTEMPTS_WARN) out.push(`Тест сдан только с ${res.passTry}-й попытки — стоит обсудить тему на занятии.`);
+            else if (!res.quizOk && res.quiz && res.quiz.a >= PB.ATTEMPTS_WARN) out.push(`Уже ${res.quiz.a} попыток теста без успеха — тему лучше разобрать вместе.`);
+            if (res.slowPass && res.mastered && res.best >= PB.EXCELLENT_PERCENT) out.push(`«Отлично» не поставлено: тест сдан не с 1-й или ${PB.EXCELLENT_MAX_TRY}-й попытки.`);
+            if (res.fast >= 3) out.push(`${res.fast} ответов дано за пару секунд — похоже на угадывание.`);
+            if (res.quizLocked) out.push(`Тест закрыт после ${PB.QUIZ_FAIL_LIMIT} неудачных попыток подряд. Разберите ошибки и нажмите «Разрешить пересдачу» в списке уроков.`);
+            return out;
+        }
+
+        // Вопросы для созвона: на чём ученик ошибся и ещё не исправился (сначала — последние уроки).
+        // Учитель задаёт их устно: ответить своими словами наугад не получится.
+        // Плюс разминка: какие прошлые уроки ученик подзабыл.
+        function callCard(st) {
+            const r = lastReport(st);
+            if (!r) return null;
+            const qs = [];
+            Object.keys(r.mk || {}).map(Number).sort((a, b) => b - a).forEach(n => {
+                const quizData = window.PB_QUIZ ? window.PB_QUIZ[PB.lessonFile(n)] || [] : [];
+                (r.mk[n] || []).forEach(i => { if (quizData[i] && qs.length < 6) qs.push({ n, q: quizData[i] }); });
+            });
+            const weak = Object.entries(r.w || {}).map(([n, [ok, bad]]) => ({ n: Number(n), ok, bad }))
+                .filter(x => x.bad >= 2 && x.bad >= x.ok).sort((a, b) => b.bad - a.bad);
+            if (!qs.length && !weak.length) return null;
+            const answer = q => {
+                if (Array.isArray(q.variants) && q.variants.length) return 'зависит от чисел в коде — пусть ученик посчитает вслух';
+                return q.type === 'code' ? q.correct[0] : q.options[q.correct];
+            };
+            return el('section', { class: 'hub-card cab-call' },
+                el('div', { class: 'hub-card-head' }, el('h2', { text: 'Вопросы для созвона' }), el('span', { class: 'hub-muted', text: 'по последнему результату' })),
+                qs.length ? el('p', { class: 'hub-muted', text: 'Ученик ошибся в этих вопросах и ещё не исправился. Задайте их устно и попросите объяснить своими словами — так видно, понял ли он тему, а не запомнил ответ.' }) : null,
+                qs.length ? el('ol', { class: 'cab-call-list' }, qs.map(({ n, q }) => el('li', {},
+                    el('strong', { text: q.question }), el('small', { class: 'hub-muted', text: ` · урок ${n}` }),
+                    q.code ? el('pre', {}, el('code', { class: 'language-python', text: q.code })) : null,
+                    el('details', {}, el('summary', { text: 'Ответ для учителя' }),
+                        el('p', { text: 'Верно: ' + answer(q) }), q.explanation ? el('p', { class: 'hub-muted', text: q.explanation }) : null)))) : null,
+                weak.length ? el('p', { class: 'cab-result-todo', text: 'Разминка показала, что стоит повторить: ' +
+                    weak.map(x => `урок ${x.n} (неверно ${x.bad} из ${x.ok + x.bad})`).join(', ') + '.' }) : null);
+        }
+
         // Новый результат: по каждому уроку, где что-то изменилось, — оценка или что осталось, ошибки в тесте и код задач
         function resultCard(st, state, refresh) {
             const r = lastReport(st);
@@ -722,13 +791,14 @@
                 const items = [];
                 items.push(el('li', { class: 'cab-result' + (res.quizOk ? ' is-done' : '') },
                     el('span', { class: 'cab-check', 'aria-hidden': 'true', text: res.quizOk ? '✓' : '' }),
-                    el('span', { class: 'cab-result-title' }, 'Тест урока', el('small', { text: res.quiz ? `лучший результат ${res.best}% · попыток: ${res.quiz.a}` : 'не сдан' })),
+                    el('span', { class: 'cab-result-title' }, 'Тест урока', el('small', { text: res.quiz ? [`лучший результат ${res.best}%`, `попыток: ${res.quiz.a}`,
+                        res.passTry ? `сдан с ${res.passTry}-й попытки` : '', res.fast ? `ответов «за пару секунд»: ${res.fast}` : ''].filter(Boolean).join(' · ') : 'не сдан' })),
                     res.quiz ? el('span', { class: 'hub-pill ' + (res.quizOk ? 'hub-pill-ok' : 'hub-pill-warn'), text: res.best + '%' }) : el('span', { class: 'hub-pill hub-pill-idle', text: '—' })));
                 res.hw.forEach(id => {
                     const t = taskById(id); const solved = r.solved.includes(id); const code = r.code[id];
                     items.push(el('li', { class: 'cab-result' + (solved ? ' is-done' : '') },
                         el('span', { class: 'cab-check', 'aria-hidden': 'true', text: solved ? '✓' : '' }),
-                        el('span', { class: 'cab-result-title' }, 'Задача «' + t.title + '»', el('small', { text: DIFF[t.difficulty] })),
+                        el('span', { class: 'cab-result-title' }, 'Задача «' + t.title + '»', el('small', { text: DIFF[t.difficulty] + ((r.hn || {})[id] ? ` · подсказок: ${r.hn[id]} из ${(t.hints || []).length || 3}` + ((r.hn || {})[id] >= 3 ? ' (смотрел почти готовое решение)' : '') : '') })),
                         el('span', { class: 'hub-pill ' + (solved ? 'hub-pill-ok' : 'hub-pill-idle'), text: solved ? 'решена' : 'не решена' }),
                         code ? el('details', { class: 'hub-code' }, el('summary', { text: 'Код ученика' }), el('pre', {}, el('code', { class: 'language-python', text: code }))) : null));
                 });
@@ -737,6 +807,7 @@
                         el('h3', { text: `Урок ${n}. ${PB.LESSON_TITLES[n - 1]}` }),
                         res.mastered ? pill(res.grade === 'excellent' ? 'excellent' : 'ok', 'Освоен · ' + PB.GRADE_TEXT[res.grade]) : pill('work', 'Не освоен')),
                     res.mastered ? null : el('p', { class: 'cab-result-todo', text: 'Осталось: ' + res.todo.join(', ') + '. Ученик видит это у себя на сайте.' }),
+                    lessonWarnings(res).length ? el('ul', { class: 'cab-warn' }, lessonWarnings(res).map(t => el('li', { text: t }))) : null,
                     el('ul', { class: 'cab-results' }, items),
                     mistakes.length ? el('details', { class: 'cab-mistakes' },
                         el('summary', { text: `Ошибки в тесте (${mistakes.length}) — попадут ученику в разминку` }),

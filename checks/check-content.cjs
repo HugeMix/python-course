@@ -120,8 +120,22 @@ async function main() {
         // тест урока
         const quiz = quizData[file];
         if (!quiz) { fail(file, 'нет теста в quizData (script.js)'); continue; }
-        if (quiz.length < 10) fail(file, `в тесте ${quiz.length} вопросов, нужно не меньше 10`);
-        for (const q of quiz) {
+        if (quiz.length < 25) fail(file, `в тесте ${quiz.length} вопросов, нужно не меньше 25`);
+        if (quiz.filter(q => q.variants).length < 2) fail(file, 'в тесте нужно хотя бы 2 вопроса с меняющимися числами (variants)');
+        if (quiz.filter(q => q.type === 'code').length < 2) fail(file, 'в тесте нужно хотя бы 2 вопроса с ответом кодом');
+        // вопрос с вариантами проверяем как несколько вопросов: каждый вариант — свой код и свои ответы
+        const expanded = quiz.flatMap(q => {
+            if (!q.variants) return [q];
+            if (!Array.isArray(q.variants) || q.variants.length < 2) { fail(`${file}, вопрос «${q.question}»`, 'у вопроса с вариантами должно быть хотя бы 2 варианта'); return []; }
+            return q.variants.map(v => ({ ...q, ...v, variants: undefined }));
+        });
+        const seenQ = new Set();
+        for (const q of expanded) {
+            const key = q.question + '|' + (q.code || '');
+            if (seenQ.has(key)) fail(file, `вопрос «${q.question}» с таким же кодом уже есть в тесте`);
+            seenQ.add(key);
+        }
+        for (const q of expanded) {
             const where = `${file}, вопрос «${q.question}»`;
             if (!q.explanation) fail(where, 'нет пояснения');
             if (q.type === 'code') {
@@ -172,6 +186,12 @@ async function main() {
             if (r.passed) fail(where, 'заготовка проходит скрытые тесты без решения');
         }
         checked++;
+    }
+    // подсказки: у домашних задач и шагов проектов — ровно 3 ступеньки, у контрольных и экзамена — нет
+    for (const t of tasks) {
+        if (t.exam && t.hints) fail(`задача ${t.id}`, 'у задач контрольной и экзамена подсказок быть не должно');
+        if ((t.hw || t.project) && !(Array.isArray(t.hints) && t.hints.length === 3 && t.hints.every(h => typeof h === 'string' && h.trim())))
+            fail(`задача ${t.id}`, 'у домашней задачи и шага проекта должно быть 3 подсказки');
     }
     for (let n = 1; n <= 16; n++) {
         const hw = tasks.filter(t => t.hw && t.lesson === n).length;

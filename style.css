@@ -270,12 +270,6 @@ body.dark-mode .card {
 }
 
 /* Сетка уроков */
-.lessons-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 30px;
-    margin-top: 40px;
-}
 
 .lesson-card {
     background: var(--card-bg);
@@ -553,55 +547,6 @@ body.dark-mode .quiz-question {
     margin-bottom: 15px;
 }
 
-.btn-quiz-opt {
-    /* Варианты-«вывод программы» бывают в несколько строк */
-    white-space: pre-line;
-    text-align: left;
-    vertical-align: top;
-    background: var(--bg-color);
-    border: 2px solid transparent;
-    padding: 12px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-right: 12px;
-    margin-bottom: 12px;
-    transition: var(--transition);
-    color: var(--text-color);
-    font-weight: 500;
-    font-size: 0.95rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
-}
-
-body.dark-mode .btn-quiz-opt {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.btn-quiz-opt:hover:not(:disabled) {
-    background: rgba(79, 70, 229, 0.05);
-    border-color: var(--accent-color);
-    transform: translateY(-2px);
-}
-
-.btn-quiz-opt.correct {
-    background: var(--success-bg);
-    border-color: var(--success-color);
-    color: #065f46;
-}
-
-.btn-quiz-opt.incorrect {
-    background: var(--error-bg);
-    border-color: var(--error-color);
-    color: #991b1b;
-}
-
-body.dark-mode .btn-quiz-opt.correct {
-    color: #6ee7b7;
-}
-
-body.dark-mode .btn-quiz-opt.incorrect {
-    color: #fca5a5;
-}
-
 textarea.code-input {
     display: block;
     width: 100%;
@@ -626,20 +571,6 @@ textarea.code-input:focus {
     outline: none;
     border-color: var(--accent-color);
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-}
-
-.quiz-passed-container {
-    text-align: center;
-    background: var(--success-bg);
-    padding: 40px;
-    border-radius: var(--radius);
-    color: var(--success-color);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.quiz-passed-container h3 {
-    font-size: 1.8rem;
-    margin-top: 0;
 }
 
 /* Кнопки навигации */
@@ -1010,17 +941,6 @@ body.dark-mode footer {
 }
 
 /* ==== БЛОКИ КВИЗА: ПРАВИЛЬНЫЙ / НЕПРАВИЛЬНЫЙ ==== */
-.quiz-question.answered-correct {
-    background: rgba(16, 185, 129, 0.05);
-    border-radius: 10px;
-    padding: 15px 20px;
-}
-
-.quiz-question.answered-wrong {
-    background: rgba(239, 68, 68, 0.05);
-    border-radius: 10px;
-    padding: 15px 20px;
-}
 
 /* ==== FEEDBACK ТЕКСТ ==== */
 .quiz-feedback {
@@ -1031,37 +951,8 @@ body.dark-mode footer {
 }
 
 /* ==== QUIZ PASSED CONTAINER В DARK MODE ==== */
-body.dark-mode .quiz-passed-container {
-    color: #34d399;
-}
 
 /* ==== БЛОК "ТЕСТ НЕ ПРОЙДЕН" ==== */
-.quiz-failed-wrapper {
-    text-align: center;
-    padding: 50px 40px 40px;
-    border-radius: var(--radius);
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.06) 0%, rgba(251, 191, 36, 0.06) 100%);
-    border: 2px solid rgba(239, 68, 68, 0.25);
-    position: relative;
-    overflow: hidden;
-}
-
-.quiz-failed-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #ef4444, #f97316, #fbbf24);
-}
-
-.quiz-failed-icon {
-    font-size: 3.5rem;
-    margin-bottom: 16px;
-    display: block;
-    animation: shake 0.5s ease 0.2s both;
-}
 
 @keyframes shake {
 
@@ -1087,173 +978,11 @@ body.dark-mode .quiz-passed-container {
     }
 }
 
-.quiz-failed-title {
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin: 0 0 10px;
-    color: #dc2626;
-    letter-spacing: -0.02em;
-}
-
-body.dark-mode .quiz-failed-title {
-    color: #f87171;
-}
-
-.quiz-failed-subtitle {
-    font-size: 1rem;
-    color: var(--text-color);
-    opacity: 0.7;
-    margin: 0 0 32px;
-    max-width: 420px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 /* Счётчики */
-.quiz-failed-score-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    margin-bottom: 28px;
-}
-
-.quiz-score-stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    background: var(--card-bg);
-    border-radius: 14px;
-    padding: 18px 28px;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(0, 0, 0, 0.04);
-    min-width: 90px;
-}
-
-body.dark-mode .quiz-score-stat {
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.quiz-score-correct .score-num {
-    color: #10b981;
-}
-
-.quiz-score-wrong .score-num {
-    color: #ef4444;
-}
-
-.score-num {
-    font-size: 2.2rem;
-    font-weight: 800;
-    line-height: 1;
-}
-
-.score-label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    opacity: 0.55;
-    color: var(--text-color);
-}
-
-.quiz-score-divider {
-    font-size: 1rem;
-    font-weight: 600;
-    opacity: 0.4;
-    color: var(--text-color);
-    white-space: nowrap;
-}
 
 /* Прогресс-бар */
-.quiz-failed-bar-wrap {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 36px;
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.quiz-failed-bar-track {
-    flex: 1;
-    height: 10px;
-    background: rgba(0, 0, 0, 0.08);
-    border-radius: 99px;
-    overflow: hidden;
-}
-
-body.dark-mode .quiz-failed-bar-track {
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.quiz-failed-bar-fill {
-    height: 100%;
-    border-radius: 99px;
-    background: linear-gradient(90deg, #ef4444, #f97316);
-    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.quiz-failed-percent {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #ef4444;
-    min-width: 40px;
-    text-align: right;
-}
-
-body.dark-mode .quiz-failed-percent {
-    color: #f87171;
-}
 
 /* Кнопки */
-.quiz-failed-actions {
-    display: flex;
-    gap: 14px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.quiz-action-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 28px;
-    border: none;
-    border-radius: 50px;
-    font-size: 0.97rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: var(--transition);
-    font-family: var(--font-family);
-}
-
-.quiz-btn-retry {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-    color: white;
-    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
-}
-
-.quiz-btn-retry:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.45);
-}
-
-.quiz-btn-review {
-    background: var(--card-bg);
-    color: var(--accent-color);
-    border: 2px solid var(--accent-color);
-    box-shadow: var(--shadow);
-}
-
-.quiz-btn-review:hover {
-    background: var(--accent-color);
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
-}
 
 /* ==== BADGE ==== */
 .badge {
@@ -1453,12 +1182,6 @@ body.dark-mode .quiz-explanation {
 .lesson-locked-banner a {
     color: var(--accent-color);
     font-weight: 600;
-}
-
-.quiz-locked-note {
-    text-align: center;
-    font-weight: 600;
-    margin: 0;
 }
 
 .quiz-feedback.is-correct {
@@ -1929,12 +1652,6 @@ body.dark-mode .plan-card {
     background: rgba(16, 185, 129, 0.12);
     color: var(--success-color);
     margin-bottom: 14px;
-}
-
-.plan-label-muted {
-    background: rgba(128, 128, 128, 0.12);
-    color: var(--text-color);
-    opacity: 0.8;
 }
 
 .plan-card h3 {
@@ -2829,13 +2546,6 @@ body.dark-mode footer.site-footer {
 }
 
 /* Мягкая пометка «В разработке» на странице курсов */
-.badge.badge-soft {
-    align-self: flex-start;
-    background: rgba(79, 70, 229, 0.1);
-    color: var(--accent-color);
-    font-size: 0.75rem;
-    letter-spacing: 0.02em;
-}
 
 /* ==================================================================
    ПОЛОСЫ ПРОКРУТКИ — тонкие, в цвет сайта (вместо стандартных серых)
@@ -3017,21 +2727,12 @@ body.dark-mode .hub-card {
     color: #fff;
 }
 
-.hub-tab-lock {
-    margin-left: auto;
-    opacity: 0.75;
-}
-
 /* Кнопки и поля */
 .hub-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
-}
-
-.hub-actions-end {
-    justify-content: flex-end;
 }
 
 .hub-btn {
@@ -3126,14 +2827,6 @@ body.dark-mode .hub-card {
     outline: none;
     border-color: var(--accent-color);
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18);
-}
-
-.hub-input-short {
-    flex: 0 0 80px;
-}
-
-.hub-input-error {
-    border-color: var(--error-color);
 }
 
 .hub-textarea {
@@ -3239,32 +2932,6 @@ body.dark-mode .hub-card {
     border-bottom: 0;
 }
 
-.hub-row-num {
-    min-width: 30px;
-    font-weight: 700;
-    color: var(--accent-color);
-    font-variant-numeric: tabular-nums;
-}
-
-.hub-row-title {
-    flex: 1 1 200px;
-    display: flex;
-    flex-direction: column;
-    font-weight: 600;
-}
-
-.hub-row-title small {
-    font-weight: 400;
-    opacity: 0.65;
-    font-size: 0.82rem;
-}
-
-.hub-row-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
 .hub-pill {
     font-size: 0.8rem;
     font-weight: 700;
@@ -3292,11 +2959,6 @@ body.dark-mode .hub-pill-warn { color: #fcd34d; }
     background: #64748b;
 }
 
-.hub-grade-5 { background: #10b981; }
-.hub-grade-4 { background: #4f46e5; }
-.hub-grade-3 { background: #f59e0b; }
-.hub-grade-2 { background: #ef4444; }
-
 .hub-code {
     flex-basis: 100%;
 }
@@ -3313,9 +2975,6 @@ body.dark-mode .hub-pill-warn { color: #fcd34d; }
 }
 
 /* Таблица журнала (на телефоне — карточками) */
-.hub-table-wrap {
-    overflow-x: auto;
-}
 
 .hub-table {
     width: 100%;
@@ -3454,24 +3113,6 @@ body.dark-mode .hub-pill-warn { color: #fcd34d; }
     .hub-chip-groups {
         grid-template-columns: 1fr;
     }
-}
-
-.hub-report-out {
-    margin-top: 16px;
-    padding: 16px;
-    border-radius: 12px;
-    background: var(--bg-color);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.hub-report-out .hub-input {
-    flex: none;
-}
-
-.hub-report-out p {
-    margin: 0;
 }
 
 .hub-steps,
@@ -3711,7 +3352,6 @@ body.dark-mode .hub-pill-warn { color: #fcd34d; }
 }
 
 .cab-student-nums b { font-size: 1.05rem; }
-.cab-grade-empty { opacity: 0.5; }
 .cab-student-nums .hub-grade { width: 32px; height: 28px; font-size: 0.85rem; }
 
 /* Профиль ученика */
@@ -3726,30 +3366,6 @@ body.dark-mode .hub-pill-warn { color: #fcd34d; }
 .cab-profile-head > div { flex: 1; min-width: 180px; }
 .cab-profile-head h2 { margin: 0 0 2px; font-size: 1.5rem; }
 
-.cab-grade-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    align-items: center;
-}
-
-.cab-grade-buttons { display: flex; gap: 8px; }
-
-.cab-grade-btn {
-    width: 52px;
-    height: 52px;
-    border: 0;
-    border-radius: 14px;
-    color: #fff;
-    font: inherit;
-    font-size: 1.3rem;
-    font-weight: 800;
-    cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.cab-grade-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.45); }
-
 .cab-grades {
     list-style: none;
     margin: 18px 0 0;
@@ -3760,15 +3376,6 @@ body.dark-mode .hub-pill-warn { color: #fcd34d; }
 }
 
 .cab-grades li { display: flex; align-items: center; gap: 12px; }
-
-.cab-grade-text {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    font-weight: 600;
-}
-
-.cab-grade-text small { font-weight: 400; opacity: 0.6; font-size: 0.8rem; }
 
 .cab-x {
     width: 32px;
@@ -3828,28 +3435,6 @@ body.dark-mode .hub-pill-warn { color: #fcd34d; }
 .cab-result-title small { font-weight: 400; opacity: 0.6; font-size: 0.82rem; }
 
 /* Шаги задания */
-.cab-step-head {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    margin-bottom: 16px;
-}
-
-.cab-step-head h2 { margin: 2px 0 2px; font-size: 1.25rem; }
-.cab-step-head .hub-muted { margin: 0; }
-
-.cab-step-num {
-    flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    color: #fff;
-    background: var(--accent-color);
-}
 
 .cab-lessons {
     display: grid;
@@ -4037,7 +3622,6 @@ body.dark-mode .hub-pill-warn { color: #fcd34d; }
     .cab-seg-btn { flex: 1; padding: 10px 6px; font-size: 0.88rem; white-space: nowrap; }
     .cab-nav-side { justify-content: flex-end; }
     .cab-students { grid-template-columns: 1fr; }
-    .cab-grade-btn { width: 48px; height: 48px; }
     .cab-submit .hub-btn { width: 100%; }
 }
 
@@ -4049,38 +3633,8 @@ body.dark-mode .hub-pill-warn { color: #fcd34d; }
     font-size: 1.6rem;
 }
 
-.task-hero-badge {
-    display: inline-block;
-    margin-bottom: 12px;
-    padding: 5px 12px;
-    border-radius: 999px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #059669;
-    background: rgba(16, 185, 129, 0.14);
-}
-
-body.dark-mode .task-hero-badge { color: #6ee7b7; }
-
 .task-progress { margin-top: 18px; }
-
-.task-progress-text {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-    font-size: 1.05rem;
-}
-
-.task-progress-text span { opacity: 0.7; font-size: 0.92rem; }
 .task-progress .hub-bar { margin-top: 10px; height: 10px; }
-
-.todo-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    counter-reset: todo;
-}
 
 .todo {
     display: flex;
@@ -4092,21 +3646,6 @@ body.dark-mode .task-hero-badge { color: #6ee7b7; }
 }
 
 .todo:last-child { border-bottom: 0; }
-
-.todo-main {
-    flex: 1 1 240px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.todo-main small { opacity: 0.65; font-size: 0.85rem; }
-.todo.is-done .todo-main strong { opacity: 0.7; }
-
-.todo-actions {
-    display: flex;
-    gap: 8px;
-}
 
 .send-card h2 { margin: 0 0 6px; font-size: 1.3rem; }
 
@@ -4122,8 +3661,6 @@ details.cab-more > .send-card {
 }
 
 @media (max-width: 600px) {
-    .todo-actions { width: 100%; padding-left: 40px; }
-    .todo-actions .hub-btn { flex: 1; }
     .send-actions .hub-btn { width: 100%; }
     .send-card .hub-input { max-width: none; }
 }
@@ -4191,33 +3728,6 @@ details.cab-more > .send-card {
 }
 
 /* Дополнительные материалы на странице «Уроки» */
-.materials-links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
-    margin-top: 18px;
-}
-
-.materials-links a {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 16px 18px;
-    border-radius: 14px;
-    border: 1px solid rgba(128, 128, 128, 0.2);
-    background: var(--bg-color);
-    color: var(--text-color);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.materials-links a:hover {
-    border-color: var(--accent-color);
-    color: var(--text-color);
-    box-shadow: 0 10px 22px -14px rgba(79, 70, 229, 0.6);
-}
-
-.materials-links strong { color: var(--accent-color); }
-.materials-links span { font-size: 0.88rem; opacity: 0.7; }
 
 /* Шапка страниц на телефоне — компактнее */
 @media (max-width: 600px) {
@@ -5005,13 +4515,6 @@ body.dark-mode .exam-pill.is-progress { color: #fbbf24; }
 .exam-actions { margin-top: 16px; }
 
 /* Карточка контрольной на странице «Уроки» */
-.lesson-card.exam-card-mini {
-    border: 1px dashed rgba(79, 70, 229, 0.45);
-    background: rgba(79, 70, 229, 0.04);
-}
-
-.lesson-card.exam-card-mini h3 { margin-top: 10px; }
-.lesson-card.exam-card-mini .exam-kicker { align-self: flex-start; width: auto; }
 
 /* Блок «Контрольная» в конце уроков 6, 11, 16 */
 .exam-callout {
@@ -5047,7 +4550,6 @@ body.dark-mode .exam-pill.is-progress { color: #fbbf24; }
 /* Кабинет: кнопки контрольных */
 .cab-exams { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .cab-exam .cab-lesson-num { width: auto; min-width: 28px; padding: 0 6px; }
-.cab-exam-hint { margin: -4px 0 10px; }
 
 @media (max-width: 700px) {
     .cab-exams { grid-template-columns: minmax(0, 1fr); }
@@ -5170,7 +4672,6 @@ body.dark-mode .my-pill-progress { color: #7dd3fc; }
     .my-row { grid-template-columns: minmax(0, 1fr); gap: 8px; }
     .my-row-actions { justify-content: flex-start; }
 }
-
 
 /* ---------- Кабинет: карточка ученика (оплата, уроки, проверка) ---------- */
 .cab-status { display: inline-block; justify-self: start; align-self: flex-start; padding: 3px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; white-space: nowrap; background: rgba(128, 128, 128, 0.14); }
@@ -5324,3 +4825,34 @@ body.dark-mode .my-row-main .my-row-hint { color: #fbbf24; }
 @media (max-width: 720px) {
     .my-profile-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* --- Честная сдача теста: правила, замок, «быстрые ответы» --- */
+.qz-rules { margin: 14px 0 0; font-size: 0.92rem; }
+.qz-rules summary { cursor: pointer; font-weight: 600; color: var(--accent-color); }
+.qz-rules ul { margin: 8px 0 0; padding-left: 20px; line-height: 1.55; }
+.qz-gate { margin: 16px 0 0; padding: 12px 14px; border-radius: 10px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); line-height: 1.5; }
+.qz-feedback-fast { margin: 8px 0 0; font-size: 0.9rem; color: #b45309; }
+body.dark-mode .qz-feedback-fast { color: #fbbf24; }
+
+/* --- Кабинет: предупреждения по уроку и вопросы для созвона --- */
+.cab-warn { margin: 8px 0 0; padding-left: 20px; font-size: 0.92rem; color: #b45309; }
+body.dark-mode .cab-warn { color: #fbbf24; }
+.cab-lrow-actions { gap: 6px; flex-wrap: wrap; margin: 0; }
+.cab-call-list { margin: 10px 0 0; padding-left: 22px; }
+.cab-call-list > li { margin-bottom: 14px; }
+.cab-call-list pre { margin: 6px 0; overflow-x: auto; }
+.cab-call-list details { margin-top: 4px; font-size: 0.92rem; }
+.cab-call-list summary { cursor: pointer; color: var(--accent-color); }
+.cab-call-list details p { margin: 4px 0; }
+
+/* --- Подсказки к задачам ступеньками --- */
+.task-hints { margin-top: 18px; padding: 14px 16px; border-radius: 12px; border: 1px dashed rgba(128, 128, 128, 0.4); }
+.task-hints-head { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; margin-bottom: 8px; }
+.task-hints-head span { font-size: 0.88rem; opacity: 0.75; }
+.task-hint { display: flex; gap: 10px; margin: 10px 0; }
+.task-hint > div { min-width: 0; flex: 1; }
+.task-hint p { margin: 0; }
+.task-hint pre { margin: 8px 0 0; overflow-x: auto; font-size: 0.88rem; }
+.task-hint-num { flex: 0 0 24px; height: 24px; border-radius: 50%; background: var(--accent-color); color: #fff; font-size: 0.8rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.task-hint-btn { margin-top: 6px; }
+.task-hint-note { margin: 6px 0 0; font-size: 0.88rem; opacity: 0.75; }

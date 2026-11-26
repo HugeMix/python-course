@@ -336,6 +336,7 @@
                     <h3 style="margin-top:0; color: var(--accent-color);" id="task-title">Выберите задачу</h3>
                     <div id="task-text" style="color: var(--text-color); line-height: 1.6;">Текст задачи появится
                         здесь...</div>
+                    <div id="task-hints" class="task-hints" hidden></div>
                 </div>
 
                 <div class="ide tasks-ide">
@@ -423,6 +424,64 @@
                 Tab: (cm) => cm.somethingSelected() ? cm.indentSelection("add") : cm.replaceSelection("    ", "end")
             }
         });
+
+        // --- Подсказки ступеньками: намёк → подсказка точнее → почти решение ---
+        // Открываются после первой проверки решения. Каждая подсказка — минус треть баллов за задачу
+        // (PB.taskPoints), а преподаватель видит, сколько подсказок взято (task_hints в отчёте).
+        function readStore(key) { try { return JSON.parse(localStorage.getItem(key)) || {}; } catch (e) { return {}; } }
+        function writeStore(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) { /* не страшно */ } }
+        function hintHtml(text) {
+            const e = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            const i = text.indexOf("\n");
+            const head = i < 0 ? text : text.slice(0, i);
+            const p = "<p>" + e(head).replace(/`([^`]+)`/g, "<code>$1</code>") + "</p>";
+            return i < 0 ? p : p + '<pre><code class="language-python">' + e(text.slice(i + 1)) + "</code></pre>";
+        }
+        function renderHints(task, locked) {
+            const box = document.getElementById("task-hints");
+            const hints = Array.isArray(task.hints) ? task.hints : [];
+            box.hidden = locked || !hints.length;
+            box.textContent = "";
+            if (box.hidden) return;
+            const used = readStore("task_hints")[task.id] || 0;
+            const tried = !!readStore("task_tried")[task.id] || !!getSolved()[task.id];
+            const full = PB.TASK_POINTS[task.difficulty];
+            const head = document.createElement("div");
+            head.className = "task-hints-head";
+            const pts = PB.taskPoints(task.id, used);
+            head.innerHTML = `<strong>Подсказки</strong><span>${used ? `взято ${used} из ${hints.length} · за задачу ${String(pts).replace(".", ",")} из ${full}` : `каждая подсказка — минус треть баллов за задачу`}</span>`;
+            box.append(head);
+            hints.slice(0, used).forEach((h, i) => {
+                const div = document.createElement("div");
+                div.className = "task-hint";
+                div.innerHTML = `<span class="task-hint-num">${i + 1}</span><div>${hintHtml(h)}</div>`;
+                box.append(div);
+                div.querySelectorAll("pre code").forEach(c => { if (window.hljs) window.hljs.highlightElement(c); });
+            });
+            if (used < hints.length) {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "hub-btn hub-btn-ghost task-hint-btn";
+                const names = ["Намёк", "Подсказка точнее", "Почти готовое решение"];
+                btn.textContent = `${names[used] || "Подсказка"} (${used + 1} из ${hints.length})`;
+                if (!tried) {
+                    btn.disabled = true;
+                    const note = document.createElement("p");
+                    note.className = "task-hint-note";
+                    note.textContent = "Подсказки откроются после первой проверки — сначала попробуйте решить сами.";
+                    box.append(btn, note);
+                } else {
+                    btn.addEventListener("click", () => {
+                        if (used === hints.length - 1 && !confirm("Последняя подсказка — почти готовое решение. За задачу останется 0 баллов, и преподаватель это увидит. Открыть?")) return;
+                        const store = readStore("task_hints");
+                        store[task.id] = used + 1;
+                        writeStore("task_hints", store);
+                        renderHints(task, false);
+                    });
+                    box.append(btn);
+                }
+            }
+        }
 
         function getSolved() {
             try { return JSON.parse(localStorage.getItem("solved_tasks")) || {}; }
@@ -630,6 +689,7 @@
             const locked = !PB.isTaskOpen(task);
             document.getElementById("task-text").innerHTML = locked ? lockedText(task) : task.desc;
             editor.setValue(locked ? "# Задача откроется вместе с уроком\n" : (localStorage.getItem(`saved_code_${task.id}`) || task.startCode));
+            renderHints(task, locked);
             taskLocked = locked;
             btnSubmit.disabled = locked || !runner.ready;
             if (locked) {
@@ -712,6 +772,9 @@
             }
 
             btnStop.hidden = true;
+            // первая проверка сделана — подсказки к этой задаче можно открывать
+            const tried = readStore("task_tried");
+            if (!tried[task.id]) { tried[task.id] = true; writeStore("task_tried", tried); renderHints(task, false); }
 
             if (result.timedOut || result.stopped) {
                 setLoading();
