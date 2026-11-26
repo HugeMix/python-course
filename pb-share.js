@@ -109,6 +109,10 @@ const PB = (() => {
                     b: sc ? clampInt(sc.best, 0, 100) : (passed[f] ? PASS_PERCENT : 0),
                     a: sc ? clampInt(sc.attempts, 0, 999) : 1
                 };
+                // f — с какой попытки тест сдан, s — неудачных попыток подряд, q — ответов «за пару секунд»
+                if (sc && sc.firstPass) lessons[n].f = clampInt(sc.firstPass, 1, 999);
+                if (sc && sc.failStreak) lessons[n].s = clampInt(sc.failStreak, 0, 999);
+                if (sc && sc.fast) lessons[n].q = clampInt(sc.fast, 0, 999);
             }
         }
         const solved = Object.keys(read('solved_tasks', {})).filter(id => /^[\w-]{1,40}$/.test(id));
@@ -118,7 +122,18 @@ const PB = (() => {
             const n = LESSON_FILES_INDEX[f];
             if (n && Array.isArray(list) && list.length) mistakes[n] = list.map(i => clampInt(i, 0, 99)).slice(0, 30);
         });
-        return { lessons, solved, mistakes };
+        // разминка: {урок: [верно, неверно]}
+        const warmup = {};
+        Object.entries(read('warmup_log', {}) || {}).forEach(([f, v]) => {
+            const n = LESSON_FILES_INDEX[f];
+            if (n && Array.isArray(v)) warmup[n] = [clampInt(v[0], 0, 9999), clampInt(v[1], 0, 9999)];
+        });
+        // подсказки к задачам: {id: сколько открыто}
+        const hints = {};
+        Object.entries(read('task_hints', {}) || {}).forEach(([id, h]) => {
+            if (/^[\w-]{1,40}$/.test(id) && h) hints[id] = clampInt(h, 0, 9);
+        });
+        return { lessons, solved, mistakes, warmup, hints };
     }
 
     function clampInt(v, min, max) {
@@ -127,23 +142,19 @@ const PB = (() => {
     }
 
     // --- Баллы ---
-    // Тест: до 10 баллов (лучший результат / 10). Задача: лёгкая 1, средняя 2, сложная 3.
+    // Задача: лёгкая 1 балл, средняя 2, сложная 3; каждая открытая подсказка — минус треть баллов.
     function taskDifficulty(id) {
         const list = typeof tasks !== 'undefined' ? tasks : [];
         const t = list.find(x => x.id === id);
         return t ? t.difficulty : null;
     }
 
-    function computePoints(lessons, solved) {
-        let pts = 0;
-        Object.values(lessons || {}).forEach(l => { pts += Math.round(clampInt(l.b, 0, 100) / 10); });
-        (solved || []).forEach(id => { pts += TASK_POINTS[taskDifficulty(id)] || 0; });
-        return pts;
-    }
-
-    function maxPoints() {
-        const list = typeof tasks !== 'undefined' ? tasks : [];
-        return LESSON_COUNT * 10 + list.reduce((s, t) => s + (TASK_POINTS[t.difficulty] || 0), 0);
+    // Баллы за задачу с учётом подсказок: каждая открытая подсказка — минус треть баллов (до 0)
+    const HINT_COUNT = 3;
+    function taskPoints(id, hintsUsed) {
+        const full = TASK_POINTS[taskDifficulty(id)] || 0;
+        const h = Math.min(HINT_COUNT, clampInt(hintsUsed, 0, HINT_COUNT));
+        return Math.round(full * (HINT_COUNT - h) / HINT_COUNT * 10) / 10;
     }
 
     // --- Отправка ---
@@ -209,6 +220,9 @@ const PB = (() => {
     // Преподаватель может засчитать урок вручную (например, после занятия по созвону).
     // Одни и те же правила работают у ученика (по его прогрессу) и в кабинете (по присланному результату).
     const EXCELLENT_PERCENT = 90;
+    const EXCELLENT_MAX_TRY = 2;            // «Отлично» — только если тест сдан с 1-й или 2-й попытки
+    const QUIZ_FAIL_LIMIT = 3;              // столько неудачных попыток подряд — и тест урока закрывается
+    const ATTEMPTS_WARN = 5;                // кабинет предупреждает: тест сдан с 5-й попытки и позже
     const EXAM_PASS = 4;                    // контрольная зачтена: решено 4 задачи из 5
     const GRADE_TEXT = { excellent: 'Отлично', good: 'Хорошо' };
     // Контрольные после модулей и итоговый экзамен перед сертификатом (задачи с полем exam в tasks_data.js)
@@ -249,13 +263,18 @@ const PB = (() => {
         const hwOk = solved >= needHw;
         const byTeacher = !!(reply && reply.s === 'ok');
         const mastered = (quizOk && hwOk) || byTeacher;
-        const grade = !mastered ? null : (quizOk && best >= EXCELLENT_PERCENT && solved === hw.length ? 'excellent' : 'good');
+        const passTry = q && q.f ? q.f : 0;   // с какой попытки сдан тест (0 — неизвестно, старые данные)
+        const slowPass = passTry > EXCELLENT_MAX_TRY;
+        const grade = !mastered ? null : (quizOk && best >= EXCELLENT_PERCENT && solved === hw.length && !slowPass ? 'excellent' : 'good');
+        const quizLocked = !quizOk && !!q && (q.s || 0) >= QUIZ_FAIL_LIMIT;
         const todo = [];
         if (!mastered) {
-            if (!quizOk) todo.push(q ? `пересдать тест — сейчас ${best}%, нужно ${PASS_PERCENT}%` : 'сдать тест урока');
+            if (quizLocked) todo.push(`тест закрыт после ${QUIZ_FAIL_LIMIT} неудачных попыток подряд — решите всю домашку или напишите преподавателю`);
+            else if (!quizOk) todo.push(q ? `пересдать тест — сейчас ${best}%, нужно ${PASS_PERCENT}%` : 'сдать тест урока');
             if (!hwOk) todo.push(`решить ещё ${plural(needHw - solved, 'задачу', 'задачи', 'задач')} из домашки`);
         }
-        return { n, quiz: q, best, hw, solved, needHw, quizOk, hwOk, mastered, byTeacher, grade, todo, started: !!q || solved > 0 };
+        return { n, quiz: q, best, hw, solved, needHw, quizOk, hwOk, mastered, byTeacher, grade, todo, started: !!q || solved > 0,
+            passTry, slowPass, quizLocked, fast: q ? q.q || 0 : 0, manyTries: passTry >= ATTEMPTS_WARN || (!quizOk && !!q && (q.a || 0) >= ATTEMPTS_WARN) };
     }
 
     function examResult(k, prog) {
@@ -473,7 +492,7 @@ const PB = (() => {
         const a = readAccess();
         const prog = collectProgress();
         const report = { v: 2, t: 'report', sid: a ? a.sid : '', name: cleanText(name, 60), at: new Date().toISOString(),
-            focus: focus ? clampInt(focus, 1, LESSON_COUNT) : 0, lessons: prog.lessons, solved: prog.solved, mk: prog.mistakes,
+            focus: focus ? clampInt(focus, 1, LESSON_COUNT) : 0, lessons: prog.lessons, solved: prog.solved, mk: prog.mistakes, w: prog.warmup, hn: prog.hints,
             op: lessonList(read('pb_opened', [])), code: {} };
         const list = typeof tasks !== 'undefined' ? tasks : [];
         const ids = list.filter(t => isTaskOpen(t)).map(t => t.id);
@@ -493,12 +512,12 @@ const PB = (() => {
     return {
         LESSON_TITLES, LESSON_COUNT, TASK_POINTS, PASS_PERCENT, TEACHER_TG, FREE_LESSONS, EXAM_LESSONS,
         read, write, encode, decode, fromHash, pageUrl, lessonFile,
-        collectProgress, computePoints, maxPoints, taskDifficulty, clampInt,
+        collectProgress, taskPoints, taskDifficulty, clampInt,
         copy, telegramShare, formatDate, el, cleanText, randomId,
         isTeacherBrowser, cleanAccess, readAccess, saveAccess, receiveAccess,
         isLessonOpen, isExamOpen, isTaskOpen, buildReportLink,
         plural, lessonResult, examResult, projectResult, computeAccess, myState, lockText, hwTasks, examTasks, projectTasks,
         certChecklist, readProfile, profileName, profileLocked, saveProfile,
-        EXAM_PASS, GRADE_TEXT, GATE_EXAM, EXCELLENT_PERCENT, EXAMS, PROJECTS
+        EXAM_PASS, GRADE_TEXT, GATE_EXAM, EXCELLENT_PERCENT, EXAMS, PROJECTS, EXCELLENT_MAX_TRY, QUIZ_FAIL_LIMIT, ATTEMPTS_WARN
     };
 })();

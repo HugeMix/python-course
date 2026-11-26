@@ -9,6 +9,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 1,
         hw: true,
+        hints: ["Текст на экран выводит функция `print()`.","Текст внутри `print()` пишется в кавычках, буквы и знаки — точно как в условии.","Одна строка программы:\nprint(\"Привет, мир!\")"],
         desc: "<p>Напишите программу, которая выводит на экран ровно одну строку: <strong>Привет, мир!</strong></p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">(ничего не вводится)</code></div><div><span>Вывод</span><code class=\"io-box\">Привет, мир!</code></div></div>",
         startCode: "# Напишите программу ниже\n",
         kind: "io",
@@ -20,6 +21,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 1,
         hw: true,
+        hints: ["Каждая строка визитки — отдельный вызов `print()`.","Нужно три `print()`: «Имя: …», «Язык: …», «Уровень: …». Сверьте двоеточия и пробелы с примером.","Три строки программы:\nprint(\"Имя: Питон\")\nprint(\"Язык: Python\")\nprint(\"Уровень: новичок\")"],
         desc: "<p>Выведите визитку из трёх строк — точно как в примере: имя, язык и уровень.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">(ничего не вводится)</code></div><div><span>Вывод</span><code class=\"io-box\">Имя: Питон\nЯзык: Python\nУровень: новичок</code></div></div>",
         startCode: "# Напишите программу ниже\n",
         kind: "io",
@@ -31,6 +33,7 @@ const tasks = [
         difficulty: "medium",
         lesson: 1,
         hw: true,
+        hints: ["Ёлочка — это четыре строки, каждая — свой `print()`.","В строках 1, 3 и 5 звёздочек, а в конце — палочка `|`. Пробелы перед звёздочками не нужны.","Начало программы:\nprint(\"*\")\nprint(\"***\")\n# ещё две строки"],
         desc: "<p>Нарисуйте ёлочку из звёздочек: в первой строке одна <code>*</code>, во второй — три, в третьей — пять, а в последней строке — ствол <code>|</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">(ничего не вводится)</code></div><div><span>Вывод</span><code class=\"io-box\">*\n***\n*****\n|</code></div></div>",
         startCode: "# Напишите программу ниже\n",
         kind: "io",
@@ -42,6 +45,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 2,
         hw: true,
+        hints: ["Имя читаем через `input()` и кладём в переменную.","Соберите фразу из частей: «Привет, » + имя + «!». Удобно f-строкой.","Почти готово:\nname = input()\nprint(f\"Привет, {...}!\")"],
         desc: "<p>Программа получает имя через <code>input()</code>. Выведите <strong>Привет, ИМЯ!</strong></p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">Аня</code></div><div><span>Вывод</span><code class=\"io-box\">Привет, Аня!</code></div></div>",
         startCode: "name = input()\n\n# выведите приветствие\n",
         kind: "io",
@@ -53,6 +57,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 2,
         hw: true,
+        hints: ["`input()` возвращает текст — его нужно превратить в число.","Прочитайте два числа: `a = int(input())` и так же `b`. Потом выведите сумму.","Почти готово:\na = int(input())\nb = int(input())\nprint(...)"],
         desc: "<p>Программа получает два целых числа, каждое на своей строке. Выведите их сумму.</p><p>Не забудьте: <code>input()</code> возвращает текст, его нужно превратить в число через <code>int()</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">2\n3</code></div><div><span>Вывод</span><code class=\"io-box\">5</code></div></div>",
         startCode: "a = int(input())\nb = int(input())\n\n# выведите сумму\n",
         kind: "io",
@@ -64,6 +69,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 2,
         hw: true,
+        hints: ["Возраст нужно превратить в число через `int()`.","Прибавьте 10 и вставьте результат во фразу f-строкой.","Почти готово:\nage = int(input())\nprint(f\"Через 10 лет вам будет {...}\")"],
         desc: "<p>Программа получает возраст человека. Выведите фразу <strong>Через 10 лет вам будет N</strong>, где N — возраст через 10 лет.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">15</code></div><div><span>Вывод</span><code class=\"io-box\">Через 10 лет вам будет 25</code></div></div>",
         startCode: "age = int(input())\n\n# выведите фразу\n",
         kind: "io",
@@ -75,6 +81,7 @@ const tasks = [
         difficulty: "medium",
         lesson: 2,
         hw: true,
+        hints: ["Прочитайте три строки по очереди. Годы превратите в числа.","Возраст в будущем = будущий год − год рождения.","Почти готово:\nname = input()\nborn = int(input())\nyear = int(input())\nprint(f\"{name}, в {year} году вам исполнится {...}\")"],
         desc: "<p>Программа получает три строки: имя, год рождения и год в будущем. Выведите: <strong>ИМЯ, в ГОД году вам исполнится N</strong>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">Аня\n2010\n2030</code></div><div><span>Вывод</span><code class=\"io-box\">Аня, в 2030 году вам исполнится 20</code></div></div>",
         startCode: "name = input()\nborn = int(input())\nyear = int(input())\n\n# выведите фразу\n",
         kind: "io",
@@ -86,6 +93,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 3,
         hw: true,
+        hints: ["Каждому — это деление нацело `//`, остаток — `%`.","Если конфет 17, а детей 5: `17 // 5` = 3, `17 % 5` = 2.","Почти готово:\ncandies = int(input())\nkids = int(input())\nprint(f\"Каждому: {candies // kids}, осталось: {...}\")"],
         desc: "<p>Программа получает два числа: сколько конфет и сколько детей. Конфеты делят поровну, целиком. Выведите <strong>Каждому: X, осталось: Y</strong>.</p><p>Подсказка: <code>//</code> — деление нацело, <code>%</code> — остаток.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">17\n5</code></div><div><span>Вывод</span><code class=\"io-box\">Каждому: 3, осталось: 2</code></div></div>",
         startCode: "candies = int(input())\nkids = int(input())\n\n# выведите результат\n",
         kind: "io",
@@ -97,6 +105,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 3,
         hw: true,
+        hints: ["Последняя цифра числа — это остаток от деления на 10.","Например, `1234 % 10` = 4.","Почти готово:\nn = int(input())\nprint(n % ...)"],
         desc: "<p>Программа получает целое неотрицательное число. Выведите его последнюю цифру.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">1234</code></div><div><span>Вывод</span><code class=\"io-box\">4</code></div></div>",
         startCode: "n = int(input())\n\n# выведите последнюю цифру\n",
         kind: "io",
@@ -108,6 +117,7 @@ const tasks = [
         difficulty: "medium",
         lesson: 3,
         hw: true,
+        hints: ["Часы — сколько раз по 60 минут помещается, минуты — что осталось.","Часы: `m // 60`, минуты: `m % 60`.","Почти готово:\nm = int(input())\nprint(f\"{m // 60} ч {...} мин\")"],
         desc: "<p>Программа получает количество минут. Переведите их в часы и минуты и выведите <strong>X ч Y мин</strong>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">125</code></div><div><span>Вывод</span><code class=\"io-box\">2 ч 5 мин</code></div></div>",
         startCode: "total = int(input())\n\n# выведите часы и минуты\n",
         kind: "io",
@@ -119,6 +129,7 @@ const tasks = [
         difficulty: "hard",
         lesson: 3,
         hw: true,
+        hints: ["Берите монеты по очереди: сначала 10, потом 5, 2 и 1.","Сколько десяток: `s // 10`. Остаток для следующих монет: `s % 10`. Дальше так же с 5 и 2.","Начало программы:\ns = int(input())\nprint(f\"10: {s // 10}\")\ns = s % 10\nprint(f\"5: {s // 5}\")\n# дальше так же для 2 и 1"],
         desc: "<p>Программа получает сумму в рублях. Выдайте её монетами 10, 5, 2 и 1 рубль так, чтобы монет было как можно меньше: сначала берите самые крупные. Выведите четыре строки: сколько монет каждого номинала.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">38</code></div><div><span>Вывод</span><code class=\"io-box\">10: 3\n5: 1\n2: 1\n1: 1</code></div></div>",
         startCode: "amount = int(input())\n\n# посчитайте монеты\n",
         kind: "io",
@@ -131,6 +142,7 @@ const tasks = [
         lesson: 3,
         hw: true,
         review: true,
+        hints: ["Все три числа читайте через `int(input())`.","Стоимость — `price * grams // 1000` (деление нацело отбросит копейки). Сдача — деньги минус стоимость.","Почти готово:\nprice = int(input())\ngrams = int(input())\nmoney = int(input())\ncost = price * grams // 1000\nprint(f\"Стоимость: {cost}\")\nprint(f\"Сдача: {...}\")"],
         desc: "<p><strong>Повторение:</strong> ввод данных, переменные и арифметика.</p><p>Программа получает три целых числа, каждое на своей строке: цену за килограмм, вес покупки в граммах и сколько денег дал покупатель. Стоимость считается в целых рублях, копейки отбрасываются: цена × граммы, нацело делённое на 1000. Выведите две строки: <code>Стоимость: C</code> и <code>Сдача: S</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">120\n1500\n500</code></div><div><span>Вывод</span><code class=\"io-box\">Стоимость: 180\nСдача: 320</code></div></div>",
         startCode: "# Напишите программу ниже\n",
         kind: "io",
@@ -142,6 +154,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 4,
         hw: true,
+        hints: ["Нужны три ветки: `if`, `elif` и `else`.","Сравните число с нулём: `> 0` — положительное, `< 0` — отрицательное, иначе ноль.","Почти готово:\nn = int(input())\nif n > 0:\n    print(\"положительное\")\nelif ...:\n    print(\"отрицательное\")\nelse:\n    print(\"ноль\")"],
         desc: "<p>Программа получает целое число. Выведите <strong>положительное</strong>, <strong>отрицательное</strong> или <strong>ноль</strong>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">5</code></div><div><span>Вывод</span><code class=\"io-box\">положительное</code></div></div>",
         startCode: "n = int(input())\n\n# напишите условие\n",
         kind: "io",
@@ -153,6 +166,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 4,
         hw: true,
+        hints: ["Заведите переменную «наименьшее» и сравнивайте с ней остальные числа.","Пусть сначала `m = a`. Если `b < m`, то `m = b`. То же для `c`.","Почти готово:\na = int(input())\nb = int(input())\nc = int(input())\nm = a\nif b < m:\n    m = b\nif ...:\n    m = c\nprint(m)"],
         desc: "<p>Программа получает три целых числа, каждое на своей строке. Выведите наименьшее. Функцию <code>min()</code> не используйте — только условия.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">5\n2\n8</code></div><div><span>Вывод</span><code class=\"io-box\">2</code></div></div>",
         startCode: "a = int(input())\nb = int(input())\nc = int(input())\n\n# найдите наименьшее\n",
         kind: "io",
@@ -164,6 +178,7 @@ const tasks = [
         difficulty: "medium",
         lesson: 4,
         hw: true,
+        hints: ["Делимость проверяют остатком: `year % 4 == 0`.","Високосный, если делится на 400, или делится на 4, но не делится на 100. Помогут `and` и `or`.","Почти готово:\nyear = int(input())\nif year % 400 == 0 or (year % 4 == 0 and year % 100 != 0):\n    print(\"високосный\")\nelse:\n    print(...)"],
         desc: "<p>Программа получает год. Выведите <strong>високосный</strong> или <strong>обычный</strong>.</p><p>Правило: год високосный, если делится на 4, но годы, которые делятся на 100, високосные только если делятся ещё и на 400.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">2024</code></div><div><span>Вывод</span><code class=\"io-box\">високосный</code></div></div>",
         startCode: "year = int(input())\n\n# напишите условие\n",
         kind: "io",
@@ -175,6 +190,7 @@ const tasks = [
         difficulty: "hard",
         lesson: 4,
         hw: true,
+        hints: ["Сначала найдите цену по возрасту, потом прибавьте 50 в выходной.","Цепочка `if / elif`: до 7 — 0, до 17 включительно — 150, от 65 — 100, иначе 300. Наценку прибавляйте, только если цена не 0.","Почти готово:\nage = int(input())\nday = input()\nif age < 7:\n    price = 0\nelif age <= 17:\n    price = 150\nelif age >= 65:\n    price = 100\nelse:\n    price = 300\nif day == \"да\" and price > 0:\n    price += 50\nprint(price)"],
         desc: "<p>Программа получает возраст и ответ <code>да</code> или <code>нет</code> — выходной ли сегодня. Выведите цену билета:</p><ul><li>до 7 лет — 0;</li><li>от 7 до 17 лет включительно — 150;</li><li>от 65 лет — 100;</li><li>остальным — 300.</li></ul><p>В выходной к платным билетам добавляется 50. Бесплатные остаются бесплатными.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">30\nда</code></div><div><span>Вывод</span><code class=\"io-box\">350</code></div></div>",
         startCode: "age = int(input())\nweekend = input()\n\n# посчитайте цену\n",
         kind: "io",
@@ -187,6 +203,7 @@ const tasks = [
         lesson: 4,
         hw: true,
         review: true,
+        hints: ["Сначала найдите процент скидки по сумме, потом добавьте 3% за карту.","Цепочка `if / elif / else` с `>=` (ровно 5000 — уже 10%). Скидка в рублях: `total * p // 100`.","Почти готово:\ntotal = int(input())\ncard = input()\nif total >= 5000:\n    p = 10\nelif total >= 2000:\n    p = 5\nelse:\n    p = 0\nif card == \"да\":\n    p += 3\nprint(f\"Скидка: {p}%\")\nprint(f\"К оплате: {...}\")"],
         desc: "<p><strong>Повторение:</strong> условия, арифметика и ввод.</p><p>Программа получает сумму покупки (целое число) и ответ <code>да</code> или <code>нет</code> — есть ли у покупателя карта магазина. Скидка: от 5000 — 10%, от 2000 — 5%, меньше — 0%. С картой к скидке добавляется ещё 3%.</p><p>Выведите две строки: <code>Скидка: P%</code> и <code>К оплате: X</code>, где X — сумма минус скидка. Скидку в рублях считайте нацело: <code>сумма * P // 100</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">6000\nнет</code></div><div><span>Вывод</span><code class=\"io-box\">Скидка: 10%\nК оплате: 5400</code></div></div>",
         startCode: "# Напишите программу ниже\n",
         kind: "io",
@@ -198,6 +215,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 5,
         hw: true,
+        hints: ["Нужен цикл, который идёт от N вниз до 1.","`range(n, 0, -1)` даёт числа n, n−1, …, 1. После цикла выведите «Старт!».","Почти готово:\nn = int(input())\nfor i in range(n, 0, -1):\n    print(i)\nprint(...)"],
         desc: "<p>Программа получает число N. Выведите числа от N до 1, каждое на своей строке, а затем слово <strong>Старт!</strong></p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">3</code></div><div><span>Вывод</span><code class=\"io-box\">3\n2\n1\nСтарт!</code></div></div>",
         startCode: "n = int(input())\n\n# напишите цикл\n",
         kind: "io",
@@ -209,6 +227,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 5,
         hw: true,
+        hints: ["Заведите переменную-сумму и прибавляйте к ней числа в цикле.","Начните с `total = 0`. Цикл `for i in range(1, n + 1)` и внутри `total += i`.","Почти готово:\nn = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total += ...\nprint(total)"],
         desc: "<p>Программа получает число N. Сложите все числа от 1 до N включительно и выведите сумму. Используйте цикл.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">5</code></div><div><span>Вывод</span><code class=\"io-box\">15</code></div></div>",
         startCode: "n = int(input())\ntotal = 0\n\n# напишите цикл\n",
         kind: "io",
@@ -220,6 +239,7 @@ const tasks = [
         difficulty: "medium",
         lesson: 5,
         hw: true,
+        hints: ["Цикл по i от 1 до 10, в каждом шаге — одна строка таблицы.","`range(1, 11)` даёт числа от 1 до 10. Строку соберите f-строкой.","Почти готово:\nn = int(input())\nfor i in range(1, 11):\n    print(f\"{n} x {i} = {...}\")"],
         desc: "<p>Программа получает число N. Выведите таблицу умножения N на числа от 1 до 10 в формате <strong>N x i = результат</strong>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">7</code></div><div><span>Вывод</span><code class=\"io-box\">7 x 1 = 7\n7 x 2 = 14\n7 x 3 = 21\n7 x 4 = 28\n7 x 5 = 35\n7 x 6 = 42\n7 x 7 = 49\n7 x 8 = 56\n7 x 9 = 63\n7 x 10 = 70</code></div></div>",
         startCode: "n = int(input())\n\n# напишите цикл\n",
         kind: "io",
@@ -231,6 +251,7 @@ const tasks = [
         difficulty: "hard",
         lesson: 5,
         hw: true,
+        hints: ["Отрицательное число сделайте положительным через `abs()`.","В цикле `while n > 0` отрезайте цифру `n = n // 10` и считайте шаги. У нуля одна цифра.","Почти готово:\nn = abs(int(input()))\ncount = 0\nwhile n > 0:\n    n = n // 10\n    count += 1\nif count == 0:\n    count = 1\nprint(count)"],
         desc: "<p>Программа получает целое число (может быть отрицательным). Выведите, сколько в нём цифр. Решите задачу циклом <code>while</code>: отрезайте последнюю цифру через <code>// 10</code>, пока число не станет нулём.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">12345</code></div><div><span>Вывод</span><code class=\"io-box\">5</code></div></div>",
         startCode: "n = int(input())\n\n# посчитайте цифры циклом while\n",
         kind: "io",
@@ -243,6 +264,7 @@ const tasks = [
         lesson: 5,
         hw: true,
         review: true,
+        hints: ["Переберите числа от 1 до N и проверяйте остаток `i % k`.","Подходящие числа печатайте `print(i, end=\" \")` и считайте. Если не нашлось ни одного — «Нет».","Почти готово:\nn = int(input())\nk = int(input())\ncount = 0\nfor i in range(1, n + 1):\n    if i % k == 0:\n        print(i, end=\" \")\n        count += 1\nif count == 0:\n    print(\"Нет\", end=\"\")\nprint()\nprint(f\"Всего: {count}\")"],
         desc: "<p><strong>Повторение:</strong> циклы, условия и остаток от деления.</p><p>Программа получает два целых числа N и K. Выведите в одной строке через пробел все числа от 1 до N, которые делятся на K без остатка, а на следующей строке — <code>Всего: C</code>. Если таких чисел нет, вместо первой строки выведите <code>Нет</code>.</p><p>Подсказка: <code>print(i, end=\" \")</code> печатает без перехода на новую строку.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">20\n5</code></div><div><span>Вывод</span><code class=\"io-box\">5 10 15 20\nВсего: 4</code></div></div>",
         startCode: "# Напишите программу ниже\n",
         kind: "io",
@@ -254,6 +276,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 6,
         hw: true,
+        hints: ["Сначала прочитайте N, потом в цикле N чисел и добавляйте их в список.","Пустой список `nums = []`, в цикле `nums.append(int(input()))`. Самое большое — `max(nums)`.","Почти готово:\nn = int(input())\nnums = []\nfor i in range(n):\n    nums.append(int(input()))\nprint(...)"],
         desc: "<p>Программа получает число N, а потом N целых чисел — каждое на своей строке. Сложите их в список и выведите самое большое.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">4\n3\n9\n-2\n5</code></div><div><span>Вывод</span><code class=\"io-box\">9</code></div></div>",
         startCode: "n = int(input())\nnumbers = []\nfor i in range(n):\n    numbers.append(int(input()))\n\n# выведите самое большое\n",
         kind: "io",
@@ -265,6 +288,7 @@ const tasks = [
         difficulty: "medium",
         lesson: 6,
         hw: true,
+        hints: ["Сложите оценки в список, среднее = сумма / количество.","`sum(nums) / len(nums)`, а потом `round(…, 1)`.","Почти готово:\nn = int(input())\nnums = []\nfor i in range(n):\n    nums.append(int(input()))\nprint(f\"Средний балл: {round(..., 1)}\")"],
         desc: "<p>Программа получает число N, а потом N оценок. Выведите <strong>Средний балл: X</strong>, где X — среднее, округлённое до 1 знака после запятой: <code>round(x, 1)</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">3\n5\n4\n4</code></div><div><span>Вывод</span><code class=\"io-box\">Средний балл: 4.3</code></div></div>",
         startCode: "n = int(input())\ngrades = []\n\n# прочитайте оценки и посчитайте среднее\n",
         kind: "io",
@@ -276,6 +300,7 @@ const tasks = [
         difficulty: "medium",
         lesson: 6,
         hw: true,
+        hints: ["Сложите слова в список, а потом пройдите его с конца.","Список задом наперёд — срез `words[::-1]`.","Почти готово:\nn = int(input())\nwords = []\nfor i in range(n):\n    words.append(input())\nfor w in words[::-1]:\n    print(...)"],
         desc: "<p>Программа получает число N, а потом N слов. Выведите слова в обратном порядке, каждое на своей строке.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">3\nраз\nдва\nтри</code></div><div><span>Вывод</span><code class=\"io-box\">три\nдва\nраз</code></div></div>",
         startCode: "n = int(input())\nwords = []\n\n# прочитайте слова и выведите их задом наперёд\n",
         kind: "io",
@@ -287,6 +312,7 @@ const tasks = [
         difficulty: "hard",
         lesson: 6,
         hw: true,
+        hints: ["Сначала нужны все числа: среднее считается по всему списку.","Посчитайте `avg = sum(nums) / len(nums)`, потом второй цикл выводит числа больше avg. Если ни одного — «Нет».","Почти готово:\nn = int(input())\nnums = []\nfor i in range(n):\n    nums.append(int(input()))\navg = sum(nums) / len(nums)\nfound = False\nfor x in nums:\n    if x > avg:\n        print(x)\n        found = True\nif not found:\n    print(...)"],
         desc: "<p>Программа получает число N, а потом N целых чисел. Выведите (каждое на своей строке, в исходном порядке) те числа, которые <strong>больше среднего</strong>. Если таких нет — выведите <strong>Нет</strong>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">5\n1\n2\n3\n4\n5</code></div><div><span>Вывод</span><code class=\"io-box\">4\n5</code></div></div>",
         startCode: "n = int(input())\nnumbers = []\n\n# напишите решение здесь\n",
         kind: "io",
@@ -299,6 +325,7 @@ const tasks = [
         lesson: 6,
         hw: true,
         review: true,
+        hints: ["`input().split()` даст список строк — каждую превратите в `int`.","Мин и макс — `min()` и `max()`. Морозные дни считайте циклом с условием `t < 0`.","Почти готово:\ntemps = []\nfor part in input().split():\n    temps.append(int(part))\nfrost = 0\nfor t in temps:\n    if t < 0:\n        frost += 1\nprint(f\"Мин: {min(temps)}\")\n# дальше — Макс, Морозных дней и Средняя"],
         desc: "<p><strong>Повторение:</strong> списки, циклы, условия и ввод.</p><p>Программа получает одной строкой температуры за несколько дней через пробел (целые числа). Выведите четыре строки:</p><ul><li><code>Мин: A</code> — самая низкая температура;</li><li><code>Макс: B</code> — самая высокая;</li><li><code>Морозных дней: C</code> — сколько дней было ниже нуля;</li><li><code>Средняя: X</code> — средняя температура, округлённая до 1 знака: <code>round(x, 1)</code>.</li></ul><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">3 -2 0 5 -1 4 2</code></div><div><span>Вывод</span><code class=\"io-box\">Мин: -2\nМакс: 5\nМорозных дней: 2\nСредняя: 1.6</code></div></div>",
         startCode: "# Напишите программу ниже\n",
         kind: "io",
@@ -313,6 +340,7 @@ const tasks = [
         project: 1,
         step: 1,
         projectTitle: "Проект 1: Угадай число",
+        hints: ["Прочитайте два числа и сравните их через `if / elif / else`.","Первой проверьте границы: `guess < 1 or guess > 100`. Потом — больше, меньше, равно.","Почти готово:\nsecret = int(input())\nguess = int(input())\nif guess < 1 or guess > 100:\n    print(\"Число должно быть от 1 до 100\")\nelif secret > guess:\n    print(\"больше\")\nelif ...:\n    print(\"меньше\")\nelse:\n    print(\"Угадано!\")"],
         desc: "<p>Соберём игру «Угадай число» за три шага. Шаг 1 — подсказка игроку.</p><p>Программа получает два целых числа, каждое на своей строке: загаданное число и попытку игрока. Выведите одно слово:</p><ul><li><code>больше</code> — если загаданное число больше попытки;</li><li><code>меньше</code> — если загаданное число меньше попытки;</li><li><code>Угадано!</code> — если числа совпали.</li></ul><p>В игре загадывают числа от 1 до 100. Если попытка меньше 1 или больше 100, вместо подсказки выведите <code>Число должно быть от 1 до 100</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">42\n50</code></div><div><span>Вывод</span><code class=\"io-box\">меньше</code></div></div>",
         startCode: "# Напишите программу ниже\n",
         kind: "io",
@@ -327,6 +355,7 @@ const tasks = [
         project: 1,
         step: 2,
         projectTitle: "Проект 1: Угадай число",
+        hints: ["Игра идёт, пока число не угадано: подойдёт `while True` и `break`.","Счётчик попыток увеличивайте сразу после чтения догадки — тогда номер попытки верный.","Почти готово:\nsecret = int(input())\ncount = 0\nwhile True:\n    guess = int(input())\n    count += 1\n    if guess < secret:\n        print(f\"Попытка {count}: больше\")\n    elif guess > secret:\n        print(f\"Попытка {count}: меньше\")\n    else:\n        print(f\"Попытка {count}: угадано!\")\n        break\nprint(...)"],
         desc: "<p>Шаг 2 — игра продолжается, пока число не угадано, и считает попытки.</p><p>Первая строка — загаданное число. Дальше идут попытки игрока, по одной на строке. На каждую попытку выведите её номер и подсказку: <code>Попытка K: больше</code> или <code>Попытка K: меньше</code>. Когда число угадано, выведите <code>Попытка K: угадано!</code>, а последней строкой — <code>Победа! Попыток: K</code>.</p><p>Подсказка: используйте <code>while True</code>, счётчик попыток и <code>break</code>, когда число угадано.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">42\n50\n25\n42</code></div><div><span>Вывод</span><code class=\"io-box\">Попытка 1: меньше\nПопытка 2: больше\nПопытка 3: угадано!\nПобеда! Попыток: 3</code></div></div>",
         startCode: "# Напишите программу ниже\n",
         kind: "io",
@@ -341,6 +370,7 @@ const tasks = [
         project: 1,
         step: 3,
         projectTitle: "Проект 1: Угадай число",
+        hints: ["Догадки складывайте в список: его длина — число сделанных попыток.","Цикл `while len(guesses) < limit`. Победу запомните в переменной `won = True` и выйдите `break`. Итог печатайте после цикла.","Почти готово:\nsecret = int(input())\nlimit = int(input())\nguesses = []\nwon = False\nwhile len(guesses) < limit:\n    guess = int(input())\n    guesses.append(guess)\n    if guess == secret:\n        won = True\n        break\n    print(\"больше\" if guess < secret else \"меньше\")\n# дальше: строка о победе или проигрыше и «Ваши догадки: …»"],
         desc: "<p>Шаг 3 — у игрока ограниченное число попыток, а в конце игра показывает все его догадки.</p><p>Первая строка — загаданное число, вторая — сколько попыток разрешено (N). Дальше идут попытки игрока, по одной на строке. На каждую неверную попытку выведите <code>больше</code> или <code>меньше</code>. Игра заканчивается:</p><ul><li>победой — выведите <code>Угадано! Попыток: K</code>;</li><li>или когда N попыток закончились — выведите <code>Попытки кончились. Было загадано: X</code>.</li></ul><p>Последней строкой в любом случае выведите все догадки по порядку через запятую и пробел: <code>Ваши догадки: 50, 25, 42</code>.</p><p>Подсказка: складывайте догадки в список через <code>append()</code>. Число попыток — это длина списка.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Ввод</span><code class=\"io-box\">42\n5\n50\n25\n42</code></div><div><span>Вывод</span><code class=\"io-box\">меньше\nбольше\nУгадано! Попыток: 3\nВаши догадки: 50, 25, 42</code></div></div>",
         startCode: "# Напишите программу ниже\n",
         kind: "io",
@@ -412,6 +442,7 @@ const tasks = [
         difficulty: "easy",
         lesson: 7,
         hw: true,
+        hints: ["Функция должна вернуть результат через `return`, а не напечатать его.","Квадрат — это `n * n` или `n ** 2`.","Почти готово:\ndef square(n):\n    return ..."],
         desc: "<p>Напишите функцию <code>square(n)</code>, которая возвращает квадрат числа <code>n</code> — число, умноженное само на себя. Должно работать и с дробными числами.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">square(4)\nsquare(-3)\nsquare(1.5)</code></div><div><span>Результат</span><code class=\"io-box\">16\n9\n2.25</code></div></div>",
         startCode: "def square(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -436,6 +467,7 @@ except Exception as e:
         difficulty: "easy",
         lesson: 7,
         hw: true,
+        hints: ["Формула уже есть в условии — перенесите её в `return`.","Внутри функции: `c * 9 / 5 + 32`.","Почти готово:\ndef to_fahrenheit(c):\n    return ..."],
         desc: "<p>Напишите функцию <code>to_fahrenheit(c)</code>, которая переводит температуру из градусов Цельсия в градусы Фаренгейта по формуле <code>F = C * 9 / 5 + 32</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">to_fahrenheit(0)\nto_fahrenheit(100)\nto_fahrenheit(-40)</code></div><div><span>Результат</span><code class=\"io-box\">32.0\n212.0\n-40.0</code></div></div>",
         startCode: "def to_fahrenheit(c):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -460,6 +492,7 @@ except Exception as e:
         difficulty: "medium",
         lesson: 7,
         hw: true,
+        hints: ["Умножайте числа от 1 до n по очереди.","Начните с `result = 1` (не с 0!) и в цикле `for i in range(1, n + 1)` умножайте. При n = 0 цикл не выполнится — и вернётся 1.","Почти готово:\ndef factorial(n):\n    result = 1\n    for i in range(1, n + 1):\n        result *= ...\n    return result"],
         desc: "<p>Напишите функцию <code>factorial(n)</code>, которая возвращает факториал числа — произведение всех чисел от 1 до <code>n</code>. Факториал нуля по определению равен 1.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">factorial(5)\nfactorial(1)\nfactorial(0)</code></div><div><span>Результат</span><code class=\"io-box\">120\n1\n1</code></div></div>",
         startCode: "def factorial(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -484,6 +517,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 7,
         hw: true,
+        hints: ["Числа меньше 2 сразу не простые.","Проверьте делители от 2 до n − 1: если `n % d == 0` — число не простое, сразу `return False`.","Почти готово:\ndef is_prime(n):\n    if n < 2:\n        return False\n    for d in range(2, n):\n        if n % d == 0:\n            return ...\n    return True"],
         desc: "<p>Напишите функцию <code>is_prime(n)</code>, которая возвращает <code>True</code>, если число простое (делится без остатка только на 1 и на само себя), и <code>False</code>, если нет. Числа меньше 2 простыми не считаются.</p><p>91 = 7 × 13, поэтому <code>is_prime(91)</code> — <code>False</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">is_prime(7)\nis_prime(91)\nis_prime(1)</code></div><div><span>Результат</span><code class=\"io-box\">True\nFalse\nFalse</code></div></div>",
         startCode: "def is_prime(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -512,6 +546,7 @@ except Exception as e:
         lesson: 7,
         hw: true,
         review: true,
+        hints: ["Соберите подходящие числа в новый пустой список.","Условие «включительно»: `low <= n <= high`. Вернуть нужно `sorted(...)` — он не меняет исходный список.","Почти готово:\ndef filter_range(nums, low, high):\n    result = []\n    for n in nums:\n        if low <= n <= high:\n            result.append(n)\n    return ..."],
         desc: "<p><strong>Повторение:</strong> функции, списки, циклы и условия.</p><p>Напишите функцию <code>filter_range(nums, low, high)</code>. Она возвращает <strong>новый</strong> список из тех чисел <code>nums</code>, которые лежат от <code>low</code> до <code>high</code> включительно, отсортированный по возрастанию. Исходный список менять нельзя.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">filter_range([5, 1, 9, 3, 7], 3, 7)\nfilter_range([1, 2], 5, 10)</code></div><div><span>Результат</span><code class=\"io-box\">[3, 5, 7]\n[]</code></div></div>",
         startCode: "def filter_range(nums, low, high):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1104,6 +1139,7 @@ except Exception as e:
         difficulty: "easy",
         lesson: 8,
         hw: true,
+        hints: ["У словаря есть метод `get()`.","`menu.get(item, 0)` вернёт цену или 0, если блюда нет.","Почти готово:\ndef price(menu, item):\n    return menu.get(...)"],
         desc: "<p>Напишите функцию <code>price(menu, item)</code>. <code>menu</code> — словарь «блюдо → цена». Верните цену блюда <code>item</code>, а если такого блюда нет — <code>0</code>.</p><p>Подсказка: метод <code>get()</code> умеет возвращать значение по умолчанию.</p>",
         startCode: "def price(menu, item):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1128,6 +1164,7 @@ except Exception as e:
         difficulty: "medium",
         lesson: 8,
         hw: true,
+        hints: ["Пройдите по словарю и запоминайте самого старшего.","Цикл `for name, age in people.items()`. Если age больше лучшего — запомните name.","Почти готово:\ndef get_oldest(people):\n    best_name = None\n    best_age = -1\n    for name, age in people.items():\n        if age > best_age:\n            best_name = name\n            best_age = ...\n    return best_name"],
         desc: "<p>Напишите функцию <code>get_oldest(people)</code>. Она получает словарь, где ключ — имя, а значение — возраст. Верните имя самого старшего человека.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">get_oldest({&#x27;Иван&#x27;: 20, &#x27;Анна&#x27;: 25})\nget_oldest({&#x27;Борис&#x27;: 50, &#x27;Глеб&#x27;: 15})</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;Анна&#x27;\n&#x27;Борис&#x27;</code></div></div>",
         startCode: "def get_oldest(people):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1150,6 +1187,7 @@ except Exception as e:
         difficulty: "medium",
         lesson: 8,
         hw: true,
+        hints: ["Создайте пустой словарь и заполните его в цикле.","В цикле `for k, v in d.items()` положите `new[v] = k`.","Почти готово:\ndef invert(d):\n    new = {}\n    for k, v in d.items():\n        new[...] = ...\n    return new"],
         desc: "<p>Напишите функцию <code>invert(d)</code>, которая возвращает новый словарь, где ключи и значения поменялись местами. Все значения в исходном словаре разные.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">invert({&#x27;a&#x27;: 1, &#x27;b&#x27;: 2})\ninvert({&#x27;кот&#x27;: &#x27;cat&#x27;})</code></div><div><span>Результат</span><code class=\"io-box\">{1: &#x27;a&#x27;, 2: &#x27;b&#x27;}\n{&#x27;cat&#x27;: &#x27;кот&#x27;}</code></div></div>",
         startCode: "def invert(d):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1173,6 +1211,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 8,
         hw: true,
+        hints: ["Разрежьте текст на слова через `split()`, буквы сделайте маленькими через `lower()`.","Счётчик: `counts[w] = counts.get(w, 0) + 1`.","Почти готово:\ndef word_counts(text):\n    counts = {}\n    for w in text.lower().split():\n        counts[w] = counts.get(w, 0) + ...\n    return counts"],
         desc: "<p>Напишите функцию <code>word_counts(text)</code>, которая возвращает словарь: ключ — слово в нижнем регистре, значение — сколько раз оно встретилось. Знаков препинания в тексте нет.</p><p>Подсказка: <code>split()</code> разрезает строку на слова, а <code>lower()</code> делает буквы маленькими.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">word_counts(&#x27;кот ест кот спит&#x27;)\nword_counts(&#x27;Раз раз два&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">{&#x27;кот&#x27;: 2, &#x27;ест&#x27;: 1, &#x27;спит&#x27;: 1}\n{&#x27;раз&#x27;: 2, &#x27;два&#x27;: 1}</code></div></div>",
         startCode: "def word_counts(text):\n    # Подсказка: .split() разбивает на слова\n    pass\n",
         testCode: `
@@ -1199,6 +1238,7 @@ except Exception as e:
         lesson: 8,
         hw: true,
         review: true,
+        hints: ["Проверить, есть ли товар в прайсе, — `item in prices`.","Сумму копите в переменной, отсутствующие товары — во множестве `set()`, а в ответ — `sorted(множество)`.","Почти готово:\ndef cart_total(prices, cart):\n    total = 0\n    missing = set()\n    for item in cart:\n        if item in prices:\n            total += prices[item]\n        else:\n            missing.add(item)\n    return (total, ...)"],
         desc: "<p><strong>Повторение:</strong> словари и множества вместе со списками, циклами и функциями.</p><p>Напишите функцию <code>cart_total(prices, cart)</code>. <code>prices</code> — словарь «товар → цена», <code>cart</code> — список товаров в корзине (товар может повторяться). Верните кортеж из двух значений: сумму за товары, которые есть в прайсе, и отсортированный список товаров, которых в прайсе нет (каждый — один раз).</p><p>Подсказка: повторы удобно убирать множеством <code>set()</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">prices = {\"хлеб\": 45, \"молоко\": 89}\ncart_total(prices, [\"хлеб\", \"молоко\", \"хлеб\", \"икра\", \"икра\"])</code></div><div><span>Результат</span><code class=\"io-box\">(179, [\"икра\"])</code></div></div>",
         startCode: "def cart_total(prices, cart):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1224,6 +1264,7 @@ except Exception as e:
         difficulty: "easy",
         lesson: 9,
         hw: true,
+        hints: ["Заглавные буквы делает метод `upper()`.","К результату прибавьте строку «!».","Почти готово:\ndef shout(text):\n    return text.upper() + ..."],
         desc: "<p>Напишите функцию <code>shout(text)</code>, которая возвращает текст заглавными буквами с восклицательным знаком в конце.</p><p>Пример: <code>shout(\"привет\")</code> → <code>\"ПРИВЕТ!\"</code></p>",
         startCode: "def shout(text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1247,6 +1288,7 @@ except Exception as e:
         difficulty: "medium",
         lesson: 9,
         hw: true,
+        hints: ["Строку можно перевернуть срезом.","Срез с шагом −1: `text[::-1]`.","Почти готово:\ndef reverse_string(text):\n    return ..."],
         desc: "<p>Напишите функцию <code>reverse_string(text)</code>, которая возвращает строку задом наперёд.</p><p>Подсказка: подойдёт срез или цикл.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">reverse_string(&#x27;собака&#x27;)\nreverse_string(&#x27;Python&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;акабос&#x27;\n&#x27;nohtyP&#x27;</code></div></div>",
         startCode: "def reverse_string(text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1270,6 +1312,7 @@ except Exception as e:
         difficulty: "medium",
         lesson: 9,
         hw: true,
+        hints: ["Сначала уберите пробелы и сделайте буквы маленькими.","`clean = text.replace(\" \", \"\").lower()`, потом сравните `clean` с `clean[::-1]`.","Почти готово:\ndef is_palindrome(text):\n    clean = text.replace(\" \", \"\").lower()\n    return clean == ..."],
         desc: "<p>Напишите функцию <code>is_palindrome(text)</code>, которая возвращает <code>True</code>, если текст читается одинаково слева направо и справа налево — без учёта пробелов и регистра, иначе <code>False</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">is_palindrome(&#x27;казак&#x27;)\nis_palindrome(&#x27;А роза упала на лапу Азора&#x27;)\nis_palindrome(&#x27;собака&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">True\nTrue\nFalse</code></div></div>",
         startCode: "def is_palindrome(text):\n    # Очистите текст от пробелов и приведите к одному регистру\n    pass\n",
         testCode: `
@@ -1293,6 +1336,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 9,
         hw: true,
+        hints: ["Обрабатывайте строку по одной букве; не латинские символы оставляйте как есть.","Номер буквы от 0 до 25: `ord(ch) - ord(\"a\")`. Сдвиг по кругу: `(номер + shift) % 26`. Для заглавных база — `ord(\"A\")`.","Почти готово:\ndef caesar(text, shift):\n    result = \"\"\n    for ch in text:\n        if \"a\" <= ch <= \"z\":\n            result += chr((ord(ch) - ord(\"a\") + shift) % 26 + ord(\"a\"))\n        elif \"A\" <= ch <= \"Z\":\n            result += ...\n        else:\n            result += ch\n    return result"],
         desc: "<p>Напишите функцию <code>caesar(text, shift)</code>, которая шифрует текст шифром Цезаря: каждая латинская буква сдвигается по алфавиту на <code>shift</code> позиций (после <code>z</code> снова идёт <code>a</code>). Заглавные буквы остаются заглавными, остальные символы не меняются. Отрицательный сдвиг расшифровывает текст.</p><p>Подсказка: функции <code>ord()</code> и <code>chr()</code> превращают букву в номер и обратно.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">caesar(&#x27;abc&#x27;, 1)\ncaesar(&#x27;xyz&#x27;, 3)\ncaesar(&#x27;Hello, World!&#x27;, 3)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;bcd&#x27;\n&#x27;abc&#x27;\n&#x27;Khoor, Zruog!&#x27;</code></div></div>",
         startCode: "def caesar(text, shift):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1319,6 +1363,7 @@ except Exception as e:
         lesson: 9,
         hw: true,
         review: true,
+        hints: ["`split()` без аргументов разрежет имя на слова и уберёт лишние пробелы.","Первое слово — фамилия: `capitalize()`. Из остальных берите первую букву `[0].upper()` и точку.","Почти готово:\ndef initials(full_name):\n    parts = full_name.split()\n    result = parts[0].capitalize()\n    for p in parts[1:]:\n        result += \" \" + ... + \".\"\n    return result"],
         desc: "<p><strong>Повторение:</strong> строки вместе со списками, циклами и функциями.</p><p>Напишите функцию <code>initials(full_name)</code>. Она получает фамилию, имя и, может быть, отчество — в любом регистре и с лишними пробелами. Верните фамилию с большой буквы и инициалы: <code>Иванов И. П.</code>. Если отчества нет — <code>Петрова А.</code>, если есть только фамилия — просто фамилию.</p><p>Подсказки: <code>split()</code> без аргументов сам убирает лишние пробелы, <code>capitalize()</code> делает первую букву большой, а остальные маленькими.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">initials(\"иванов иван петрович\")\ninitials(\"  ПЕТРОВА   анна \")\ninitials(\"пушкин\")</code></div><div><span>Результат</span><code class=\"io-box\">\"Иванов И. П.\"\n\"Петрова А.\"\n\"Пушкин\"</code></div></div>",
         startCode: "def initials(full_name):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1463,6 +1508,7 @@ except Exception as e:
         difficulty: "easy",
         lesson: 10,
         hw: true,
+        hints: ["Нужно два шага: открыть файл на запись, потом на чтение.","`with open(filename, \"w\", encoding=\"utf-8\") as f: f.write(text)`, затем с режимом «r» и `f.read()`.","Почти готово:\ndef write_and_read(filename, text):\n    with open(filename, \"w\", encoding=\"utf-8\") as f:\n        f.write(text)\n    with open(filename, encoding=\"utf-8\") as f:\n        return ..."],
         desc: "<p>Напишите функцию <code>write_and_read(filename, text)</code>: запишите <code>text</code> в файл <code>filename</code>, затем прочитайте файл и верните его содержимое.</p><p>Используйте <code>with open(...)</code> и <code>encoding=\"utf-8\"</code>. Файл создаётся во временной памяти браузера.</p>",
         startCode: "def write_and_read(filename, text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1485,6 +1531,7 @@ except Exception as e:
         difficulty: "medium",
         lesson: 10,
         hw: true,
+        hints: ["Прочитайте весь файл в строку через `read()`.","`split()` без аргументов режет и по пробелам, и по переводам строк. Нужна длина списка.","Почти готово:\ndef count_words_in_file(filename):\n    with open(filename, encoding=\"utf-8\") as f:\n        return len(f.read()....)"],
         desc: "<p>Напишите функцию <code>count_words_in_file(filename)</code>, которая возвращает количество слов в текстовом файле. Слова разделены пробелами и переносами строк.</p>",
         startCode: "def count_words_in_file(filename):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1514,6 +1561,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 10,
         hw: true,
+        hints: ["Режим «w» сам перезапишет старый файл.","Запишите каждую строку с `\"\\n\"` на конце, потом прочитайте файл и посчитайте строки.","Почти готово:\ndef save_and_count(filename, lines):\n    with open(filename, \"w\", encoding=\"utf-8\") as f:\n        for line in lines:\n            f.write(line + \"\\n\")\n    with open(filename, encoding=\"utf-8\") as f:\n        return len(f.readlines())"],
         desc: "<p>Напишите функцию <code>save_and_count(filename, lines)</code>. Она записывает строки из списка <code>lines</code> в файл <code>filename</code> — каждую с новой строки, а если файл уже был, перезаписывает его. Затем открывает файл на чтение и возвращает, сколько в нём строк.</p><p>Используйте <code>with open(...)</code> и <code>encoding=&quot;utf-8&quot;</code>. Файл создаётся во временной памяти браузера.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">save_and_count(&#x27;notes.txt&#x27;, [&#x27;купить хлеб&#x27;, &#x27;позвонить маме&#x27;])</code></div><div><span>Результат</span><code class=\"io-box\">2</code></div></div>",
         startCode: "def save_and_count(filename, lines):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1540,6 +1588,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 10,
         hw: true,
+        hints: ["Читайте файл построчно и пропускайте пустые строки.","Собирайте числа в список: `if line.strip(): nums.append(int(line))`. Пустой список — `None`.","Почти готово:\ndef max_in_file(filename):\n    nums = []\n    with open(filename, encoding=\"utf-8\") as f:\n        for line in f:\n            if line.strip():\n                nums.append(int(line))\n    if not nums:\n        return None\n    return ..."],
         desc: "<p>Напишите функцию <code>max_in_file(filename)</code>. В файле записаны целые числа — по одному на строке, но могут встречаться пустые строки. Верните самое большое число. Если чисел нет совсем — верните <code>None</code>.</p>",
         startCode: "def max_in_file(filename):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1570,6 +1619,7 @@ except Exception as e:
         lesson: 10,
         hw: true,
         review: true,
+        hints: ["Откройте два файла: один на чтение, другой на запись («w»).","Для каждой строки: `strip()`, пустые пропускайте, остальные пишите с `upper()` и считайте.","Почти готово:\ndef copy_upper(src, dst):\n    count = 0\n    with open(src, encoding=\"utf-8\") as fin, open(dst, \"w\", encoding=\"utf-8\") as fout:\n        for line in fin:\n            line = line.strip()\n            if line:\n                fout.write(line.upper() + \"\\n\")\n                count += 1\n    return ..."],
         desc: "<p><strong>Повторение:</strong> файлы вместе со строками, циклами и функциями.</p><p>Напишите функцию <code>copy_upper(src, dst)</code>. Она читает файл <code>src</code> и записывает в файл <code>dst</code> его строки большими буквами, по одной на строке. Пробелы по краям строк уберите, пустые строки пропустите. Функция возвращает, сколько строк записано.</p><p>Файлы открывайте с <code>encoding=\"utf-8\"</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\"># в файле src.txt:  «привет», «», «  мир  »\ncopy_upper(\"src.txt\", \"dst.txt\")\n# в файле dst.txt:</code></div><div><span>Результат</span><code class=\"io-box\">\n2\nПРИВЕТ\nМИР</code></div></div>",
         startCode: "def copy_upper(src, dst):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1603,6 +1653,7 @@ except Exception as e:
         difficulty: "easy",
         lesson: 11,
         hw: true,
+        hints: ["Попытку перевода поместите в `try`, а запасной ответ — в `except`.","Ошибка при плохом тексте — `ValueError`. В `except ValueError:` верните default.","Почти готово:\ndef to_int(text, default):\n    try:\n        return int(text)\n    except ValueError:\n        return ..."],
         desc: "<p>Напишите функцию <code>to_int(text, default)</code>: попробуйте превратить <code>text</code> в целое число через <code>int()</code>. Если не получилось — верните <code>default</code>. Обязательно используйте <code>try-except</code>.</p>",
         startCode: "def to_int(text, default):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1628,6 +1679,7 @@ except Exception as e:
         difficulty: "medium",
         lesson: 11,
         hw: true,
+        hints: ["Проверьте, лежит ли возраст в границах от 0 до 120.","Если да — `return age`, иначе `raise ValueError(\"Неверный возраст\")`.","Почти готово:\ndef check_age(age):\n    if 0 <= age <= 120:\n        return age\n    raise ..."],
         desc: "<p>Напишите функцию <code>check_age(age)</code>. Если возраст от 0 до 120 включительно — верните его. Иначе вызовите ошибку: <code>raise ValueError(\"Неверный возраст\")</code>.</p>",
         startCode: "def check_age(age):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1660,6 +1712,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 11,
         hw: true,
+        hints: ["Деление на ноль вызывает ошибку `ZeroDivisionError`.","Поместите `a / b` в `try`, а в `except ZeroDivisionError:` верните строку «Ошибка».","Почти готово:\ndef safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return ..."],
         desc: "<p>Напишите функцию <code>safe_divide(a, b)</code>, которая возвращает результат деления <code>a / b</code>. Если делить на ноль, функция должна вернуть строку <code>Ошибка</code>.</p><p>Обязательно используйте <code>try-except</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">safe_divide(10, 2)\nsafe_divide(10, 0)</code></div><div><span>Результат</span><code class=\"io-box\">5.0\n&#x27;Ошибка&#x27;</code></div></div>",
         startCode: "def safe_divide(a, b):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1685,6 +1738,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 11,
         hw: true,
+        hints: ["Пройдите по списку и пробуйте перевести каждую строку.","Внутри цикла: `try: result.append(int(s))`, а `except ValueError: pass` пропускает плохие строки.","Почти готово:\ndef parse_numbers(items):\n    result = []\n    for s in items:\n        try:\n            result.append(int(s))\n        except ValueError:\n            pass\n    return ..."],
         desc: "<p>Напишите функцию <code>parse_numbers(items)</code>. Она получает список строк и возвращает список целых чисел из тех строк, которые удалось превратить в число через <code>int()</code>. Остальные строки пропускаются.</p><p>Обязательно используйте <code>try-except</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">parse_numbers([&#x27;10&#x27;, &#x27;abc&#x27;, &#x27;-3&#x27;, &#x27;4.5&#x27;])\nparse_numbers([&#x27;один&#x27;, &#x27;два&#x27;])</code></div><div><span>Результат</span><code class=\"io-box\">[10, -3]\n[]</code></div></div>",
         startCode: "def parse_numbers(items):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1711,6 +1765,7 @@ except Exception as e:
         lesson: 11,
         hw: true,
         review: true,
+        hints: ["Анкету без запятой пропускайте сразу; возраст переводите через `int()` внутри `try`.","Если `int()` выбросил `ValueError` — `continue`. Отрицательный возраст тоже не берите. Пустой список возрастов — `None`.","Почти готово:\ndef average_age(records):\n    ages = []\n    for rec in records:\n        if \",\" not in rec:\n            continue\n        name, age = rec.split(\",\", 1)\n        try:\n            age = int(age)\n        except ValueError:\n            continue\n        if age >= 0:\n            ages.append(age)\n    if not ages:\n        return None\n    return round(..., 1)"],
         desc: "<p><strong>Повторение:</strong> обработка ошибок вместе со строками, списками и функциями.</p><p>Напишите функцию <code>average_age(records)</code>. <code>records</code> — список строк вида <code>\"Имя,возраст\"</code>. Посчитайте средний возраст по правильным анкетам и верните его, округлив до 1 знака. Пропустите анкеты без запятой, с возрастом не числом и с отрицательным возрастом. Если правильных анкет нет — верните <code>None</code>.</p><p>Подсказка: <code>int(\"abc\")</code> выбрасывает <code>ValueError</code> — перехватите её через <code>try / except</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">average_age([\"Аня,20\", \"Боря,abc\", \"Вера,31\"])\naverage_age([\"Гена\"])</code></div><div><span>Результат</span><code class=\"io-box\">25.5\nNone</code></div></div>",
         startCode: "def average_age(records):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -1740,6 +1795,7 @@ except Exception as e:
         project: 2,
         step: 1,
         projectTitle: "Проект 2: Телефонная книга",
+        hints: ["Цифры из строки соберите циклом с `ch.isdigit()`.","Номер: 11 цифр с 7 или 8 в начале → `\"+7\" + digits[1:]`, 10 цифр → `\"+7\" + digits`, иначе `raise ValueError`. Поиск без регистра — сравнивайте `lower()`.","Почти готово:\ndef normalize_phone(text):\n    digits = \"\"\n    for ch in text:\n        if ch.isdigit():\n            digits += ch\n    if len(digits) == 11 and digits[0] in \"78\":\n        return \"+7\" + digits[1:]\n    if len(digits) == 10:\n        return \"+7\" + digits\n    raise ValueError(\"Неверный номер\")\n\n# add_contact: name.strip(), пустое имя — ValueError, потом book[name] = normalize_phone(phone)\n# find_contact: цикл по book.items() и сравнение key.lower() == name.lower()"],
         desc: "<p>Соберём телефонную книгу за три шага. Книга — это словарь: ключ — имя, значение — номер. Шаг 1 — три функции:</p><ul><li><code>normalize_phone(text)</code> — оставляет в строке только цифры и приводит номер к виду <code>+7XXXXXXXXXX</code>. Подходят 11 цифр, начинающиеся с <code>7</code> или <code>8</code> (первую цифру заменяем на <code>+7</code>), и 10 цифр (добавляем <code>+7</code> впереди). В остальных случаях — <code>raise ValueError(\"Неверный номер\")</code>.</li><li><code>add_contact(book, name, phone)</code> — убирает пробелы вокруг имени и записывает в словарь <code>book</code> номер в виде <code>+7…</code>. Пустое имя — <code>ValueError(\"Пустое имя\")</code>. С плохим номером ошибка, и книга не меняется.</li><li><code>find_contact(book, name)</code> — ищет контакт без учёта регистра букв и возвращает номер, а если такого нет — <code>None</code>.</li></ul><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">normalize_phone(\"8 (912) 345-67-89\")\nnormalize_phone(\"912 345 67 89\")\nnormalize_phone(\"12345\")</code></div><div><span>Результат</span><code class=\"io-box\">\"+79123456789\"\n\"+79123456789\"\nValueError: Неверный номер</code></div></div>",
         startCode: "def normalize_phone(text):\n    # напишите решение здесь\n    pass\n\ndef add_contact(book, name, phone):\n    pass\n\ndef find_contact(book, name):\n    pass\n",
         testCode: `
@@ -1792,6 +1848,7 @@ except Exception as e:
         project: 2,
         step: 2,
         projectTitle: "Проект 2: Телефонная книга",
+        hints: ["Поиск без учёта регистра: `part.lower() in name.lower()`.","Найденные имена соберите в список и верните `sorted(...)`. Код номера — срез `phone[2:5]`.","Почти готово:\ndef search(book, part):\n    found = []\n    for name in book:\n        if part.lower() in name.lower():\n            found.append(name)\n    return sorted(found)\n\ndef stats(book):\n    codes = {}\n    for phone in book.values():\n        code = phone[2:5]\n        codes[code] = codes.get(code, 0) + 1\n    return {\"total\": ..., \"codes\": codes}"],
         desc: "<p>Шаг 2 — поиск по части имени и статистика. Книга — словарь вида <code>{\"Аня\": \"+79123456789\", …}</code>, номера уже приведены к виду <code>+7…</code>. Напишите две функции:</p><ul><li><code>search(book, part)</code> — возвращает список имён, в которых есть <code>part</code> (без учёта регистра), отсортированный по алфавиту. Пустая <code>part</code> подходит ко всем именам.</li><li><code>stats(book)</code> — возвращает словарь <code>{\"total\": N, \"codes\": {…}}</code>: сколько всего контактов и сколько номеров с каждым кодом. Код — три цифры после <code>+7</code>: у <code>+79123456789</code> код <code>\"912\"</code>.</li></ul><p>Функции из шага 1 можно оставить в программе — они не помешают.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">book = {\"Аня\": \"+79123456789\", \"Таня\": \"+79031112233\"}\nsearch(book, \"ан\")\nstats(book)</code></div><div><span>Результат</span><code class=\"io-box\">[\"Аня\", \"Таня\"]\n{\"total\": 2, \"codes\": {\"912\": 1, \"903\": 1}}</code></div></div>",
         startCode: "def search(book, part):\n    # напишите решение здесь\n    pass\n\ndef stats(book):\n    pass\n",
         testCode: `
@@ -1824,6 +1881,7 @@ except Exception as e:
         project: 2,
         step: 3,
         projectTitle: "Проект 2: Телефонная книга",
+        hints: ["Сохраняйте по алфавиту: `for name in sorted(book)`.","При загрузке: строку без «;» пропустите, разрежьте `line.split(\";\", 1)`, номер прогоните через `normalize_phone` внутри `try`, ошибку `ValueError` — пропустить.","Почти готово:\ndef load_book(filename):\n    book = {}\n    try:\n        with open(filename, encoding=\"utf-8\") as f:\n            for line in f:\n                if \";\" not in line:\n                    continue\n                name, phone = line.split(\";\", 1)\n                try:\n                    book[name.strip()] = normalize_phone(phone)\n                except ValueError:\n                    pass\n    except FileNotFoundError:\n        pass\n    return book"],
         desc: "<p>Шаг 3 — книга сохраняется в файл и не пропадает между запусками. Напишите две функции:</p><ul><li><code>save_book(book, filename)</code> — записывает контакты в файл, по одному на строке, в виде <code>Имя;+79123456789</code>, по алфавиту имён.</li><li><code>load_book(filename)</code> — читает такой файл и возвращает словарь. Пробелы вокруг имени и номера уберите, номер приведите к виду <code>+7…</code>. Пустые строки, строки без <code>;</code> и строки с неверным номером пропустите. Если файла нет — верните пустой словарь (перехватите <code>FileNotFoundError</code>).</li></ul><p>Скопируйте в программу <code>normalize_phone</code> из шага 1: она приведёт номер к нужному виду, а на плохом номере выбросит <code>ValueError</code>, который нужно перехватить.</p><p>Файлы открывайте с <code>encoding=\"utf-8\"</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">save_book({\"Таня\": \"+79991234567\", \"Аня\": \"+79123456789\"}, \"book.txt\")\n# в файле book.txt:</code></div><div><span>Результат</span><code class=\"io-box\">Аня;+79123456789\nТаня;+79991234567</code></div></div>",
         startCode: "# Скопируйте сюда normalize_phone из шага 1 — она пригодится\n\ndef save_book(book, filename):\n    # напишите решение здесь\n    pass\n\ndef load_book(filename):\n    pass\n",
         testCode: `
@@ -1987,6 +2045,7 @@ except Exception as e:
         difficulty: "easy",
         lesson: 12,
         hw: true,
+        hints: ["Сначала подключите модуль: `import math`.","Площадь круга — `math.pi * r ** 2`, потом `round(…, 2)`.","Почти готово:\nimport math\n\ndef circle_area(r):\n    return round(..., 2)"],
         desc: "<p>Напишите функцию <code>circle_area(r)</code>, которая возвращает площадь круга радиуса <code>r</code>, округлённую до 2 знаков: <code>round(x, 2)</code>. Число π возьмите из модуля <code>math</code>: <code>math.pi</code>.</p>",
         startCode: "import math\n\ndef circle_area(r):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2010,6 +2069,7 @@ except Exception as e:
         difficulty: "easy",
         lesson: 12,
         hw: true,
+        hints: ["Подключите модуль `math` — в нём есть корень `sqrt()`.","Гипотенуза: `math.sqrt(a ** 2 + b ** 2)`, округлите до 2 знаков.","Почти готово:\nimport math\n\ndef hypotenuse(a, b):\n    return round(math.sqrt(...), 2)"],
         desc: "<p>Напишите функцию <code>hypotenuse(a, b)</code>, которая возвращает длину гипотенузы прямоугольного треугольника с катетами <code>a</code> и <code>b</code>, округлённую до 2 знаков. Формула: корень из <code>a² + b²</code>, корень — <code>math.sqrt()</code>.</p>",
         startCode: "import math\n\ndef hypotenuse(a, b):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2033,6 +2093,7 @@ except Exception as e:
         difficulty: "medium",
         lesson: 12,
         hw: true,
+        hints: ["Случайное целое число даёт `random.randint()`.","`random.randint(1, 6)` — бросок кубика. Сделайте так n раз и сложите в список.","Почти готово:\nimport random\n\ndef roll_dice(n):\n    result = []\n    for i in range(n):\n        result.append(...)\n    return result"],
         desc: "<p>Напишите функцию <code>roll_dice(n)</code>, которая возвращает список из <code>n</code> случайных бросков игрального кубика — целых чисел от 1 до 6. Используйте модуль <code>random</code>.</p>",
         startCode: "import random\n\ndef roll_dice(n):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2059,6 +2120,7 @@ except Exception as e:
         lesson: 12,
         hw: true,
         review: true,
+        hints: ["Длина маршрута — сумма отрезков между соседними точками.","Цикл по номерам `for i in range(1, len(points))`: отрезок от `points[i - 1]` до `points[i]`.","Почти готово:\nimport math\n\ndef path_length(points):\n    total = 0\n    for i in range(1, len(points)):\n        x1, y1 = points[i - 1]\n        x2, y2 = points[i]\n        total += math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)\n    return ..."],
         desc: "<p><strong>Повторение:</strong> модуль <code>math</code> вместе с кортежами, циклами и функциями.</p><p>Напишите функцию <code>path_length(points)</code>. <code>points</code> — список точек маршрута, каждая точка — кортеж <code>(x, y)</code>. Верните длину маршрута — сумму расстояний между соседними точками, округлённую до 2 знаков. Если точек меньше двух, верните <code>0</code>.</p><p>Расстояние между точками: <code>math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">path_length([(0, 0), (3, 4), (3, 10)])\npath_length([(0, 0), (1, 1)])</code></div><div><span>Результат</span><code class=\"io-box\">11.0\n1.41</code></div></div>",
         startCode: "import math\n\ndef path_length(points):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2084,6 +2146,7 @@ except Exception as e:
         difficulty: "easy",
         lesson: 13,
         hw: true,
+        hints: ["Имя сохраните в `__init__` как `self.name`.","Метод `speak(self)` возвращает f-строку с `self.name`.","Почти готово:\nclass Dog:\n    def __init__(self, name):\n        self.name = name\n\n    def speak(self):\n        return f\"{...}: Гав!\""],
         desc: "<p>Напишите класс <code>Dog</code>. При создании он получает имя: <code>Dog(\"Шарик\")</code>. Имя хранится в атрибуте <code>name</code>. Метод <code>speak()</code> возвращает строку <strong>ИМЯ: Гав!</strong></p>",
         startCode: "class Dog:\n    def __init__(self, name):\n        pass\n\n    def speak(self):\n        pass\n",
         testCode: `
@@ -2108,6 +2171,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 13,
         hw: true,
+        hints: ["Ширину и высоту сохраните в `__init__`.","`self.width = width`, `self.height = height`, а площадь — их произведение.","Почти готово:\nclass Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\n    def get_area(self):\n        return ..."],
         desc: "<p>Напишите класс <code>Rectangle</code>. При создании он получает ширину и высоту: <code>Rectangle(10, 5)</code>. Метод <code>get_area()</code> возвращает площадь — ширину, умноженную на высоту.</p><p class=\"io-title\">Пример:</p><code class=\"io-box\">r = Rectangle(10, 5)\nr.get_area()  # 50\nRectangle(2, 3).get_area()  # 6</code>",
         startCode: "class Rectangle:\n    def __init__(self, w, h):\n        pass\n\n    def get_area(self):\n        pass\n",
         testCode: `
@@ -2135,6 +2199,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 13,
         hw: true,
+        hints: ["Баланс храните в атрибуте `self.balance`.","В `withdraw` сначала проверьте, хватает ли денег: если нет — `return False` и ничего не меняйте.","Почти готово:\nclass BankAccount:\n    def __init__(self, balance):\n        self.balance = balance\n\n    def deposit(self, amount):\n        self.balance += amount\n\n    def withdraw(self, amount):\n        if amount > self.balance:\n            return False\n        self.balance -= amount\n        return ..."],
         desc: "<p>Напишите класс <code>BankAccount</code>: <code>BankAccount(balance)</code> создаёт счёт с начальным балансом, атрибут <code>balance</code> хранит текущий баланс, <code>deposit(amount)</code> пополняет счёт, <code>withdraw(amount)</code> снимает деньги и возвращает <code>True</code>. Если денег не хватает, баланс не меняется, а <code>withdraw</code> возвращает <code>False</code>.</p><p class=\"io-title\">Пример:</p><code class=\"io-box\">acc = BankAccount(100)\nacc.deposit(50)\nacc.balance  # 150\nacc.withdraw(30)  # True\nacc.withdraw(500)  # False\nacc.balance  # 120</code>",
         startCode: "class BankAccount:\n    def __init__(self, balance):\n        pass\n\n    def deposit(self, amount):\n        pass\n\n    def withdraw(self, amount):\n        pass\n",
         testCode: `
@@ -2165,6 +2230,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 13,
         hw: true,
+        hints: ["Внутри стека удобно хранить обычный список.","Положить — `append()`, забрать — `pop()`, верх — последний элемент `items[-1]`. Пустой стек проверяйте до `pop()`.","Почти готово:\nclass Stack:\n    def __init__(self):\n        self.items = []\n\n    def push(self, item):\n        self.items.append(item)\n\n    def pop(self):\n        if not self.items:\n            return None\n        return self.items.pop()\n\n    # peek, is_empty и size — по тому же образцу"],
         desc: "<p>Напишите класс <code>Stack</code> — «стопку», в которой последний положенный элемент забирается первым. Методы: <code>push(item)</code> — положить наверх; <code>pop()</code> — забрать и вернуть верхний элемент (<code>None</code>, если стек пуст); <code>peek()</code> — вернуть верхний элемент, не забирая (<code>None</code>, если пусто); <code>is_empty()</code> — пуст ли стек; <code>size()</code> — сколько элементов.</p><p class=\"io-title\">Пример:</p><code class=\"io-box\">s = Stack()\ns.push(1)\ns.push(2)\ns.peek()  # 2\ns.pop()  # 2\ns.size()  # 1</code>",
         startCode: "class Stack:\n    def __init__(self):\n        pass\n\n    def push(self, item):\n        pass\n\n    def pop(self):\n        pass\n\n    def peek(self):\n        pass\n\n    def is_empty(self):\n        pass\n\n    def size(self):\n        pass\n",
         testCode: `
@@ -2196,6 +2262,7 @@ except Exception as e:
         lesson: 13,
         hw: true,
         review: true,
+        hints: ["Храните товары в словаре: имя → [цена, количество].","В `add` сначала проверьте цену и количество (`raise ValueError`), потом либо увеличьте количество, либо добавьте товар.","Почти готово:\nclass Cart:\n    def __init__(self):\n        self.items = {}\n\n    def add(self, name, price, qty=1):\n        if price < 1 or qty < 1:\n            raise ValueError(\"Неверная цена или количество\")\n        if name in self.items:\n            self.items[name][1] += qty\n        else:\n            self.items[name] = [price, qty]\n\n    # remove, total и count — по тому же словарю"],
         desc: "<p><strong>Повторение:</strong> классы вместе со словарями, циклами и ошибками.</p><p>Напишите класс <code>Cart</code> — корзину интернет-магазина:</p><ul><li><code>add(name, price, qty=1)</code> — добавить товар. Если товар уже есть, увеличить количество (цена остаётся прежней). Цена или количество меньше 1 — <code>ValueError</code>;</li><li><code>remove(name)</code> — убрать товар целиком. Если его нет — <code>ValueError(\"Нет такого товара\")</code>;</li><li><code>total()</code> — стоимость всей корзины (цена × количество);</li><li><code>count()</code> — сколько всего штук товаров.</li></ul><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">c = Cart()\nc.add(\"хлеб\", 45, 2)\nc.add(\"сыр\", 300)\nc.total()\nc.count()</code></div><div><span>Результат</span><code class=\"io-box\">\n\n\n390\n3</code></div></div>",
         startCode: "class Cart:\n    def __init__(self):\n        # напишите решение здесь\n        pass\n\n    def add(self, name, price, qty=1):\n        pass\n\n    def remove(self, name):\n        pass\n\n    def total(self):\n        pass\n\n    def count(self):\n        pass\n",
         testCode: `
@@ -2240,6 +2307,7 @@ except Exception as e:
         difficulty: "medium",
         lesson: 14,
         hw: true,
+        hints: ["Строку в дату превращает `datetime.strptime()`, дату в строку — `strftime()`.","Формат входа `\"%Y-%m-%d\"`, выхода — `\"%d.%m.%Y\"`.","Почти готово:\nfrom datetime import datetime\n\ndef format_date(text):\n    d = datetime.strptime(text, \"%Y-%m-%d\")\n    return d.strftime(...)"],
         desc: "<p>Напишите функцию <code>format_date(text)</code>, которая получает дату в формате <code>ГГГГ-ММ-ДД</code> и возвращает её в привычном виде <code>ДД.ММ.ГГГГ</code>. Используйте <code>datetime.strptime()</code> и <code>strftime()</code>.</p>",
         startCode: "from datetime import datetime\n\ndef format_date(text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2263,6 +2331,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 14,
         hw: true,
+        hints: ["Превратите обе строки в даты через `strptime()`.","Вычтите одну дату из другой — у результата есть `.days`.","Почти готово:\nfrom datetime import datetime\n\ndef get_days_diff(date1_str, date2_str):\n    d1 = datetime.strptime(date1_str, \"%Y-%m-%d\")\n    d2 = datetime.strptime(date2_str, \"%Y-%m-%d\")\n    return (...).days"],
         desc: "<p>Напишите функцию <code>get_days_diff(date1_str, date2_str)</code>. Даты приходят строками в формате ГГГГ-ММ-ДД. Верните, сколько дней проходит от первой даты до второй.</p><p>Подсказка: <code>datetime.strptime()</code> превращает строку в дату, а у разности дат есть атрибут <code>.days</code>. В 2024 году в феврале 29 дней.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">get_days_diff(&#x27;2025-01-01&#x27;, &#x27;2025-01-10&#x27;)\nget_days_diff(&#x27;2024-02-01&#x27;, &#x27;2024-03-01&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">9\n29</code></div></div>",
         startCode: "from datetime import datetime\n\ndef get_days_diff(date1_str, date2_str):\n    # Вам поможет datetime.strptime()\n    pass\n",
         testCode: `
@@ -2285,6 +2354,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 14,
         hw: true,
+        hints: ["Составьте список названий дней от понедельника до воскресенья.","`weekday()` даёт номер дня (0 — понедельник) — это и есть номер в списке.","Почти готово:\nfrom datetime import datetime\n\ndef weekday_name(date_str):\n    names = [\"понедельник\", \"вторник\", \"среда\", \"четверг\", \"пятница\", \"суббота\", \"воскресенье\"]\n    d = datetime.strptime(date_str, \"%Y-%m-%d\")\n    return names[...]"],
         desc: "<p>Напишите функцию <code>weekday_name(date_str)</code>. Она получает дату строкой в формате ГГГГ-ММ-ДД и возвращает день недели по-русски маленькими буквами: <code>понедельник</code>, <code>вторник</code>, …, <code>воскресенье</code>.</p><p>Подсказка: метод <code>weekday()</code> возвращает 0 для понедельника и 6 для воскресенья.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">weekday_name(&#x27;2024-01-01&#x27;)\nweekday_name(&#x27;2000-01-01&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;понедельник&#x27;\n&#x27;суббота&#x27;</code></div></div>",
         startCode: "from datetime import datetime\n\ndef weekday_name(date_str):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2309,6 +2379,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 14,
         hw: true,
+        hints: ["Начните с разности годов, потом проверьте, был ли уже день рождения.","Если (месяц, день) даты day раньше (месяц, день) рождения — вычтите 1. Кортежи можно сравнивать: `(m1, d1) < (m2, d2)`.","Почти готово:\nfrom datetime import datetime\n\ndef age_on(birth, day):\n    b = datetime.strptime(birth, \"%Y-%m-%d\")\n    d = datetime.strptime(day, \"%Y-%m-%d\")\n    age = d.year - b.year\n    if (d.month, d.day) < (b.month, b.day):\n        age -= 1\n    return ..."],
         desc: "<p>Напишите функцию <code>age_on(birth, day)</code>: обе даты приходят строками в формате <code>ГГГГ-ММ-ДД</code>. Верните, сколько <strong>полных</strong> лет исполнилось человеку на дату <code>day</code>. Если день рождения в этом году ещё не наступил — год не засчитывается.</p>",
         startCode: "from datetime import datetime\n\ndef age_on(birth, day):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2334,6 +2405,7 @@ except Exception as e:
         lesson: 14,
         hw: true,
         review: true,
+        hints: ["Превратите строки в даты через `datetime.strptime(s, \"%d.%m.%Y\")`.","Идите по дням циклом `while day <= last`, прибавляя `timedelta(days=1)`. Выходной — `weekday() >= 5`.","Почти готово:\nfrom datetime import datetime, timedelta\n\ndef weekend_days(start, end):\n    day = datetime.strptime(start, \"%d.%m.%Y\")\n    last = datetime.strptime(end, \"%d.%m.%Y\")\n    count = 0\n    while day <= last:\n        if day.weekday() >= 5:\n            count += 1\n        day += timedelta(days=1)\n    return ..."],
         desc: "<p><strong>Повторение:</strong> дата и время вместе с циклами, условиями и функциями.</p><p>Напишите функцию <code>weekend_days(start, end)</code>. Даты приходят строками вида <code>\"ДД.ММ.ГГГГ\"</code>. Верните, сколько суббот и воскресений в промежутке от <code>start</code> до <code>end</code> включительно. Если <code>end</code> раньше <code>start</code> — верните 0.</p><p>Подсказки: строку в дату — <code>datetime.strptime(s, \"%d.%m.%Y\")</code>, следующий день — <code>+ timedelta(days=1)</code>, у субботы <code>weekday()</code> равен 5, у воскресенья — 6.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">weekend_days(\"09.11.2026\", \"15.11.2026\")\nweekend_days(\"01.12.2026\", \"31.12.2026\")</code></div><div><span>Результат</span><code class=\"io-box\">2\n8</code></div></div>",
         startCode: "from datetime import datetime, timedelta\n\ndef weekend_days(start, end):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2360,6 +2432,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 15,
         hw: true,
+        hints: ["Посчитайте слова в словаре, как в уроке про словари.","Слова идут по порядку — проходите их тем же порядком и запоминайте слово, только если его счёт строго больше лучшего.","Почти готово:\ndef most_common_word(text):\n    words = text.lower().split()\n    counts = {}\n    for w in words:\n        counts[w] = counts.get(w, 0) + 1\n    best = words[0]\n    for w in words:\n        if counts[w] > counts[best]:\n            best = w\n    return ..."],
         desc: "<p>Напишите функцию <code>most_common_word(text)</code>, которая возвращает самое частое слово текста маленькими буквами. Регистр не важен, знаков препинания нет. Если таких слов несколько, верните то, что встретилось раньше.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">most_common_word(&#x27;Кот видит кота а кот спит&#x27;)\nmost_common_word(&#x27;яблоко груша&#x27;)</code></div><div><span>Результат</span><code class=\"io-box\">&#x27;кот&#x27;\n&#x27;яблоко&#x27;</code></div></div>",
         startCode: "def most_common_word(text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2384,6 +2457,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 15,
         hw: true,
+        hints: ["Храните дела списком, а выполненные — отдельно (например, множеством).","`done(title)`: если дела нет в списке — `return False`, иначе отметьте и `return True`. `pending()` — дела, которых нет среди выполненных.","Почти готово:\nclass TodoList:\n    def __init__(self):\n        self.items = []\n        self.finished = set()\n\n    def add(self, title):\n        self.items.append(title)\n\n    def done(self, title):\n        if title not in self.items:\n            return False\n        self.finished.add(title)\n        return True\n\n    def pending(self):\n        return [t for t in self.items if t not in ...]"],
         desc: "<p>Напишите класс <code>TodoList</code> — список дел:</p><ul><li><code>add(title)</code> — добавить дело;</li><li><code>done(title)</code> — отметить дело выполненным и вернуть <code>True</code>; если такого дела нет — вернуть <code>False</code>;</li><li><code>pending()</code> — вернуть список невыполненных дел в порядке добавления.</li></ul>",
         startCode: "class TodoList:\n    def __init__(self):\n        pass\n\n    def add(self, title):\n        pass\n\n    def done(self, title):\n        pass\n\n    def pending(self):\n        pass\n",
         testCode: `
@@ -2412,6 +2486,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 15,
         hw: true,
+        hints: ["Запись — режим «w», каждое дело с `\"\\n\"` на конце.","При чтении уберите переводы строк через `strip()` и пропустите пустые строки. Отсутствие файла ловите `except FileNotFoundError`.","Почти готово:\ndef save_tasks(filename, tasks):\n    with open(filename, \"w\", encoding=\"utf-8\") as f:\n        for t in tasks:\n            f.write(t + \"\\n\")\n\ndef load_tasks(filename):\n    try:\n        with open(filename, encoding=\"utf-8\") as f:\n            return [line.strip() for line in f if line.strip()]\n    except FileNotFoundError:\n        return ..."],
         desc: "<p>Напишите две функции:</p><ul><li><code>save_tasks(filename, tasks)</code> — записывает список строк <code>tasks</code> в файл, по одной на строке;</li><li><code>load_tasks(filename)</code> — читает файл и возвращает список дел. Если файла нет — возвращает пустой список (перехватите <code>FileNotFoundError</code>).</li></ul>",
         startCode: "def save_tasks(filename, tasks):\n    pass\n\ndef load_tasks(filename):\n    pass\n",
         testCode: `
@@ -2438,6 +2513,7 @@ except Exception as e:
         lesson: 15,
         hw: true,
         review: true,
+        hints: ["Пройдите по делам: сделанные считайте, несделанные собирайте в список строк.","Первая строка — «Сделано: X из Y», дальше — строки «- название». Соедините их через `\"\\n\".join(...)`.","Почти готово:\ndef todo_report(todos):\n    done = 0\n    lines = []\n    for t in todos:\n        if t[\"done\"]:\n            done += 1\n        else:\n            lines.append(\"- \" + t[\"title\"])\n    return \"\\n\".join([f\"Сделано: {done} из {len(todos)}\"] + ...)"],
         desc: "<p><strong>Повторение:</strong> список дел из словарей, циклы, условия и строки.</p><p>Напишите функцию <code>todo_report(todos)</code>. <code>todos</code> — список словарей вида <code>{\"title\": \"купить хлеб\", \"done\": True}</code>. Верните отчёт строкой: первая строка — <code>Сделано: X из Y</code>, а под ней — каждое несделанное дело в исходном порядке в виде <code>- название</code>. Строки соединяются через <code>\"\\n\"</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">todos = [{\"title\": \"купить хлеб\", \"done\": True},\n         {\"title\": \"сделать уроки\", \"done\": False}]\nprint(todo_report(todos))</code></div><div><span>Результат</span><code class=\"io-box\">\n\nСделано: 1 из 2\n- сделать уроки</code></div></div>",
         startCode: "def todo_report(todos):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2468,6 +2544,7 @@ except Exception as e:
         difficulty: "medium",
         lesson: 16,
         hw: true,
+        hints: ["Пустой словарь — сразу верните base.","Соберите части «ключ=значение» в список и соедините их через `\"&\".join(...)`.","Почти готово:\ndef build_url(base, params):\n    if not params:\n        return base\n    parts = []\n    for k, v in params.items():\n        parts.append(f\"{k}={v}\")\n    return base + \"?\" + ..."],
         desc: "<p>Напишите функцию <code>build_url(base, params)</code>. <code>params</code> — словарь параметров запроса. Верните адрес вида <code>base?ключ1=значение1&amp;ключ2=значение2</code> в порядке ключей словаря. Если параметров нет — верните <code>base</code> без знака вопроса.</p>",
         startCode: "def build_url(base, params):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2491,6 +2568,7 @@ except Exception as e:
         difficulty: "medium",
         lesson: 16,
         hw: true,
+        hints: ["`json.loads()` превращает текст в словарь.","Температуры лежат в `data[\"days\"]`, у каждого дня — ключ `\"temp\"`. Сложите их и разделите на количество.","Почти готово:\nimport json\n\ndef avg_temp(json_text):\n    data = json.loads(json_text)\n    temps = [d[\"temp\"] for d in data[\"days\"]]\n    return round(..., 1)"],
         desc: "<p>Сервис погоды прислал ответ в формате JSON (строкой). Напишите функцию <code>avg_temp(json_text)</code>, которая возвращает среднюю температуру за все дни, округлённую до 1 знака. Используйте <code>json.loads()</code>.</p><p>Пример ответа: <code>{\"city\": \"Москва\", \"days\": [{\"temp\": 10}, {\"temp\": 14}]}</code></p>",
         startCode: "import json\n\ndef avg_temp(json_text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2514,6 +2592,7 @@ except Exception as e:
         difficulty: "hard",
         lesson: 16,
         hw: true,
+        hints: ["`json.loads()` превратит текст в список словарей.","Пустой список — `None`. Иначе ищите игрока с наибольшим `score`, заменяя лучшего, только если счёт строго больше.","Почти готово:\nimport json\n\ndef top_player(json_text):\n    players = json.loads(json_text)\n    if not players:\n        return None\n    best = players[0]\n    for p in players:\n        if p[\"score\"] > best[\"score\"]:\n            best = p\n    return ..."],
         desc: "<p>API игры возвращает таблицу результатов — JSON-список вида <code>[{\"name\": \"Аня\", \"score\": 120}, ...]</code>. Напишите функцию <code>top_player(json_text)</code>, которая возвращает имя игрока с наибольшим счётом. Если список пуст — верните <code>None</code>. При равенстве — того, кто раньше в списке.</p>",
         startCode: "import json\n\ndef top_player(json_text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2538,6 +2617,7 @@ except Exception as e:
         lesson: 16,
         hw: true,
         review: true,
+        hints: ["`json.loads()` поместите в `try`: на плохом тексте он выбросит `ValueError`.","Температуры — `day[\"t\"]` для каждого дня из `data[\"days\"]`. Пустой список — «нет данных».","Почти готово:\nimport json\n\ndef weather_summary(text):\n    try:\n        data = json.loads(text)\n    except ValueError:\n        return \"Ошибка данных\"\n    temps = [d[\"t\"] for d in data[\"days\"]]\n    if not temps:\n        return f\"{data['city']}: нет данных\"\n    avg = round(sum(temps) / len(temps), 1)\n    return f\"{data['city']}: от {min(temps)} до {max(temps)}, в среднем {avg}\""],
         desc: "<p><strong>Повторение:</strong> JSON вместе со словарями, списками, ошибками и функциями.</p><p>Сервис погоды присылает текст JSON вида <code>{\"city\": \"Москва\", \"days\": [{\"date\": \"10.11\", \"t\": 3}, …]}</code>. Напишите функцию <code>weather_summary(text)</code>, которая возвращает строку <code>Москва: от -2 до 5, в среднем 1.5</code> — самую низкую и самую высокую температуру и среднюю, округлённую до 1 знака.</p><p>Если дней в списке нет — верните <code>Москва: нет данных</code>. Если текст — не JSON, верните <code>Ошибка данных</code> (<code>json.loads</code> выбрасывает <code>ValueError</code>).</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">weather_summary('{\"city\": \"Сочи\", \"days\": [{\"date\": \"10.11\", \"t\": 12}, {\"date\": \"11.11\", \"t\": 15}]}')\nweather_summary(\"не json\")</code></div><div><span>Результат</span><code class=\"io-box\">\"Сочи: от 12 до 15, в среднем 13.5\"\n\"Ошибка данных\"</code></div></div>",
         startCode: "import json\n\ndef weather_summary(text):\n    # напишите решение здесь\n    pass\n",
         testCode: `
@@ -2570,6 +2650,7 @@ except Exception as e:
         project: 3,
         step: 1,
         projectTitle: "Проект 3: Трекер привычек",
+        hints: ["Отмеченные дни храните списком в `self.days`; перед добавлением проверяйте `day not in self.days`.","Серия: идите назад от `today` по одному дню (`day - timedelta(days=1)`), пока день отмечен. Если сам `today` не отмечен — начните со вчера.","Почти готово:\n    def streak(self, today):\n        day = today\n        if not self.is_done(day):\n            day = day - timedelta(days=1)\n        count = 0\n        while self.is_done(day):\n            count += 1\n            day = day - timedelta(days=1)\n        return count"],
         desc: "<p>Соберём трекер привычек за три шага. Шаг 1 — класс <code>Habit</code> (одна привычка):</p><ul><li><code>Habit(name)</code> — у объекта есть атрибут <code>name</code>, отметок пока нет;</li><li><code>mark(day)</code> — отметить, что в день <code>day</code> (объект <code>date</code>) привычка выполнена. Повторная отметка того же дня ничего не меняет;</li><li><code>is_done(day)</code> — <code>True</code>, если день отмечен;</li><li><code>total()</code> — сколько всего дней отмечено;</li><li><code>streak(today)</code> — серия: сколько дней подряд привычка выполнялась, считая назад от <code>today</code>. Если <code>today</code> ещё не отмечен, серия не прервана — считайте от вчерашнего дня.</li></ul><p>Подсказка: предыдущий день — <code>day - timedelta(days=1)</code>.</p><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">h = Habit(\"Зарядка\")\nh.mark(date(2026, 11, 9))\nh.mark(date(2026, 11, 10))\nh.streak(date(2026, 11, 10))\nh.streak(date(2026, 11, 11))\nh.streak(date(2026, 11, 12))</code></div><div><span>Результат</span><code class=\"io-box\">\n\n\n2\n2\n0</code></div></div>",
         startCode: "from datetime import date, timedelta\n\nclass Habit:\n    def __init__(self, name):\n        # напишите решение здесь\n        pass\n\n    def mark(self, day):\n        pass\n\n    def is_done(self, day):\n        pass\n\n    def total(self):\n        pass\n\n    def streak(self, today):\n        pass\n",
         testCode: `
@@ -2616,6 +2697,7 @@ except Exception as e:
         project: 3,
         step: 2,
         projectTitle: "Проект 3: Трекер привычек",
+        hints: ["Привычки храните в словаре `self.habits`: имя → объект `Habit`.","В `add` и `mark` сначала проверьте, есть ли имя в словаре, и выбросите `ValueError`. Отчёт — по `sorted(self.habits)`.","Почти готово:\n    def report(self, today):\n        if not self.habits:\n            return \"Привычек пока нет\"\n        lines = []\n        for name in sorted(self.habits):\n            h = self.habits[name]\n            lines.append(f\"{name}: серия {h.streak(today)}, всего {h.total()}\")\n        return \"\\n\".join(lines)"],
         desc: "<p>Шаг 2 — класс <code>Tracker</code>, который хранит все привычки. Скопируйте в программу класс <code>Habit</code> из шага 1 и напишите:</p><ul><li><code>Tracker()</code> — у объекта есть словарь <code>habits</code>: имя → объект <code>Habit</code>;</li><li><code>add(name)</code> — создаёт привычку, кладёт в словарь и возвращает её. Если такая уже есть — <code>ValueError(\"Такая привычка уже есть\")</code>;</li><li><code>mark(name, day)</code> — отмечает день у привычки. Если привычки нет — <code>ValueError(\"Нет такой привычки\")</code>;</li><li><code>report(today)</code> — отчёт строкой: по строке на привычку, по алфавиту, в виде <code>Зарядка: серия 2, всего 3</code>. Строки соединяются через <code>\"\\n\"</code>. Если привычек нет — <code>Привычек пока нет</code>.</li></ul><p class=\"io-title\">Пример:</p><div class=\"io-example\"><div><span>Вызов</span><code class=\"io-box\">t = Tracker()\nt.add(\"Чтение\")\nt.add(\"Зарядка\")\nt.mark(\"Зарядка\", date(2026, 11, 10))\nprint(t.report(date(2026, 11, 10)))</code></div><div><span>Результат</span><code class=\"io-box\">\n\n\n\nЗарядка: серия 1, всего 1\nЧтение: серия 0, всего 0</code></div></div>",
         startCode: "from datetime import date, timedelta\n\n# Скопируйте сюда класс Habit из шага 1\n\nclass Tracker:\n    def __init__(self):\n        # напишите решение здесь\n        pass\n\n    def add(self, name):\n        pass\n\n    def mark(self, name, day):\n        pass\n\n    def report(self, today):\n        pass\n",
         testCode: `
@@ -2663,6 +2745,7 @@ except Exception as e:
         project: 3,
         step: 3,
         projectTitle: "Проект 3: Трекер привычек",
+        hints: ["Для JSON соберите обычный словарь: имя → список дат строками.","Даты отсортируйте `sorted(habit.days)` и переведите `d.strftime(\"%Y-%m-%d\")`. При загрузке — `datetime.strptime(s, \"%Y-%m-%d\").date()`.","Почти готово:\n    def save(self, filename):\n        data = {}\n        for name, habit in self.habits.items():\n            data[name] = [d.strftime(\"%Y-%m-%d\") for d in sorted(habit.days)]\n        with open(filename, \"w\", encoding=\"utf-8\") as f:\n            f.write(json.dumps(data, ensure_ascii=False))\n\n# load_tracker: try/except FileNotFoundError, json.loads, tracker.add(name), tracker.mark(name, дата)"],
         desc: "<p>Шаг 3 — трекер сохраняется в файл JSON и загружается обратно. Скопируйте классы <code>Habit</code> и <code>Tracker</code> из шага 2 и добавьте:</p><ul><li>метод <code>save(filename)</code> у класса <code>Tracker</code> — записывает в файл JSON-объект: имя привычки → список отмеченных дат строками <code>\"ГГГГ-ММ-ДД\"</code>, даты по возрастанию. Например: <code>{\"Зарядка\": [\"2026-11-09\", \"2026-11-10\"], \"Чтение\": []}</code>;</li><li>функцию <code>load_tracker(filename)</code> — читает такой файл и возвращает новый <code>Tracker</code> со всеми привычками и отметками. Если файла нет — пустой <code>Tracker</code>.</li></ul><p>Подсказки: дату в строку — <code>day.strftime(\"%Y-%m-%d\")</code>, строку в дату — <code>datetime.strptime(s, \"%Y-%m-%d\").date()</code>. Текст JSON — <code>json.dumps(data, ensure_ascii=False)</code> и <code>json.loads(text)</code>. Файлы открывайте с <code>encoding=\"utf-8\"</code>.</p>",
         startCode: "import json\nfrom datetime import date, datetime, timedelta\n\n# Скопируйте сюда классы Habit и Tracker из шага 2\n# и добавьте классу Tracker метод save(self, filename)\n\ndef load_tracker(filename):\n    # напишите решение здесь\n    pass\n",
         testCode: `

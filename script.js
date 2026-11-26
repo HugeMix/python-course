@@ -68,7 +68,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что выведет программа?", code: "print(60 * 60)", options: ["3600", "60 * 60", "Ошибка", "120"], correct: 0, explanation: "Звёздочка * — это умножение: 60 * 60 = 3600." },
             { question: "Какие кавычки можно использовать для текста?", options: ["Только двойные \"…\"", "Только одинарные '…'", "Любые, но одинаковые с двух сторон", "Кавычки не нужны"], correct: 2, explanation: "Python понимает и \"…\", и '…'. Главное — чтобы текст начинался и заканчивался одинаковой кавычкой." },
             { question: "Напишите команду, которая выводит слово Python", type: "code", correct: ["print('Python')", "print(\"Python\")"], explanation: "Текст в кавычках внутри print: print(\"Python\")." },
-            { question: "Напишите команду, которая выводит число 42", type: "code", correct: ["print(42)", "print('42')", "print(\"42\")"], explanation: "Числа можно писать без кавычек: print(42)." }
+            { question: "Напишите команду, которая выводит число 42", type: "code", correct: ["print(42)", "print('42')", "print(\"42\")"], explanation: "Числа можно писать без кавычек: print(42)." },
+            { question: "Что выведет программа?", code: "print(\"Раз\")\nprint(\"Два\")", options: ["Раз\nДва","Раз Два","РазДва","Два\nРаз"], correct: 0, explanation: "Каждый print() выводит свою строку: сначала «Раз», потом с новой строки «Два»." },
+            { question: "Что выведет программа?", code: "print(\"Привет\", \"мир\")", options: ["Привет мир","Приветмир","Привет, мир","Привет\nмир"], correct: 0, explanation: "Если передать в print() несколько значений через запятую, он выведет их через пробел." },
+            { question: "Что выведет программа?", code: "# print(\"Скрыто\")\nprint(\"Видно\")", options: ["Видно","Скрыто\nВидно","Скрыто","Ничего"], correct: 0, explanation: "Строка, которая начинается с #, — комментарий. Python её не выполняет." },
+            { question: "Что выведет программа?", code: "print(\"Итого:\", 10)", options: ["Итого: 10","Итого:10","\"Итого:\" 10","Ошибка"], correct: 0, explanation: "print() выводит значения через запятую, ставя между ними пробел. Текст и число можно передать вместе." },
+            { question: "Что выведет программа?", code: "print(10 - 4, 2)", options: ["6 2","62","8","10 - 4 2"], correct: 0, explanation: "Python считает выражение 10 - 4 = 6 и выводит его и число 2 через пробел." },
+            { question: "Что выведет программа?", variants: [
+                { code: "print(4 * 3)", options: ["12","43","4 * 3","7"], correct: 0 },
+                { code: "print(6 * 2)", options: ["12","62","6 * 2","8"], correct: 0 },
+                { code: "print(5 * 3)", options: ["15","53","5 * 3","8"], correct: 0 }
+            ], explanation: "Без кавычек Python считает выражение: звёздочка * — это умножение." },
+            { question: "Что выведет программа?", variants: [
+                { code: "print(\"ab\" * 3)", options: ["ababab","ab3","ab ab ab","Ошибка"], correct: 0 },
+                { code: "print(\"xo\" * 2)", options: ["xoxo","xo2","xo xo","Ошибка"], correct: 0 },
+                { code: "print(\"-\" * 5)", options: ["-----","-5","- - - - -","Ошибка"], correct: 0 }
+            ], explanation: "Текст, умноженный на число, повторяется столько раз подряд — без пробелов." },
+            { question: "Найдите ошибку в программе", code: "print(\"Привет)", options: ["Не закрыта кавычка","print пишется с большой буквы","Нельзя писать по-русски","Ошибки нет"], correct: 0, explanation: "Текст начинается с кавычки, но не заканчивается ей. У каждой открывающей кавычки должна быть закрывающая." },
+            { question: "Напишите команду, которая выводит на экран слово Python", type: "code", correct: ["print(\"Python\")"], explanation: "Текст выводит print(), а сам текст пишется в кавычках: print(\"Python\")." },
+            { question: "Напишите программу из одной строки: вывести результат 7 + 8 (число, а не текст)", type: "code", correct: ["print(7 + 8)","print(8 + 7)"], explanation: "Без кавычек Python посчитает: print(7 + 8) выведет 15." }
         ],
         'lesson2.html': [
             { question: "Что выведет программа?", code: "x = 5\nprint(x)", options: ["x", "5", "x = 5", "Ошибка"], correct: 1, explanation: "В print(x) нет кавычек, поэтому выводится значение переменной x, то есть 5." },
@@ -86,7 +104,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что значит знак = в строке score = 0?", options: ["Проверить, равен ли score нулю", "Положить 0 в переменную score", "Вывести 0 на экран", "Удалить score"], correct: 1, explanation: "Одно = — это присваивание: значение справа кладётся в переменную слева." },
             { question: "Чем отличаются переменные name и Name?", options: ["Ничем, это одна переменная", "Это две разные переменные", "Name писать нельзя", "name писать нельзя"], correct: 1, explanation: "Python различает регистр букв, поэтому это две разные переменные." },
             { question: "Создайте переменную city и положите в неё строку Москва", type: "code", correct: ["city = 'Москва'", "city = \"Москва\""], explanation: "Имя, знак = и строка в кавычках: city = \"Москва\"." },
-            { question: "Напишите, как получить целое число от пользователя и положить его в переменную n", type: "code", correct: ["n = int(input())"], explanation: "input() даёт строку, int() превращает её в число: n = int(input())." }
+            { question: "Напишите, как получить целое число от пользователя и положить его в переменную n", type: "code", correct: ["n = int(input())"], explanation: "input() даёт строку, int() превращает её в число: n = int(input())." },
+            { question: "Что выведет программа?", code: "x = 5\nx = 7\nprint(x)", options: ["7","5","5\n7","12"], correct: 0, explanation: "Переменная хранит последнее значение: сначала 5, потом её перезаписали на 7." },
+            { question: "Что выведет программа?", code: "name = \"Аня\"\nprint(\"name\")", options: ["name","Аня","\"Аня\"","Ошибка"], correct: 0, explanation: "В кавычках — просто текст «name». Чтобы вывести значение переменной, кавычки не нужны: print(name)." },
+            { question: "Что выведет программа?", code: "a = \"3\"\nprint(a * 2)", options: ["33","6","3 3","Ошибка"], correct: 0, explanation: "a — это текст «3». Текст, умноженный на 2, повторяется: «33»." },
+            { question: "Что выведет программа?", code: "print(type(3.5))", options: ["<class 'float'>","<class 'int'>","<class 'str'>","3.5"], correct: 0, explanation: "Число с точкой — дробное, тип float." },
+            { question: "Что выведет программа?", code: "age = 12\nprint(f\"Мне {age + 1}\")", options: ["Мне 13","Мне 12","Мне age + 1","Мне {age + 1}"], correct: 0, explanation: "В f-строке внутри фигурных скобок можно считать: age + 1 = 13." },
+            { question: "Что выведет программа?", variants: [
+                { code: "a = 4\nb = a\na = 10\nprint(b)", options: ["4","10","14","Ошибка"], correct: 0 },
+                { code: "a = 2\nb = a\na = 9\nprint(b)", options: ["2","9","11","Ошибка"], correct: 0 },
+                { code: "a = 7\nb = a\na = 1\nprint(b)", options: ["7","1","8","Ошибка"], correct: 0 }
+            ], explanation: "b = a копирует число, которое было в a в этот момент. Если потом поменять a, b не меняется." },
+            { question: "Что выведет программа?", variants: [
+                { code: "x = int(\"12\") + 3\nprint(x)", options: ["15","123","12 + 3","Ошибка"], correct: 0 },
+                { code: "x = int(\"40\") + 2\nprint(x)", options: ["42","402","40 + 2","Ошибка"], correct: 0 },
+                { code: "x = int(\"7\") + 8\nprint(x)", options: ["15","78","7 + 8","Ошибка"], correct: 0 }
+            ], explanation: "int() превращает текст в число, после этого + складывает числа." },
+            { question: "Найдите ошибку в программе", code: "year = 2026\nprint(\"Сейчас \" + year)", options: ["Нельзя склеивать текст и число через +","year — запрещённое имя","Число нельзя хранить в переменной","Ошибки нет"], correct: 0, explanation: "Текст и число через + не складываются: TypeError. Помогут str(year) или f-строка: f\"Сейчас {year}\"." },
+            { question: "Напишите строку, которая читает число с клавиатуры и сохраняет его в переменную n как целое число", type: "code", correct: ["n = int(input())"], explanation: "input() возвращает текст, int() превращает его в число: n = int(input())." },
+            { question: "Напишите f-строку, которая выводит «Привет, » и значение переменной name (весь вызов print)", type: "code", correct: ["print(f\"Привет, {name}\")","print(f\"Привет, {name}!\")"], explanation: "f перед кавычками, а переменная — в фигурных скобках: print(f\"Привет, {name}\")." }
         ],
         'lesson3.html': [
             { question: "Что выведет программа?", code: "print(10 // 3)", options: ["3.333", "3", "4", "3.0"], correct: 1, explanation: "// — деление нацело: от 10 / 3 = 3.33… остаётся только целая часть 3." },
@@ -104,7 +140,29 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Как правильно записать дробное число два с половиной?", options: ["2,5", "2.5", "2 1/2", "2:5"], correct: 1, explanation: "Дробная часть отделяется точкой: 2.5. Запятая в Python разделяет разные значения." },
             { question: "Чем отличаются 7 / 2 и 7 // 2?", options: ["Ничем", "7 / 2 = 3.5, а 7 // 2 = 3", "7 / 2 = 3, а 7 // 2 = 3.5", "7 // 2 — это ошибка"], correct: 1, explanation: "/ — обычное деление, // — только целая часть результата." },
             { question: "Напишите выражение: остаток от деления 25 на 7", type: "code", correct: ["25 % 7", "print(25 % 7)"], explanation: "Остаток даёт оператор %: 25 % 7 (получится 4)." },
-            { question: "Напишите короткую запись: уменьшить переменную lives на 1", type: "code", correct: ["lives -= 1"], explanation: "lives -= 1 — то же самое, что lives = lives - 1." }
+            { question: "Напишите короткую запись: уменьшить переменную lives на 1", type: "code", correct: ["lives -= 1"], explanation: "lives -= 1 — то же самое, что lives = lives - 1." },
+            { question: "Что выведет программа?", code: "print(2 ** 10)", options: ["1024","20","100","210"], correct: 0, explanation: "** — степень: 2 в 10-й степени = 1024." },
+            { question: "Что выведет программа?", code: "print(-7 // 2)", options: ["-4","-3","-3.5","3"], correct: 0, explanation: "// округляет вниз — в сторону меньшего числа. -3.5 вниз — это -4." },
+            { question: "Что выведет программа?", code: "x = 5\nx *= 3\nx -= 1\nprint(x)", options: ["14","15","12","16"], correct: 0, explanation: "x *= 3 → 15, потом x -= 1 → 14." },
+            { question: "Что выведет программа?", code: "print(17 // 5, 17 % 5)", options: ["3 2","3.4 2","2 3","3 3"], correct: 0, explanation: "17 = 5 * 3 + 2: целая часть 3, остаток 2." },
+            { question: "Что выведет программа?", code: "print(round(2.675, 1))", options: ["2.7","2.6","3","2.67"], correct: 0, explanation: "round(x, 1) оставляет 1 знак после точки: 2.675 → 2.7." },
+            { question: "Что выведет программа?", variants: [
+                { code: "print(23 // 4)", options: ["5","5.75","6","3"], correct: 0 },
+                { code: "print(29 // 6)", options: ["4","4.83","5","5.0"], correct: 0 },
+                { code: "print(50 // 7)", options: ["7","7.14","8","1"], correct: 0 }
+            ], explanation: "// — деление нацело: дробная часть отбрасывается." },
+            { question: "Что выведет программа?", variants: [
+                { code: "print(23 % 4)", options: ["3","5","0","5.75"], correct: 0 },
+                { code: "print(29 % 6)", options: ["5","4","0","6"], correct: 0 },
+                { code: "print(50 % 7)", options: ["1","7","0","3"], correct: 0 }
+            ], explanation: "% — остаток от деления. Делимое = делитель × частное + остаток." },
+            { question: "Что выведет программа?", variants: [
+                { code: "print(3 + 4 * 2 ** 2)", options: ["19","196","28","35"], correct: 0 },
+                { code: "print(1 + 2 * 3 ** 2)", options: ["19","81","27","15"], correct: 0 },
+                { code: "print(10 - 2 * 2 ** 3)", options: ["-6","512","64","6"], correct: 0 }
+            ], explanation: "Порядок действий: сначала степень **, потом умножение, потом сложение и вычитание." },
+            { question: "Напишите выражение: последняя цифра числа n", type: "code", correct: ["n % 10"], explanation: "Остаток от деления на 10 — это последняя цифра: n % 10." },
+            { question: "Напишите выражение: сколько полных часов в m минутах", type: "code", correct: ["m // 60"], explanation: "Полные часы — деление нацело на 60: m // 60." }
         ],
         'lesson4.html': [
             { question: "Что выведет программа?", code: "x = 7\nif x > 5:\n    print(\"A\")\nelse:\n    print(\"B\")", options: ["A", "B", "A и B", "Ничего"], correct: 0, explanation: "7 больше 5, условие верно — выполняется ветка if, а else пропускается." },
@@ -121,7 +179,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Если условие в if ложно, а else нет — что выполнится?", options: ["Строки внутри if", "Строки после условия, написанные без отступа", "Ничего, программа остановится", "Программа выдаст ошибку"], correct: 1, explanation: "Код внутри if пропускается, и программа просто продолжает работу со следующей строки без отступа." },
             { question: "Что выведет программа?", code: "x = 50\nif x > 100:\n    print(\"отлично\")\nelif x > 10:\n    print(\"хорошо\")\nelse:\n    print(\"плохо\")", options: ["отлично", "хорошо", "отлично и хорошо", "Ничего"], correct: 1, explanation: "Первое условие (x > 100) ложно, второе (x > 10) верно — выводится «хорошо». До else дело не доходит." },
             { question: "Напишите заголовок условия: если x не равно 0", type: "code", correct: ["if x != 0:", "if not x == 0:", "if 0 != x:"], explanation: "«Не равно» записывается как !=, а в конце строки нужно двоеточие: if x != 0:" },
-            { question: "Напишите ключевое слово для ветки «иначе если»", type: "code", correct: ["elif"], explanation: "elif — сокращение от else if. Ключевые слова пишутся строчными буквами." }
+            { question: "Напишите ключевое слово для ветки «иначе если»", type: "code", correct: ["elif"], explanation: "elif — сокращение от else if. Ключевые слова пишутся строчными буквами." },
+            { question: "Что выведет программа?", code: "x = 0\nif x:\n    print(\"да\")\nelse:\n    print(\"нет\")", options: ["нет","да","0","Ошибка"], correct: 0, explanation: "Ноль в условии считается ложью, поэтому выполняется else." },
+            { question: "Что выведет программа?", code: "print(5 > 3 and 2 > 4)", options: ["False","True","5","Ошибка"], correct: 0, explanation: "and требует, чтобы оба условия были верны. 2 > 4 — ложь, значит всё False." },
+            { question: "Что выведет программа?", code: "print(5 > 3 or 2 > 4)", options: ["True","False","5","Ошибка"], correct: 0, explanation: "or достаточно одного верного условия: 5 > 3 — правда." },
+            { question: "Что выведет программа?", code: "age = 15\nprint(13 <= age <= 17)", options: ["True","False","15","Ошибка"], correct: 0, explanation: "Двойное сравнение: 13 <= 15 и 15 <= 17 — оба верны." },
+            { question: "Что выведет программа?", code: "x = 10\nif x > 5:\n    print(\"A\")\nif x > 8:\n    print(\"B\")", options: ["A\nB","A","B","Ничего"], correct: 0, explanation: "Это два отдельных if, а не if/elif: проверяются оба, и оба верны." },
+            { question: "Что выведет программа?", variants: [
+                { code: "n = 14\nif n % 2 == 0:\n    print(\"чёт\")\nelse:\n    print(\"нечет\")", options: ["чёт","нечет","0","14"], correct: 0 },
+                { code: "n = 9\nif n % 2 == 0:\n    print(\"чёт\")\nelse:\n    print(\"нечет\")", options: ["нечет","чёт","1","9"], correct: 0 },
+                { code: "n = 0\nif n % 2 == 0:\n    print(\"чёт\")\nelse:\n    print(\"нечет\")", options: ["чёт","нечет","0","Ошибка"], correct: 0 }
+            ], explanation: "Число чётное, если остаток от деления на 2 равен нулю." },
+            { question: "Что выведет программа?", variants: [
+                { code: "t = 25\nif t > 30:\n    print(\"жарко\")\nelif t > 20:\n    print(\"тепло\")\nelse:\n    print(\"холодно\")", options: ["тепло","жарко","холодно","жарко\nтепло"], correct: 0 },
+                { code: "t = 35\nif t > 30:\n    print(\"жарко\")\nelif t > 20:\n    print(\"тепло\")\nelse:\n    print(\"холодно\")", options: ["жарко","тепло","холодно","жарко\nтепло"], correct: 0 },
+                { code: "t = 12\nif t > 30:\n    print(\"жарко\")\nelif t > 20:\n    print(\"тепло\")\nelse:\n    print(\"холодно\")", options: ["холодно","тепло","жарко","Ничего"], correct: 0 }
+            ], explanation: "Условия проверяются сверху вниз, выполняется только первая верная ветка." },
+            { question: "Найдите ошибку в программе", code: "x = 5\nif x == 5:\nprint(\"пять\")", options: ["Нет отступа перед print","Нужно = вместо ==","Не хватает else","Ошибки нет"], correct: 0, explanation: "Строки внутри if пишутся с отступом в 4 пробела. Без него — IndentationError." },
+            { question: "Напишите заголовок условия: если n делится на 3 без остатка", type: "code", correct: ["if n % 3 == 0:","if not n % 3:"], explanation: "Остаток от деления на 3 равен нулю: if n % 3 == 0:" },
+            { question: "Напишите заголовок условия: если возраст age от 18 до 65 включительно", type: "code", correct: ["if 18 <= age <= 65:","if age >= 18 and age <= 65:","if age <= 65 and age >= 18:"], explanation: "Удобно двойным сравнением: if 18 <= age <= 65:" }
         ],
         'lesson5.html': [
             { question: "Сколько раз выведется «Привет»?", code: "for i in range(5):\n    print(\"Привет\")", options: ["4", "5", "6", "0"], correct: 1, explanation: "range(5) даёт пять чисел: 0, 1, 2, 3, 4." },
@@ -139,7 +215,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что делает break?", options: ["Пропускает один повтор", "Немедленно завершает цикл", "Останавливает всю программу с ошибкой", "Начинает цикл сначала"], correct: 1, explanation: "break выходит из цикла, и программа продолжается со строки после него." },
             { question: "Сколько звёздочек выведет программа?", code: "for a in range(2):\n    for b in range(3):\n        print(\"*\")", options: ["5", "6", "8", "15"], correct: 1, explanation: "Внешний цикл повторяется 2 раза, внутренний — 3 раза на каждом: 2 × 3 = 6." },
             { question: "Напишите заголовок цикла, который повторится 10 раз (переменная i)", type: "code", correct: ["for i in range(10):", "for i in range(0, 10):"], explanation: "range(10) даёт ровно 10 чисел: for i in range(10):" },
-            { question: "Напишите заголовок цикла «пока x меньше 100»", type: "code", correct: ["while x < 100:", "while 100 > x:"], explanation: "while, условие и двоеточие: while x < 100:" }
+            { question: "Напишите заголовок цикла «пока x меньше 100»", type: "code", correct: ["while x < 100:", "while 100 > x:"], explanation: "while, условие и двоеточие: while x < 100:" },
+            { question: "Что выведет программа?", code: "for i in range(3):\n    print(i * 2)", options: ["0\n2\n4","2\n4\n6","0\n1\n2","0\n2\n4\n6"], correct: 0, explanation: "i пробегает 0, 1, 2, а печатается удвоенное значение: 0, 2, 4." },
+            { question: "Что выведет программа?", code: "n = 0\nwhile n < 3:\n    n += 1\nprint(n)", options: ["3","2","4","0"], correct: 0, explanation: "Цикл крутится, пока n < 3. Когда n стало 3, условие ложно — выходим и печатаем 3." },
+            { question: "Что выведет программа?", code: "for i in range(3):\n    print(\"ha\", end=\"\")", options: ["hahaha","ha\nha\nha","ha","ha ha ha"], correct: 0, explanation: "end=\"\" убирает переход на новую строку, поэтому три «ha» печатаются подряд." },
+            { question: "Что выведет программа?", code: "for i in range(5):\n    if i == 3:\n        break\n    print(i)", options: ["0\n1\n2","0\n1\n2\n3","3","0\n1\n2\n4"], correct: 0, explanation: "break сразу выходит из цикла, когда i стало 3, — тройка уже не печатается." },
+            { question: "Что выведет программа?", code: "for i in range(4):\n    if i == 1:\n        continue\n    print(i)", options: ["0\n2\n3","0\n1\n2\n3","0","2\n3"], correct: 0, explanation: "continue пропускает остаток шага: единица не печатается, а цикл продолжается." },
+            { question: "Что выведет программа?", variants: [
+                { code: "s = 0\nfor i in range(1, 5):\n    s += i\nprint(s)", options: ["10","15","4","6"], correct: 0 },
+                { code: "s = 0\nfor i in range(2, 6):\n    s += i\nprint(s)", options: ["14","20","9","15"], correct: 0 },
+                { code: "s = 0\nfor i in range(1, 8, 2):\n    s += i\nprint(s)", options: ["16","28","9","12"], correct: 0 }
+            ], explanation: "Переменная s копит сумму всех чисел, которые даёт range (последнее число range не включает)." },
+            { question: "Сколько раз выведется «*»?", variants: [
+                { code: "for i in range(2, 9, 3):\n    print(\"*\")", options: ["3","2","7","9"], correct: 0 },
+                { code: "for i in range(10, 0, -2):\n    print(\"*\")", options: ["5","10","4","0"], correct: 0 },
+                { code: "for i in range(1, 12, 4):\n    print(\"*\")", options: ["3","4","11","2"], correct: 0 }
+            ], explanation: "Выпишите числа, которые даёт range: от начала, с шагом, не доходя до конца, — и посчитайте их." },
+            { question: "Найдите ошибку в программе", code: "for i in range(5)\n    print(i)", options: ["Нет двоеточия после заголовка цикла","range нужно писать с большой буквы","Переменную цикла нельзя называть i","Ошибки нет"], correct: 0, explanation: "После заголовка for … in … обязательно двоеточие, иначе SyntaxError." },
+            { question: "Напишите заголовок цикла, который проходит числа от 1 до 10 включительно (переменная i)", type: "code", correct: ["for i in range(1, 11):"], explanation: "range не включает конец, поэтому пишем 11: for i in range(1, 11):" },
+            { question: "Напишите заголовок цикла while: повторять, пока x больше нуля", type: "code", correct: ["while x > 0:","while 0 < x:"], explanation: "while, условие и двоеточие: while x > 0:" }
         ],
         'lesson6.html': [
             { question: "Что выведет программа?", code: "nums = [10, 20, 30]\nprint(nums[1])", options: ["10", "20", "30", "Ошибка"], correct: 1, explanation: "Индексы начинаются с нуля: [0] — 10, [1] — 20." },
@@ -157,7 +251,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что выведет программа?", code: "lst = [\"a\", \"b\", \"c\"]\nlst.pop()\nprint(lst)", options: ["['a', 'b']", "['b', 'c']", "['a', 'c']", "['a', 'b', 'c']"], correct: 0, explanation: "pop() убирает последний элемент." },
             { question: "Какой метод добавляет элемент в конец списка?", options: ["add()", "append()", "push()", "insert()"], correct: 1, explanation: "append(x) добавляет x в конец списка." },
             { question: "Создайте список colors из трёх строк: red, green, blue", type: "code", correct: ["colors = [\"red\", \"green\", \"blue\"]", "colors = ['red', 'green', 'blue']"], explanation: "Список — в квадратных скобках через запятую: colors = [\"red\", \"green\", \"blue\"]." },
-            { question: "Напишите, как добавить число 7 в конец списка nums", type: "code", correct: ["nums.append(7)"], explanation: "nums.append(7) добавляет 7 в конец." }
+            { question: "Напишите, как добавить число 7 в конец списка nums", type: "code", correct: ["nums.append(7)"], explanation: "nums.append(7) добавляет 7 в конец." },
+            { question: "Что выведет программа?", code: "a = [3, 1, 2]\na.append(5)\nprint(a)", options: ["[3, 1, 2, 5]","[5, 3, 1, 2]","[1, 2, 3, 5]","[3, 1, 2]"], correct: 0, explanation: "append() добавляет элемент в конец списка." },
+            { question: "Что выведет программа?", code: "a = [10, 20, 30]\nprint(a[-1])", options: ["30","10","20","Ошибка"], correct: 0, explanation: "Индекс -1 — последний элемент списка." },
+            { question: "Что выведет программа?", code: "a = [5, 2, 8]\nprint(len(a), sum(a))", options: ["3 15","15 3","3 8","2 15"], correct: 0, explanation: "len() — сколько элементов, sum() — их сумма." },
+            { question: "Что выведет программа?", code: "a = [1, 2, 3, 4, 5]\nprint(a[1:3])", options: ["[2, 3]","[1, 2, 3]","[2, 3, 4]","[1, 2]"], correct: 0, explanation: "Срез [1:3] — элементы с индексами 1 и 2 (конец не включается)." },
+            { question: "Что выведет программа?", code: "t = (1, 2)\nt[0] = 5\nprint(t)", options: ["Ошибка","(5, 2)","(1, 2)","[5, 2]"], correct: 0, explanation: "Кортеж нельзя менять: TypeError." },
+            { question: "Что выведет программа?", variants: [
+                { code: "a = [4, 7, 1]\na.sort()\nprint(a[0])", options: ["1","4","7","Ошибка"], correct: 0 },
+                { code: "a = [9, 3, 6]\na.sort()\nprint(a[0])", options: ["3","9","6","Ошибка"], correct: 0 },
+                { code: "a = [5, 8, 2]\na.sort()\nprint(a[-1])", options: ["8","2","5","Ошибка"], correct: 0 }
+            ], explanation: "sort() сортирует список по возрастанию: [0] — самый маленький, [-1] — самый большой." },
+            { question: "Что выведет программа?", variants: [
+                { code: "a = [2, 4, 6]\nprint(a[1] + a[2])", options: ["10","6","8","46"], correct: 0 },
+                { code: "a = [3, 5, 9]\nprint(a[0] + a[2])", options: ["12","8","14","39"], correct: 0 },
+                { code: "a = [1, 8, 4]\nprint(a[2] * a[0])", options: ["4","8","32","0"], correct: 0 }
+            ], explanation: "Индексы считаются с нуля: [0] — первый элемент, [1] — второй, [2] — третий." },
+            { question: "Найдите ошибку в программе", code: "a = [1, 2, 3]\nprint(a[3])", options: ["Элемента с индексом 3 нет","Нельзя печатать список","Список пишут в круглых скобках","Ошибки нет"], correct: 0, explanation: "В списке из трёх элементов индексы 0, 1, 2. a[3] — IndexError." },
+            { question: "Напишите строку: добавить число 7 в конец списка nums", type: "code", correct: ["nums.append(7)"], explanation: "Метод append() кладёт элемент в конец: nums.append(7)." },
+            { question: "Напишите выражение: сколько элементов в списке nums", type: "code", correct: ["len(nums)"], explanation: "Длину списка даёт len(): len(nums)." }
         ],
         'lesson7.html': [
             { question: "Каким словом создаётся функция?", options: ["func", "def", "function", "create"], correct: 1, explanation: "def — от английского define, «определить»." },
@@ -175,7 +287,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что выведет программа?", code: "x = 5\n\ndef change():\n    x = 10\n\nchange()\nprint(x)", options: ["5", "10", "Ошибка", "None"], correct: 0, explanation: "Внутри функции своя локальная переменная x. Внешняя x осталась равна 5." },
             { question: "Что такое рекурсия?", options: ["Функция, которая вызывает саму себя", "Функция без параметров", "Функция, которая ничего не возвращает", "Ошибка в функции"], correct: 0, explanation: "Рекурсивная функция вызывает саму себя, и у неё обязательно должно быть условие остановки." },
             { question: "Напишите первую строку функции double с параметром x", type: "code", correct: ["def double(x):"], explanation: "def, имя, параметр в скобках и двоеточие: def double(x):" },
-            { question: "Напишите строку, которая возвращает из функции значение x * 2", type: "code", correct: ["return x * 2", "return 2 * x", "return x*2", "return x + x"], explanation: "return и выражение: return x * 2" }
+            { question: "Напишите строку, которая возвращает из функции значение x * 2", type: "code", correct: ["return x * 2", "return 2 * x", "return x*2", "return x + x"], explanation: "return и выражение: return x * 2" },
+            { question: "Что выведет программа?", code: "def double(x):\n    return x * 2\n\nprint(double(4) + 1)", options: ["9","10","8","5"], correct: 0, explanation: "double(4) возвращает 8, потом прибавляем 1." },
+            { question: "Что выведет программа?", code: "def hello():\n    print(\"привет\")\n\nr = hello()\nprint(r)", options: ["привет\nNone","привет","None","Ошибка"], correct: 0, explanation: "Функция печатает «привет», но ничего не возвращает (нет return) — значит, возвращает None." },
+            { question: "Что выведет программа?", code: "def f(a, b=10):\n    return a + b\n\nprint(f(1), f(1, 2))", options: ["11 3","3 11","11 12","Ошибка"], correct: 0, explanation: "Если b не передали, берётся значение по умолчанию 10." },
+            { question: "Что выведет программа?", code: "def f(x):\n    return x\n    print(\"после\")\n\nprint(f(5))", options: ["5","после\n5","5\nпосле","None"], correct: 0, explanation: "return сразу завершает функцию — строка после него не выполняется." },
+            { question: "Что выведет программа?", code: "x = 1\ndef change():\n    x = 99\n\nchange()\nprint(x)", options: ["1","99","None","Ошибка"], correct: 0, explanation: "x внутри функции — своя, локальная переменная. Внешняя x не меняется." },
+            { question: "Что выведет программа?", variants: [
+                { code: "def area(w, h):\n    return w * h\n\nprint(area(3, 4))", options: ["12","7","34","None"], correct: 0 },
+                { code: "def area(w, h):\n    return w * h\n\nprint(area(5, 6))", options: ["30","11","56","None"], correct: 0 },
+                { code: "def area(w, h):\n    return w * h\n\nprint(area(2, 9))", options: ["18","11","29","None"], correct: 0 }
+            ], explanation: "Аргументы подставляются в параметры по порядку, функция возвращает их произведение." },
+            { question: "Что выведет программа?", variants: [
+                { code: "def g(n):\n    if n > 10:\n        return \"big\"\n    return \"small\"\n\nprint(g(12))", options: ["big","small","big\nsmall","None"], correct: 0 },
+                { code: "def g(n):\n    if n > 10:\n        return \"big\"\n    return \"small\"\n\nprint(g(10))", options: ["small","big","big\nsmall","None"], correct: 0 },
+                { code: "def g(n):\n    if n > 10:\n        return \"big\"\n    return \"small\"\n\nprint(g(3))", options: ["small","big","big\nsmall","None"], correct: 0 }
+            ], explanation: "Первый сработавший return завершает функцию. Обратите внимание: 10 > 10 — ложь." },
+            { question: "Найдите ошибку в программе", code: "def square(n)\n    return n * n", options: ["Нет двоеточия после заголовка","Нельзя называть функцию square","return пишется с большой буквы","Ошибки нет"], correct: 0, explanation: "После заголовка def … () обязательно двоеточие." },
+            { question: "Напишите заголовок функции add, которая принимает два параметра a и b", type: "code", correct: ["def add(a, b):"], explanation: "def, имя, параметры в скобках и двоеточие: def add(a, b):" },
+            { question: "Напишите строку, которая возвращает из функции сумму a и b", type: "code", correct: ["return a + b","return b + a"], explanation: "Результат функции отдаёт return: return a + b." }
         ],
         'lesson8.html': [
             { question: "Что выведет программа?", code: "menu = {\"чай\": 50, \"кофе\": 120}\nprint(menu[\"кофе\"])", options: ["50", "120", "кофе", "Ошибка"], correct: 1, explanation: "По ключу \"кофе\" лежит значение 120." },
@@ -193,7 +323,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Найдите ошибку в программе", code: "s = {}\ns.add(\"python\")", options: ["{} — пустой словарь, у него нет add", "Нельзя добавлять строки", "Нужно писать append", "Ошибки нет"], correct: 0, explanation: "{} создаёт словарь. Для множества нужно s = set()." },
             { question: "Какой тип НЕ может быть ключом словаря?", options: ["Строка", "Число", "Кортеж", "Список"], correct: 3, explanation: "Ключ должен быть неизменяемым, а список можно менять." },
             { question: "Создайте словарь prices, где ключу \"хлеб\" соответствует 40", type: "code", correct: ["prices = {\"хлеб\": 40}", "prices = {'хлеб': 40}"], explanation: "Фигурные скобки, ключ, двоеточие, значение: prices = {\"хлеб\": 40}." },
-            { question: "Напишите, как добавить в словарь d ключ \"x\" со значением 10", type: "code", correct: ["d[\"x\"] = 10", "d['x'] = 10"], explanation: "Квадратные скобки с ключом и присваивание: d[\"x\"] = 10." }
+            { question: "Напишите, как добавить в словарь d ключ \"x\" со значением 10", type: "code", correct: ["d[\"x\"] = 10", "d['x'] = 10"], explanation: "Квадратные скобки с ключом и присваивание: d[\"x\"] = 10." },
+            { question: "Что выведет программа?", code: "d = {\"a\": 1, \"b\": 2}\nprint(d[\"b\"])", options: ["2","1","b","Ошибка"], correct: 0, explanation: "По ключу «b» лежит значение 2." },
+            { question: "Что выведет программа?", code: "d = {\"a\": 1}\nprint(d.get(\"z\", 0))", options: ["0","None","Ошибка","z"], correct: 0, explanation: "get() возвращает значение по умолчанию, если ключа нет." },
+            { question: "Что выведет программа?", code: "d = {\"a\": 1}\nd[\"a\"] = 5\nprint(d)", options: ["{'a': 5}","{'a': 1}","{'a': 1, 'a': 5}","Ошибка"], correct: 0, explanation: "Ключи в словаре не повторяются: новое значение заменяет старое." },
+            { question: "Что выведет программа?", code: "s = {1, 2, 2, 3, 3}\nprint(len(s))", options: ["3","5","2","Ошибка"], correct: 0, explanation: "Множество хранит только разные значения: 1, 2, 3." },
+            { question: "Что выведет программа?", code: "d = {\"x\": 1, \"y\": 2}\nprint(\"y\" in d, 2 in d)", options: ["True False","True True","False True","False False"], correct: 0, explanation: "in для словаря проверяет ключи, а не значения: «y» — ключ, 2 — значение." },
+            { question: "Что выведет программа?", variants: [
+                { code: "d = {\"кот\": 3, \"пёс\": 5}\nd[\"кот\"] += 1\nprint(d[\"кот\"])", options: ["4","3","1","Ошибка"], correct: 0 },
+                { code: "d = {\"кот\": 7, \"пёс\": 2}\nd[\"пёс\"] += 3\nprint(d[\"пёс\"])", options: ["5","2","3","Ошибка"], correct: 0 },
+                { code: "d = {\"кот\": 1, \"пёс\": 9}\nd[\"кот\"] *= 2\nprint(d[\"кот\"])", options: ["2","1","9","Ошибка"], correct: 0 }
+            ], explanation: "Значение по ключу можно менять так же, как обычную переменную: +=, *= и т. д." },
+            { question: "Что выведет программа?", variants: [
+                { code: "a = {1, 2, 3}\nb = {2, 3, 4}\nprint(len(a & b))", options: ["2","4","1","3"], correct: 0 },
+                { code: "a = {1, 2, 3}\nb = {3, 4, 5}\nprint(len(a | b))", options: ["5","6","1","3"], correct: 0 },
+                { code: "a = {1, 2, 3, 4}\nb = {2, 4}\nprint(len(a - b))", options: ["2","4","6","0"], correct: 0 }
+            ], explanation: "& — общие элементы, | — все элементы без повторов, - — элементы первого множества, которых нет во втором." },
+            { question: "Найдите ошибку в программе", code: "d = {\"a\": 1}\nprint(d[\"b\"])", options: ["Ключа «b» нет в словаре","Словарь пишут в квадратных скобках","Нельзя печатать словарь","Ошибки нет"], correct: 0, explanation: "Обращение к несуществующему ключу — KeyError. Безопаснее d.get(\"b\")." },
+            { question: "Напишите выражение: значение по ключу \"name\" из словаря user, а если ключа нет — строка \"гость\"", type: "code", correct: ["user.get(\"name\", \"гость\")"], explanation: "get() с двумя аргументами: user.get(\"name\", \"гость\")." },
+            { question: "Напишите строку: добавить в множество seen число 5", type: "code", correct: ["seen.add(5)"], explanation: "В множество добавляют методом add(): seen.add(5)." }
         ],
         'lesson9.html': [
             { question: "Что выведет программа?", code: "s = \"Питон\"\nprint(s[0])", options: ["П", "n", "Python", "Ошибка"], correct: 0, explanation: "Индекс 0 — первый символ строки." },
@@ -211,7 +359,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что выведет программа?", code: "print(\"кот\".find(\"я\"))", options: ["-1", "0", "None", "Ошибка"], correct: 0, explanation: "find возвращает -1, если подстрока не найдена." },
             { question: "Что делает \\n внутри строки?", options: ["Выводит букву n", "Переносит текст на новую строку", "Удаляет строку", "Ничего"], correct: 1, explanation: "\\n — специальный символ переноса строки." },
             { question: "Напишите выражение, которое делает строку s маленькими буквами", type: "code", correct: ["s.lower()"], explanation: "Метод lower() возвращает строку строчными буквами: s.lower()" },
-            { question: "Напишите выражение, которое заменяет в строке s все пробелы на _", type: "code", correct: ["s.replace(\" \", \"_\")", "s.replace(' ', '_')"], explanation: "replace(что, на что): s.replace(\" \", \"_\")" }
+            { question: "Напишите выражение, которое заменяет в строке s все пробелы на _", type: "code", correct: ["s.replace(\" \", \"_\")", "s.replace(' ', '_')"], explanation: "replace(что, на что): s.replace(\" \", \"_\")" },
+            { question: "Что выведет программа?", code: "s = \"Python\"\nprint(s[0], s[-1])", options: ["P n","P o","y n","Ошибка"], correct: 0, explanation: "[0] — первая буква, [-1] — последняя." },
+            { question: "Что выведет программа?", code: "s = \"привет\"\nprint(s[1:4])", options: ["рив","прив","риве","при"], correct: 0, explanation: "Срез [1:4] — буквы с индексами 1, 2, 3." },
+            { question: "Что выведет программа?", code: "print(\"  да  \".strip() + \"!\")", options: ["да!","  да  !","да  !","  да!"], correct: 0, explanation: "strip() убирает пробелы по краям строки." },
+            { question: "Что выведет программа?", code: "print(\"a,b,c\".split(\",\"))", options: ["['a', 'b', 'c']","a b c","['a,b,c']","abc"], correct: 0, explanation: "split(\",\") режет строку по запятым и возвращает список." },
+            { question: "Что выведет программа?", code: "print(\"-\".join([\"1\", \"2\", \"3\"]))", options: ["1-2-3","-1-2-3","123","['1', '2', '3']"], correct: 0, explanation: "join склеивает элементы списка, ставя между ними строку «-»." },
+            { question: "Что выведет программа?", variants: [
+                { code: "print(\"банан\".count(\"а\"))", options: ["2","3","1","0"], correct: 0 },
+                { code: "print(\"молоко\".count(\"о\"))", options: ["3","2","1","0"], correct: 0 },
+                { code: "print(\"кукушка\".count(\"к\"))", options: ["3","2","4","1"], correct: 0 }
+            ], explanation: "count() считает, сколько раз подстрока встречается в строке." },
+            { question: "Что выведет программа?", variants: [
+                { code: "print(\"мир\".upper() + \"!\" * 2)", options: ["МИР!!","мир!!","МИР!2","МИР!"], correct: 0 },
+                { code: "print(\"Кот\".lower() * 2)", options: ["коткот","кот кот","КОТКОТ","Коткот"], correct: 0 },
+                { code: "print(\"ура\".capitalize() + \"?\")", options: ["Ура?","УРА?","ура?","УРа?"], correct: 0 }
+            ], explanation: "upper() — все буквы большие, lower() — все маленькие, capitalize() — первая большая. Строки склеиваются + и повторяются *." },
+            { question: "Найдите ошибку в программе", code: "s = \"кот\"\ns[0] = \"К\"\nprint(s)", options: ["Строку нельзя менять по индексу","Индексы начинаются с 1","Нужны двойные кавычки","Ошибки нет"], correct: 0, explanation: "Строки неизменяемы: TypeError. Можно собрать новую: s = \"К\" + s[1:]." },
+            { question: "Напишите выражение: строка text задом наперёд (срезом)", type: "code", correct: ["text[::-1]"], explanation: "Срез с шагом -1: text[::-1]." },
+            { question: "Напишите выражение: список слов из строки text (по пробелам)", type: "code", correct: ["text.split()","text.split(\" \")"], explanation: "split() без аргументов режет строку по пробелам: text.split()." }
         ],
         'lesson10.html': [
             { question: "Какой режим открытия стирает старое содержимое файла?", options: ["\"r\"", "\"w\"", "\"a\"", "Никакой"], correct: 1, explanation: "\"w\" открывает файл для записи заново — всё старое удаляется." },
@@ -229,7 +395,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Найдите ошибку в программе", code: "with open(\"a.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"x\")\nwith open(\"a.txt\", encoding=\"utf-8\") as f:\n    pass\nprint(f.read())", options: ["Чтение после закрытия файла", "Файл не существует", "Нужно писать read без скобок", "Ошибки нет"], correct: 0, explanation: "print(f.read()) стоит без отступа, то есть после блока with — файл уже закрыт." },
             { question: "Что такое CSV?", options: ["Таблица в текстовом файле: значения разделены запятыми", "Картинка", "Программа на Python", "Архив"], correct: 0, explanation: "CSV (comma-separated values) — простой текстовый формат таблиц." },
             { question: "Напишите первую строку блока: открыть файл data.txt для чтения в кодировке utf-8 как f", type: "code", correct: ["with open(\"data.txt\", encoding=\"utf-8\") as f:", "with open(\"data.txt\", \"r\", encoding=\"utf-8\") as f:", "with open('data.txt', encoding='utf-8') as f:", "with open('data.txt', 'r', encoding='utf-8') as f:"], explanation: "with open(\"data.txt\", \"r\", encoding=\"utf-8\") as f: — режим \"r\" можно не писать, он по умолчанию." },
-            { question: "Напишите строку, которая записывает в открытый файл f текст «Привет» и перенос строки", type: "code", correct: ["f.write(\"Привет\\n\")", "f.write('Привет\\n')"], explanation: "f.write(\"Привет\\n\") — перенос строки нужно добавить самому." }
+            { question: "Напишите строку, которая записывает в открытый файл f текст «Привет» и перенос строки", type: "code", correct: ["f.write(\"Привет\\n\")", "f.write('Привет\\n')"], explanation: "f.write(\"Привет\\n\") — перенос строки нужно добавить самому." },
+            { question: "Какой режим открытия файла стирает старое содержимое и пишет заново?", options: ["\"w\"","\"r\"","\"a\"","\"x+\""], correct: 0, explanation: "\"w\" — запись: файл создаётся заново (старое содержимое пропадает). \"a\" — дописать в конец." },
+            { question: "Какой режим дописывает текст в конец файла, не стирая старый?", options: ["\"a\"","\"w\"","\"r\"","\"d\""], correct: 0, explanation: "\"a\" (append) — дописать в конец." },
+            { question: "Что выведет программа?", code: "with open(\"t.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"раз\\nдва\\n\")\nwith open(\"t.txt\", encoding=\"utf-8\") as f:\n    print(len(f.readlines()))", options: ["2","1","3","0"], correct: 0, explanation: "В файле две строки, readlines() вернёт список из двух элементов." },
+            { question: "Что выведет программа?", code: "with open(\"t.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"A\")\nwith open(\"t.txt\", \"a\", encoding=\"utf-8\") as f:\n    f.write(\"B\")\nwith open(\"t.txt\", encoding=\"utf-8\") as f:\n    print(f.read())", options: ["AB","B","A","A\nB"], correct: 0, explanation: "Сначала записали «A», потом режимом \"a\" дописали «B» в конец." },
+            { question: "Что выведет программа?", code: "with open(\"t.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"A\")\nwith open(\"t.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"B\")\nwith open(\"t.txt\", encoding=\"utf-8\") as f:\n    print(f.read())", options: ["B","AB","A","Ошибка"], correct: 0, explanation: "Режим \"w\" стирает старое содержимое — остаётся только «B»." },
+            { question: "Что выведет программа?", variants: [
+                { code: "with open(\"n.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"3\\n4\\n5\\n\")\ntotal = 0\nwith open(\"n.txt\", encoding=\"utf-8\") as f:\n    for line in f:\n        total += int(line)\nprint(total)", options: ["12","345","3","Ошибка"], correct: 0 },
+                { code: "with open(\"n.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"10\\n20\\n\")\ntotal = 0\nwith open(\"n.txt\", encoding=\"utf-8\") as f:\n    for line in f:\n        total += int(line)\nprint(total)", options: ["30","1020","10","Ошибка"], correct: 0 },
+                { code: "with open(\"n.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"7\\n1\\n2\\n\")\ntotal = 0\nwith open(\"n.txt\", encoding=\"utf-8\") as f:\n    for line in f:\n        total += int(line)\nprint(total)", options: ["10","712","7","Ошибка"], correct: 0 }
+            ], explanation: "Цикл for по файлу даёт строки, int() превращает каждую в число (перевод строки int() не мешает)." },
+            { question: "Что выведет программа?", variants: [
+                { code: "with open(\"w.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"кот пёс\\nкит\")\nwith open(\"w.txt\", encoding=\"utf-8\") as f:\n    print(len(f.read().split()))", options: ["3","2","1","7"], correct: 0 },
+                { code: "with open(\"w.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"раз два три\\nчетыре\")\nwith open(\"w.txt\", encoding=\"utf-8\") as f:\n    print(len(f.read().split()))", options: ["4","2","3","1"], correct: 0 },
+                { code: "with open(\"w.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"а б\\nв г\\nд\")\nwith open(\"w.txt\", encoding=\"utf-8\") as f:\n    print(len(f.read().split()))", options: ["5","3","2","9"], correct: 0 }
+            ], explanation: "read() читает весь файл, а split() режет и по пробелам, и по переводам строк." },
+            { question: "Найдите ошибку в программе", code: "with open(\"data.txt\", \"r\") as f:\n    f.write(\"привет\")", options: ["Файл открыт на чтение, а в него пишут","with нельзя использовать с файлами","Нужно закрыть файл вручную","Ошибки нет"], correct: 0, explanation: "Режим \"r\" — только чтение. Чтобы писать, нужен \"w\" или \"a\"." },
+            { question: "Напишите заголовок: открыть файл \"log.txt\" на дозапись в кодировке utf-8 как f (через with)", type: "code", correct: ["with open(\"log.txt\", \"a\", encoding=\"utf-8\") as f:"], explanation: "Режим \"a\" дописывает в конец: with open(\"log.txt\", \"a\", encoding=\"utf-8\") as f:" },
+            { question: "Напишите строку: записать в открытый файл f текст \"ok\" и перевод строки", type: "code", correct: ["f.write(\"ok\\n\")"], explanation: "Перевод строки — \\n: f.write(\"ok\\n\")." }
         ],
         'lesson11.html': [
             { question: "Что выведет программа?", code: "try:\n    int(\"abc\")\nexcept ValueError:\n    print(\"Ошибка\")\nprint(\"Готово\")", options: ["Ошибка", "Готово", "Ошибка\nГотово", "Программа упадёт"], correct: 2, explanation: "int(\"abc\") вызывает ValueError, срабатывает except, а потом программа продолжает работу." },
@@ -247,7 +431,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что выведет программа?", code: "items = [1]\ntry:\n    print(items[0])\n    print(items[5])\nexcept IndexError:\n    print(\"Ошибка\")", options: ["1\n2", "Ошибка", "1\nОшибка", "2"], correct: 2, explanation: "Первый элемент выводится. Индекса 5 нет — IndexError, срабатывает except." },
             { question: "Найдите ошибку в программе", code: "try:\n    n = int(\"5\")\nprint(n)", options: ["После try нет блока except или finally", "Нельзя выводить n", "int нельзя использовать в try", "Ошибки нет"], correct: 0, explanation: "После try обязательно нужен except или finally — SyntaxError." },
             { question: "Напишите строку, которая начинает блок перехвата ошибки ValueError", type: "code", correct: ["except ValueError:"], explanation: "except, тип ошибки и двоеточие: except ValueError:" },
-            { question: "Напишите строку, которая вызывает ошибку ValueError с текстом Плохо", type: "code", correct: ["raise ValueError(\"Плохо\")", "raise ValueError('Плохо')"], explanation: "raise и исключение с текстом: raise ValueError(\"Плохо\")" }
+            { question: "Напишите строку, которая вызывает ошибку ValueError с текстом Плохо", type: "code", correct: ["raise ValueError(\"Плохо\")", "raise ValueError('Плохо')"], explanation: "raise и исключение с текстом: raise ValueError(\"Плохо\")" },
+            { question: "Что выведет программа?", code: "try:\n    x = int(\"abc\")\n    print(\"ok\")\nexcept ValueError:\n    print(\"ошибка\")", options: ["ошибка","ok","ok\nошибка","Ошибка"], correct: 0, explanation: "int(\"abc\") выбрасывает ValueError — строка print(\"ok\") уже не выполняется, срабатывает except." },
+            { question: "Что выведет программа?", code: "try:\n    print(10 / 2)\nexcept ZeroDivisionError:\n    print(\"на ноль\")", options: ["5.0","на ноль","5","5.0\nна ноль"], correct: 0, explanation: "Ошибки нет, поэтому except пропускается." },
+            { question: "Что выведет программа?", code: "try:\n    print([1, 2][5])\nexcept IndexError:\n    print(\"нет такого\")\nfinally:\n    print(\"конец\")", options: ["нет такого\nконец","конец","нет такого","Ошибка"], correct: 0, explanation: "IndexError пойман, а finally выполняется всегда." },
+            { question: "Что выведет программа?", code: "def check(n):\n    if n < 0:\n        raise ValueError(\"минус\")\n    return n\n\ntry:\n    check(-1)\nexcept ValueError as e:\n    print(e)", options: ["минус","ValueError","-1","Ошибка"], correct: 0, explanation: "raise выбрасывает ошибку с текстом «минус», а print(e) выводит этот текст." },
+            { question: "Что выведет программа?", code: "try:\n    x = int(\"5\") + \"1\"\nexcept ValueError:\n    print(\"A\")\nexcept TypeError:\n    print(\"B\")", options: ["B","A","A\nB","6"], correct: 0, explanation: "int(\"5\") работает, а вот 5 + \"1\" — число плюс текст — это TypeError. Срабатывает тот except, тип которого совпал с ошибкой." },
+            { question: "Что выведет программа?", variants: [
+                { code: "nums = []\nfor s in [\"5\", \"x\", \"7\"]:\n    try:\n        nums.append(int(s))\n    except ValueError:\n        pass\nprint(nums)", options: ["[5, 7]","[5, 'x', 7]","[]","Ошибка"], correct: 0 },
+                { code: "nums = []\nfor s in [\"a\", \"2\", \"b\"]:\n    try:\n        nums.append(int(s))\n    except ValueError:\n        pass\nprint(nums)", options: ["[2]","['a', 2, 'b']","[]","Ошибка"], correct: 0 },
+                { code: "nums = []\nfor s in [\"1\", \"2\", \"3!\"]:\n    try:\n        nums.append(int(s))\n    except ValueError:\n        pass\nprint(nums)", options: ["[1, 2]","[1, 2, 3]","[]","Ошибка"], correct: 0 }
+            ], explanation: "Строки, которые не превращаются в число, вызывают ValueError и пропускаются (pass)." },
+            { question: "Что выведет программа?", variants: [
+                { code: "def safe(a, b):\n    try:\n        return a // b\n    except ZeroDivisionError:\n        return -1\n\nprint(safe(9, 2), safe(9, 0))", options: ["4 -1","4.5 -1","4 0","Ошибка"], correct: 0 },
+                { code: "def safe(a, b):\n    try:\n        return a // b\n    except ZeroDivisionError:\n        return -1\n\nprint(safe(7, 0), safe(7, 7))", options: ["-1 1","0 1","-1 0","Ошибка"], correct: 0 },
+                { code: "def safe(a, b):\n    try:\n        return a // b\n    except ZeroDivisionError:\n        return -1\n\nprint(safe(20, 6), safe(0, 0))", options: ["3 -1","3 0","3.33 -1","Ошибка"], correct: 0 }
+            ], explanation: "При делении на ноль срабатывает except и функция возвращает -1, иначе — результат деления нацело." },
+            { question: "Найдите ошибку в программе", code: "try:\n    n = int(input())\nexcept:\n    print(\"не число\")\nprint(n * 2)", options: ["Если ввели не число, n не существует — дальше будет NameError","except нельзя писать без типа ошибки","try нельзя использовать с input()","Ошибки нет"], correct: 0, explanation: "Если int() упал, переменная n так и не создана, и print(n * 2) выдаст NameError." },
+            { question: "Напишите строку, которая выбрасывает ошибку ValueError с текстом \"Плохо\"", type: "code", correct: ["raise ValueError(\"Плохо\")"], explanation: "raise и ошибка с текстом в скобках: raise ValueError(\"Плохо\")." },
+            { question: "Напишите строку except, которая ловит ошибку деления на ноль", type: "code", correct: ["except ZeroDivisionError:"], explanation: "except, тип ошибки и двоеточие: except ZeroDivisionError:" }
         ],
         'lesson12.html': [
             { question: "Что выведет программа?", code: "import math\nprint(math.sqrt(16))", options: ["4.0", "4", "16", "Ошибка"], correct: 0, explanation: "math.sqrt возвращает дробное число: корень из 16 — это 4.0." },
@@ -265,7 +467,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что выведет программа?", code: "from collections import Counter\nprint(Counter(\"abaa\").most_common(1))", options: ["[('a', 3)]", "a", "3", "{'a': 3, 'b': 1}"], correct: 0, explanation: "most_common(1) возвращает список с одной самой частой парой (элемент, количество)." },
             { question: "Как называется каталог бесплатных библиотек для Python?", options: ["PyPI", "GitHub", "Google Play", "App Store"], correct: 0, explanation: "PyPI (pypi.org) — Python Package Index, оттуда pip скачивает библиотеки." },
             { question: "Напишите строку, которая подключает модуль random", type: "code", correct: ["import random"], explanation: "import и имя модуля: import random" },
-            { question: "Напишите строку, которая подключает из модуля math только функцию sqrt", type: "code", correct: ["from math import sqrt"], explanation: "from модуль import функция: from math import sqrt" }
+            { question: "Напишите строку, которая подключает из модуля math только функцию sqrt", type: "code", correct: ["from math import sqrt"], explanation: "from модуль import функция: from math import sqrt" },
+            { question: "Что выведет программа?", code: "import math\nprint(math.sqrt(49))", options: ["7.0","7","49","24.5"], correct: 0, explanation: "math.sqrt() — квадратный корень, результат всегда дробный: 7.0." },
+            { question: "Что выведет программа?", code: "import math\nprint(math.ceil(2.1), math.floor(2.9))", options: ["3 2","2 3","2 2","3 3"], correct: 0, explanation: "ceil округляет вверх, floor — вниз." },
+            { question: "Что выведет программа?", code: "from math import pi\nprint(round(pi, 2))", options: ["3.14","3.1","3.142","Ошибка"], correct: 0, explanation: "from math import pi подключает только pi — его можно писать без math." },
+            { question: "Что выведет программа?", code: "import random\nx = random.randint(5, 5)\nprint(x)", options: ["5","Случайное число от 0 до 5","Ошибка","10"], correct: 0, explanation: "randint(a, b) включает обе границы: от 5 до 5 — только 5." },
+            { question: "Сколько разных чисел может вернуть random.randint(1, 6)?", options: ["6","5","7","Сколько угодно"], correct: 0, explanation: "randint включает обе границы: 1, 2, 3, 4, 5, 6 — шесть чисел." },
+            { question: "Что выведет программа?", variants: [
+                { code: "import math\nprint(math.hypot(3, 4))", options: ["5.0","7","12","25"], correct: 0 },
+                { code: "import math\nprint(math.hypot(6, 8))", options: ["10.0","14","48","100"], correct: 0 },
+                { code: "import math\nprint(math.hypot(5, 12))", options: ["13.0","17","60","169"], correct: 0 }
+            ], explanation: "math.hypot(a, b) — гипотенуза: корень из a² + b². Результат дробный." },
+            { question: "Что выведет программа?", variants: [
+                { code: "import math\nprint(math.pow(2, 3), 2 ** 3)", options: ["8.0 8","8 8","8.0 8.0","6 8"], correct: 0 },
+                { code: "import math\nprint(math.pow(3, 2), 3 ** 2)", options: ["9.0 9","9 9","9.0 9.0","6 9"], correct: 0 },
+                { code: "import math\nprint(math.pow(10, 2), 10 ** 2)", options: ["100.0 100","100 100","100.0 100.0","20 100"], correct: 0 }
+            ], explanation: "math.pow() всегда возвращает дробное число, а ** с целыми числами — целое." },
+            { question: "Найдите ошибку в программе", code: "import math\nprint(sqrt(16))", options: ["Нужно писать math.sqrt","Модуль называется Math","Корень из 16 нельзя взять","Ошибки нет"], correct: 0, explanation: "После import math функции вызывают через точку: math.sqrt(16). Иначе NameError." },
+            { question: "Напишите выражение: округлить число x вверх до целого (модуль math подключён)", type: "code", correct: ["math.ceil(x)"], explanation: "Вверх округляет math.ceil(): math.ceil(2.1) — это 3." },
+            { question: "Напишите выражение: случайный элемент из списка colors (модуль random подключён)", type: "code", correct: ["random.choice(colors)"], explanation: "random.choice() выбирает случайный элемент списка." }
         ],
         'lesson13.html': [
             { question: "Что такое класс?", options: ["Шаблон (чертёж), по которому создаются объекты", "Готовый объект", "Модуль Python", "Тип ошибки"], correct: 0, explanation: "Класс описывает, какие у объектов данные и что они умеют." },
@@ -283,7 +503,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Найдите ошибку в программе", code: "class Dog:\n    def __init__(self, name):\n        self.name = name\n\n    def hi(self):\n        print(name)\n\nDog(\"Рекс\").hi()", options: ["Внутри метода нужно писать self.name", "Метод нельзя называть hi", "Нужно два __init__", "Ошибки нет"], correct: 0, explanation: "name внутри метода — обычная переменная, её нет. Атрибут — self.name." },
             { question: "Зачем нужен super().__init__(...) в дочернем классе?", options: ["Чтобы выполнить __init__ родителя и не повторять его код", "Чтобы удалить родителя", "Чтобы создать второй объект", "Он ничего не делает"], correct: 0, explanation: "super() обращается к родительскому классу, его __init__ заполнит общие атрибуты." },
             { question: "Напишите первую строку класса Car", type: "code", correct: ["class Car:"], explanation: "class, имя с большой буквы и двоеточие: class Car:" },
-            { question: "Напишите первую строку метода __init__ с параметром color", type: "code", correct: ["def __init__(self, color):"], explanation: "Первый параметр — self, потом color: def __init__(self, color):" }
+            { question: "Напишите первую строку метода __init__ с параметром color", type: "code", correct: ["def __init__(self, color):"], explanation: "Первый параметр — self, потом color: def __init__(self, color):" },
+            { question: "Что выведет программа?", code: "class Cat:\n    def __init__(self, name):\n        self.name = name\n\nc = Cat(\"Мурка\")\nprint(c.name)", options: ["Мурка","name","Cat","Ошибка"], correct: 0, explanation: "__init__ сохранил имя в атрибут self.name." },
+            { question: "Что выведет программа?", code: "class Counter:\n    def __init__(self):\n        self.n = 0\n    def add(self):\n        self.n += 1\n\nc = Counter()\nc.add()\nc.add()\nprint(c.n)", options: ["2","1","0","Ошибка"], correct: 0, explanation: "Каждый вызов add() увеличивает атрибут n на 1." },
+            { question: "Что выведет программа?", code: "class Box:\n    def __init__(self, v):\n        self.v = v\n\na = Box(1)\nb = Box(2)\na.v = 10\nprint(b.v)", options: ["2","10","1","Ошибка"], correct: 0, explanation: "У каждого объекта свои атрибуты: изменение a не влияет на b." },
+            { question: "Что выведет программа?", code: "class P:\n    def __init__(self, x):\n        self.x = x\n    def __str__(self):\n        return f\"P({self.x})\"\n\nprint(P(3))", options: ["P(3)","3","P","<P object>"], correct: 0, explanation: "__str__ задаёт, как объект выглядит в print()." },
+            { question: "Что такое self в методе класса?", options: ["Сам объект, у которого вызван метод","Имя класса","Специальная глобальная переменная","Первый аргумент, который всегда равен None"], correct: 0, explanation: "self — это объект, с которым работает метод. Через него метод читает и меняет атрибуты." },
+            { question: "Что выведет программа?", variants: [
+                { code: "class Acc:\n    def __init__(self, b):\n        self.b = b\n    def take(self, x):\n        if x <= self.b:\n            self.b -= x\n\na = Acc(100)\na.take(30)\na.take(90)\nprint(a.b)", options: ["70","-20","100","10"], correct: 0 },
+                { code: "class Acc:\n    def __init__(self, b):\n        self.b = b\n    def take(self, x):\n        if x <= self.b:\n            self.b -= x\n\na = Acc(50)\na.take(60)\na.take(20)\nprint(a.b)", options: ["30","-30","50","-10"], correct: 0 },
+                { code: "class Acc:\n    def __init__(self, b):\n        self.b = b\n    def take(self, x):\n        if x <= self.b:\n            self.b -= x\n\na = Acc(10)\na.take(10)\na.take(1)\nprint(a.b)", options: ["0","-1","10","9"], correct: 0 }
+            ], explanation: "Снимаем деньги, только если их хватает (x <= self.b). Иначе баланс не меняется." },
+            { question: "Что выведет программа?", variants: [
+                { code: "class R:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def per(self):\n        return 2 * (self.w + self.h)\n\nprint(R(3, 4).per())", options: ["14","12","7","24"], correct: 0 },
+                { code: "class R:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def per(self):\n        return 2 * (self.w + self.h)\n\nprint(R(5, 1).per())", options: ["12","5","6","10"], correct: 0 },
+                { code: "class R:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def per(self):\n        return 2 * (self.w + self.h)\n\nprint(R(2, 2).per())", options: ["8","4","16","6"], correct: 0 }
+            ], explanation: "Метод per() считает периметр: дважды сумма ширины и высоты." },
+            { question: "Найдите ошибку в программе", code: "class Dog:\n    def __init__(self, name):\n        name = name\n\nd = Dog(\"Рекс\")\nprint(d.name)", options: ["Имя не сохранено в self.name","Класс нужно писать с маленькой буквы","__init__ нельзя называть так","Ошибки нет"], correct: 0, explanation: "Без self. имя остаётся обычной локальной переменной. Нужно self.name = name, иначе AttributeError." },
+            { question: "Напишите заголовок класса с именем Student", type: "code", correct: ["class Student:"], explanation: "class, имя с большой буквы и двоеточие: class Student:" },
+            { question: "Напишите строку внутри __init__: сохранить параметр age в атрибут объекта", type: "code", correct: ["self.age = age"], explanation: "Атрибут объекта задают через self: self.age = age." }
         ],
         'lesson14.html': [
             { question: "Что выведет программа?", code: "from datetime import date\nprint(date(2026, 11, 11))", options: ["2026-11-11", "11.11.2026", "11/11/2026", "Ошибка"], correct: 0, explanation: "По умолчанию дата выводится в формате ГГГГ-ММ-ДД." },
@@ -301,7 +539,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Чем отличается strftime от strptime?", options: ["strftime — дата в строку, strptime — строка в дату", "Ничем", "strftime — только для времени", "strptime выводит дату на экран"], correct: 0, explanation: "f — format (оформить в строку), p — parse (разобрать строку)." },
             { question: "Что делает time.sleep(2)?", options: ["Ставит программу на паузу на 2 секунды", "Возвращает текущее время", "Завершает программу через 2 секунды", "Ускоряет программу в 2 раза"], correct: 0, explanation: "sleep — «спать»: программа ждёт указанное число секунд." },
             { question: "Напишите строку, которая подключает из модуля datetime классы date и timedelta", type: "code", correct: ["from datetime import date, timedelta", "from datetime import timedelta, date"], explanation: "from datetime import date, timedelta" },
-            { question: "Напишите выражение: дата d в формате ДД.ММ.ГГГГ", type: "code", correct: ["d.strftime(\"%d.%m.%Y\")", "d.strftime('%d.%m.%Y')"], explanation: "strftime с шаблоном: d.strftime(\"%d.%m.%Y\")" }
+            { question: "Напишите выражение: дата d в формате ДД.ММ.ГГГГ", type: "code", correct: ["d.strftime(\"%d.%m.%Y\")", "d.strftime('%d.%m.%Y')"], explanation: "strftime с шаблоном: d.strftime(\"%d.%m.%Y\")" },
+            { question: "Что выведет программа?", code: "from datetime import date\nd = date(2026, 3, 8)\nprint(d.month)", options: ["3","8","2026","март"], correct: 0, explanation: "date(год, месяц, день): месяц — 3." },
+            { question: "Что выведет программа?", code: "from datetime import date, timedelta\nd = date(2026, 1, 31) + timedelta(days=1)\nprint(d)", options: ["2026-02-01","2026-01-32","2026-01-31","Ошибка"], correct: 0, explanation: "timedelta сам переходит через конец месяца." },
+            { question: "Что выведет программа?", code: "from datetime import date\nprint((date(2026, 1, 10) - date(2026, 1, 1)).days)", options: ["9","10","1","Ошибка"], correct: 0, explanation: "Разность дат — timedelta, у неё атрибут .days: 10 − 1 = 9." },
+            { question: "Что выведет программа?", code: "from datetime import date\nprint(date(2026, 5, 4).strftime(\"%d.%m.%Y\"))", options: ["04.05.2026","4.5.2026","2026-05-04","05.04.2026"], correct: 0, explanation: "%d — день, %m — месяц, %Y — год, всё с ведущими нулями." },
+            { question: "Что выведет программа?", code: "from datetime import datetime\nd = datetime.strptime(\"15.06.2026\", \"%d.%m.%Y\")\nprint(d.year)", options: ["2026","15","6","Ошибка"], correct: 0, explanation: "strptime разбирает строку по шаблону и возвращает дату." },
+            { question: "Что выведет программа?", variants: [
+                { code: "from datetime import date\nprint(date(2026, 11, 9).weekday())", options: ["0","1","6","9"], correct: 0 },
+                { code: "from datetime import date\nprint(date(2026, 11, 14).weekday())", options: ["5","6","4","14"], correct: 0 },
+                { code: "from datetime import date\nprint(date(2026, 11, 15).weekday())", options: ["6","0","7","15"], correct: 0 }
+            ], explanation: "weekday() даёт номер дня недели: 0 — понедельник, 6 — воскресенье. 9 ноября 2026 года — понедельник." },
+            { question: "Что выведет программа?", variants: [
+                { code: "from datetime import date, timedelta\nd = date(2026, 2, 27) + timedelta(days=3)\nprint(d)", options: ["2026-03-02","2026-02-30","2026-03-01","2026-03-03"], correct: 0 },
+                { code: "from datetime import date, timedelta\nd = date(2024, 2, 27) + timedelta(days=3)\nprint(d)", options: ["2024-03-01","2024-02-30","2024-03-02","2024-02-29"], correct: 0 },
+                { code: "from datetime import date, timedelta\nd = date(2026, 12, 30) + timedelta(days=5)\nprint(d)", options: ["2027-01-04","2026-12-35","2027-01-05","2026-01-04"], correct: 0 }
+            ], explanation: "timedelta учитывает длину месяцев и високосные годы (в феврале 2024 года 29 дней)." },
+            { question: "Найдите ошибку в программе", code: "from datetime import datetime\nd = datetime.strptime(\"2026-05-04\", \"%d.%m.%Y\")", options: ["Шаблон не совпадает с форматом строки","strptime нужно писать с большой буквы","datetime нельзя импортировать так","Ошибки нет"], correct: 0, explanation: "Строка в формате ГГГГ-ММ-ДД, а шаблон — ДД.ММ.ГГГГ. Нужен \"%Y-%m-%d\", иначе ValueError." },
+            { question: "Напишите выражение: дата d плюс 7 дней (timedelta подключён)", type: "code", correct: ["d + timedelta(days=7)","timedelta(days=7) + d"], explanation: "К дате прибавляют timedelta: d + timedelta(days=7)." },
+            { question: "Напишите выражение: дата d строкой в формате ДД.ММ.ГГГГ", type: "code", correct: ["d.strftime(\"%d.%m.%Y\")"], explanation: "strftime с шаблоном: d.strftime(\"%d.%m.%Y\")." }
         ],
         'lesson15.html': [
             { question: "Что выведет программа?", code: "for i, item in enumerate([\"хлеб\", \"молоко\"], start=1):\n    print(i, item)", options: ["1 хлеб\n2 молоко", "0 хлеб\n1 молоко", "хлеб\nмолоко", "Ошибка"], correct: 0, explanation: "enumerate с start=1 нумерует элементы с единицы." },
@@ -319,7 +575,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Для чего нужен Git?", options: ["Сохранять историю версий проекта и возвращаться к ним", "Запускать программы на Python", "Устанавливать библиотеки", "Проверять орфографию"], correct: 0, explanation: "Git хранит «снимки» проекта, к любому можно вернуться." },
             { question: "Что выведет программа?", code: "tasks = [{\"done\": True}, {\"done\": False}, {\"done\": False}]\ndone = sum(1 for t in tasks if t[\"done\"])\nprint(f\"Выполнено: {done} из {len(tasks)}\")", options: ["Выполнено: 1 из 3", "Выполнено: 2 из 3", "1", "Ошибка"], correct: 0, explanation: "sum с условием считает дела, у которых done == True." },
             { question: "Напишите строку, которая добавляет в список tasks словарь с ключами title (значение title) и done (значение False)", type: "code", correct: ["tasks.append({\"title\": title, \"done\": False})", "tasks.append({'title': title, 'done': False})"], explanation: "append добавляет словарь в конец списка: tasks.append({\"title\": title, \"done\": False})" },
-            { question: "Напишите заголовок цикла, который перебирает список tasks с номерами i, начиная с 1 (элемент — t)", type: "code", correct: ["for i, t in enumerate(tasks, start=1):", "for i, t in enumerate(tasks, 1):"], explanation: "enumerate со start=1: for i, t in enumerate(tasks, start=1):" }
+            { question: "Напишите заголовок цикла, который перебирает список tasks с номерами i, начиная с 1 (элемент — t)", type: "code", correct: ["for i, t in enumerate(tasks, start=1):", "for i, t in enumerate(tasks, 1):"], explanation: "enumerate со start=1: for i, t in enumerate(tasks, start=1):" },
+            { question: "Что выведет программа?", code: "todos = [\"хлеб\", \"уроки\"]\ntodos.remove(\"хлеб\")\nprint(todos)", options: ["['уроки']","['хлеб']","[]","Ошибка"], correct: 0, explanation: "remove() удаляет элемент по значению." },
+            { question: "Что выведет программа?", code: "todos = [{\"t\": \"a\", \"done\": True}, {\"t\": \"b\", \"done\": False}]\nprint(len([x for x in todos if not x[\"done\"]]))", options: ["1","2","0","Ошибка"], correct: 0, explanation: "Списковое включение собирает только несделанные дела — одно." },
+            { question: "Что выведет программа?", code: "items = [\"a\", \"b\", \"c\"]\nfor i, x in enumerate(items, 1):\n    print(i, x)", options: ["1 a\n2 b\n3 c","0 a\n1 b\n2 c","a\nb\nc","1\n2\n3"], correct: 0, explanation: "enumerate(items, 1) даёт пары (номер, элемент), нумерация с 1." },
+            { question: "Что выведет программа?", code: "words = \"кот пёс кот\".split()\nprint(words.count(\"кот\"))", options: ["2","1","3","0"], correct: 0, explanation: "count() считает, сколько раз элемент встречается в списке." },
+            { question: "Что выведет программа?", code: "todos = [\"a\", \"b\"]\nif \"c\" in todos:\n    todos.remove(\"c\")\nprint(len(todos))", options: ["2","1","3","Ошибка"], correct: 0, explanation: "Перед remove() проверили, есть ли элемент, — ошибки нет, список не изменился." },
+            { question: "Что выведет программа?", variants: [
+                { code: "nums = [5, 1, 4]\nprint(sorted(nums, reverse=True))", options: ["[5, 4, 1]","[1, 4, 5]","[4, 1, 5]","[5, 1, 4]"], correct: 0 },
+                { code: "nums = [2, 9, 3]\nprint(sorted(nums, reverse=True))", options: ["[9, 3, 2]","[2, 3, 9]","[3, 9, 2]","[2, 9, 3]"], correct: 0 },
+                { code: "nums = [7, 7, 1]\nprint(sorted(nums, reverse=True))", options: ["[7, 7, 1]","[1, 7, 7]","[7, 1]","[7, 1, 7]"], correct: 0 }
+            ], explanation: "sorted(..., reverse=True) возвращает новый список по убыванию." },
+            { question: "Что выведет программа?", variants: [
+                { code: "tasks = [(\"a\", 2), (\"b\", 1), (\"c\", 3)]\nprint(sorted(tasks, key=lambda t: t[1])[0][0])", options: ["b","a","c","1"], correct: 0 },
+                { code: "tasks = [(\"a\", 5), (\"b\", 9), (\"c\", 4)]\nprint(sorted(tasks, key=lambda t: t[1])[0][0])", options: ["c","a","b","4"], correct: 0 },
+                { code: "tasks = [(\"a\", 3), (\"b\", 3), (\"c\", 8)]\nprint(sorted(tasks, key=lambda t: t[1])[-1][0])", options: ["c","a","b","8"], correct: 0 }
+            ], explanation: "key=lambda t: t[1] сортирует по второму элементу (приоритету). [0] — первый после сортировки, [-1] — последний." },
+            { question: "Найдите ошибку в программе", code: "todos = [\"хлеб\"]\ntodos.remove(\"молоко\")", options: ["Удаляют элемент, которого нет в списке","remove пишется с большой буквы","Список нельзя менять","Ошибки нет"], correct: 0, explanation: "remove() для отсутствующего элемента выдаёт ValueError. Сначала проверьте: if \"молоко\" in todos." },
+            { question: "Напишите выражение: сколько дел в списке todos", type: "code", correct: ["len(todos)"], explanation: "Количество элементов — len(todos)." },
+            { question: "Напишите строку: удалить из списка todos дело \"хлеб\"", type: "code", correct: ["todos.remove(\"хлеб\")"], explanation: "Удалить по значению — remove(): todos.remove(\"хлеб\")." }
         ],
         'lesson16.html': [
             { question: "Что такое API?", options: ["Способ, которым программы обмениваются данными", "Язык программирования", "База данных", "Браузер"], correct: 0, explanation: "API — интерфейс для общения программ: одна отправляет запрос, другая присылает ответ." },
@@ -337,7 +611,25 @@ document.addEventListener('DOMContentLoaded', () => {
             { question: "Что делает response.raise_for_status()?", options: ["Выбрасывает ошибку, если код ответа 4xx или 5xx", "Повышает скорость запроса", "Печатает код статуса", "Повторяет запрос"], correct: 0, explanation: "Так удобно сразу превратить неудачный ответ в исключение и обработать его в except." },
             { question: "Где правильно хранить ключ API?", options: ["Отдельно от кода, например в переменной окружения", "Прямо в коде на GitHub", "В названии файла", "В комментарии к коду"], correct: 0, explanation: "Ключ — как пароль: его нельзя публиковать." },
             { question: "Напишите строку, которая превращает JSON-текст из переменной text в словарь data (модуль json подключён)", type: "code", correct: ["data = json.loads(text)"], explanation: "json.loads(text) разбирает текст JSON: data = json.loads(text)" },
-            { question: "Напишите строку, которая делает GET-запрос по адресу из переменной url и сохраняет ответ в response", type: "code", correct: ["response = requests.get(url)", "response = requests.get(url, timeout=10)"], explanation: "response = requests.get(url) — а в реальной программе ещё timeout=10." }
+            { question: "Напишите строку, которая делает GET-запрос по адресу из переменной url и сохраняет ответ в response", type: "code", correct: ["response = requests.get(url)", "response = requests.get(url, timeout=10)"], explanation: "response = requests.get(url) — а в реальной программе ещё timeout=10." },
+            { question: "Что выведет программа?", code: "import json\nd = json.loads('{\"a\": 1, \"b\": [2, 3]}')\nprint(d[\"b\"][1])", options: ["3","2","[2, 3]","Ошибка"], correct: 0, explanation: "json.loads превращает текст в словарь, по ключу «b» — список, [1] — второй элемент." },
+            { question: "Что выведет программа?", code: "import json\nprint(json.dumps({\"x\": True}))", options: ["{\"x\": true}","{'x': True}","{\"x\": True}","Ошибка"], correct: 0, explanation: "В JSON логические значения пишутся с маленькой буквы, а строки — в двойных кавычках." },
+            { question: "Что выведет программа?", code: "import json\nprint(type(json.loads(\"[1, 2]\")).__name__)", options: ["list","str","dict","tuple"], correct: 0, explanation: "JSON-массив превращается в список Python." },
+            { question: "Что выведет программа?", code: "import json\ntry:\n    json.loads(\"не json\")\nexcept ValueError:\n    print(\"плохой ответ\")", options: ["плохой ответ","не json","Ошибка","Ничего"], correct: 0, explanation: "На неправильном тексте json.loads выбрасывает ошибку (JSONDecodeError — это вид ValueError)." },
+            { question: "Какой код ответа сервера означает «всё хорошо»?", options: ["200","404","500","301"], correct: 0, explanation: "200 — успех. 404 — не найдено, 500 — ошибка на сервере." },
+            { question: "Что выведет программа?", variants: [
+                { code: "import json\ndata = json.loads('[{\"n\": \"A\", \"s\": 5}, {\"n\": \"B\", \"s\": 9}]')\nprint(max(d[\"s\"] for d in data))", options: ["9","5","B","14"], correct: 0 },
+                { code: "import json\ndata = json.loads('[{\"n\": \"A\", \"s\": 12}, {\"n\": \"B\", \"s\": 4}]')\nprint(max(d[\"s\"] for d in data))", options: ["12","4","A","16"], correct: 0 },
+                { code: "import json\ndata = json.loads('[{\"n\": \"A\", \"s\": 3}, {\"n\": \"B\", \"s\": 3}, {\"n\": \"C\", \"s\": 1}]')\nprint(sum(d[\"s\"] for d in data))", options: ["7","3","1","6"], correct: 0 }
+            ], explanation: "json.loads даёт список словарей; по каждому словарю берём значение «s»." },
+            { question: "Что выведет программа?", variants: [
+                { code: "import json\nd = json.loads('{\"city\": \"Омск\", \"t\": [1, 3, 5]}')\nprint(d[\"city\"], sum(d[\"t\"]) / len(d[\"t\"]))", options: ["Омск 3.0","Омск 9","Омск 3","Ошибка"], correct: 0 },
+                { code: "import json\nd = json.loads('{\"city\": \"Сочи\", \"t\": [10, 20]}')\nprint(d[\"city\"], sum(d[\"t\"]) / len(d[\"t\"]))", options: ["Сочи 15.0","Сочи 30","Сочи 15","Ошибка"], correct: 0 },
+                { code: "import json\nd = json.loads('{\"city\": \"Тула\", \"t\": [4]}')\nprint(d[\"city\"], sum(d[\"t\"]) / len(d[\"t\"]))", options: ["Тула 4.0","Тула 4","Тула 1","Ошибка"], correct: 0 }
+            ], explanation: "Среднее = сумма / количество; обычное деление / всегда даёт дробное число." },
+            { question: "Найдите ошибку в программе", code: "import json\nd = json.loads(\"{'a': 1}\")", options: ["В JSON строки пишутся только в двойных кавычках","json.loads принимает только числа","Нужно json.dumps","Ошибки нет"], correct: 0, explanation: "Одинарные кавычки в JSON запрещены — будет ошибка. Правильно: '{\"a\": 1}'." },
+            { question: "Напишите выражение: превратить текст JSON из переменной text в данные Python", type: "code", correct: ["json.loads(text)"], explanation: "Текст в данные — json.loads(text)." },
+            { question: "Напишите выражение: превратить словарь data в текст JSON с русскими буквами без кодов", type: "code", correct: ["json.dumps(data, ensure_ascii=False)"], explanation: "ensure_ascii=False оставляет русские буквы как есть: json.dumps(data, ensure_ascii=False)." }
         ]
     };
     window.PB_QUIZ = quizData; // вопросы тестов нужны кабинету (показать ошибки ученика)
@@ -570,6 +862,103 @@ document.addEventListener('DOMContentLoaded', () => {
     const QUIZ_PASS = 0.7;     // доля верных ответов, чтобы тест засчитался
     const OPTION_LETTERS = 'АБВГДЕЖ';
 
+    // --- Правила честной сдачи теста (пока тест урока не сдан; в браузере преподавателя не действуют) ---
+    // 1. Тест открывается после упражнений «Попробуйте сами» этого урока.
+    // 2. После неудачной попытки — пауза RETRY_PAUSE_MIN минут: время перечитать урок.
+    // 3. После FAIL_LIMIT неудачных попыток подряд тест закрывается: открыть ещё попытки можно,
+    //    решив всю домашку урока (один раз), дальше — только преподаватель («Разрешить пересдачу»).
+    // 4. Пока тест не сдан, правильные ответы и объяснения к ошибкам не показываются.
+    // 5. Слишком быстрые ответы считаются: преподаватель видит, похоже ли на угадывание.
+    // «Отлично» за урок — только если тест сдан с 1-й или 2-й попытки (pb-share.js → EXCELLENT_MAX_TRY).
+    const RETRY_PAUSE_MIN = 10;
+    const FAIL_LIMIT = hasPB ? PB.QUIZ_FAIL_LIMIT : 3;
+    const EXCELLENT_MAX_TRY = hasPB ? PB.EXCELLENT_MAX_TRY : 2;
+    const FAST_SEC = 2, FAST_CODE_SEC = 4;   // ответ быстрее — «похоже на угадывание»
+    const TEACHER_TG_URL = 'https://t.me/HugeMixProfile';
+
+    function quizPassed() { return !!safeGetProgress()[currentPath]; }
+    function strictMode() { return !isTeacherBrowser() && !quizPassed(); }
+    function readJSON(key, fallback) {
+        try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch (e) { return fallback; }
+    }
+    function updateQuizScore(change) {
+        const scores = readJSON('quiz_scores', {});
+        const sc = scores[currentPath] || { best: 0, attempts: 0 };
+        change(sc);
+        scores[currentPath] = sc;
+        try { localStorage.setItem('quiz_scores', JSON.stringify(scores)); } catch (e) { /* не страшно */ }
+        return sc;
+    }
+    function tryStatus() {
+        const done = readJSON('try_done', {});
+        const ids = [...document.querySelectorAll('.try-it[data-id]')].map(b => b.dataset.id);
+        return { total: ids.length, done: ids.filter(id => done[id]).length, first: ids.find(id => !done[id]) };
+    }
+    function hwStatus() {
+        const solved = readJSON('solved_tasks', {});
+        const ids = [...document.querySelectorAll('.hw-tasks li[data-task]')].map(li => li.dataset.task);
+        return { total: ids.length, done: ids.filter(id => solved[id]).length };
+    }
+    function minutesText(n) { return n + ' ' + (n % 10 === 1 && n % 100 !== 11 ? 'минуту' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'минуты' : 'минут'); }
+
+    // Что мешает начать тест прямо сейчас; null — можно начинать
+    function quizGate() {
+        if (!strictMode()) return null;
+        const tr = tryStatus();
+        if (tr.done < tr.total) return { kind: 'try', tr };
+        let sc = readQuizScore() || {};
+        // ответ преподавателя «Разрешаю пересдать тест» снимает замок (один раз на каждый ответ)
+        const access = hasPB ? PB.readAccess() : null;
+        const reply = access && access.replies ? access.replies[lessonsList.indexOf(currentPath) + 1] : null;
+        if (reply && reply.s === 'redo' && reply.at && reply.at !== sc.redoAt) {
+            sc = updateQuizScore(s => { s.redoAt = reply.at; s.failStreak = 0; s.lastFailAt = null; });
+        }
+        if ((sc.failStreak || 0) >= FAIL_LIMIT) {
+            const hw = hwStatus();
+            if (sc.hwUnlock) return { kind: 'teacher', hw };
+            return { kind: hw.done >= hw.total ? 'hw-ready' : 'hw', hw };
+        }
+        const left = sc.lastFailAt ? RETRY_PAUSE_MIN * 60000 - (Date.now() - Date.parse(sc.lastFailAt)) : 0;
+        if (left > 0) return { kind: 'pause', left };
+        return null;
+    }
+
+    function gateText(g) {
+        if (g.kind === 'try') return `Сначала решите упражнения «Попробуйте сами» в этом уроке: решено ${g.tr.done} из ${g.tr.total}. Так вы попробуете тему руками, а тест проверит, что она понятна.`;
+        if (g.kind === 'pause') return `Пересдать можно через ${minutesText(Math.ceil(g.left / 60000))}. Пока перечитайте разделы урока, где были ошибки, и запустите примеры — тогда следующая попытка будет не наугад.`;
+        if (g.kind === 'hw') return `Тест не сдан ${FAIL_LIMIT} раза подряд, поэтому он закрыт. Решите всю домашку урока (решено ${g.hw.done} из ${g.hw.total}) — тогда откроются ещё ${FAIL_LIMIT} попытки. Задачи покажут, что именно в теме непонятно. Можно и написать преподавателю.`;
+        if (g.kind === 'hw-ready') return `Домашка решена — можно открыть ещё ${FAIL_LIMIT} попытки.`;
+        return `Тест снова не сдан ${FAIL_LIMIT} раза подряд. Дальше — вместе с преподавателем: напишите ему, какие вопросы непонятны. Он разберёт тему с вами и откроет пересдачу.`;
+    }
+
+    function gateActions(box, g) {
+        const out = [];
+        const link = (text, href, primary, blank) => {
+            const a = qel('a', 'qz-btn ' + (primary ? 'qz-btn-primary' : 'qz-btn-ghost'), text);
+            a.href = href;
+            if (blank) { a.target = '_blank'; a.rel = 'noopener'; }
+            return a;
+        };
+        if (g.kind === 'try') {
+            out.push(qbtn('К упражнениям', 'qz-btn-primary', () => {
+                const el = document.querySelector(`.try-it[data-id="${g.tr.first}"]`);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }));
+        } else if (g.kind === 'pause') {
+            out.push(qbtn('Перечитать урок', 'qz-btn-primary', () => window.scrollTo({ top: 0, behavior: 'smooth' })));
+        } else if (g.kind === 'hw') {
+            out.push(link('К домашке', '#homework', true), link('Написать преподавателю', TEACHER_TG_URL, false, true));
+        } else if (g.kind === 'hw-ready') {
+            out.push(qbtn(`Открыть ещё ${FAIL_LIMIT} попытки`, 'qz-btn-primary', () => {
+                updateQuizScore(s => { s.failStreak = 0; s.hwUnlock = true; });
+                renderQuizIntro(box);
+            }));
+        } else {
+            out.push(link('Написать преподавателю', TEACHER_TG_URL, true, true), link('Отправить результат', 'python-basic.html#send', false));
+        }
+        return out;
+    }
+
     function qel(tag, cls, text) {
         const node = document.createElement(tag);
         if (cls) node.className = cls;
@@ -663,7 +1052,19 @@ document.addEventListener('DOMContentLoaded', () => {
             showNextLessonButton();
         } else {
             renderQuizIntro(box);
+            // упражнение решено или домашка решена в другой вкладке — замок теста мог сняться
+            const refresh = () => { if (!box._quiz && box.querySelector('.qz-intro')) renderQuizIntro(box); };
+            document.addEventListener('pb:try-done', refresh);
+            window.addEventListener('focus', refresh);
         }
+    }
+
+    // Вопрос с вариантами (variants): в каждой попытке берём один вариант — числа в коде другие,
+    // поэтому ответ нельзя запомнить, его нужно посчитать. orig — исходный вопрос (для списка ошибок).
+    function pickVariant(q) {
+        if (!Array.isArray(q.variants) || !q.variants.length) return q;
+        const v = q.variants[Math.floor(Math.random() * q.variants.length)];
+        return { ...q, ...v, variants: undefined, orig: q };
     }
 
     function renderQuizLocked(box) {
@@ -700,7 +1101,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         card.append(facts);
         if (score) card.append(qel('p', 'qz-muted', `Ваш лучший результат: ${score.best}% · попыток: ${score.attempts}`));
+        if (strictMode()) {
+            const rules = qel('details', 'qz-rules');
+            rules.append(qel('summary', '', 'Правила сдачи'));
+            const ul = qel('ul');
+            [`Тест открывается после упражнений «Попробуйте сами» этого урока.`,
+             `Пока тест не сдан, правильные ответы не показываются — ищите их в уроке сами.`,
+             `После неудачной попытки — пауза ${RETRY_PAUSE_MIN} минут, чтобы перечитать урок.`,
+             `После ${FAIL_LIMIT} неудачных попыток подряд тест закрывается до решения домашки.`,
+             `«Отлично» за урок — только если тест сдан с 1-й или ${EXCELLENT_MAX_TRY}-й попытки.`,
+             `Преподаватель видит число попыток и ответы, данные за пару секунд.`].forEach(t => ul.append(qel('li', '', t)));
+            rules.append(ul);
+            card.append(rules);
+        }
         const actions = qel('div', 'qz-actions');
+        const gate = quizGate();
+        clearTimeout(box._gateTimer);
+        if (gate) {
+            const note = qel('p', 'qz-gate', gateText(gate));
+            note.setAttribute('role', 'status');
+            card.append(note);
+            gateActions(box, gate).forEach(b => actions.append(b));
+            if (gate.kind === 'pause') box._gateTimer = setTimeout(() => { if (!box._quiz) renderQuizIntro(box); }, Math.min(gate.left + 500, 30000));
+            card.append(actions);
+            box.append(card);
+            return;
+        }
         const start = qbtn('Начать тест', 'qz-btn-primary', () => startQuiz(box));
         start.id = 'btn-start-quiz';
         actions.append(start);
@@ -729,10 +1155,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startQuiz(box) {
+        if (quizGate()) { renderQuizIntro(box); scrollToQuiz(box); return; }
         const all = quizData[currentPath] || [];
-        const questions = all.length > QUIZ_SIZE ? shuffleArray(all).slice(0, QUIZ_SIZE) : all.slice();
+        const questions = (all.length > QUIZ_SIZE ? shuffleArray(all).slice(0, QUIZ_SIZE) : all.slice()).map(pickVariant);
         if (!questions.length) return;
-        const state = { questions, index: 0, answers: [] };
+        const state = { questions, index: 0, answers: [], strict: strictMode() };
         box._quiz = state;
         toggleLessonVisibility(false);
         renderQuestion(box, state);
@@ -758,6 +1185,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const q = st.questions[st.index];
         const n = st.questions.length;
         box.textContent = '';
+        st.shownAt = Date.now();
         const card = qel('div', 'qz-card qz-run');
 
         const head = qel('div', 'qz-head');
@@ -827,7 +1255,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const ok = o.i === q.correct;
                     list.querySelectorAll('.qz-option').forEach(x => {
                         x.disabled = true;
-                        if (Number(x.dataset.origIndex) === q.correct) x.classList.add('is-correct');
+                        // пока тест не сдан, верный вариант не подсвечиваем — его нужно найти в уроке самому
+                        if (Number(x.dataset.origIndex) === q.correct && (ok || !st.strict)) x.classList.add('is-correct');
                     });
                     b.classList.add('is-picked');
                     if (!ok) b.classList.add('is-wrong');
@@ -843,7 +1272,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function answerGiven(box, st, card, ok, given, right) {
         const q = st.questions[st.index];
-        st.answers.push({ correct: ok, given, right });
+        const secs = (Date.now() - (st.shownAt || Date.now())) / 1000;
+        const fast = secs < (q.code || q.type === 'code' ? FAST_CODE_SEC : FAST_SEC);
+        st.answers.push({ correct: ok, given, right, fast });
         const seg = card.querySelectorAll('.qz-seg')[st.index];
         if (seg) seg.className = 'qz-seg ' + (ok ? 'is-ok' : 'is-bad');
         const bar = card.querySelector('.qz-progress');
@@ -854,12 +1285,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const fb = qel('div', 'qz-feedback ' + (ok ? 'is-ok' : 'is-bad'));
         fb.setAttribute('role', 'status');
         fb.append(qel('strong', 'qz-feedback-title', ok ? 'Верно' : 'Неверно'));
-        if (!ok && q.type === 'code') {
-            const p = qel('p', 'qz-feedback-right', 'Правильный ответ: ');
-            p.append(qel('code', '', right));
-            fb.append(p);
+        if (!ok && st.strict) {
+            fb.append(qel('p', 'qz-feedback-text', 'Правильный ответ и объяснение откроются, когда вы сдадите тест. Найдите ответ в уроке сами — так тема запомнится.'));
+        } else {
+            if (!ok && q.type === 'code') {
+                const p = qel('p', 'qz-feedback-right', 'Правильный ответ: ');
+                p.append(qel('code', '', right));
+                fb.append(p);
+            }
+            if (q.explanation) fb.append(qel('p', 'qz-feedback-text', q.explanation));
         }
-        if (q.explanation) fb.append(qel('p', 'qz-feedback-text', q.explanation));
+        if (fast && !ok) fb.append(qel('p', 'qz-feedback-fast', 'Ответ дан за пару секунд. Не спешите: прочитайте вопрос и код целиком.'));
 
         const last = st.index === st.questions.length - 1;
         const next = qbtn(last ? 'Показать результат' : 'Следующий вопрос →', 'qz-btn-primary qz-next', () => {
@@ -877,11 +1313,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function finishQuiz(box, st) {
         const total = st.questions.length;
         const correct = st.answers.filter(a => a.correct).length;
-        saveQuizScore(correct, total);
+        const passed = correct / total >= QUIZ_PASS;
+        st.fast = st.answers.filter(a => a.fast).length;
+        saveQuizScore(correct, total, passed, st.fast);
         // ошибки запоминаем: они попадут в разминку следующих уроков и в результат для преподавателя
         const all = quizData[currentPath] || [];
-        st.answers.forEach((a, i) => markMistake(currentPath, all.indexOf(st.questions[i]), !a.correct));
-        const passed = correct / total >= QUIZ_PASS;
+        st.answers.forEach((a, i) => markMistake(currentPath, all.indexOf(st.questions[i].orig || st.questions[i]), !a.correct));
         if (passed) {
             const progress = safeGetProgress();
             progress[currentPath] = true;
@@ -913,6 +1350,16 @@ document.addEventListener('DOMContentLoaded', () => {
         try { localStorage.setItem('quiz_mistakes', JSON.stringify(m)); } catch (e) { /* не страшно */ }
     }
 
+    // Итоги разминки для преподавателя: warmup_log {'lesson4.html': [верно, неверно]}.
+    // По ним кабинет подсказывает, какие прошлые уроки ученик подзабыл.
+    function logWarmup(file, ok) {
+        const log = readJSON('warmup_log', {});
+        const row = Array.isArray(log[file]) ? log[file] : [0, 0];
+        row[ok ? 0 : 1]++;
+        log[file] = row;
+        try { localStorage.setItem('warmup_log', JSON.stringify(log)); } catch (e) { /* не страшно */ }
+    }
+
     // В начале урока — 3 вопроса из прошлых уроков: сначала те, где ученик ошибался, потом случайные
     // (чаще из прошлого урока, реже — из более ранних). Так пройденное не забывается.
     const WARMUP_SIZE = 3;
@@ -925,7 +1372,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const key = file + ':' + i;
             if (!q || q.type === 'code' || seen.has(key) || picked.length >= WARMUP_SIZE) return;
             seen.add(key);
-            picked.push({ file, i, q, fromMistake });
+            picked.push({ file, i, q: pickVariant(q), fromMistake });
         };
         for (let k = lessonIndex - 1; k >= 0; k--) shuffleArray(mistakes[lessonsList[k]] || []).forEach(i => add(lessonsList[k], i, true));
         for (let guard = 0; picked.length < WARMUP_SIZE && guard < 60; guard++) {
@@ -989,6 +1436,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 list.dataset.done = '1';
                 const ok = o.idx === q.correct;
                 markMistake(file, i, !ok);
+                logWarmup(file, ok);
                 list.querySelectorAll('.qz-option').forEach((x, xi) => { x.disabled = true; });
                 [...list.children].forEach(x => { if (x.dataset.idx === String(q.correct)) x.classList.add('is-correct'); });
                 b.classList.add('is-picked');
@@ -1030,9 +1478,10 @@ document.addEventListener('DOMContentLoaded', () => {
         text.append(qel('h2', 'qz-title', passed ? (correct === total ? 'Отлично, без единой ошибки!' : 'Хороший результат!') : 'Пока не получилось'));
         text.append(qel('p', 'qz-lead', passed
             ? `Верных ответов: ${correct} из ${total}. ${afterPassText()}`
-            : `Верных ответов: ${correct} из ${total}, а нужно хотя бы ${need}. Посмотрите разбор ниже, повторите урок и попробуйте снова.`));
+            : `Верных ответов: ${correct} из ${total}, а нужно хотя бы ${need}. Посмотрите, где были ошибки, найдите ответы в уроке и попробуйте снова.`));
         top.append(text);
         card.append(top);
+        if (st.fast >= 2) card.append(qel('p', 'qz-gate', `На ${st.fast} ${st.fast % 10 >= 2 && st.fast % 10 <= 4 && (st.fast % 100 < 10 || st.fast % 100 >= 20) ? 'вопроса' : 'вопросов'} вы ответили за пару секунд. Преподаватель это увидит — не торопитесь, читайте вопрос и код целиком.`));
 
         const actions = qel('div', 'qz-actions');
         if (passed) {
@@ -1040,8 +1489,15 @@ document.addEventListener('DOMContentLoaded', () => {
             actions.append(qbtn('Пройти ещё раз', 'qz-btn-ghost', () => startQuiz(box)));
             actions.append(qbtn('Вернуться к уроку', 'qz-link', () => leaveQuiz(box)));
         } else {
-            actions.append(qbtn('Пройти ещё раз', 'qz-btn-primary', () => startQuiz(box)));
-            actions.append(qbtn('Повторить урок', 'qz-btn-ghost', () => { leaveQuiz(box); window.scrollTo({ top: 0, behavior: 'smooth' }); }));
+            const gate = quizGate();
+            if (gate) {
+                card.append(qel('p', 'qz-gate', gateText(gate)));
+                actions.append(qbtn('Повторить урок', 'qz-btn-primary', () => { leaveQuiz(box); window.scrollTo({ top: 0, behavior: 'smooth' }); }));
+                if (gate.kind === 'hw' || gate.kind === 'teacher') gateActions(box, gate).forEach(b => { b.classList.remove('qz-btn-primary'); b.classList.add('qz-btn-ghost'); actions.append(b); });
+            } else {
+                actions.append(qbtn('Пройти ещё раз', 'qz-btn-primary', () => startQuiz(box)));
+                actions.append(qbtn('Повторить урок', 'qz-btn-ghost', () => { leaveQuiz(box); window.scrollTo({ top: 0, behavior: 'smooth' }); }));
+            }
         }
         card.append(actions);
 
@@ -1050,7 +1506,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!wrong.length) {
             review.append(qel('p', 'qz-muted', 'Все ответы верные — разбирать нечего.'));
         } else {
-            review.append(qel('h3', 'qz-review-title', wrong.length === 1 ? 'Разбор ошибки' : `Разбор ошибок (${wrong.length})`));
+            const hide = st.strict && !passed;   // тест не сдан — ответы не раскрываем
+            review.append(qel('h3', 'qz-review-title', hide ? `Где были ошибки (${wrong.length})` : wrong.length === 1 ? 'Разбор ошибки' : `Разбор ошибок (${wrong.length})`));
+            if (hide) review.append(qel('p', 'qz-muted', 'Правильные ответы и объяснения откроются, когда вы сдадите тест. Найдите ответы в уроке сами — так тема запомнится. При пересдаче вопросы будут другие.'));
             wrong.forEach(({ a, q, n }) => {
                 const item = qel('div', 'qz-review-item');
                 item.append(qel('p', 'qz-review-q', `${n}. ${q.question}`));
@@ -1062,8 +1520,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     p.append(qel('span', 'qz-review-value' + (mono ? ' is-mono' : ''), value));
                     return p;
                 };
-                item.append(line('Ваш ответ', a.given, 'is-bad'), line('Правильный ответ', a.right, 'is-ok'));
-                if (q.explanation) item.append(qel('p', 'qz-review-why', q.explanation));
+                item.append(line('Ваш ответ', a.given, 'is-bad'));
+                if (!hide) {
+                    item.append(line('Правильный ответ', a.right, 'is-ok'));
+                    if (q.explanation) item.append(qel('p', 'qz-review-why', q.explanation));
+                }
                 review.append(item);
             });
         }
@@ -1083,19 +1544,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function saveQuizScore(correct, total) {
-        let scores = {};
-        try { scores = JSON.parse(localStorage.getItem('quiz_scores')) || {}; } catch (e) { scores = {}; }
+    // quiz_scores[урок]: лучший и последний результат, число попыток, а ещё:
+    // firstPass — с какой попытки тест сдан впервые; failStreak — неудачных попыток подряд;
+    // lastFailAt — время последней неудачи (для паузы); fast — сколько всего ответов дано «за пару секунд».
+    function saveQuizScore(correct, total, passed, fast) {
         const percent = Math.round(correct / total * 100);
-        const prev = scores[currentPath] || { best: 0, attempts: 0 };
-        scores[currentPath] = {
-            last: percent,
-            best: Math.max(prev.best || 0, percent),
-            attempts: (prev.attempts || 0) + 1,
-            correct, total,
-            at: new Date().toISOString()
-        };
-        try { localStorage.setItem('quiz_scores', JSON.stringify(scores)); } catch (e) { /* не страшно */ }
+        const wasPassed = quizPassed();
+        const now = new Date().toISOString();
+        updateQuizScore(sc => {
+            sc.last = percent;
+            sc.best = Math.max(sc.best || 0, percent);
+            sc.attempts = (sc.attempts || 0) + 1;
+            sc.correct = correct; sc.total = total; sc.at = now;
+            sc.fast = (sc.fast || 0) + (fast || 0);
+            if (passed) {
+                if (!wasPassed && !sc.firstPass) sc.firstPass = sc.attempts;
+                sc.failStreak = 0; sc.lastFailAt = null;
+            } else if (!wasPassed && !isTeacherBrowser()) {
+                sc.failStreak = (sc.failStreak || 0) + 1;
+                sc.lastFailAt = now;
+            }
+        });
     }
 
     // Кнопка «Следующий урок» внизу страницы — когда тест пройден и следующий урок открыт
@@ -1857,6 +2326,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     done[id] = true;
                     try { localStorage.setItem('try_done', JSON.stringify(done)); } catch (e) { /* нет */ }
                     markDone();
+                    document.dispatchEvent(new CustomEvent('pb:try-done'));
                 }
                 check.disabled = false;
             });
